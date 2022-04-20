@@ -1,0 +1,10 @@
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\bin\Debug\HealthCareSystem.exe.config
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\bin\Debug\HealthCareSystem.exe
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\bin\Debug\HealthCareSystem.pdb
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.csprojAssemblyReference.cache
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.LoginForm.resources
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Properties.Resources.resources
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.csproj.GenerateResource.cache
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.csproj.CoreCompileInputs.cache
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.exe
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.pdb
