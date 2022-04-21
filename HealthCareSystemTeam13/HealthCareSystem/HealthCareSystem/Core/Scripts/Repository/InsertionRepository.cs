@@ -80,19 +80,28 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return users;
         }
 
-        public static void InsertUsersToDatabase()
+        private static void InsertSingle(User user)
         {
-            List<User> users = GetUsers();
-            
             var query = "INSERT INTO users(usrnm, pass, role) VALUES(@usrnm, @pass, @role)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
-                cmd.Parameters.AddWithValue("@usrnm", "markoni");
-                cmd.Parameters.AddWithValue("@pass", "markoni123");
-                cmd.Parameters.AddWithValue("@role", "Patient");
+                cmd.Parameters.AddWithValue("@usrnm", user.Username);
+                cmd.Parameters.AddWithValue("@pass", user.Password);
+                cmd.Parameters.AddWithValue("@role", user.Role.ToString());
                 cmd.ExecuteNonQuery();
 
             }
+        }
+
+        public static void InsertUsers()
+        {
+            List<User> users = GetUsers();
+
+            foreach(User user in users)
+            {
+                InsertSingle(user);
+            }
+  
         }
 
         public static void InsertDoctors()
