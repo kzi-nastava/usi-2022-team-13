@@ -3,7 +3,7 @@
 ## Goals
 
 * Create a .NET C# Application for a Healthcare System using Windows Forms App
-* Use an SQL Database and host it online
+* Use a MS Access SQL Database 
 * Enable Login and Registration for users
 * Enable all kind of Functionalities for Hospital Manager, Doctor, Patient, Secretary
 
