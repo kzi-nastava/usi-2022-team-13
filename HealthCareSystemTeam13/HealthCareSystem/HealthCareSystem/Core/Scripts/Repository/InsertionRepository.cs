@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.OleDb;
+using HealthCareSystem.Core.Users.Model;
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
@@ -67,8 +68,22 @@ namespace HealthCareSystem.Core.Scripts.Repository
             Connection.Close();
 
         }
-        public static void InsertUsers()
+
+        private static List<User> GetUsers()
         {
+            List<User> users = new List<User>();
+
+            users.Add(new User("markomarkovic", "marko123", UserRole.HospitalManager));
+            users.Add(new User("mirkobreskvica", "mirko123", UserRole.Doctor));
+            users.Add(new User("marinaadamovic", "marina123", UserRole.Doctor));
+
+            return users;
+        }
+
+        public static void InsertUsersToDatabase()
+        {
+            List<User> users = GetUsers();
+            
             var query = "INSERT INTO users(usrnm, pass, role) VALUES(@usrnm, @pass, @role)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
