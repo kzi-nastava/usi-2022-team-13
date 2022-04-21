@@ -8,7 +8,7 @@ namespace HealthCareSystem.Core.Users.Model
 {
     public enum UserRole
     {
-        HospitalManager, Patient, Doctor, Secretary
+        HospitalManagers, Patients, Doctors, Secretaries
     }
     class User
     {
