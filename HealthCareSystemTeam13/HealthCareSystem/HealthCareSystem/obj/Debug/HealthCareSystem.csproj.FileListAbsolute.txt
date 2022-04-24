@@ -8,3 +8,5 @@ C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\Hea
 C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.csproj.CoreCompileInputs.cache
 C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.exe
 C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.pdb
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.DoctorView.resources
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.HospitalManagerView.resources

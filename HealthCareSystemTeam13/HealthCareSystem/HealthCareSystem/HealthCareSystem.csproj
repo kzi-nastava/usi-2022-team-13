@@ -49,21 +49,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Authentication\LoginAuthentication.cs" />
+    <Compile Include="Core\DatabaseHelpers.cs" />
     <Compile Include="Core\Rooms\Model\Room.cs" />
     <Compile Include="Core\Scripts\Repository\InsertionRepository.cs" />
     <Compile Include="Core\Users\Doctors\Model\Doctor.cs" />
     <Compile Include="Core\Users\HospitalManagers\Model\HospitalManager.cs" />
     <Compile Include="Core\Users\Model\User.cs" />
+    <Compile Include="DoctorView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DoctorView.Designer.cs">
+      <DependentUpon>DoctorView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="HospitalManagerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HospitalManagerView.Designer.cs">
+      <DependentUpon>HospitalManagerView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DoctorView.resx">
+      <DependentUpon>DoctorView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HospitalManagerView.resx">
+      <DependentUpon>HospitalManagerView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

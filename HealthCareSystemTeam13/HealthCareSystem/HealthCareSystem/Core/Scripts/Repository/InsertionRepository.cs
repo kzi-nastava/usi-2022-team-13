@@ -8,6 +8,7 @@ using HealthCareSystem.Core.Users.Model;
 using HealthCareSystem.Core.Users.Doctors.Model;
 using HealthCareSystem.Core.Users.HospitalManagers;
 using HealthCareSystem.Core.Rooms.Model;
+using HealthCareSystem.Core;
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
@@ -74,6 +75,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
                     cmd.ExecuteNonQuery();
 
                 }
+                query = "Delete from rooms";
+                using (var cmd = new OleDbCommand(query, Connection))
+                {
+                    cmd.ExecuteNonQuery();
+
+                }
 
                 Connection.Close();
             }
@@ -82,29 +89,11 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         private static List<String> GetUserIds(UserRole role)
         {
-            List<String> ids = new List<String>();
 
             var query = "select ID from Users where role='" + role.ToString() + "'";
-
-            return ExecuteReaderQueries(ids, query);
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
 
-        private static List<string> ExecuteReaderQueries(List<string> data, string query)
-        {
-            OleDbCommand cmd = new OleDbCommand();
-            cmd.Connection = Connection;
-            cmd.CommandType = System.Data.CommandType.Text;
-            cmd.CommandText = query;
-            OleDbDataReader idsReader = cmd.ExecuteReader();
-            while (idsReader.Read())
-            {
-                data.Add(idsReader[0].ToString());
-            }
-
-
-            return data;
-        }
-    
         private static List<User> GetUsers()
         {
             List<User> users = new List<User>();
