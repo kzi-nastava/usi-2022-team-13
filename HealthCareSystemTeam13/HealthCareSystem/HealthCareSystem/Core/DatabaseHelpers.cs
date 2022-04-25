@@ -8,6 +8,15 @@ namespace HealthCareSystem.Core
 {
     class DatabaseHelpers
     {
+        public static void ExecuteNonQueries(string query, OleDbConnection connection)
+        {
+            using (var cmd = new OleDbCommand(query, connection))
+            {
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+
         public static List<string> ExecuteReaderQueries(string query, OleDbConnection connection)
         {
 

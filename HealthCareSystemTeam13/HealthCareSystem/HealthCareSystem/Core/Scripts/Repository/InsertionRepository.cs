@@ -72,24 +72,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 // In here we need to make a list of table names
                 // But in an opposite order of insertion so that the deletion
                 // goes from the last inserted to first
-                var query = "Delete from users";
-                using (var cmd = new OleDbCommand(query, Connection))
-                {
-                    cmd.ExecuteNonQuery();
-
-                }
-                query = "Delete from rooms";
-                using (var cmd = new OleDbCommand(query, Connection))
-                {
-                    cmd.ExecuteNonQuery();
-
-                }
-                query = "Delete from medications";
-                using (var cmd = new OleDbCommand(query, Connection))
-                {
-                    cmd.ExecuteNonQuery();
-
-                }
+                DatabaseHelpers.ExecuteNonQueries("Delete from users", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from rooms", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from medications", Connection);
 
                 Connection.Close();
             }
