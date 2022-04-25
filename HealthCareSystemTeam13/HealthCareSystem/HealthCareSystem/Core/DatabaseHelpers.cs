@@ -8,6 +8,15 @@ namespace HealthCareSystem.Core
 {
     class DatabaseHelpers
     {
+        public static void ExecuteNonQueries(string query, OleDbConnection connection)
+        {
+            using (var cmd = new OleDbCommand(query, connection))
+            {
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+
         public static List<string> ExecuteReaderQueries(string query, OleDbConnection connection)
         {
 
@@ -18,10 +27,10 @@ namespace HealthCareSystem.Core
             cmd.CommandType = System.Data.CommandType.Text;
             cmd.CommandText = query;
             
-            OleDbDataReader idsReader = cmd.ExecuteReader();
-            while (idsReader.Read())
+            OleDbDataReader queryData = cmd.ExecuteReader();
+            while (queryData.Read())
             {
-                data.Add(idsReader[0].ToString());
+                data.Add(queryData[0].ToString());
             }
 
             return data;
