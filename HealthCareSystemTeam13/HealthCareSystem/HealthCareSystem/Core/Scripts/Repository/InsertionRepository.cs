@@ -12,12 +12,9 @@ using HealthCareSystem.Core.Medications.Model;
 using HealthCareSystem.Core.Users.HospitalManagers;
 using HealthCareSystem.Core.Rooms.Model;
 using HealthCareSystem.Core;
-<<<<<<< HEAD
 using HealthCareSystem.Core.Rooms.Equipment.Model;
 using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
-=======
 using HealthCareSystem.Core.Ingredients.Model;
->>>>>>> 1e092d3808df72b0d83b2641221da8ee9cb205b5
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
@@ -53,7 +50,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertManagers();
             InsertPatients();
             InsertSecretaries();
-            InsertSurveys();
 
             //Room Insertion
             InsertRooms();
@@ -61,6 +57,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
             //Medication Insertion
             InsertMedications();
             InsertIngredients();
+
+            InsertEquipment();
+            InsertHospitalSurveys();
 
 
             Connection.Close();
@@ -97,6 +96,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
         {
 
             var query = "select ID from Users where role='" + role.ToString() + "'";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+        private static List<String> GetPatientIds()
+        {
+
+            var query = "select ID from Patients";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
 
@@ -144,22 +149,22 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return hospitalSurveys;
         }
 
-        private static void InsertHospitalSurveyt()
+        private static void InsertHospitalSurveys()
         {
             List<HospitalSurvey> hospitalSurveys = GetHospitalSurveys();
-
+            List<String> patientIds = GetPatientIds();
             foreach (HospitalSurvey hospitalSurvey in hospitalSurveys)
             {
-                InsertSingleHospitalSurvey(hospitalSurvey);
+                InsertSingleHospitalSurvey(hospitalSurvey, patientIds);
             }
 
         }
-        private static void InsertSingleHospitalSurvey(HospitalSurvey hospitalSurvey)
+        private static void InsertSingleHospitalSurvey(HospitalSurvey hospitalSurvey, List<String> patientIds)
         {
-            var query = "INSERT INTO hospitalSurvey(quality," +
+            var query = "INSERT INTO hospitalSurveys(quality," +
                 "higyene," +
                 "isSatisfied," +
-                "wouldRecommend," +
+                "wouldRecomend," +
                 "comment, id_patient) VALUES(@qualityOfService, @cleanliness, @happiness, @wouldRecommend, @comment, @idPatient)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
@@ -168,7 +173,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@happiness", hospitalSurvey.Happiness);
                 cmd.Parameters.AddWithValue("@wouldRecommend", hospitalSurvey.WouldRecommend);
                 cmd.Parameters.AddWithValue("@comment", hospitalSurvey.Comment);
-                cmd.Parameters.AddWithValue("@idPatient", 0);
+                cmd.Parameters.AddWithValue("@idPatient", Convert.ToInt32(patientIds[0]));
                 cmd.ExecuteNonQuery();
             }
         }
