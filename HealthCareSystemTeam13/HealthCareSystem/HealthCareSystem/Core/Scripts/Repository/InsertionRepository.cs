@@ -9,10 +9,10 @@ using HealthCareSystem.Core.Users.Doctors.Model;
 using HealthCareSystem.Core.Users.Patients.Model;
 using HealthCareSystem.Core.Users.Secretaries.Model;
 using HealthCareSystem.Core.Medications.Model;
-using HealthCareSystem.Core.Medications.Ingredients.Model;
 using HealthCareSystem.Core.Users.HospitalManagers;
 using HealthCareSystem.Core.Rooms.Model;
 using HealthCareSystem.Core;
+using HealthCareSystem.Core.Ingredients.Model;
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
@@ -79,6 +79,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 DatabaseHelpers.ExecuteNonQueries("Delete from users", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from rooms", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from medications", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Ingredients", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Equipment", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from HospitalSurveys", Connection);
 
                 Connection.Close();
             }
