@@ -7,12 +7,17 @@ using System.Data.OleDb;
 using HealthCareSystem.Core.Users.Model;
 using HealthCareSystem.Core.Users.Doctors.Model;
 using HealthCareSystem.Core.Users.Patients.Model;
+using HealthCareSystem.Core.Users.Secretaries.Model;
 using HealthCareSystem.Core.Medications.Model;
 using HealthCareSystem.Core.Users.HospitalManagers;
 using HealthCareSystem.Core.Rooms.Model;
 using HealthCareSystem.Core;
+<<<<<<< HEAD
 using HealthCareSystem.Core.Rooms.Equipment.Model;
 using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
+=======
+using HealthCareSystem.Core.Ingredients.Model;
+>>>>>>> 1e092d3808df72b0d83b2641221da8ee9cb205b5
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
@@ -52,7 +57,11 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             //Room Insertion
             InsertRooms();
+
+            //Medication Insertion
             InsertMedications();
+            InsertIngredients();
+
 
             Connection.Close();
         }
@@ -71,27 +80,13 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
             finally
             {
-                // In here we need to make a list of table names
-                // But in an opposite order of insertion so that the deletion
-                // goes from the last inserted to first
-                var query = "Delete from users";
-                using (var cmd = new OleDbCommand(query, Connection))
-                {
-                    cmd.ExecuteNonQuery();
-
-                }
-                query = "Delete from rooms";
-                using (var cmd = new OleDbCommand(query, Connection))
-                {
-                    cmd.ExecuteNonQuery();
-
-                }
-                query = "Delete from medications";
-                using (var cmd = new OleDbCommand(query, Connection))
-                {
-                    cmd.ExecuteNonQuery();
-
-                }
+                // Deleting all records from database
+                DatabaseHelpers.ExecuteNonQueries("Delete from users", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from rooms", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from medications", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Ingredients", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Equipment", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from HospitalSurveys", Connection);
 
                 Connection.Close();
             }
@@ -193,6 +188,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
             users.Add(new User("nevenkamilica", "neven123", UserRole.Patients));
             users.Add(new User("isidornevenko", "isidor123", UserRole.Patients));
 
+            users.Add(new User("tinabalerina", "tina123", UserRole.Secretaries));
+            users.Add(new User("tomadiploma", "toma123", UserRole.Secretaries));
+            users.Add(new User("codabilo", "danilo123", UserRole.Secretaries));
+
             return users;
         }
 
@@ -292,8 +291,39 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         private static void InsertSecretaries()
         {
+            List<Secretary> secretaries = GetSecretaries();
+
+            foreach (Secretary secretary in secretaries)
+            {
+                InsertSingleSecretary(secretary);
+            }
 
         }
+        private static List<Secretary> GetSecretaries()
+        {
+            List<Secretary> secretaries = new List<Secretary>();
+            List<String> userIds = GetUserIds(UserRole.Secretaries);
+
+            secretaries.Add(new Secretary("Tina", "Mihajlovic", Convert.ToInt32(userIds[0])));
+            secretaries.Add(new Secretary("Milica", "Tomic", Convert.ToInt32(userIds[1])));
+            secretaries.Add(new Secretary("Danilo", "Jevtic", Convert.ToInt32(userIds[2])));
+
+            return secretaries;
+        }
+
+        private static void InsertSingleSecretary(Secretary secretary)
+        {
+            var query = "INSERT INTO Secretaries(firstName, lastName, user_id) VALUES(@firstName, @LastName, @user_id)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@firstName", secretary.FirstName);
+                cmd.Parameters.AddWithValue("@LastName", secretary.LastName);
+                cmd.Parameters.AddWithValue("@user_id", secretary.UserId);
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+
         private static void InsertManagers()
         {
             List<HospitalManager> managers = GetHospitalManagers();
@@ -371,9 +401,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
         }
 
-
-
-
         private static void InsertMedications()
         {
             List<Medication> medications = GetMedications();
@@ -399,6 +426,34 @@ namespace HealthCareSystem.Core.Scripts.Repository
             {
                 cmd.Parameters.AddWithValue("@nameOfMedication", medication.Name);
                 cmd.Parameters.AddWithValue("@status", medication.Status.ToString());
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private static void InsertIngredients()
+        {
+            List<Ingredient> ingredients = GetIngredients();
+            foreach (Ingredient ingredient in ingredients)
+            {
+                InsertSingleIngredient(ingredient);
+            }
+        }
+        private static List<Ingredient> GetIngredients()
+        {
+            List<Ingredient> ingredients = new List<Ingredient>();
+
+            ingredients.Add(new Ingredient("Penicilin"));
+            ingredients.Add(new Ingredient("Celuloza"));
+            ingredients.Add(new Ingredient("Monohidrat"));
+            
+            return ingredients;
+        }
+        private static void InsertSingleIngredient(Ingredient ingredient)
+        {
+            var query = "INSERT INTO Ingredients(nameOfIngredient) VALUES(@nameOfIngredient)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@nameOfIngredient", ingredient.Name);
                 cmd.ExecuteNonQuery();
             }
         }
