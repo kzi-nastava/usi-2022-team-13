@@ -50,7 +50,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             //Room Insertion
             InsertRooms();
+
+            //Medication Insertion
             InsertMedications();
+
 
             Connection.Close();
         }
@@ -69,9 +72,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
             finally
             {
-                // In here we need to make a list of table names
-                // But in an opposite order of insertion so that the deletion
-                // goes from the last inserted to first
+                // Deleting all records from database
                 DatabaseHelpers.ExecuteNonQueries("Delete from users", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from rooms", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from medications", Connection);
@@ -280,10 +281,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             }
         }
-
-
-
-
         private static void InsertMedications()
         {
             List<Medication> medications = GetMedications();
