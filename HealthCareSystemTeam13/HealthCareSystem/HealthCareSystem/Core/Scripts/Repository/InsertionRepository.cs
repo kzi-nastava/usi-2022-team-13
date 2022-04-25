@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Data.OleDb;
 using HealthCareSystem.Core.Users.Model;
 using HealthCareSystem.Core.Users.Doctors.Model;
+using HealthCareSystem.Core.Users.Patients.Model;
+using HealthCareSystem.Core.Medications.Model;
 using HealthCareSystem.Core.Users.HospitalManagers;
 using HealthCareSystem.Core.Rooms.Model;
 using HealthCareSystem.Core;
@@ -48,6 +50,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             //Room Insertion
             InsertRooms();
+            InsertMedications();
 
             Connection.Close();
         }
@@ -81,6 +84,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
                     cmd.ExecuteNonQuery();
 
                 }
+                query = "Delete from medications";
+                using (var cmd = new OleDbCommand(query, Connection))
+                {
+                    cmd.ExecuteNonQuery();
+
+                }
 
                 Connection.Close();
             }
@@ -99,9 +108,15 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<User> users = new List<User>();
 
             users.Add(new User("markomarkovic", "marko123", UserRole.HospitalManagers));
+
             users.Add(new User("mirkobreskvica", "mirko123", UserRole.Doctors));
             users.Add(new User("marinaadamovic", "marina123", UserRole.Doctors));
             users.Add(new User("nikolaredic", "nikola123", UserRole.Doctors));
+
+
+            users.Add(new User("jovanjabuka", "jovan123", UserRole.Patients));
+            users.Add(new User("nevenkamilica", "neven123", UserRole.Patients));
+            users.Add(new User("isidornevenko", "isidor123", UserRole.Patients));
 
             return users;
         }
@@ -166,11 +181,40 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             }
         }
+        private static List<Patient> GetPatients()
+        {
+            List<Patient> patients = new List<Patient>();
+            List<String> userIds = GetUserIds(UserRole.Patients);
 
+            patients.Add(new Patient("Jovana", "Jabuka", Convert.ToInt32(userIds[0]), false));
+            patients.Add(new Patient("Neven", "Kamilica", Convert.ToInt32(userIds[1]), false));
+            patients.Add(new Patient("Isidor", "Nevenko", Convert.ToInt32(userIds[2]), true));
+
+            return patients;
+        }
         private static void InsertPatients()
         {
+            List<Patient> patients = GetPatients();
 
+            foreach (Patient patient in patients)
+            {
+                InsertSinglePatient(patient);
+            }
         }
+
+        private static void InsertSinglePatient(Patient patient)
+        {
+            var query = "INSERT INTO Patients(firstName, lastName, user_id, isBlocked) VALUES(@firstName, @LastName, @user_id, @isBlocked)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@firstName", patient.FirstName);
+                cmd.Parameters.AddWithValue("@LastName", patient.LastName);
+                cmd.Parameters.AddWithValue("@user_id", patient.UserId);
+                cmd.Parameters.AddWithValue("@isBlocked", patient.IsBlocked);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
         private static void InsertSecretaries()
         {
 
@@ -252,6 +296,38 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
         }
 
-       
+
+
+
+        private static void InsertMedications()
+        {
+            List<Medication> medications = GetMedications();
+            foreach (Medication medication in medications)
+            {
+                InsertSingleMedication(medication);
+            }
+        }
+        private static List<Medication> GetMedications()
+        {
+            List<Medication> medications = new List<Medication>();
+
+            medications.Add(new Medication("Brufen", MedicationStatus.Approved));
+            medications.Add(new Medication("Analgin", MedicationStatus.Approved));
+            medications.Add(new Medication("Panklav", MedicationStatus.Approved));
+            
+            return medications;
+        }
+        private static void InsertSingleMedication(Medication medication)
+        {
+            var query = "INSERT INTO medications(nameOfMedication, status) VALUES(@nameOfMedication, @status)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@nameOfMedication", medication.Name);
+                cmd.Parameters.AddWithValue("@status", medication.Status.ToString());
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+
     }
 }
