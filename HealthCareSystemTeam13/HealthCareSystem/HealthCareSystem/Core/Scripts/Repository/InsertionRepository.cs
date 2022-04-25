@@ -11,6 +11,8 @@ using HealthCareSystem.Core.Medications.Model;
 using HealthCareSystem.Core.Users.HospitalManagers;
 using HealthCareSystem.Core.Rooms.Model;
 using HealthCareSystem.Core;
+using HealthCareSystem.Core.Rooms.Equipment.Model;
+using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
@@ -101,6 +103,79 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             var query = "select ID from Users where role='" + role.ToString() + "'";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+
+        private static List<Equipment> GetEquipment()
+        {
+            List<Equipment> equipment = new List<Equipment>();
+
+            equipment.Add(new Equipment("Bed", Equipment.EquipmentType.Static ));
+            equipment.Add(new Equipment("Chair", Equipment.EquipmentType.Dynamic));
+            equipment.Add(new Equipment("Computer", Equipment.EquipmentType.Dynamic));
+
+            return equipment;
+        }
+
+        private static void InsertEquipment()
+        {
+            List<Equipment> equipmentList = GetEquipment();
+
+            foreach (Equipment equipment in equipmentList)
+            {
+                InsertSingleEquipment(equipment);
+            }
+
+        }
+        private static void InsertSingleEquipment(Equipment equipment)
+        {
+            var query = "INSERT INTO equipment(nameOf, type) VALUES(@name, @type)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@name", equipment.Name);
+                cmd.Parameters.AddWithValue("@type", equipment.Type);
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+
+        private static List<HospitalSurvey> GetHospitalSurveys()
+        {
+            List<HospitalSurvey> hospitalSurveys = new List<HospitalSurvey>();
+
+            hospitalSurveys.Add(new HospitalSurvey(5, 5, 5, 5, "Great service!" ));
+            hospitalSurveys.Add(new HospitalSurvey(2, 5, 3, 2, "So-so!"));
+            hospitalSurveys.Add(new HospitalSurvey(2, 2, 2, 2, "I really hated the hospital!"));
+
+            return hospitalSurveys;
+        }
+
+        private static void InsertHospitalSurveyt()
+        {
+            List<HospitalSurvey> hospitalSurveys = GetHospitalSurveys();
+
+            foreach (HospitalSurvey hospitalSurvey in hospitalSurveys)
+            {
+                InsertSingleHospitalSurvey(hospitalSurvey);
+            }
+
+        }
+        private static void InsertSingleHospitalSurvey(HospitalSurvey hospitalSurvey)
+        {
+            var query = "INSERT INTO hospitalSurvey(quality," +
+                "higyene," +
+                "isSatisfied," +
+                "wouldRecommend," +
+                "comment, id_patient) VALUES(@qualityOfService, @cleanliness, @happiness, @wouldRecommend, @comment, @idPatient)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@qualityOfService", hospitalSurvey.QualityOfService);
+                cmd.Parameters.AddWithValue("@cleanliness", hospitalSurvey.Cleanliness);
+                cmd.Parameters.AddWithValue("@happiness", hospitalSurvey.Happiness);
+                cmd.Parameters.AddWithValue("@wouldRecommend", hospitalSurvey.WouldRecommend);
+                cmd.Parameters.AddWithValue("@comment", hospitalSurvey.Comment);
+                cmd.Parameters.AddWithValue("@idPatient", 0);
+                cmd.ExecuteNonQuery();
+            }
         }
 
         private static List<User> GetUsers()

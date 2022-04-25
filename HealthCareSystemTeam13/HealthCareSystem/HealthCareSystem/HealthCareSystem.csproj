@@ -52,8 +52,10 @@
     <Compile Include="Core\Authentication\LoginAuthentication.cs" />
     <Compile Include="Core\DatabaseHelpers.cs" />
     <Compile Include="Core\Medications\Model\Medication.cs" />
+    <Compile Include="Core\Rooms\Equipment\Model\Equipment.cs" />
     <Compile Include="Core\Rooms\Model\Room.cs" />
     <Compile Include="Core\Scripts\Repository\InsertionRepository.cs" />
+    <Compile Include="Core\Surveys\HospitalSurveys\Model\HospitalSurvey.cs" />
     <Compile Include="Core\Users\Doctors\Model\Doctor.cs" />
     <Compile Include="Core\Users\HospitalManagers\Model\HospitalManager.cs" />
     <Compile Include="Core\Users\Model\User.cs" />
@@ -116,10 +118,8 @@
     <Folder Include="Core\Medications\Ingredients\" />
     <Folder Include="Core\Medications\Receipts\" />
     <Folder Include="Core\Pages\" />
-    <Folder Include="Core\Rooms\Equipment\" />
     <Folder Include="Core\Rooms\Renovations\" />
     <Folder Include="Core\Surveys\DoctorSurveys\" />
-    <Folder Include="Core\Surveys\HospitalSurveys\" />
     <Folder Include="Core\Users\Secretaries\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
