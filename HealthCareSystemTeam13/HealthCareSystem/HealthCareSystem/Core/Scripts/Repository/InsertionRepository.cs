@@ -49,8 +49,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertDoctors();
             InsertManagers();
             InsertPatients();
-            InsertBlockedPatients();
             InsertSecretaries();
+            InsertBlockedPatients();
 
             //Room Insertion
             InsertRooms();
@@ -58,6 +58,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             //Medication Insertion
             InsertMedications();
             InsertIngredients();
+
             InsertMedicationsIngredients();
             InsertRejectedMedications();
 
@@ -317,7 +318,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
         {
             List<BlockedPatient> blockedPatients = GetBlockedPatients();
 
-            foreach (BlockedPatients blockedPatient in blockedPatients)
+            foreach (BlockedPatient blockedPatient in blockedPatients)
             {
                 InsertSingleBlockedPatient(blockedPatient);
             }
@@ -561,6 +562,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             var query = "select ID from Ingredients";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
 
+        }
         private static void InsertSinglePatientAlergies(string patientId, string ingredientId)
         {
             var query = "INSERT INTO PatientAlergicTo(id_patient, id_ingredient) VALUES(@id_patient, @id_ingredient)";
@@ -594,7 +596,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (MedicationsIngredient medicationsIngredient in medicationsIngredients)
             {
-                InsertSingleRejectedMedication(medicationsIngredient);
+                InsertSingleMedicationsIngredient(medicationsIngredient);
             }
 
         }
@@ -602,11 +604,11 @@ namespace HealthCareSystem.Core.Scripts.Repository
         {
             List<MedicationsIngredient> medicationsIngredients = new List<MedicationsIngredient>();
             List<String> medicationsIds = GetMedicationIds();
-            List<String> ingredientsIds = GetDoctorIds();
+            List<String> ingredientsIds = DatabaseHelpers.ExecuteReaderQueries("select id from Ingredients", Connection);
 
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIds[0]), Convert.ToInt32(ingredients[0])));
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIds[1]), Convert.ToInt32(ingredients[0])));
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIds[2]), Convert.ToInt32(ingredients[0])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIds[0]), Convert.ToInt32(ingredientsIds[0])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIds[1]), Convert.ToInt32(ingredientsIds[0])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIds[2]), Convert.ToInt32(ingredientsIds[0])));
 
             return medicationsIngredients;
         }

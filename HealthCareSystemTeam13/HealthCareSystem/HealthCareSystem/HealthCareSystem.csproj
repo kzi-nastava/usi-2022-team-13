@@ -53,6 +53,8 @@
     <Compile Include="Core\DatabaseHelpers.cs" />
     <Compile Include="Core\Medications\Ingredients\Model\Ingredient.cs" />
     <Compile Include="Core\Medications\Model\Medication.cs" />
+    <Compile Include="Core\Medications\Model\MedicationsIngredient.cs" />
+    <Compile Include="Core\Medications\Model\RejectedMedication.cs" />
     <Compile Include="Core\Rooms\Equipment\Model\Equipment.cs" />
     <Compile Include="Core\Rooms\Model\Room.cs" />
     <Compile Include="Core\Scripts\Repository\InsertionRepository.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="Core\Users\Doctors\Model\ReferralLetter.cs" />
     <Compile Include="Core\Users\HospitalManagers\Model\HospitalManager.cs" />
     <Compile Include="Core\Users\Model\User.cs" />
+    <Compile Include="Core\Users\Patients\Model\BlockedPatient.cs" />
     <Compile Include="Core\Users\Patients\Model\Patient.cs" />
     <Compile Include="Core\Users\Secretaries\Model\Secretary.cs" />
     <Compile Include="DoctorView.cs">
