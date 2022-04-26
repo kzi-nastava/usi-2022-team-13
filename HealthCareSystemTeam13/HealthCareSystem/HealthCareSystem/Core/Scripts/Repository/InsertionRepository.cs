@@ -91,7 +91,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             //InsertRenovations();
             InsertTransferHistoryOfEquipment();
-            
+
+            InsertPatientEditRequests();
+
+            InsertReceipts();
+            InsertReceiptMedication();
+
 
             Connection.Close();
         }
@@ -100,7 +105,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
         {
             try
             {
-                Connection.Open();
+                if (Connection.State == System.Data.ConnectionState.Closed)
+                {
+                    Connection.Open();
+                }
 
             }
             catch (Exception exception)
@@ -110,16 +118,21 @@ namespace HealthCareSystem.Core.Scripts.Repository
             finally
             {
                 // Deleting all records from database
+
+                DatabaseHelpers.ExecuteNonQueries("Delete from BlockedPatients", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from ReceiptMedications", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Receipt", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from HospitalSurveys", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from PatientAlergicTo", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from MedicalRecord", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Examination", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from RequestForDinamicEquipment", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from users", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from rooms", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from medications", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Ingredients", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Equipment", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from HospitalSurveys", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from PatientAlergicTo", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from MedicalRecord", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from Examination", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from Instructions", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Instructions", Connection); 
 
                 Connection.Close();
             }
@@ -920,6 +933,85 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
         }
 
+        private static void InsertPatientEditRequests()
+        {
+            List<string> patientIds = GetPatientIds();
+            List<string> examinationIds = DatabaseHelpers.ExecuteReaderQueries("select id from examination", Connection);
 
+            InsertSinglePatientEditRequest(patientIds[2], examinationIds[2], DateTime.Now.AddDays(4), true, false);
+
+        }
+
+        private static void InsertSinglePatientEditRequest(string patientId, string examinationId, DateTime newDateTime, bool isChanged, bool isDeleted)
+        {
+            var query = "INSERT INTO PatientEditRequest(id_patient, id_examination, dateOf, isChanged, isDeleted) VALUES(@id_patient, @id_examination, @dateOf, @isChanged, @isDeleted)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_patient", Convert.ToInt32(patientId));
+                cmd.Parameters.AddWithValue("@id_examination", Convert.ToInt32(examinationId));
+                cmd.Parameters.AddWithValue("@dateOf", newDateTime.ToString());
+                cmd.Parameters.AddWithValue("@isChanged", isChanged);
+                cmd.Parameters.AddWithValue("@isDeleted", isDeleted);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private static void InsertReceipts()
+        {
+            List<Receipt> receipts = GetReceipts();
+
+            foreach (Receipt receipt in receipts)
+            {
+                InsertSingleReceipt(receipt);
+            }
+        }
+        private static void InsertSingleReceipt(Receipt receipt)
+        {
+            var query = "INSERT INTO Receipt(id_instructions, id_doctor, id_patient, dateOf) VALUES(@id_instructions, @id_doctor, @id_patient, @dateOf)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_instructions", receipt.InstructionId);
+                cmd.Parameters.AddWithValue("@id_instructions", receipt.DoctorId);
+                cmd.Parameters.AddWithValue("@id_instructions", receipt.PatientId);
+                cmd.Parameters.AddWithValue("@id_instructions", receipt.DateOfHandout.ToString());
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private static List<Receipt> GetReceipts()
+        {
+            List<Receipt> receipts = new List<Receipt>();
+            List<string> patientIds = GetPatientIds();
+            List<string> doctorIds = GetDoctorIds();
+            List<string> instructionIds = DatabaseHelpers.ExecuteReaderQueries("select id from Instructions", Connection);
+            receipts.Add(new Receipt(Convert.ToInt32(doctorIds[0]), Convert.ToInt32(instructionIds[0]), Convert.ToInt32(patientIds[0]), DateTime.Now));
+            receipts.Add(new Receipt(Convert.ToInt32(doctorIds[0]), Convert.ToInt32(instructionIds[1]), Convert.ToInt32(patientIds[1]), DateTime.Now));
+            receipts.Add(new Receipt(Convert.ToInt32(doctorIds[1]), Convert.ToInt32(instructionIds[2]), Convert.ToInt32(patientIds[2]), DateTime.Now));
+
+
+            return receipts;
+        }
+
+        private static void InsertReceiptMedication()
+        {
+            List<string> receiptIds = DatabaseHelpers.ExecuteReaderQueries("select id from Receipt", Connection);
+            List<string> medicationIds = GetMedicationIds();
+            InsertSingleReceiptMedication(Convert.ToInt32(receiptIds[0]), Convert.ToInt32(medicationIds[0]));
+            InsertSingleReceiptMedication(Convert.ToInt32(receiptIds[1]), Convert.ToInt32(medicationIds[0]));
+            InsertSingleReceiptMedication(Convert.ToInt32(receiptIds[2]), Convert.ToInt32(medicationIds[1]));
+
+
+        }
+        private static void InsertSingleReceiptMedication(int receiptId, int medicationId)
+        {
+            var query = "INSERT INTO ReceiptMedications(id_receipt, id_medication) VALUES(@id_receipt, @id_medication)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_receipt", receiptId);
+                cmd.Parameters.AddWithValue("@id_medication", medicationId);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }

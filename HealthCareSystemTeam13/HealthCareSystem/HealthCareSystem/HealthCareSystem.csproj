@@ -55,6 +55,7 @@
     <Compile Include="Core\Medications\Ingredients\Model\Ingredient.cs" />
     <Compile Include="Core\Medications\Model\Medication.cs" />
     <Compile Include="Core\Medications\Model\MedicationsIngredient.cs" />
+    <Compile Include="Core\Medications\Model\Receipt.cs" />
     <Compile Include="Core\Medications\Model\RejectedMedication.cs" />
     <Compile Include="Core\Medications\Receipts\Model\Instruction.cs" />
     <Compile Include="Core\Rooms\DynamicEquipmentRequests\Model\DynamicEquipmentRequest.cs" />
