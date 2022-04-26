@@ -108,5 +108,9 @@ namespace HealthCareSystem.Core.Authentication
             return (username == "" || password == "" || username.Contains(" "));
 
         }
+        ~LoginAuthentication()
+        {
+            Connection.Close();
+        }
     }
 }
