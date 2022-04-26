@@ -82,6 +82,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertExaminations();
             InsertAnamnesises();
             InsertInstructions();
+            InsertDiseaseHistories();
 
 
             InsertRoomHasEquipment();
@@ -97,6 +98,50 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             Connection.Close();
         }
+
+
+
+
+
+        private static void InsertDiseaseHistories()
+        {
+            List<DiseaseHistory> diseaseHistories = GetDiseaseHistories();
+
+            foreach (DiseaseHistory diseaseHistory in diseaseHistories)
+            {
+                InsertSingleDiseaseHistory(diseaseHistory);
+            }
+        }
+
+        private static List<DiseaseHistory> GetDiseaseHistories()
+        {
+            List<DiseaseHistory> diseaseHistory = new List<DiseaseHistory>();
+            List<String> medicalRecordIds = GetMedicalRecordIds();
+
+
+            diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[0]), "Dementia"));
+            diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[1]), "Alzheimer"));
+            diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[2]), "Diabetes"));
+
+            return diseaseHistory;
+        }
+
+        private static void InsertSingleDiseaseHistory(DiseaseHistory diseaseHistory)
+        {
+            var query = "INSERT INTO DiseaseHistory(id_medicalRecord, nameOfDisease) VALUES(@id_medicalRecord, @nameOfDisease)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_medicalRecord", diseaseHistory.IdMedicalRecord);
+                cmd.Parameters.AddWithValue("@nameOfDisease", diseaseHistory.NameOfDisease);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+
+
+
+
+
 
         public void DeleteRecords()
         {
@@ -122,6 +167,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 DatabaseHelpers.ExecuteNonQueries("Delete from PatientAlergicTo", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from MedicalRecord", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Examination", Connection);
+<<<<<<< HEAD
+                DatabaseHelpers.ExecuteNonQueries("Delete from Instructions", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from DiseaseHistory", Connection);
+=======
                 DatabaseHelpers.ExecuteNonQueries("Delete from RequestForDinamicEquipment", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from users", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from rooms", Connection);
@@ -140,6 +189,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 DatabaseHelpers.ExecuteNonQueries("Delete from HistoryOfEquipment", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Instructions", Connection); 
               
+>>>>>>> feature/DatabaseAuthentication
                 Connection.Close();
             }
         }
@@ -767,6 +817,15 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         }
 
+<<<<<<< HEAD
+        private static List<String> GetMedicalRecordIds()
+        {
+            var query = "select ID from MedicalRecord";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+
+        }
+=======
+>>>>>>> feature/DatabaseAuthentication
         private static void InsertSinglePatientAlergies(string patientId, string ingredientId)
         {
             var query = "INSERT INTO PatientAlergicTo(id_patient, id_ingredient) VALUES(@id_patient, @id_ingredient)";
