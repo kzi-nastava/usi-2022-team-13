@@ -307,6 +307,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return renovations;
         }
 
+        // FOR LATER PURPOSES
+
         /*private static void InsertRenovations()
         {
             List<Renovation> renovations = GetRenovations();
