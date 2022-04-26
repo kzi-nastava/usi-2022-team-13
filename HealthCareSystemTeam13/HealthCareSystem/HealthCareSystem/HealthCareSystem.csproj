@@ -57,8 +57,12 @@
     <Compile Include="Core\Medications\Model\MedicationsIngredient.cs" />
     <Compile Include="Core\Medications\Model\RejectedMedication.cs" />
     <Compile Include="Core\Medications\Receipts\Model\Instruction.cs" />
+    <Compile Include="Core\Rooms\DynamicEquipmentRequests\Model\DynamicEquipmentRequest.cs" />
     <Compile Include="Core\Rooms\Equipment\Model\Equipment.cs" />
+    <Compile Include="Core\Rooms\Equipment\RoomHasEquipment\Model\RoomHasEquipment.cs" />
+    <Compile Include="Core\Rooms\Equipment\TransferHistoryOfEquipment\Model\TransferHistoryOfEquipment.cs" />
     <Compile Include="Core\Rooms\Model\Room.cs" />
+    <Compile Include="Core\Rooms\Renovations\Model\Renovation.cs" />
     <Compile Include="Core\Scripts\Repository\InsertionRepository.cs" />
     <Compile Include="Core\Surveys\HospitalSurveys\Model\HospitalSurvey.cs" />
     <Compile Include="Core\Users\Doctors\Model\Doctor.cs" />
@@ -124,13 +128,7 @@
     <Folder Include="Core\Data\" />
     <Folder Include="Core\Examinations\Anamnesis\" />
     <Folder Include="Core\Pages\" />
-    <Folder Include="Core\Rooms\Renovations\" />
     <Folder Include="Core\Surveys\DoctorSurveys\" />
-<<<<<<< HEAD
-=======
-    <Folder Include="Core\Users\Secretaries\" />
-    <Folder Include="Core\Surveys\HospitalSurveys\" />
->>>>>>> origin/PetarScripts
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

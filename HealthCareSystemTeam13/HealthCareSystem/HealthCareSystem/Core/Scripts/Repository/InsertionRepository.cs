@@ -12,23 +12,18 @@ using HealthCareSystem.Core.Medications.Model;
 using HealthCareSystem.Core.Users.HospitalManagers;
 using HealthCareSystem.Core.Rooms.Model;
 using HealthCareSystem.Core;
-<<<<<<< HEAD
 using HealthCareSystem.Core.Rooms.Equipment.Model;
 using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
 using HealthCareSystem.Core.Ingredients.Model;
 using HealthCareSystem.Core.Examinations.Examination;
 using HealthCareSystem.Core.Medications.Receipts.Model;
-=======
-
 using HealthCareSystem.Core.Rooms.Equipment.Model;
 using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
-
 using HealthCareSystem.Core.Ingredients.Model;
 using HealthCareSystem.Core.Rooms.Renovations.Model;
 using HealthCareSystem.Core.Rooms.Equipment.TransferHistoryOfEquipment.Model;
 using HealthCareSystem.Core.Rooms.DynamicEqipmentRequests.Model;
 using HealthCareSystem.Core.Rooms.Equipment.RoomHasEquipment.Model;
->>>>>>> origin/PetarScripts
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
@@ -91,11 +86,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertInstructions();
 
 
-
-            InsertDynamicEquipmentRequests();
-            InsertRenovations();
-            InsertTransferHistoryOfEquipment();
             InsertRoomHasEquipment();
+            InsertDynamicEquipmentRequests();
+
+            //InsertRenovations();
+            InsertTransferHistoryOfEquipment();
+            
 
             Connection.Close();
         }
@@ -151,13 +147,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
 
-        private static List<String> GetRoomIds()
-        {
-
-            var query = "select ID from Rooms";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
-        }
-
         private static List<String> GetEquipmentIds()
         {
 
@@ -198,7 +187,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@name", equipment.Name);
-                cmd.Parameters.AddWithValue("@type", equipment.Type);
+                cmd.Parameters.AddWithValue("@type", equipment.Type.ToString());
                 cmd.ExecuteNonQuery();
 
             }
@@ -318,7 +307,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return renovations;
         }
 
-        private static void InsertRenovations()
+        /*private static void InsertRenovations()
         {
             List<Renovation> renovations = GetRenovations();
 
@@ -326,19 +315,19 @@ namespace HealthCareSystem.Core.Scripts.Repository
             {
                 InsertSingleRenovation(renovation);
             }
-        }
+        }*/
 
-        private static void InsertSingleRenovation(Renovation renovation)
+       /* private static void InsertSingleRenovation(Renovation renovation)
         {
-            var query = "INSERT INTO Renovations(id_room, startingDate, endingDate) VALUES(@id_room, @startingDate, @ending_date)";
+            var query = "INSERT INTO Renovations(id_room, dateOfStart, dateOfFinish) VALUES(@id_room, @startingDate, @ending_date)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_room", renovation.RoomId);
-                cmd.Parameters.AddWithValue("@startingDate", renovation.StartingDate);
-                cmd.Parameters.AddWithValue("@ending_date", renovation.EndingDate);
+                cmd.Parameters.AddWithValue("@startingDate", renovation.StartingDate.ToString());
+                cmd.Parameters.AddWithValue("@ending_date", renovation.EndingDate.ToString());
                 cmd.ExecuteNonQuery();
             }
-        }
+        }*/
 
         private static List<TransferHistoryOfEquipment> GetTransferHistoryOfEquipment()
         {
@@ -364,12 +353,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         private static void InsertSingleTransferHistoryOfEquipment(TransferHistoryOfEquipment transferHistoryOfEquipment)
         {
-            var query = "INSERT INTO TransferHistoryOfEquipment(id_original_room, id_new_room, dateOfChange) VALUES(@first_room_id, @second_room_id, @transferDate)";
+            var query = "INSERT INTO EquipmentTransferHistory(id_original_room, id_new_room, dateOfChange) VALUES(@first_room_id, @second_room_id, @transferDate)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@first_room_id", transferHistoryOfEquipment.FirstRoomId);
                 cmd.Parameters.AddWithValue("@second_room_id", transferHistoryOfEquipment.SecondRoomId);
-                cmd.Parameters.AddWithValue("@transferDate", transferHistoryOfEquipment.TransferDate);
+                cmd.Parameters.AddWithValue("@transferDate", transferHistoryOfEquipment.TransferDate.ToString());
                 cmd.ExecuteNonQuery();
             }
         }
@@ -379,7 +368,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<RoomHasEquipment> roomHasEquipment = new List<RoomHasEquipment>();
             List<String> roomIds = GetRoomIds();
             List<String> equipmentIds = GetEquipmentIds();
-
+            
             roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIds[0]), Convert.ToInt32(roomIds[4]), 5));
             roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIds[1]), Convert.ToInt32(roomIds[3]), 4));
 
@@ -426,20 +415,22 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static void InsertDynamicEquipmentRequests()
         {
             List<DynamicEquipmentRequest> dynamicEquipmentRequests = GetDynamicEquipmentRequests();
-
+            List<String> secreatyIds = GetSecretaryIds();
             foreach (DynamicEquipmentRequest dynamicEquipmentRequest in dynamicEquipmentRequests)
             {
-                InsertSingleDynamicEquipmentRequest(dynamicEquipmentRequest);
+                InsertSingleDynamicEquipmentRequest(dynamicEquipmentRequest, secreatyIds[0]);
             }
         }
 
-        private static void InsertSingleDynamicEquipmentRequest(DynamicEquipmentRequest dynamicEquipmentRequest)
+        private static void InsertSingleDynamicEquipmentRequest(DynamicEquipmentRequest dynamicEquipmentRequest, string secretaryId)
         {
-            var query = "INSERT INTO DynamicEquipmentRequest(id_equipment, quantity) VALUES(@id_equipment, @quantity)";
+            var query = "INSERT INTO RequestForDinamicEquipment(id_equipment, amount, id_secretary) VALUES(@id_equipment, @quantity, @id_secretary)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_equipment", dynamicEquipmentRequest.EquipmentId);
                 cmd.Parameters.AddWithValue("@quantity", dynamicEquipmentRequest.Quantity);
+                cmd.Parameters.AddWithValue("@secretary_id", Convert.ToInt32(secretaryId));
+
 
                 cmd.ExecuteNonQuery();
             }
