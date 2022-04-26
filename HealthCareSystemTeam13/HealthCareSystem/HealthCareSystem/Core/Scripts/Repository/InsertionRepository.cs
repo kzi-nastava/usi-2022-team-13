@@ -15,7 +15,7 @@ using HealthCareSystem.Core;
 using HealthCareSystem.Core.Rooms.Equipment.Model;
 using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
 using HealthCareSystem.Core.Ingredients.Model;
-using HealthCareSystem.Core.Examinations.Examination;
+using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Medications.Receipts.Model;
 using HealthCareSystem.Core.Rooms.Equipment.Model;
 using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
@@ -42,14 +42,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
                 Connection.Open();
 
-
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.ToString());
             }
         }
-
 
         public void ExecuteQueries()
         {
@@ -80,9 +78,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
             //PatientAlergies
             InsertPatientAlergies();
 
-
             InsertMedicalRecords();
             InsertExaminations();
+            InsertAnamnesises();
             InsertInstructions();
 
 
@@ -92,7 +90,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             //InsertRenovations();
             InsertTransferHistoryOfEquipment();
             
-
             Connection.Close();
         }
 
@@ -110,51 +107,63 @@ namespace HealthCareSystem.Core.Scripts.Repository
             finally
             {
                 // Deleting all records from database
-                DatabaseHelpers.ExecuteNonQueries("Delete from users", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from rooms", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from medications", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Users", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Menagers", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Secretaries", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Patients", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Doctors", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from BlockedPatients", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Rooms", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Medications", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Ingredients", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from MedicationsIngredients", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from RejectedMedications", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Equipment", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from HospitalSurveys", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from PatientAlergicTo", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from MedicalRecord", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from Examination", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from Instructions", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from MedicalRecords", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Examinations", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Anamnesises", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Instructionss", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from RoomHasEquipment", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from DynamicEquipmentRequests", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from HistoryOfEquipment", Connection);
 
                 Connection.Close();
             }
         }
 
-
-        private static List<String> GetUserIds(UserRole role)
+        private static List<String> GetUserIDs(UserRole role)
         {
             var query = "select ID from Users where role='" + role.ToString() + "'";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
-        private static List<String> GetPatientIds()
+
+        private static List<String> GetPatientIDs()
         {
             var query = "select ID from Patients";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
-        private static List<String> GetSecretaryIds()
+
+        private static List<String> GetSecretaryIDs()
         {
             var query = "select ID from Secretaries";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
-        private static List<String> GetDoctorIds()
+
+        private static List<String> GetDoctorIDs()
         {
             var query = "select ID from Doctors";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
 
-        private static List<String> GetEquipmentIds()
+        private static List<String> GetEquipmentIDs()
         {
-
             var query = "select ID from Equipment where type='" + Equipment.EquipmentType.Dynamic.ToString() + "'";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
 
-        private static List<String> GetRoomIds()
+        private static List<String> GetRoomIDs()
         {
             var query = "select ID from Rooms";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
@@ -181,6 +190,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
 
         }
+
         private static void InsertSingleEquipment(Equipment equipment)
         {
             var query = "INSERT INTO equipment(nameOf, type) VALUES(@name, @type)";
@@ -189,7 +199,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@name", equipment.Name);
                 cmd.Parameters.AddWithValue("@type", equipment.Type.ToString());
                 cmd.ExecuteNonQuery();
-
             }
         }
 
@@ -207,14 +216,15 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static void InsertHospitalSurveys()
         {
             List<HospitalSurvey> hospitalSurveys = GetHospitalSurveys();
-            List<String> patientIds = GetPatientIds();
+            List<String> patientIDs = GetPatientIDs();
             foreach (HospitalSurvey hospitalSurvey in hospitalSurveys)
             {
-                InsertSingleHospitalSurvey(hospitalSurvey, patientIds);
+                InsertSingleHospitalSurvey(hospitalSurvey, patientIDs);
             }
 
         }
-        private static void InsertSingleHospitalSurvey(HospitalSurvey hospitalSurvey, List<String> patientIds)
+
+        private static void InsertSingleHospitalSurvey(HospitalSurvey hospitalSurvey, List<String> patientIDs)
         {
             var query = "INSERT INTO hospitalSurveys(quality," +
                 "higyene," +
@@ -228,7 +238,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@happiness", hospitalSurvey.Happiness);
                 cmd.Parameters.AddWithValue("@wouldRecommend", hospitalSurvey.WouldRecommend);
                 cmd.Parameters.AddWithValue("@comment", hospitalSurvey.Comment);
-                cmd.Parameters.AddWithValue("@idPatient", Convert.ToInt32(patientIds[0]));
+                cmd.Parameters.AddWithValue("@idPatient", Convert.ToInt32(patientIDs[0]));
                 cmd.ExecuteNonQuery();
             }
         }
@@ -275,7 +285,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@pass", user.Password);
                 cmd.Parameters.AddWithValue("@role", user.Role.ToString());
                 cmd.ExecuteNonQuery();
-
             }
         }
 
@@ -292,17 +301,16 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static List<Renovation> GetRenovations()
         {
             List<Renovation> renovations = new List<Renovation>();
-            List<String> roomIds = GetRoomIds();
+            List<String> roomIDs = GetRoomIDs();
 
-            renovations.Add(new Renovation(Convert.ToInt32(roomIds[0]), DateTime.Now, DateTime.Now.AddMonths(2)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIds[1]), DateTime.Now, DateTime.Now.AddMonths(1)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIds[2]), DateTime.Now, DateTime.Now.AddMonths(3)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIds[3]), DateTime.Now, DateTime.Now.AddMonths(4)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIds[4]), DateTime.Now, DateTime.Now.AddMonths(5)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIds[5]), DateTime.Now, DateTime.Now.AddMonths(1)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIds[6]), DateTime.Now, DateTime.Now.AddDays(15)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIds[7]), DateTime.Now, DateTime.Now.AddDays(25)));
-
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[0]), DateTime.Now, DateTime.Now.AddMonths(2)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[1]), DateTime.Now, DateTime.Now.AddMonths(1)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[2]), DateTime.Now, DateTime.Now.AddMonths(3)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[3]), DateTime.Now, DateTime.Now.AddMonths(4)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[4]), DateTime.Now, DateTime.Now.AddMonths(5)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[5]), DateTime.Now, DateTime.Now.AddMonths(1)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[6]), DateTime.Now, DateTime.Now.AddDays(15)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[7]), DateTime.Now, DateTime.Now.AddDays(25)));
 
             return renovations;
         }
@@ -332,11 +340,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static List<TransferHistoryOfEquipment> GetTransferHistoryOfEquipment()
         {
             List<TransferHistoryOfEquipment> transferHistoryOfEquipment = new List<TransferHistoryOfEquipment>();
-            List<String> roomIds = GetRoomIds();
+            List<String> roomIDs = GetRoomIDs();
 
-            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIds[0]), Convert.ToInt32(roomIds[5]), DateTime.Now));
-            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIds[1]), Convert.ToInt32(roomIds[6]), DateTime.Now));
-
+            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[0]), Convert.ToInt32(roomIDs[5]), DateTime.Now));
+            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[1]), Convert.ToInt32(roomIDs[6]), DateTime.Now));
 
             return transferHistoryOfEquipment;
         }
@@ -366,12 +373,11 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static List<RoomHasEquipment> GetRoomHasEquipment()
         {
             List<RoomHasEquipment> roomHasEquipment = new List<RoomHasEquipment>();
-            List<String> roomIds = GetRoomIds();
-            List<String> equipmentIds = GetEquipmentIds();
+            List<String> roomIDs = GetRoomIDs();
+            List<String> equipmentIDs = GetEquipmentIDs();
             
-            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIds[0]), Convert.ToInt32(roomIds[4]), 5));
-            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIds[1]), Convert.ToInt32(roomIds[3]), 4));
-
+            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[0]), Convert.ToInt32(roomIDs[4]), 5));
+            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[1]), Convert.ToInt32(roomIDs[3]), 4));
 
             return roomHasEquipment;
         }
@@ -402,12 +408,11 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static List<DynamicEquipmentRequest> GetDynamicEquipmentRequests()
         {
             List<DynamicEquipmentRequest> dynamicEquipmentRequests = new List<DynamicEquipmentRequest>();
-            List<String> equipmentIds = GetEquipmentIds();
+            List<String> equipmentIDs = GetEquipmentIDs();
 
-            dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIds[0]), 10));
-            dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIds[1]), 15));
-            // dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIds[2]), 20));
-
+            dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIDs[0]), 10));
+            dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIDs[1]), 15));
+            // dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIDs[2]), 20));
 
             return dynamicEquipmentRequests;
         }
@@ -415,10 +420,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static void InsertDynamicEquipmentRequests()
         {
             List<DynamicEquipmentRequest> dynamicEquipmentRequests = GetDynamicEquipmentRequests();
-            List<String> secreatyIds = GetSecretaryIds();
+            List<String> secreatyIDs = GetSecretaryIDs();
             foreach (DynamicEquipmentRequest dynamicEquipmentRequest in dynamicEquipmentRequests)
             {
-                InsertSingleDynamicEquipmentRequest(dynamicEquipmentRequest, secreatyIds[0]);
+                InsertSingleDynamicEquipmentRequest(dynamicEquipmentRequest, secreatyIDs[0]);
             }
         }
 
@@ -430,8 +435,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@id_equipment", dynamicEquipmentRequest.EquipmentId);
                 cmd.Parameters.AddWithValue("@quantity", dynamicEquipmentRequest.Quantity);
                 cmd.Parameters.AddWithValue("@secretary_id", Convert.ToInt32(secretaryId));
-
-
                 cmd.ExecuteNonQuery();
             }
         }
@@ -439,12 +442,11 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static List<Doctor> GetDoctors()
         {
             List<Doctor> doctors = new List<Doctor>();
-            List<String> userIds = GetUserIds(UserRole.Doctors);
+            List<String> userIDs = GetUserIDs(UserRole.Doctors);
 
-            doctors.Add(new Doctor("Mirko", "Breskvica", Convert.ToInt32(userIds[0]), DoctorSpeciality.BasicPractice));
-            doctors.Add(new Doctor("Marina", "Adamovic", Convert.ToInt32(userIds[1]), DoctorSpeciality.Dermatology));
-            doctors.Add(new Doctor("Nikola", "Redic", Convert.ToInt32(userIds[2]), DoctorSpeciality.Neurology));
-
+            doctors.Add(new Doctor("Mirko", "Breskvica", Convert.ToInt32(userIDs[0]), DoctorSpeciality.BasicPractice));
+            doctors.Add(new Doctor("Marina", "Adamovic", Convert.ToInt32(userIDs[1]), DoctorSpeciality.Dermatology));
+            doctors.Add(new Doctor("Nikola", "Redic", Convert.ToInt32(userIDs[2]), DoctorSpeciality.Neurology));
 
             return doctors;
         }
@@ -459,20 +461,20 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@user_id", doctor.UserId);
                 cmd.Parameters.AddWithValue("@speciality", doctor.Speciality.ToString());
                 cmd.ExecuteNonQuery();
-
             }
         }
         private static List<Patient> GetPatients()
         {
             List<Patient> patients = new List<Patient>();
-            List<String> userIds = GetUserIds(UserRole.Patients);
+            List<String> userIDs = GetUserIDs(UserRole.Patients);
 
-            patients.Add(new Patient("Jovana", "Jabuka", Convert.ToInt32(userIds[0]), true));
-            patients.Add(new Patient("Neven", "Kamilica", Convert.ToInt32(userIds[1]), false));
-            patients.Add(new Patient("Isidor", "Nevenko", Convert.ToInt32(userIds[2]), false));
+            patients.Add(new Patient("Jovana", "Jabuka", Convert.ToInt32(userIDs[0]), true));
+            patients.Add(new Patient("Neven", "Kamilica", Convert.ToInt32(userIDs[1]), false));
+            patients.Add(new Patient("Isidor", "Nevenko", Convert.ToInt32(userIDs[2]), false));
 
             return patients;
         }
+
         private static void InsertPatients()
         {
             List<Patient> patients = GetPatients();
@@ -506,13 +508,14 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
 
         }
+
         private static List<BlockedPatient> GetBlockedPatients()
         {
             List<BlockedPatient> blockedPatients = new List<BlockedPatient>();
-            List<String> patientsIds = GetPatientIds();
-            List<String> secretariesIds = GetSecretaryIds();
+            List<String> patientsIDs = GetPatientIDs();
+            List<String> secretariesIDs = GetSecretaryIDs();
 
-            blockedPatients.Add(new BlockedPatient(Convert.ToInt32(patientsIds[0]), Convert.ToInt32(secretariesIds[1]), new DateTime(2022, 4, 26)));
+            blockedPatients.Add(new BlockedPatient(Convert.ToInt32(patientsIDs[0]), Convert.ToInt32(secretariesIDs[1]), new DateTime(2022, 4, 26)));
 
             return blockedPatients;
         }
@@ -526,7 +529,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@id_secretary", blockedPatient.SecretaryID);
                 cmd.Parameters.AddWithValue("@dateOf", blockedPatient.DateOf);
                 cmd.ExecuteNonQuery();
-
             }
         }
 
@@ -540,14 +542,15 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
 
         }
+
         private static List<Secretary> GetSecretaries()
         {
             List<Secretary> secretaries = new List<Secretary>();
-            List<String> userIds = GetUserIds(UserRole.Secretaries);
+            List<String> userIDs = GetUserIDs(UserRole.Secretaries);
 
-            secretaries.Add(new Secretary("Tina", "Mihajlovic", Convert.ToInt32(userIds[0])));
-            secretaries.Add(new Secretary("Milica", "Tomic", Convert.ToInt32(userIds[1])));
-            secretaries.Add(new Secretary("Danilo", "Jevtic", Convert.ToInt32(userIds[2])));
+            secretaries.Add(new Secretary("Tina", "Mihajlovic", Convert.ToInt32(userIDs[0])));
+            secretaries.Add(new Secretary("Milica", "Tomic", Convert.ToInt32(userIDs[1])));
+            secretaries.Add(new Secretary("Danilo", "Jevtic", Convert.ToInt32(userIDs[2])));
 
             return secretaries;
         }
@@ -561,7 +564,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@LastName", secretary.LastName);
                 cmd.Parameters.AddWithValue("@user_id", secretary.UserId);
                 cmd.ExecuteNonQuery();
-
             }
         }
 
@@ -575,12 +577,13 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
 
         }
+
         private static List<HospitalManager> GetHospitalManagers()
         {
             List<HospitalManager> hospitalManager = new List<HospitalManager>();
-            List<String> userIds = GetUserIds(UserRole.HospitalManagers);
+            List<String> userIDs = GetUserIDs(UserRole.HospitalManagers);
 
-            hospitalManager.Add(new HospitalManager("Marko", "Markovic", Convert.ToInt32(userIds[0])));
+            hospitalManager.Add(new HospitalManager("Marko", "Markovic", Convert.ToInt32(userIDs[0])));
 
             return hospitalManager;
         }
@@ -611,6 +614,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 InsertSingleRoom(room);
             }
         }
+
         private static List<Room> GetRooms()
         {
             List<Room> rooms = new List<Room>();
@@ -631,6 +635,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             return rooms;
         }
+
         private static void InsertSingleRoom(Room room)
         {
             var query = "INSERT INTO rooms(type) VALUES(@type)";
@@ -660,6 +665,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             
             return medications;
         }
+
         private static void InsertSingleMedication(Medication medication)
         {
             var query = "INSERT INTO medications(nameOfMedication, status) VALUES(@nameOfMedication, @status)";
@@ -671,7 +677,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
         }
 
-        private static List<String> GetMedicationIds()
+        private static List<String> GetMedicationIDs()
         {
             var query = "select ID from Medications";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
@@ -687,13 +693,14 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
 
         }
+
         private static List<RejectedMedication> GetRejectedMedications()
         {
             List<RejectedMedication> rejectedMedications = new List<RejectedMedication>();
-            List<String> medicationsIds = GetMedicationIds();
-            List<String> doctorsIds = GetDoctorIds();
+            List<String> medicationsIDs = GetMedicationIDs();
+            List<String> doctorsIDs = GetDoctorIDs();
 
-            rejectedMedications.Add(new RejectedMedication(Convert.ToInt32(medicationsIds[1]), Convert.ToInt32(doctorsIds[2]), "Medication is too strong."));
+            rejectedMedications.Add(new RejectedMedication(Convert.ToInt32(medicationsIDs[1]), Convert.ToInt32(doctorsIDs[2]), "Medication is too strong."));
 
             return rejectedMedications;
         }
@@ -707,7 +714,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@id_doctor", rejectedMedication.DoctorID);
                 cmd.Parameters.AddWithValue("@description", rejectedMedication.Description);
                 cmd.ExecuteNonQuery();
-
             }
         }
 
@@ -719,6 +725,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 InsertSingleIngredient(ingredient);
             }
         }
+
         private static List<Ingredient> GetIngredients()
         {
             List<Ingredient> ingredients = new List<Ingredient>();
@@ -729,6 +736,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             
             return ingredients;
         }
+
         private static void InsertSingleIngredient(Ingredient ingredient)
         {
             var query = "INSERT INTO Ingredients(nameOfIngredient) VALUES(@nameOfIngredient)";
@@ -739,12 +747,13 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
         }
 
-        private static List<String> GetIngredientIds()
+        private static List<String> GetIngredientIDs()
         {
             var query = "select ID from Ingredients";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
 
         }
+
         private static void InsertSinglePatientAlergies(string patientId, string ingredientId)
         {
             var query = "INSERT INTO PatientAlergicTo(id_patient, id_ingredient) VALUES(@id_patient, @id_ingredient)";
@@ -758,17 +767,14 @@ namespace HealthCareSystem.Core.Scripts.Repository
         }
         private static void InsertPatientAlergies()
         {
+            List<string> patientIDs = GetPatientIDs();
+            List<string> ingredientIDs = DatabaseHelpers.ExecuteReaderQueries("select id from ingredients", Connection);
 
-            List<string> patientIds = GetPatientIds();
-            List<string> ingredientIds = DatabaseHelpers.ExecuteReaderQueries("select id from ingredients", Connection);
-
-
-            for(int i =0;i < patientIds.Count();i++)
+            for(int i =0;i < patientIDs.Count();i++)
             {
-                InsertSinglePatientAlergies(patientIds[i], ingredientIds[i]);
+                InsertSinglePatientAlergies(patientIDs[i], ingredientIDs[i]);
 
             }
-
 
         }
 
@@ -782,15 +788,16 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
 
         }
+
         private static List<MedicationsIngredient> GetMedicationsIngredients()
         {
             List<MedicationsIngredient> medicationsIngredients = new List<MedicationsIngredient>();
-            List<String> medicationsIds = GetMedicationIds();
-            List<String> ingredientsIds = DatabaseHelpers.ExecuteReaderQueries("select id from Ingredients", Connection);
+            List<String> medicationsIDs = GetMedicationIDs();
+            List<String> ingredientsIDs = DatabaseHelpers.ExecuteReaderQueries("select id from Ingredients", Connection);
 
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIds[0]), Convert.ToInt32(ingredientsIds[0])));
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIds[1]), Convert.ToInt32(ingredientsIds[0])));
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIds[2]), Convert.ToInt32(ingredientsIds[0])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[0]), Convert.ToInt32(ingredientsIDs[0])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[1]), Convert.ToInt32(ingredientsIDs[0])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[2]), Convert.ToInt32(ingredientsIDs[0])));
 
             return medicationsIngredients;
         }
@@ -806,6 +813,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             }
         }
+
         private static void InsertMedicalRecords()
         {
             List<MedicalRecord> medicalRecords = GetMedicalRecords();
@@ -819,11 +827,11 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static List<MedicalRecord> GetMedicalRecords()
         {
             List<MedicalRecord> medicalRecords = new List<MedicalRecord>();
-            List<String> patientIds = GetPatientIds();
+            List<String> patientIDs = GetPatientIDs();
 
-            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIds[0]), 185, 85));
-            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIds[1]), 192, 92));
-            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIds[2]), 183, 75));
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[0]), 185, 85));
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[1]), 192, 92));
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[2]), 183, 75));
 
             return medicalRecords;
         }
@@ -839,6 +847,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.ExecuteNonQuery();
             }
         }
+
         private static void InsertExaminations()
         {
             List<Examination> examinations = GetExaminations();
@@ -852,15 +861,15 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static List<Examination> GetExaminations()
         {
             List<Examination> examinations = new List<Examination>();
-            List<String> patientIds = GetPatientIds();
-            List<String> doctorIds = GetDoctorIds();
-            List<String> roomIds = GetRoomIds();
+            List<String> patientIDs = GetPatientIDs();
+            List<String> doctorIDs = GetDoctorIDs();
+            List<String> roomIDs = GetRoomIDs();
 
 
-
-            examinations.Add(new Examination(Convert.ToInt32(doctorIds[0]), Convert.ToInt32(patientIds[0]), false, false, false, DateTime.Now.AddDays(2),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIds[4]), 15));
-            examinations.Add(new Examination(Convert.ToInt32(doctorIds[1]), Convert.ToInt32(patientIds[1]), false, false, false, DateTime.Now.AddDays(2),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIds[5]), 15));
-            examinations.Add(new Examination(Convert.ToInt32(doctorIds[2]), Convert.ToInt32(patientIds[2]), false, false, false, DateTime.Now.AddDays(3),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIds[4]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIDs[0]), Convert.ToInt32(patientIDs[3]), false, false, false, new DateTime(2022, 4, 26), false, Convert.ToInt32(roomIDs[4]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIDs[0]), Convert.ToInt32(patientIDs[0]), false, false, false, DateTime.Now.AddDays(2),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIDs[1]), Convert.ToInt32(patientIDs[1]), false, false, false, DateTime.Now.AddDays(2),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[5]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIDs[2]), Convert.ToInt32(patientIDs[2]), false, false, false, DateTime.Now.AddDays(3),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
 
             return examinations;
         }
@@ -881,6 +890,45 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@isUrgent", examination.IsUrgent);
                 cmd.Parameters.AddWithValue("@id_room", examination.IdRoom);
                 cmd.Parameters.AddWithValue("@duration", examination.Duration);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private static List<String> GetExaminationIDs()
+        {
+            var query = "select ID from Examinations";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+
+        private static void InsertAnamnesises()
+        {
+            List<Anamnesis> anamnesises = GetAnamnesises();
+
+            foreach (Anamnesis anamnesis in anamnesises)
+            {
+                InsertSingleInstruction(anamnesis);
+            }
+        }
+
+        private static List<Anamnesis> GetAnamnesises()
+        {
+            List<Anamnesis> anamnesises = new List<Anamnesis>();
+            List<String> examinationIDs = GetExaminationIDs();
+
+            anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[0]), "Runny nose and coughs alot.", "Patient should drink antibiotics.", new DateTime(2022, 4, 26)));
+
+            return anamnesises;
+        }
+
+        private static void InsertSingleAnamnesis(Anamnesis anamnesis)
+        {
+            var query = "INSERT INTO Anamnesises(id_examination, notice, conclusions, dafeOf) VALUES(@id_examination, @notice, @conclusions, @dafeOf)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_examination", anamnesis.ExaminationID);
+                cmd.Parameters.AddWithValue("@notice", anamnesis.Notice);
+                cmd.Parameters.AddWithValue("@conclusions", anamnesis.Conclusions);
+                cmd.Parameters.AddWithValue("@dafeOf", anamnesis.DafeOf);
                 cmd.ExecuteNonQuery();
             }
         }
@@ -917,7 +965,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.ExecuteNonQuery();
             }
         }
-
 
     }
 }

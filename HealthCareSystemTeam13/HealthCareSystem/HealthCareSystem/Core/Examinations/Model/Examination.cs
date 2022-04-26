@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HealthCareSystem.Core.Examinations.Examination
+namespace HealthCareSystem.Core.Examinations.Model
 {
 
     enum TypeOfExamination
