@@ -121,11 +121,8 @@
     <Folder Include="Core\Pages\" />
     <Folder Include="Core\Rooms\Renovations\" />
     <Folder Include="Core\Surveys\DoctorSurveys\" />
-<<<<<<< HEAD
     <Folder Include="Core\Users\Secretaries\" />
-=======
     <Folder Include="Core\Surveys\HospitalSurveys\" />
->>>>>>> 1e092d3808df72b0d83b2641221da8ee9cb205b5
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

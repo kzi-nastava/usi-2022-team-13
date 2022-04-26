@@ -12,12 +12,15 @@ using HealthCareSystem.Core.Medications.Model;
 using HealthCareSystem.Core.Users.HospitalManagers;
 using HealthCareSystem.Core.Rooms.Model;
 using HealthCareSystem.Core;
-<<<<<<< HEAD
+
 using HealthCareSystem.Core.Rooms.Equipment.Model;
 using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
-=======
+
 using HealthCareSystem.Core.Ingredients.Model;
->>>>>>> 1e092d3808df72b0d83b2641221da8ee9cb205b5
+using HealthCareSystem.Core.Rooms.Renovations.Model;
+using HealthCareSystem.Core.Rooms.Equipment.TransferHistoryOfEquipment.Model;
+using HealthCareSystem.Core.Rooms.DynamicEqipmentRequests.Model;
+using HealthCareSystem.Core.Rooms.Equipment.RoomHasEquipment.Model;
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
@@ -63,6 +66,13 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertIngredients();
 
 
+
+
+            InsertDynamicEquipmentRequests();
+            InsertRenovations();
+            InsertTransferHistoryOfEquipment();
+            InsertRoomHasEquipment();
+
             Connection.Close();
         }
 
@@ -97,6 +107,19 @@ namespace HealthCareSystem.Core.Scripts.Repository
         {
 
             var query = "select ID from Users where role='" + role.ToString() + "'";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+
+        private static List<String> GetEquipmentIds()
+        {
+
+            var query = "select ID from Equipment where type='" + Equipment.EquipmentType.Dynamic.ToString() + "'";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+
+        private static List<String> GetRoomIds()
+        {
+            var query = "select ID from Rooms";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
 
@@ -226,6 +249,151 @@ namespace HealthCareSystem.Core.Scripts.Repository
             foreach (Doctor doctor in doctors)
             {
                 InsertSingleDoctor(doctor);
+            }
+        }
+
+        private static List<Renovation> GetRenovations()
+        {
+            List<Renovation> renovations = new List<Renovation>();
+            List<String> roomIds = GetRoomIds();
+
+            renovations.Add(new Renovation(Convert.ToInt32(roomIds[0]), DateTime.Now, DateTime.Now.AddMonths(2)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIds[1]), DateTime.Now, DateTime.Now.AddMonths(1)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIds[2]), DateTime.Now, DateTime.Now.AddMonths(3)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIds[3]), DateTime.Now, DateTime.Now.AddMonths(4)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIds[4]), DateTime.Now, DateTime.Now.AddMonths(5)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIds[5]), DateTime.Now, DateTime.Now.AddMonths(1)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIds[6]), DateTime.Now, DateTime.Now.AddDays(15)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIds[7]), DateTime.Now, DateTime.Now.AddDays(25)));
+
+
+            return renovations;
+        }
+
+        private static void InsertRenovations()
+        {
+            List<Renovation> renovations = GetRenovations();
+
+            foreach (Renovation renovation in renovations)
+            {
+                InsertSingleRenovation(renovation);
+            }
+        }
+
+        private static void InsertSingleRenovation(Renovation renovation)
+        {
+            var query = "INSERT INTO Renovations(id_room, startingDate, endingDate) VALUES(@id_room, @startingDate, @ending_date)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_room", renovation.RoomId);
+                cmd.Parameters.AddWithValue("@startingDate", renovation.StartingDate);
+                cmd.Parameters.AddWithValue("@ending_date", renovation.EndingDate);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private static List<TransferHistoryOfEquipment> GetTransferHistoryOfEquipment()
+        {
+            List<TransferHistoryOfEquipment> transferHistoryOfEquipment = new List<TransferHistoryOfEquipment>();
+            List<String> roomIds = GetRoomIds();
+
+            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIds[0]), Convert.ToInt32(roomIds[5]), DateTime.Now));
+            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIds[1]), Convert.ToInt32(roomIds[6]), DateTime.Now));
+
+
+            return transferHistoryOfEquipment;
+        }
+
+        private static void InsertTransferHistoryOfEquipment()
+        {
+            List<TransferHistoryOfEquipment> transferHistoryOfEquipmentList = GetTransferHistoryOfEquipment();
+
+            foreach (TransferHistoryOfEquipment transferHistoryOfEquipment in transferHistoryOfEquipmentList)
+            {
+                InsertSingleTransferHistoryOfEquipment(transferHistoryOfEquipment);
+            }
+        }
+
+        private static void InsertSingleTransferHistoryOfEquipment(TransferHistoryOfEquipment transferHistoryOfEquipment)
+        {
+            var query = "INSERT INTO TransferHistoryOfEquipment(id_original_room, id_new_room, dateOfChange) VALUES(@first_room_id, @second_room_id, @transferDate)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@first_room_id", transferHistoryOfEquipment.FirstRoomId);
+                cmd.Parameters.AddWithValue("@second_room_id", transferHistoryOfEquipment.SecondRoomId);
+                cmd.Parameters.AddWithValue("@transferDate", transferHistoryOfEquipment.TransferDate);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private static List<RoomHasEquipment> GetRoomHasEquipment()
+        {
+            List<RoomHasEquipment> roomHasEquipment = new List<RoomHasEquipment>();
+            List<String> roomIds = GetRoomIds();
+            List<String> equipmentIds = GetEquipmentIds();
+
+            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIds[0]), Convert.ToInt32(roomIds[4]), 5));
+            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIds[1]), Convert.ToInt32(roomIds[3]), 4));
+
+
+            return roomHasEquipment;
+        }
+
+        private static void InsertRoomHasEquipment()
+        {
+            List<RoomHasEquipment> roomHasEquipmentList = GetRoomHasEquipment();
+
+            foreach (RoomHasEquipment roomHasEquipment in roomHasEquipmentList)
+            {
+                InsertSingleRoomHasEquipment(roomHasEquipment);
+            }
+        }
+
+        private static void InsertSingleRoomHasEquipment(RoomHasEquipment roomHasEquipment)
+        {
+            var query = "INSERT INTO RoomHasEquipment(id_room, id_equipment, amount) " +
+                "VALUES(@room_id, @equipment_id, @quantity)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@room_id", roomHasEquipment.RoomId);
+                cmd.Parameters.AddWithValue("@equipment_id", roomHasEquipment.EquipmentId);
+                cmd.Parameters.AddWithValue("@quantity", roomHasEquipment.Quantity);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private static List<DynamicEquipmentRequest> GetDynamicEquipmentRequests()
+        {
+            List<DynamicEquipmentRequest> dynamicEquipmentRequests = new List<DynamicEquipmentRequest>();
+            List<String> equipmentIds = GetEquipmentIds();
+
+            dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIds[0]), 10));
+            dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIds[1]), 15));
+            // dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIds[2]), 20));
+
+
+            return dynamicEquipmentRequests;
+        }
+
+        private static void InsertDynamicEquipmentRequests()
+        {
+            List<DynamicEquipmentRequest> dynamicEquipmentRequests = GetDynamicEquipmentRequests();
+
+            foreach (DynamicEquipmentRequest dynamicEquipmentRequest in dynamicEquipmentRequests)
+            {
+                InsertSingleDynamicEquipmentRequest(dynamicEquipmentRequest);
+            }
+        }
+
+        private static void InsertSingleDynamicEquipmentRequest(DynamicEquipmentRequest dynamicEquipmentRequest)
+        {
+            var query = "INSERT INTO DynamicEquipmentRequest(id_equipment, quantity) VALUES(@id_equipment, @quantity)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_equipment", dynamicEquipmentRequest.EquipmentId);
+                cmd.Parameters.AddWithValue("@quantity", dynamicEquipmentRequest.Quantity);
+
+                cmd.ExecuteNonQuery();
             }
         }
 
