@@ -58,8 +58,14 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertMedications();
             InsertIngredients();
 
+            //Equipment
             InsertEquipment();
+
+            //Surveys
             InsertHospitalSurveys();
+
+            //PatientAlergies
+            InsertPatientAlergies();
 
 
             Connection.Close();
@@ -461,6 +467,17 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@nameOfIngredient", ingredient.Name);
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        private static void InsertPatientAlergies()
+        {
+            //get patients ids
+            // get alergies ids
+            // push that
+            List<string> patientIds = GetPatientIds();
+            List<string> ingredientIds = DatabaseHelpers.ExecuteReaderQueries("select id")
+
+
         }
 
 
