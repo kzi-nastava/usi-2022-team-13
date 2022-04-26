@@ -51,8 +51,10 @@
   <ItemGroup>
     <Compile Include="Core\Authentication\LoginAuthentication.cs" />
     <Compile Include="Core\DatabaseHelpers.cs" />
+    <Compile Include="Core\Examinations\Examination\Examination.cs" />
     <Compile Include="Core\Medications\Ingredients\Model\Ingredient.cs" />
     <Compile Include="Core\Medications\Model\Medication.cs" />
+    <Compile Include="Core\Medications\Receipts\Model\Instruction.cs" />
     <Compile Include="Core\Rooms\Equipment\Model\Equipment.cs" />
     <Compile Include="Core\Rooms\Model\Room.cs" />
     <Compile Include="Core\Scripts\Repository\InsertionRepository.cs" />
@@ -60,6 +62,7 @@
     <Compile Include="Core\Users\Doctors\Model\Doctor.cs" />
     <Compile Include="Core\Users\HospitalManagers\Model\HospitalManager.cs" />
     <Compile Include="Core\Users\Model\User.cs" />
+    <Compile Include="Core\Users\Patients\Model\MedicalRecord.cs" />
     <Compile Include="Core\Users\Patients\Model\Patient.cs" />
     <Compile Include="Core\Users\Secretaries\Model\Secretary.cs" />
     <Compile Include="DoctorView.cs">
@@ -116,13 +119,9 @@
   <ItemGroup>
     <Folder Include="Core\Data\" />
     <Folder Include="Core\Examinations\Anamnesis\" />
-    <Folder Include="Core\Examinations\Examination\" />
-    <Folder Include="Core\Medications\Receipts\" />
     <Folder Include="Core\Pages\" />
     <Folder Include="Core\Rooms\Renovations\" />
     <Folder Include="Core\Surveys\DoctorSurveys\" />
-    <Folder Include="Core\Users\Secretaries\" />
-    <Folder Include="Core\Surveys\HospitalSurveys\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

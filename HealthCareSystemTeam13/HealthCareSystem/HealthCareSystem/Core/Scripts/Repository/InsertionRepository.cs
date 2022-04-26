@@ -15,6 +15,8 @@ using HealthCareSystem.Core;
 using HealthCareSystem.Core.Rooms.Equipment.Model;
 using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
 using HealthCareSystem.Core.Ingredients.Model;
+using HealthCareSystem.Core.Examinations.Examination;
+using HealthCareSystem.Core.Medications.Receipts.Model;
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
@@ -61,10 +63,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertEquipment();
             InsertHospitalSurveys();
 
+            InsertMedicalRecords();
+            InsertExaminations();
+            InsertInstructions();
 
             Connection.Close();
         }
-
 
         public void DeleteRecords()
         {
@@ -86,6 +90,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 DatabaseHelpers.ExecuteNonQueries("Delete from Ingredients", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Equipment", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from HospitalSurveys", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from MedicalRecord", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Examination", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from Instructions", Connection);
 
                 Connection.Close();
             }
@@ -102,6 +109,20 @@ namespace HealthCareSystem.Core.Scripts.Repository
         {
 
             var query = "select ID from Patients";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+
+        private static List<String> GetDoctorIds()
+        {
+
+            var query = "select ID from Doctors";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+
+        private static List<String> GetRoomIds()
+        {
+
+            var query = "select ID from Rooms";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
 
@@ -459,6 +480,118 @@ namespace HealthCareSystem.Core.Scripts.Repository
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@nameOfIngredient", ingredient.Name);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private static void InsertMedicalRecords()
+        {
+            List<MedicalRecord> medicalRecords = GetMedicalRecords();
+
+            foreach (MedicalRecord medicalRecord in medicalRecords)
+            {
+                InsertSingleMedicalRecord(medicalRecord);
+            }
+        }
+
+        private static List<MedicalRecord> GetMedicalRecords()
+        {
+            List<MedicalRecord> medicalRecords = new List<MedicalRecord>();
+            List<String> patientIds = GetPatientIds();
+
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIds[0]), 185, 85));
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIds[1]), 192, 92));
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIds[2]), 183, 75));
+
+            return medicalRecords;
+        }
+
+        private static void InsertSingleMedicalRecord(MedicalRecord medicalRecord)
+        {
+            var query = "INSERT INTO MedicalRecord(id_patient, height, weight) VALUES(@id_patient, @height, @weight)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_patient", medicalRecord.IdPatient);
+                cmd.Parameters.AddWithValue("@height", medicalRecord.Height);
+                cmd.Parameters.AddWithValue("@weight", medicalRecord.Weight);
+                cmd.ExecuteNonQuery();
+            }
+        }
+        private static void InsertExaminations()
+        {
+            List<Examination> examinations = GetExaminations();
+
+            foreach (Examination examination in examinations)
+            {
+                InsertSingleExamination(examination);
+            }
+        }
+
+        private static List<Examination> GetExaminations()
+        {
+            List<Examination> examinations = new List<Examination>();
+            List<String> patientIds = GetPatientIds();
+            List<String> doctorIds = GetDoctorIds();
+            List<String> roomIds = GetRoomIds();
+
+
+
+            examinations.Add(new Examination(Convert.ToInt32(doctorIds[0]), Convert.ToInt32(patientIds[0]), false, false, false, DateTime.Now.AddDays(2), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIds[4]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIds[1]), Convert.ToInt32(patientIds[1]), false, false, false, DateTime.Now.AddDays(2), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIds[5]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIds[2]), Convert.ToInt32(patientIds[2]), false, false, false, DateTime.Now.AddDays(3), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIds[4]), 15));
+
+            return examinations;
+        }
+
+        private static void InsertSingleExamination(Examination examination)
+        {
+            var query = "INSERT INTO Examination(id_doctor, id_patient, isEdited, isCancelled, isFinished, dateOf, typeOfExamination, isUrgent, id_room, duration) " +
+                "VALUES(@id_doctor, @id_patient, @isEdited, @isCancelled, @isFinished, @dateOf, @typeOfExamination, @isUrgent, @id_room, @duration)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_doctor", examination.IdDoctor);
+                cmd.Parameters.AddWithValue("@id_patient", examination.IdPatient);
+                cmd.Parameters.AddWithValue("@isEdited", examination.IsEdited);
+                cmd.Parameters.AddWithValue("@isCancelled", examination.IsCancelled);
+                cmd.Parameters.AddWithValue("@isFinished", examination.IsFinished);
+                cmd.Parameters.AddWithValue("@dateOf", examination.DateOf.ToString());
+                cmd.Parameters.AddWithValue("@typeOfExamination", examination.TypeOfExamination);
+                cmd.Parameters.AddWithValue("@isUrgent", examination.IsUrgent);
+                cmd.Parameters.AddWithValue("@id_room", examination.IdRoom);
+                cmd.Parameters.AddWithValue("@duration", examination.Duration);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private static void InsertInstructions()
+        {
+            List<Instruction> instructions = GetInstructions();
+
+            foreach (Instruction instruction in instructions)
+            {
+                InsertSingleInstruction(instruction);
+            }
+        }
+
+        private static List<Instruction> GetInstructions()
+        {
+            List<Instruction> instructions = new List<Instruction>();
+            DateTime tomorrow = DateTime.Now.AddHours(20);
+
+            instructions.Add(new Instruction(tomorrow, 3));
+            instructions.Add(new Instruction(tomorrow, 4));
+            instructions.Add(new Instruction(tomorrow, 2));
+
+            return instructions;
+        }
+
+        private static void InsertSingleInstruction(Instruction instruction)
+        {
+            var query = "INSERT INTO Instructions(startTime, timesPerDay) VALUES(@startTime, @timesPerDay)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@startTime", instruction.StartTime.ToString());
+                cmd.Parameters.AddWithValue("@timesPerDay", instruction.TimesPerDay);
                 cmd.ExecuteNonQuery();
             }
         }
