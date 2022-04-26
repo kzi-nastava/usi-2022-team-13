@@ -70,16 +70,13 @@ namespace HealthCareSystem.Core.Scripts.Repository
             //Surveys
             InsertHospitalSurveys();
 
-<<<<<<< HEAD
             //PatientAlergies
             InsertPatientAlergies();
 
 
-=======
             InsertMedicalRecords();
             InsertExaminations();
             InsertInstructions();
->>>>>>> DusanScripts
 
             Connection.Close();
         }
@@ -104,13 +101,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 DatabaseHelpers.ExecuteNonQueries("Delete from Ingredients", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Equipment", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from HospitalSurveys", Connection);
-<<<<<<< HEAD
                 DatabaseHelpers.ExecuteNonQueries("Delete from PatientAlergicTo", Connection);
-=======
                 DatabaseHelpers.ExecuteNonQueries("Delete from MedicalRecord", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Examination", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Instructions", Connection);
->>>>>>> DusanScripts
 
                 Connection.Close();
             }
@@ -134,13 +128,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
         }
         private static List<String> GetDoctorIds()
         {
-            var query = "select ID from Doctors";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
-        }
-
-        private static List<String> GetDoctorIds()
-        {
-
             var query = "select ID from Doctors";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
@@ -584,7 +571,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
         }
 
-<<<<<<< HEAD
         private static List<String> GetIngredientIds()
         {
             var query = "select ID from Ingredients";
@@ -652,7 +638,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             }
         }
-=======
         private static void InsertMedicalRecords()
         {
             List<MedicalRecord> medicalRecords = GetMedicalRecords();
@@ -705,9 +690,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
 
 
-            examinations.Add(new Examination(Convert.ToInt32(doctorIds[0]), Convert.ToInt32(patientIds[0]), false, false, false, DateTime.Now.AddDays(2), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIds[4]), 15));
-            examinations.Add(new Examination(Convert.ToInt32(doctorIds[1]), Convert.ToInt32(patientIds[1]), false, false, false, DateTime.Now.AddDays(2), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIds[5]), 15));
-            examinations.Add(new Examination(Convert.ToInt32(doctorIds[2]), Convert.ToInt32(patientIds[2]), false, false, false, DateTime.Now.AddDays(3), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIds[4]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIds[0]), Convert.ToInt32(patientIds[0]), false, false, false, DateTime.Now.AddDays(2),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIds[4]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIds[1]), Convert.ToInt32(patientIds[1]), false, false, false, DateTime.Now.AddDays(2),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIds[5]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIds[2]), Convert.ToInt32(patientIds[2]), false, false, false, DateTime.Now.AddDays(3),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIds[4]), 15));
 
             return examinations;
         }
@@ -765,7 +750,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
         }
 
->>>>>>> DusanScripts
 
     }
 }

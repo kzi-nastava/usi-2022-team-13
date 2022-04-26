@@ -1,4 +1,5 @@
-﻿using HealthCareSystem.Core.Users.Patients.Model;
+﻿using HealthCareSystem.Core.Examinations.Examination;
+using HealthCareSystem.Core.Users.Patients.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,6 @@ using System.Threading.Tasks;
 
 namespace HealthCareSystem.Core.Users.Doctors.Model
 {
-    enum TypeOfExamination
-    {
-
-    }
     class ReferralLetter
     {
         public Doctor CurrentDoctor { get; set; }
