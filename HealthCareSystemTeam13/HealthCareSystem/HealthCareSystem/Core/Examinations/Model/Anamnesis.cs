@@ -25,7 +25,7 @@ namespace HealthCareSystem.Core.Examinations.Model
         {
             this.ExaminationID = examinationID;
             this.Notice = notice;
-            this.Conclusion = conclusion;
+            this.Conclusions = conclusion;
             this.DateOf = dateOf;
         }
     }

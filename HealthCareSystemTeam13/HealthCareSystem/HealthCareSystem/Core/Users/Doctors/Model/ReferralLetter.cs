@@ -1,4 +1,4 @@
-﻿using HealthCareSystem.Core.Examinations.Examination;
+﻿using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Users.Patients.Model;
 using System;
 using System.Collections.Generic;

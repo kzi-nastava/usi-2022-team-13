@@ -51,7 +51,8 @@
   <ItemGroup>
     <Compile Include="Core\Authentication\LoginAuthentication.cs" />
     <Compile Include="Core\DatabaseHelpers.cs" />
-    <Compile Include="Core\Examinations\Examination\Examination.cs" />
+    <Compile Include="Core\Examinations\Model\Anamnesis.cs" />
+    <Compile Include="Core\Examinations\Model\Examination.cs" />
     <Compile Include="Core\Medications\Ingredients\Model\Ingredient.cs" />
     <Compile Include="Core\Medications\Model\Medication.cs" />
     <Compile Include="Core\Medications\Model\MedicationsIngredient.cs" />
@@ -128,7 +129,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Data\" />
-    <Folder Include="Core\Examinations\Anamnesis\" />
     <Folder Include="Core\Pages\" />
     <Folder Include="Core\Surveys\DoctorSurveys\" />
   </ItemGroup>
