@@ -68,6 +68,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertPatientAlergies();
 
 
+
             Connection.Close();
         }
 
@@ -92,6 +93,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 DatabaseHelpers.ExecuteNonQueries("Delete from Ingredients", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Equipment", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from HospitalSurveys", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from PatientAlergicTo", Connection);
 
                 Connection.Close();
             }
@@ -491,7 +493,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 InsertSinglePatientAlergies(patientIds[i], ingredientIds[i]);
 
             }
-
 
         }
 
