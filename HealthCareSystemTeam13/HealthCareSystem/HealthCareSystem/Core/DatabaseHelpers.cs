@@ -17,6 +17,7 @@ namespace HealthCareSystem.Core
             }
         }
 
+
         public static List<string> ExecuteReaderQueries(string query, OleDbConnection connection)
         {
 
@@ -35,5 +36,6 @@ namespace HealthCareSystem.Core
 
             return data;
         }
+
     }
 }

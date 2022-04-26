@@ -58,6 +58,7 @@
     <Compile Include="Core\Scripts\Repository\InsertionRepository.cs" />
     <Compile Include="Core\Surveys\HospitalSurveys\Model\HospitalSurvey.cs" />
     <Compile Include="Core\Users\Doctors\Model\Doctor.cs" />
+    <Compile Include="Core\Users\Doctors\Model\ReferralLetter.cs" />
     <Compile Include="Core\Users\HospitalManagers\Model\HospitalManager.cs" />
     <Compile Include="Core\Users\Model\User.cs" />
     <Compile Include="Core\Users\Patients\Model\Patient.cs" />
@@ -121,8 +122,6 @@
     <Folder Include="Core\Pages\" />
     <Folder Include="Core\Rooms\Renovations\" />
     <Folder Include="Core\Surveys\DoctorSurveys\" />
-    <Folder Include="Core\Users\Secretaries\" />
-    <Folder Include="Core\Surveys\HospitalSurveys\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
