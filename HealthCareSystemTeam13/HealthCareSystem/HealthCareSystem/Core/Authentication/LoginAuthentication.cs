@@ -12,6 +12,7 @@ using HealthCareSystem.Core.Scripts.Repository;
 using HealthCareSystem.Core.Users.Model;
 using HealthCareSystem.Core.Authentication;
 using HealthCareSystem.Core;
+using HealthCareSystem.Core.GUI;
 
 namespace HealthCareSystem.Core.Authentication
 {
@@ -49,7 +50,7 @@ namespace HealthCareSystem.Core.Authentication
         {
             User user = GetUser(Username, Password);
 
-            Connection.Close();
+            
             if (user == null)
             {
                 MessageBox.Show("Invalid Input. Try Again!");
@@ -71,10 +72,28 @@ namespace HealthCareSystem.Core.Authentication
                         managerView.ShowDialog();
                         break;
                     case UserRole.Patients:
+
+                        bool isBlocked = DatabaseHelpers.IsPatientBlocked(Username, Connection);
+                        if (!isBlocked)
+                        {
+
+                            PatientView patientView = new PatientView();
+                            this.Login.Hide();
+                            patientView.ShowDialog();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Patient is blocked!");
+                        }
                         break;
                     case UserRole.Secretaries:
+                        SecretaryView secretacyView = new SecretaryView();
+                        this.Login.Hide();
+                        secretacyView.ShowDialog();
                         break;
+                     
                 }
+                Connection.Close();
             }
         }
 

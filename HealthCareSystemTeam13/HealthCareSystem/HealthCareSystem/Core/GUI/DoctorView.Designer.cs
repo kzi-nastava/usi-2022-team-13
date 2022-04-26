@@ -1,7 +1,7 @@
 ﻿
 namespace HealthCareSystem
 {
-    partial class HospitalManagerView
+    partial class DoctorView
     {
         /// <summary>
         /// Required designer variable.
@@ -31,14 +31,15 @@ namespace HealthCareSystem
         {
             this.SuspendLayout();
             // 
-            // HospitalManagerView
+            // DoctorView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Name = "HospitalManagerView";
-            this.Text = "HospitalManagerView";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.HospitalManagerView_FormClosing);
+            this.Name = "DoctorView";
+            this.Text = "Doctor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DoctorView_FormClosing);
+            this.Load += new System.EventHandler(this.DoctorView_Load);
             this.ResumeLayout(false);
 
         }

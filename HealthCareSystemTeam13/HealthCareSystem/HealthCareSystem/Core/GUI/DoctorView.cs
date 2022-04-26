@@ -21,5 +21,10 @@ namespace HealthCareSystem
         {
             Application.Exit();
         }
+
+        private void DoctorView_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
