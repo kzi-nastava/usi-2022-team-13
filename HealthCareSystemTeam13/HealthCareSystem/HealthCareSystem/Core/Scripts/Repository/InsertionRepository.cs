@@ -468,14 +468,29 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.ExecuteNonQuery();
             }
         }
+        private static void InsertSinglePatientAlergies(string patientId, string ingredientId)
+        {
+            var query = "INSERT INTO PatientAlergicTo(id_patient, id_ingredient) VALUES(@id_patient, @id_ingredient)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_patient", Convert.ToInt32(patientId));
+                cmd.Parameters.AddWithValue("@id_ingredient", Convert.ToInt32(ingredientId));
+                cmd.ExecuteNonQuery();
+            }
 
+        }
         private static void InsertPatientAlergies()
         {
-            //get patients ids
-            // get alergies ids
-            // push that
+
             List<string> patientIds = GetPatientIds();
-            List<string> ingredientIds = DatabaseHelpers.ExecuteReaderQueries("select id")
+            List<string> ingredientIds = DatabaseHelpers.ExecuteReaderQueries("select id from ingredients", Connection);
+
+
+            for(int i =0;i < patientIds.Count();i++)
+            {
+                InsertSinglePatientAlergies(patientIds[i], ingredientIds[i]);
+
+            }
 
 
         }
