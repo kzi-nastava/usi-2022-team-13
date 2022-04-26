@@ -49,6 +49,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertDoctors();
             InsertManagers();
             InsertPatients();
+            InsertBlockedPatients();
             InsertSecretaries();
 
             //Room Insertion
@@ -57,6 +58,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             //Medication Insertion
             InsertMedications();
             InsertIngredients();
+            InsertMedicationsIngredients();
+            InsertRejectedMedications();
 
             //Equipment
             InsertEquipment();
@@ -102,14 +105,22 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         private static List<String> GetUserIds(UserRole role)
         {
-
             var query = "select ID from Users where role='" + role.ToString() + "'";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
         private static List<String> GetPatientIds()
         {
-
             var query = "select ID from Patients";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+        private static List<String> GetSecretaryIds()
+        {
+            var query = "select ID from Secretaries";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+        private static List<String> GetDoctorIds()
+        {
+            var query = "select ID from Doctors";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
 
@@ -273,9 +284,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<Patient> patients = new List<Patient>();
             List<String> userIds = GetUserIds(UserRole.Patients);
 
-            patients.Add(new Patient("Jovana", "Jabuka", Convert.ToInt32(userIds[0]), false));
+            patients.Add(new Patient("Jovana", "Jabuka", Convert.ToInt32(userIds[0]), true));
             patients.Add(new Patient("Neven", "Kamilica", Convert.ToInt32(userIds[1]), false));
-            patients.Add(new Patient("Isidor", "Nevenko", Convert.ToInt32(userIds[2]), true));
+            patients.Add(new Patient("Isidor", "Nevenko", Convert.ToInt32(userIds[2]), false));
 
             return patients;
         }
@@ -299,6 +310,40 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@user_id", patient.UserId);
                 cmd.Parameters.AddWithValue("@isBlocked", patient.IsBlocked);
                 cmd.ExecuteNonQuery();
+            }
+        }
+
+        private static void InsertBlockedPatients()
+        {
+            List<BlockedPatient> blockedPatients = GetBlockedPatients();
+
+            foreach (BlockedPatients blockedPatient in blockedPatients)
+            {
+                InsertSingleBlockedPatient(blockedPatient);
+            }
+
+        }
+        private static List<BlockedPatient> GetBlockedPatients()
+        {
+            List<BlockedPatient> blockedPatients = new List<BlockedPatient>();
+            List<String> patientsIds = GetPatientIds();
+            List<String> secretariesIds = GetSecretaryIds();
+
+            blockedPatients.Add(new BlockedPatient(Convert.ToInt32(patientsIds[0]), Convert.ToInt32(secretariesIds[1]), new DateTime(2022, 4, 26)));
+
+            return blockedPatients;
+        }
+
+        private static void InsertSingleBlockedPatient(BlockedPatient blockedPatient)
+        {
+            var query = "INSERT INTO BlockedPatients(id_patient, id_secretary, dateOf) VALUES(@id_patient, @id_secretary, @dateOf)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_patient", blockedPatient.PatientID);
+                cmd.Parameters.AddWithValue("@id_secretary", blockedPatient.SecretaryID);
+                cmd.Parameters.AddWithValue("@dateOf", blockedPatient.DateOf);
+                cmd.ExecuteNonQuery();
+
             }
         }
 
@@ -427,7 +472,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<Medication> medications = new List<Medication>();
 
             medications.Add(new Medication("Brufen", MedicationStatus.Approved));
-            medications.Add(new Medication("Analgin", MedicationStatus.Approved));
+            medications.Add(new Medication("Analgin", MedicationStatus.Denied));
             medications.Add(new Medication("Panklav", MedicationStatus.Approved));
             
             return medications;
@@ -440,6 +485,46 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@nameOfMedication", medication.Name);
                 cmd.Parameters.AddWithValue("@status", medication.Status.ToString());
                 cmd.ExecuteNonQuery();
+            }
+        }
+
+        private static List<String> GetMedicationIds()
+        {
+            var query = "select ID from Medications";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+
+        private static void InsertRejectedMedications()
+        {
+            List<RejectedMedication> rejectedMedications = GetRejectedMedications();
+
+            foreach (RejectedMedication rejectedMedication in rejectedMedications)
+            {
+                InsertSingleRejectedMedication(rejectedMedication);
+            }
+
+        }
+        private static List<RejectedMedication> GetRejectedMedications()
+        {
+            List<RejectedMedication> rejectedMedications = new List<RejectedMedication>();
+            List<String> medicationsIds = GetMedicationIds();
+            List<String> doctorsIds = GetDoctorIds();
+
+            rejectedMedications.Add(new RejectedMedication(Convert.ToInt32(medicationsIds[1]), Convert.ToInt32(doctorsIds[2]), "Medication is too strong."));
+
+            return rejectedMedications;
+        }
+
+        private static void InsertSingleRejectedMedication(RejectedMedication rejectedMedication)
+        {
+            var query = "INSERT INTO RejectedMedications(id_medication, id_doctor, description) VALUES(@id_medication, @id_doctor, @description)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_medication", rejectedMedication.MedicationID);
+                cmd.Parameters.AddWithValue("@id_doctor", rejectedMedication.DoctorID);
+                cmd.Parameters.AddWithValue("@description", rejectedMedication.Description);
+                cmd.ExecuteNonQuery();
+
             }
         }
 
@@ -470,6 +555,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.ExecuteNonQuery();
             }
         }
+
+        private static List<String> GetIngredientIds()
+        {
+            var query = "select ID from Ingredients";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+
         private static void InsertSinglePatientAlergies(string patientId, string ingredientId)
         {
             var query = "INSERT INTO PatientAlergicTo(id_patient, id_ingredient) VALUES(@id_patient, @id_ingredient)";
@@ -494,8 +585,43 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             }
 
+
         }
 
+        private static void InsertMedicationsIngredients()
+        {
+            List<MedicationsIngredient> medicationsIngredients = GetMedicationsIngredients();
+
+            foreach (MedicationsIngredient medicationsIngredient in medicationsIngredients)
+            {
+                InsertSingleRejectedMedication(medicationsIngredient);
+            }
+
+        }
+        private static List<MedicationsIngredient> GetMedicationsIngredients()
+        {
+            List<MedicationsIngredient> medicationsIngredients = new List<MedicationsIngredient>();
+            List<String> medicationsIds = GetMedicationIds();
+            List<String> ingredientsIds = GetDoctorIds();
+
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIds[0]), Convert.ToInt32(ingredients[0])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIds[1]), Convert.ToInt32(ingredients[0])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIds[2]), Convert.ToInt32(ingredients[0])));
+
+            return medicationsIngredients;
+        }
+
+        private static void InsertSingleMedicationsIngredient(MedicationsIngredient medicationsIngredient)
+        {
+            var query = "INSERT INTO MedicationContainsIngredient(id_medication, id_ingredient) VALUES(@id_medication, @id_ingredient)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_medication", medicationsIngredient.MedicationID);
+                cmd.Parameters.AddWithValue("@id_ingredient", medicationsIngredient.IngredientID);
+                cmd.ExecuteNonQuery();
+
+            }
+        }
 
     }
 }
