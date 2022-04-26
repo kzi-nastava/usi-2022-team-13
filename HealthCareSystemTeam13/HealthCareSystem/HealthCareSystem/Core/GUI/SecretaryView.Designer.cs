@@ -1,7 +1,7 @@
 ﻿
-namespace HealthCareSystem
+namespace HealthCareSystem.Core.GUI
 {
-    partial class DoctorView
+    partial class SecretaryView
     {
         /// <summary>
         /// Required designer variable.
@@ -31,14 +31,14 @@ namespace HealthCareSystem
         {
             this.SuspendLayout();
             // 
-            // DoctorView
+            // SecretaryView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Name = "DoctorView";
-            this.Text = "DoctorView";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DoctorView_FormClosing);
+            this.Name = "SecretaryView";
+            this.Text = "Secretary";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SecretaryView_FormClosing);
             this.ResumeLayout(false);
 
         }

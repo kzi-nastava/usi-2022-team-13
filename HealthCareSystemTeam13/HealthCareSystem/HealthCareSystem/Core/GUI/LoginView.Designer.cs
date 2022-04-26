@@ -95,7 +95,7 @@ namespace HealthCareSystem
             this.Controls.Add(this.tbUsername);
             this.Controls.Add(this.btnLogin);
             this.Name = "LoginForm";
-            this.Text = "Form1";
+            this.Text = "Login";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LoginForm_FormClosing);
             this.Load += new System.EventHandler(this.LoginForm_Load);
             this.ResumeLayout(false);

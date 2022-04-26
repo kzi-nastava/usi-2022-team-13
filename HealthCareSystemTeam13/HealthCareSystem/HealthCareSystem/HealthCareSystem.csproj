@@ -53,6 +53,18 @@
     <Compile Include="Core\DatabaseHelpers.cs" />
     <Compile Include="Core\Examinations\Model\Anamnesis.cs" />
     <Compile Include="Core\Examinations\Model\Examination.cs" />
+    <Compile Include="Core\GUI\PatientView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientView.Designer.cs">
+      <DependentUpon>PatientView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\SecretaryView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\SecretaryView.Designer.cs">
+      <DependentUpon>SecretaryView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\Medications\Ingredients\Model\Ingredient.cs" />
     <Compile Include="Core\Medications\Model\Medication.cs" />
     <Compile Include="Core\Medications\Model\MedicationsIngredient.cs" />
@@ -76,34 +88,40 @@
     <Compile Include="Core\Users\Patients\Model\MedicalRecord.cs" />
     <Compile Include="Core\Users\Patients\Model\Patient.cs" />
     <Compile Include="Core\Users\Secretaries\Model\Secretary.cs" />
-    <Compile Include="DoctorView.cs">
+    <Compile Include="Core\GUI\DoctorView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DoctorView.Designer.cs">
+    <Compile Include="Core\GUI\DoctorView.Designer.cs">
       <DependentUpon>DoctorView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="Core\GUI\LoginView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Core\GUI\LoginView.Designer.cs">
+      <DependentUpon>LoginView.cs</DependentUpon>
     </Compile>
-    <Compile Include="HospitalManagerView.cs">
+    <Compile Include="Core\GUI\HospitalManagerView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HospitalManagerView.Designer.cs">
+    <Compile Include="Core\GUI\HospitalManagerView.Designer.cs">
       <DependentUpon>HospitalManagerView.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="DoctorView.resx">
+    <EmbeddedResource Include="Core\GUI\DoctorView.resx">
       <DependentUpon>DoctorView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Core\GUI\LoginView.resx">
+      <DependentUpon>LoginView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="HospitalManagerView.resx">
+    <EmbeddedResource Include="Core\GUI\HospitalManagerView.resx">
       <DependentUpon>HospitalManagerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientView.resx">
+      <DependentUpon>PatientView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\SecretaryView.resx">
+      <DependentUpon>SecretaryView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

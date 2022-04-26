@@ -137,12 +137,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
         }
 
-
-
-
-
-
-
         public void DeleteRecords()
         {
             try
