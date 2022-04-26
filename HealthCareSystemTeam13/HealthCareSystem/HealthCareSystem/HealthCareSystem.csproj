@@ -126,6 +126,11 @@
     <Folder Include="Core\Pages\" />
     <Folder Include="Core\Rooms\Renovations\" />
     <Folder Include="Core\Surveys\DoctorSurveys\" />
+<<<<<<< HEAD
+=======
+    <Folder Include="Core\Users\Secretaries\" />
+    <Folder Include="Core\Surveys\HospitalSurveys\" />
+>>>>>>> origin/PetarScripts
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
