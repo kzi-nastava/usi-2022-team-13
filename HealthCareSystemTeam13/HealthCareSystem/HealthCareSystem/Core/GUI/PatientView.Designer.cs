@@ -29,20 +29,58 @@ namespace HealthCareSystem.Core.GUI
         /// </summary>
         private void InitializeComponent()
         {
+            this.btnExaminations = new System.Windows.Forms.Button();
+            this.btnExit = new System.Windows.Forms.Button();
+            this.pnlPatient = new System.Windows.Forms.Panel();
             this.SuspendLayout();
+            // 
+            // btnExaminations
+            // 
+            this.btnExaminations.Location = new System.Drawing.Point(2, 66);
+            this.btnExaminations.Name = "btnExaminations";
+            this.btnExaminations.Size = new System.Drawing.Size(137, 88);
+            this.btnExaminations.TabIndex = 0;
+            this.btnExaminations.Text = "My Examinations";
+            this.btnExaminations.UseVisualStyleBackColor = true;
+            this.btnExaminations.Click += new System.EventHandler(this.btnExaminations_Click);
+            // 
+            // btnExit
+            // 
+            this.btnExit.Location = new System.Drawing.Point(30, 415);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(109, 23);
+            this.btnExit.TabIndex = 1;
+            this.btnExit.Text = "Exit";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
+            // pnlPatient
+            // 
+            this.pnlPatient.Location = new System.Drawing.Point(145, 1);
+            this.pnlPatient.Name = "pnlPatient";
+            this.pnlPatient.Size = new System.Drawing.Size(749, 573);
+            this.pnlPatient.TabIndex = 3;
             // 
             // PatientView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(897, 577);
+            this.Controls.Add(this.pnlPatient);
+            this.Controls.Add(this.btnExit);
+            this.Controls.Add(this.btnExaminations);
             this.Name = "PatientView";
             this.Text = "Patient";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PatientView_FormClosing);
+            this.Load += new System.EventHandler(this.PatientView_Load);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.Button btnExaminations;
+        private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.Panel pnlPatient;
     }
 }

@@ -77,7 +77,7 @@ namespace HealthCareSystem.Core.Authentication
                         if (!isBlocked)
                         {
 
-                            PatientView patientView = new PatientView();
+                            PatientView patientView = new PatientView(Username);
                             this.Login.Hide();
                             patientView.ShowDialog();
                         }
