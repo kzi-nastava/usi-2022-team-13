@@ -23,7 +23,7 @@ namespace HealthCareSystem
         private void btnLogin_Click(object sender, EventArgs e)
         {
 
-            LoginAuthentication loginAuthentication = new LoginAuthentication(tbUsername.Text, tbPassword.Text, this);
+            LoginAuthentication loginAuthentication = new LoginAuthentication(tbUsername.Text, tbUsername.Text, this);
             loginAuthentication.OpenViewForm();
 
         }
@@ -40,6 +40,26 @@ namespace HealthCareSystem
         {
             InsertionRepository dbInsertion = new InsertionRepository();
             dbInsertion.DeleteRecords();
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lbUsername_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
