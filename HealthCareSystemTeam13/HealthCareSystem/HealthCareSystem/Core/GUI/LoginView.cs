@@ -23,7 +23,7 @@ namespace HealthCareSystem
         private void btnLogin_Click(object sender, EventArgs e)
         {
 
-            LoginAuthentication loginAuthentication = new LoginAuthentication(tbUsername.Text, tbUsername.Text, this);
+            LoginAuthentication loginAuthentication = new LoginAuthentication(tbUsername.Text, tbPasssword.Text, this);
             loginAuthentication.OpenViewForm();
 
         }
@@ -60,6 +60,12 @@ namespace HealthCareSystem
         private void label1_Click_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void pictureBox2_Click_1(object sender, EventArgs e)
+        {
+            LoginAuthentication loginAuthentication = new LoginAuthentication(tbUsername.Text, tbPasssword.Text, this);
+            loginAuthentication.OpenViewForm();
         }
     }
 }

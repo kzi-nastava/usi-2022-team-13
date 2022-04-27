@@ -51,10 +51,9 @@ namespace HealthCareSystem
             // btnLogin
             // 
             this.btnLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLogin.Location = new System.Drawing.Point(613, 347);
-            this.btnLogin.Margin = new System.Windows.Forms.Padding(4);
+            this.btnLogin.Location = new System.Drawing.Point(460, 282);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(219, 47);
+            this.btnLogin.Size = new System.Drawing.Size(164, 38);
             this.btnLogin.TabIndex = 0;
             this.btnLogin.Text = "Login";
             this.btnLogin.UseVisualStyleBackColor = true;
@@ -65,10 +64,9 @@ namespace HealthCareSystem
             this.tbUsername.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(197)))), ((int)(((byte)(197)))), ((int)(((byte)(231)))));
             this.tbUsername.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbUsername.Location = new System.Drawing.Point(629, 152);
-            this.tbUsername.Margin = new System.Windows.Forms.Padding(4);
+            this.tbUsername.Location = new System.Drawing.Point(472, 124);
             this.tbUsername.Name = "tbUsername";
-            this.tbUsername.Size = new System.Drawing.Size(188, 31);
+            this.tbUsername.Size = new System.Drawing.Size(141, 25);
             this.tbUsername.TabIndex = 2;
             // 
             // lbUsername
@@ -76,10 +74,9 @@ namespace HealthCareSystem
             this.lbUsername.AutoSize = true;
             this.lbUsername.Font = new System.Drawing.Font("Nirmala UI", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbUsername.ForeColor = System.Drawing.Color.Indigo;
-            this.lbUsername.Location = new System.Drawing.Point(607, 99);
-            this.lbUsername.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbUsername.Location = new System.Drawing.Point(455, 80);
             this.lbUsername.Name = "lbUsername";
-            this.lbUsername.Size = new System.Drawing.Size(148, 38);
+            this.lbUsername.Size = new System.Drawing.Size(117, 30);
             this.lbUsername.TabIndex = 3;
             this.lbUsername.Text = "Username";
             this.lbUsername.Click += new System.EventHandler(this.lbUsername_Click);
@@ -89,19 +86,19 @@ namespace HealthCareSystem
             this.lbPassword.AutoSize = true;
             this.lbPassword.Font = new System.Drawing.Font("Nirmala UI", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbPassword.ForeColor = System.Drawing.Color.Indigo;
-            this.lbPassword.Location = new System.Drawing.Point(607, 213);
-            this.lbPassword.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbPassword.Location = new System.Drawing.Point(455, 173);
             this.lbPassword.Name = "lbPassword";
-            this.lbPassword.Size = new System.Drawing.Size(139, 38);
+            this.lbPassword.Size = new System.Drawing.Size(112, 30);
             this.lbPassword.TabIndex = 4;
             this.lbPassword.Text = "Password";
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(-9, -33);
+            this.pictureBox1.Location = new System.Drawing.Point(-7, -27);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(495, 537);
+            this.pictureBox1.Size = new System.Drawing.Size(371, 436);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
@@ -109,19 +106,22 @@ namespace HealthCareSystem
             // pictureBox2
             // 
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(613, 332);
+            this.pictureBox2.Location = new System.Drawing.Point(460, 269);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(224, 83);
+            this.pictureBox2.Size = new System.Drawing.Size(168, 67);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 6;
             this.pictureBox2.TabStop = false;
+            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click_1);
             // 
             // pictureBox3
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(613, 245);
+            this.pictureBox3.Location = new System.Drawing.Point(460, 199);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(224, 81);
+            this.pictureBox3.Size = new System.Drawing.Size(168, 66);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox3.TabIndex = 7;
             this.pictureBox3.TabStop = false;
@@ -129,9 +129,10 @@ namespace HealthCareSystem
             // pictureBox4
             // 
             this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(613, 130);
+            this.pictureBox4.Location = new System.Drawing.Point(460, 106);
+            this.pictureBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(224, 81);
+            this.pictureBox4.Size = new System.Drawing.Size(168, 66);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox4.TabIndex = 8;
             this.pictureBox4.TabStop = false;
@@ -139,9 +140,10 @@ namespace HealthCareSystem
             // pictureBox5
             // 
             this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
-            this.pictureBox5.Location = new System.Drawing.Point(676, 14);
+            this.pictureBox5.Location = new System.Drawing.Point(507, 11);
+            this.pictureBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(97, 82);
+            this.pictureBox5.Size = new System.Drawing.Size(73, 67);
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox5.TabIndex = 9;
             this.pictureBox5.TabStop = false;
@@ -151,9 +153,10 @@ namespace HealthCareSystem
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label1.Location = new System.Drawing.Point(652, 407);
+            this.label1.Location = new System.Drawing.Point(489, 331);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(140, 34);
+            this.label1.Size = new System.Drawing.Size(109, 26);
             this.label1.TabIndex = 10;
             this.label1.Text = "No account? Contact\r\nour secretaries!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -164,18 +167,17 @@ namespace HealthCareSystem
             this.tbPasssword.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(197)))), ((int)(((byte)(197)))), ((int)(((byte)(231)))));
             this.tbPasssword.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbPasssword.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbPasssword.Location = new System.Drawing.Point(629, 267);
-            this.tbPasssword.Margin = new System.Windows.Forms.Padding(4);
+            this.tbPasssword.Location = new System.Drawing.Point(472, 217);
             this.tbPasssword.Name = "tbPasssword";
-            this.tbPasssword.Size = new System.Drawing.Size(188, 31);
+            this.tbPasssword.Size = new System.Drawing.Size(141, 25);
             this.tbPasssword.TabIndex = 11;
             // 
             // LoginForm
             // 
             this.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(897, 473);
+            this.ClientSize = new System.Drawing.Size(673, 384);
             this.Controls.Add(this.tbPasssword);
             this.Controls.Add(this.tbUsername);
             this.Controls.Add(this.label1);
@@ -188,7 +190,6 @@ namespace HealthCareSystem
             this.Controls.Add(this.lbUsername);
             this.Controls.Add(this.btnLogin);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "LoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LOGIN";
