@@ -8,28 +8,31 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HealthCareSystem.Core.Users.Patients.Repository;
+using HealthCareSystem.Core.GUI.PatientFunctionalities;
 
 namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 {
     public partial class PatientExaminations : Form
     {
         public string Username { get; set; }
+        PatientRepository patientRepository;
         public PatientExaminations(string username)
         {
             Username = username;
+            patientRepository = new PatientRepository(Username);
+            patientRepository.PullExaminations();
+       
             InitializeComponent();
             FillDataGridView();
-            
+
         }
 
         private void FillDataGridView()
         {
-            PatientRepository patientRepository = new PatientRepository(Username);
 
             dgwExaminations.DataSource = patientRepository.examinations;
-
             DataGridViewSettings();
-            
+
 
         }
         private void DataGridViewSettings()
@@ -53,17 +56,57 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            bool canEdit = CanChangeExamination();
 
-            if (canEdit)
+            if (CanChangeExamination())
             {
-                Console.WriteLine(dgwExaminations.SelectedCells[0].Value.ToString());
+                if (IsValidDate())
+                {
+                    /*patientRepository.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
+                    MessageBox.Show("Succesfully edited examination!");*/
+
+
+                }
             }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            bool canDelete = CanChangeExamination();
+
+            if (CanChangeExamination())
+            {
+                DialogResult wantToCancel = MessageBox.Show("Are you sure?", "Cancel Examination", MessageBoxButtons.YesNo);
+
+                if (wantToCancel == DialogResult.Yes)
+                {
+                    if (IsValidDate())
+                    {
+                        patientRepository.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
+                        MessageBox.Show("Succesfully canceled examination!");
+                        RefreshDataGridView();
+
+                    }
+                }
+            }
+
+        }
+
+        private bool IsValidDate()
+        {
+            DateTime examinationDate = (DateTime)dgwExaminations.SelectedRows[0].Cells[2].Value;
+
+
+            if (examinationDate.CompareTo(DateTime.Now) < 0)
+            {
+                MessageBox.Show("This examination date/time has expired.");
+                return false;
+            }
+            else if ((examinationDate - DateTime.Now).TotalDays < 1)
+            {
+                MessageBox.Show("You can only edit/delete an examination atleast 1 day before it starts");
+                return false;
+            }
+
+            return true;
 
         }
 
@@ -84,7 +127,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 else
                 {
                     return true;
-
                 }
             }
             else
@@ -94,4 +136,25 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             return false;
         }
 
+        private void RefreshDataGridView()
+        {
+            patientRepository.PullExaminations();
+            dgwExaminations.DataSource = patientRepository.examinations;
+            dgwExaminations.Refresh();
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            AddEditExamination addEditView = new AddEditExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value, true);
+
+            addEditView.ShowDialog();
+
+        }
+
+        private void PatientExaminations_Load(object sender, EventArgs e)
+        {
+
+        }
     }
+
+}

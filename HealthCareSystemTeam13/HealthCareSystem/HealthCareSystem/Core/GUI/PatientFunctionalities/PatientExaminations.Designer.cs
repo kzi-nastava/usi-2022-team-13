@@ -40,7 +40,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             this.dgwExaminations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwExaminations.Location = new System.Drawing.Point(14, 14);
-            this.dgwExaminations.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgwExaminations.Margin = new System.Windows.Forms.Padding(4);
             this.dgwExaminations.Name = "dgwExaminations";
             this.dgwExaminations.Size = new System.Drawing.Size(726, 419);
             this.dgwExaminations.TabIndex = 0;
@@ -50,18 +50,19 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             this.btnAdd.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAdd.Location = new System.Drawing.Point(284, 451);
-            this.btnAdd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(4);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(170, 59);
             this.btnAdd.TabIndex = 1;
             this.btnAdd.Text = "ADD";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnEdit
             // 
             this.btnEdit.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEdit.Location = new System.Drawing.Point(462, 451);
-            this.btnEdit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnEdit.Margin = new System.Windows.Forms.Padding(4);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(143, 59);
             this.btnEdit.TabIndex = 2;
@@ -73,7 +74,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             this.btnCancel.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.Location = new System.Drawing.Point(613, 451);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(127, 59);
             this.btnCancel.TabIndex = 3;
@@ -92,9 +93,10 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.Controls.Add(this.dgwExaminations);
             this.Font = new System.Drawing.Font("Lucida Bright", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "PatientExaminations";
             this.Text = "PatientExaminations";
+            this.Load += new System.EventHandler(this.PatientExaminations_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgwExaminations)).EndInit();
             this.ResumeLayout(false);
 

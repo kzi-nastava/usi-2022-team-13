@@ -31,19 +31,18 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
                 Console.WriteLine(exception.ToString());
             }
 
-
-            PullExaminations();
-
         
         }
         private int GetPatientId()
         {
             string userId = DatabaseHelpers.ExecuteReaderQueries("select id from users where usrnm = '" + Username + "'", Connection)[0];
 
-            return Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries("select id from patients where user_id = " + Convert.ToInt32(userId) + "", Connection)[0]);
+            int patientId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries("select id from patients where user_id = " + Convert.ToInt32(userId) + "", Connection)[0]);
+
+            return patientId;
         }
 
-        private void PullExaminations()
+        public void PullExaminations()
         {
             examinations = new DataTable();
    
@@ -53,6 +52,18 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             FillTable(examinations, examinationsQuery);
 
 
+        }
+        
+        public List<string> GetExamination(int examinationId)
+        {
+            string query = "select id_doctor, dateOf, id_room from Examination where id = " + examinationId + "";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+
+        public void CancelExamination(int examinationId)
+        {
+            string query = "delete from Examination where id = " + examinationId + "";
+            DatabaseHelpers.ExecuteNonQueries(query, Connection);
         }
 
         private void FillTable(DataTable table, string query)
