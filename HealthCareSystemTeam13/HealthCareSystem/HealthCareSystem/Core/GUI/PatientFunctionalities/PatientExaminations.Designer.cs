@@ -39,10 +39,10 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // dgwExaminations
             // 
             this.dgwExaminations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgwExaminations.Location = new System.Drawing.Point(14, 14);
+            this.dgwExaminations.Location = new System.Drawing.Point(3, 14);
             this.dgwExaminations.Margin = new System.Windows.Forms.Padding(4);
             this.dgwExaminations.Name = "dgwExaminations";
-            this.dgwExaminations.Size = new System.Drawing.Size(726, 419);
+            this.dgwExaminations.Size = new System.Drawing.Size(737, 419);
             this.dgwExaminations.TabIndex = 0;
             this.dgwExaminations.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwExaminations_CellContentClick);
             // 

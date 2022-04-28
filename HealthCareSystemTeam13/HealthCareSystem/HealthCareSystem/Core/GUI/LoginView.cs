@@ -40,6 +40,7 @@ namespace HealthCareSystem
         {
             InsertionRepository dbInsertion = new InsertionRepository();
             dbInsertion.DeleteRecords();
+            Application.Exit();
         }
     }
 }

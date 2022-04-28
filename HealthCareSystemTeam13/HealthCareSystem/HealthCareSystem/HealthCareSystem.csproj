@@ -53,6 +53,7 @@
     <Compile Include="Core\DatabaseHelpers.cs" />
     <Compile Include="Core\Examinations\Model\Anamnesis.cs" />
     <Compile Include="Core\Examinations\Model\Examination.cs" />
+    <Compile Include="Core\Examinations\Repository\ExaminationRepository.cs" />
     <Compile Include="Core\GUI\PatientFunctionalities\AddEditExamination.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -89,10 +90,12 @@
     <Compile Include="Core\Rooms\Equipment\TransferHistoryOfEquipment\Model\TransferHistoryOfEquipment.cs" />
     <Compile Include="Core\Rooms\Model\Room.cs" />
     <Compile Include="Core\Rooms\Renovations\Model\Renovation.cs" />
+    <Compile Include="Core\Rooms\Repository\RoomRepository.cs" />
     <Compile Include="Core\Scripts\Repository\InsertionRepository.cs" />
     <Compile Include="Core\Surveys\HospitalSurveys\Model\HospitalSurvey.cs" />
     <Compile Include="Core\Users\Doctors\Model\Doctor.cs" />
     <Compile Include="Core\Users\Doctors\Model\ReferralLetter.cs" />
+    <Compile Include="Core\Users\Doctors\Repository\DoctorRepository.cs" />
     <Compile Include="Core\Users\HospitalManagers\Model\HospitalManager.cs" />
     <Compile Include="Core\Users\Model\User.cs" />
     <Compile Include="Core\Users\Patients\Model\BlockedPatient.cs" />

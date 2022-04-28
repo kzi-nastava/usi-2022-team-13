@@ -36,7 +36,7 @@ namespace HealthCareSystem.Core.GUI
             // 
             // btnExaminations
             // 
-            this.btnExaminations.Location = new System.Drawing.Point(2, 66);
+            this.btnExaminations.Location = new System.Drawing.Point(2, 26);
             this.btnExaminations.Name = "btnExaminations";
             this.btnExaminations.Size = new System.Drawing.Size(137, 88);
             this.btnExaminations.TabIndex = 0;
@@ -46,9 +46,9 @@ namespace HealthCareSystem.Core.GUI
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(30, 415);
+            this.btnExit.Location = new System.Drawing.Point(2, 513);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(109, 23);
+            this.btnExit.Size = new System.Drawing.Size(137, 52);
             this.btnExit.TabIndex = 1;
             this.btnExit.Text = "Exit";
             this.btnExit.UseVisualStyleBackColor = true;

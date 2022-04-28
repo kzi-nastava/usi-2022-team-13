@@ -41,6 +41,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.tbRoomId = new System.Windows.Forms.TextBox();
             this.tbDuration = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.tbTime = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnAccept
@@ -100,7 +102,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 121);
+            this.label3.Location = new System.Drawing.Point(21, 114);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(30, 13);
             this.label3.TabIndex = 6;
@@ -108,7 +110,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             // dtDate
             // 
-            this.dtDate.Location = new System.Drawing.Point(134, 121);
+            this.dtDate.Location = new System.Drawing.Point(132, 114);
             this.dtDate.Name = "dtDate";
             this.dtDate.Size = new System.Drawing.Size(200, 20);
             this.dtDate.TabIndex = 7;
@@ -149,11 +151,29 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.label5.TabIndex = 10;
             this.label5.Text = "Duration (min)";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(24, 142);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(30, 13);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "Time";
+            // 
+            // tbTime
+            // 
+            this.tbTime.Location = new System.Drawing.Point(150, 142);
+            this.tbTime.Name = "tbTime";
+            this.tbTime.Size = new System.Drawing.Size(100, 20);
+            this.tbTime.TabIndex = 13;
+            // 
             // AddEditExamination
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(382, 452);
+            this.Controls.Add(this.tbTime);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.tbDuration);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.tbRoomId);
@@ -188,5 +208,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private System.Windows.Forms.TextBox tbRoomId;
         private System.Windows.Forms.TextBox tbDuration;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox tbTime;
     }
 }

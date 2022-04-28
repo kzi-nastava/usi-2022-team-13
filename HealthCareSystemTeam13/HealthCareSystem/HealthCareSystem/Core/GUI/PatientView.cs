@@ -14,9 +14,11 @@ namespace HealthCareSystem.Core.GUI
     public partial class PatientView : Form
     {
         public string Username { get; set; }
-        public PatientView(string username)
+        public LoginForm SuperForm;
+        public PatientView(string username, LoginForm superForm)
         {
             Username = username;
+            SuperForm = superForm;
             InitializeComponent();
 
         }
@@ -46,7 +48,9 @@ namespace HealthCareSystem.Core.GUI
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            DialogResult exit = MessageBox.Show("Are you sure?", "Exit?", MessageBoxButtons.YesNo);
+
+            if(exit == DialogResult.Yes) Application.Exit();
         }
 
         private void btnExaminations_Click(object sender, EventArgs e)
@@ -58,6 +62,6 @@ namespace HealthCareSystem.Core.GUI
         {
 
         }
-       
+
     }
 }

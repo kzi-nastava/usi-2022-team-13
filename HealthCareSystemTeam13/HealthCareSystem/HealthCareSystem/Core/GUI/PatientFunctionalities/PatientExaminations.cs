@@ -61,9 +61,10 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             {
                 if (IsValidDate())
                 {
-                    /*patientRepository.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
-                    MessageBox.Show("Succesfully edited examination!");*/
+                    int examinationId = (int)dgwExaminations.SelectedRows[0].Cells[0].Value;
+                    AddEditExamination addEditView = new AddEditExamination(examinationId, false, Username, this);
 
+                    addEditView.ShowDialog();
 
                 }
             }
@@ -136,7 +137,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             return false;
         }
 
-        private void RefreshDataGridView()
+        public void RefreshDataGridView()
         {
             patientRepository.PullExaminations();
             dgwExaminations.DataSource = patientRepository.examinations;
@@ -145,9 +146,10 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            AddEditExamination addEditView = new AddEditExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value, true);
+            AddEditExamination addEditView = new AddEditExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value, true, Username, this);
 
             addEditView.ShowDialog();
+            
 
         }
 
