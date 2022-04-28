@@ -188,6 +188,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.Controls.Add(this.btnAccept);
             this.Name = "AddEditExamination";
             this.Text = "AddEditExamination";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddEditExamination_FormClosing);
             this.Load += new System.EventHandler(this.AddEditExamination_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

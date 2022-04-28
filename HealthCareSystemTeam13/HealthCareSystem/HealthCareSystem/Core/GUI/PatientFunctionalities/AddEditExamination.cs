@@ -31,9 +31,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private ExaminationRepository ExaminationRep;
         private string selectedTime;
         private string PatientUsername;
-        private PatientExaminations PreviousForm;
 
-        public AddEditExamination(int examinationId, bool isAddChoosen, string patientUsername, PatientExaminations previousForm)
+        public AddEditExamination(int examinationId, bool isAddChoosen, string patientUsername)
         {
             ExaminationId = examinationId;
             IsAddChoosen = isAddChoosen;
@@ -43,7 +42,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             RoomRep = new RoomRepository();
             ExaminationRep = new ExaminationRepository();
 
-            PreviousForm = previousForm;
 
             InitializeComponent();
 
@@ -116,14 +114,15 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 {
                     
                     PatientRep.InsertExamination(PatientUsername, SelectedDoctor.ID, mergedTime, duration, roomId);
+                    MessageBox.Show("Successfully added examination!");
                     
                 }
                 else
                 {
                     UpdateContent(mergedTime);
-
-                    this.Close();
+                    
                 }
+                this.Close();
             } 
         }
 
@@ -208,6 +207,11 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             string[] examinationHourMinute = examinationTime.Split(':');
             DateTime examinationDateTime = new DateTime(examinationDate.Year, examinationDate.Month, examinationDate.Day, Convert.ToInt32(examinationHourMinute[0]), Convert.ToInt32(examinationHourMinute[1]), 0);
             return examinationDateTime;
+        }
+
+        private void AddEditExamination_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            
         }
     }
 }

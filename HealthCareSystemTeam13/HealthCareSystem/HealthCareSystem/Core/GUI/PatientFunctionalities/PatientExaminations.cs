@@ -62,7 +62,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 if (IsValidDate())
                 {
                     int examinationId = (int)dgwExaminations.SelectedRows[0].Cells[0].Value;
-                    AddEditExamination addEditView = new AddEditExamination(examinationId, false, Username, this);
+                    AddEditExamination addEditView = new AddEditExamination(examinationId, false, Username);
 
                     addEditView.ShowDialog();
 
@@ -146,7 +146,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            AddEditExamination addEditView = new AddEditExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value, true, Username, this);
+            AddEditExamination addEditView = new AddEditExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value, true, Username);
 
             addEditView.ShowDialog();
             
@@ -156,6 +156,11 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void PatientExaminations_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            RefreshDataGridView();
         }
     }
 
