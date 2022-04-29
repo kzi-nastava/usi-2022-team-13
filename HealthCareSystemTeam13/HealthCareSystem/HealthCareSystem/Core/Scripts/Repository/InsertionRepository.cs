@@ -229,11 +229,11 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         private static void InsertEquipment()
         {
-            List<Equipment> equipmentList = GetEquipment();
+            List<Equipment> equipment = GetEquipment();
 
-            foreach (Equipment equipment in equipmentList)
+            foreach (Equipment singleEquipment in equipment)
             {
-                InsertSingleEquipment(equipment);
+                InsertSingleEquipment(singleEquipment);
             }
 
         }
@@ -399,11 +399,11 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         private static void InsertTransferHistoryOfEquipment()
         {
-            List<TransferHistoryOfEquipment> transferHistoryOfEquipmentList = GetTransferHistoryOfEquipment();
+            List<TransferHistoryOfEquipment> transferHistoryOfEquipment = GetTransferHistoryOfEquipment();
 
-            foreach (TransferHistoryOfEquipment transferHistoryOfEquipment in transferHistoryOfEquipmentList)
+            foreach (TransferHistoryOfEquipment singleTransferHistoryOfEquipment in transferHistoryOfEquipment)
             {
-                InsertSingleTransferHistoryOfEquipment(transferHistoryOfEquipment);
+                InsertSingleTransferHistoryOfEquipment(singleTransferHistoryOfEquipment);
             }
         }
 
@@ -433,11 +433,11 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         private static void InsertRoomHasEquipment()
         {
-            List<RoomHasEquipment> roomHasEquipmentList = GetRoomHasEquipment();
+            List<RoomHasEquipment> roomHasEquipment = GetRoomHasEquipment();
 
-            foreach (RoomHasEquipment roomHasEquipment in roomHasEquipmentList)
+            foreach (RoomHasEquipment singleRoomHasEquipment in roomHasEquipment)
             {
-                InsertSingleRoomHasEquipment(roomHasEquipment);
+                InsertSingleRoomHasEquipment(singleRoomHasEquipment);
             }
         }
 
@@ -942,7 +942,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@isCancelled", examination.IsCancelled);
                 cmd.Parameters.AddWithValue("@isFinished", examination.IsFinished);
                 cmd.Parameters.AddWithValue("@dateOf", examination.DateOf.ToString());
-                cmd.Parameters.AddWithValue("@typeOfExamination", examination.TypeOfExamination);
+                cmd.Parameters.AddWithValue("@typeOfExamination", examination.TypeOfExamination.ToString());
                 cmd.Parameters.AddWithValue("@isUrgent", examination.IsUrgent);
                 cmd.Parameters.AddWithValue("@id_room", examination.IdRoom);
                 cmd.Parameters.AddWithValue("@duration", examination.Duration);

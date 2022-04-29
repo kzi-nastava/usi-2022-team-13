@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.OleDb;
+using HealthCareSystem.Core.Users.Doctors.Model;
+
 namespace HealthCareSystem.Core
 {
     class DatabaseHelpers
@@ -21,21 +23,28 @@ namespace HealthCareSystem.Core
             Console.WriteLine(query);
 
             List<string> data = new List<string>();
-            OleDbCommand cmd = new OleDbCommand();
-           
-            cmd.Connection = connection;
-            cmd.CommandType = System.Data.CommandType.Text;
-            cmd.CommandText = query;
-            
-            OleDbDataReader queryData = cmd.ExecuteReader();
+            OleDbCommand cmd = GetCommand(query, connection);
 
-            while (queryData.Read())
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
             {
-                data.Add(queryData[0].ToString());
+                data.Add(reader[0].ToString());
             }
 
             return data;
         }
+
+        public static OleDbCommand GetCommand(string query, OleDbConnection connection)
+        {
+            OleDbCommand cmd = new OleDbCommand();
+
+            cmd.Connection = connection;
+            cmd.CommandType = System.Data.CommandType.Text;
+            cmd.CommandText = query;
+            return cmd;
+        }
+
         public static bool IsPatientBlocked(string patientUsername, OleDbConnection connection)
         {
 
@@ -45,6 +54,8 @@ namespace HealthCareSystem.Core
   
             return blockedPatients[0] == "True";
         }
+
+      
 
     }
 }

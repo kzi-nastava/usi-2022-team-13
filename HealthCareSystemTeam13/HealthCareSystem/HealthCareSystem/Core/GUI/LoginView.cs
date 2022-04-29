@@ -40,6 +40,7 @@ namespace HealthCareSystem
         {
             InsertionRepository dbInsertion = new InsertionRepository();
             dbInsertion.DeleteRecords();
+            Application.Exit();
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)

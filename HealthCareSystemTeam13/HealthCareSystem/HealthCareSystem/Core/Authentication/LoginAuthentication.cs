@@ -77,7 +77,7 @@ namespace HealthCareSystem.Core.Authentication
                         if (!isBlocked)
                         {
 
-                            PatientView patientView = new PatientView();
+                            PatientView patientView = new PatientView(Username, Login);
                             this.Login.Hide();
                             patientView.ShowDialog();
                         }
@@ -129,7 +129,7 @@ namespace HealthCareSystem.Core.Authentication
         }
         ~LoginAuthentication()
         {
-            Connection.Close();
+            if(Connection.State == ConnectionState.Open) Connection.Close();
         }
     }
 }
