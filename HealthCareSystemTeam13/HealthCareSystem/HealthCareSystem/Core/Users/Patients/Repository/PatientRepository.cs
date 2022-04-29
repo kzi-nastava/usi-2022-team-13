@@ -9,6 +9,8 @@ using HealthCareSystem.Core;
 using HealthCareSystem.Core.Users.Doctors.Model;
 using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Rooms.Model;
+using HealthCareSystem.Core.Scripts.Repository;
+using HealthCareSystem.Core.Users.Patients.Model;
 
 namespace HealthCareSystem.Core.Users.Patients.Repository
 {
@@ -60,13 +62,30 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         {
             
             DatabaseHelpers.ExecuteNonQueries(query, Connection);
+            InsertExaminationChanges(TypeOfChange.Edit);
+
+        }
+
+        public void InsertExaminationChanges(TypeOfChange typeOfChange)
+        {
+            int patientId = GetPatientId(Username);
+
+            string insertQuery = "insert into PatientExaminationChanges(id_patient, typeOfChange, dateOf) values(@id_patient, @typeOfChange, @dateOf)";
+
+            using (var cmd = new OleDbCommand(insertQuery, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_patient", patientId);
+                cmd.Parameters.AddWithValue("@typeOfChange", typeOfChange.ToString());
+                cmd.Parameters.AddWithValue("@dateOf", DateTime.Now.ToString());
+
+                cmd.ExecuteNonQuery();
+            }
+           
         }
 
         public void InsertExamination(string patientUsername, int doctorId, DateTime examinationDateTime, int duration, int roomId)
         {
-            string patientIdQuery = "select Patients.id from Patients inner join Users on Patients.user_id = Users.id where Users.usrnm = '"+patientUsername+"'";
-            int patientId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(patientIdQuery, Connection)[0]);
-
+            int patientId = GetPatientId(patientUsername);
 
             string insertQuery = "insert into Examination(id_doctor, id_patient, isEdited, isCancelled, isFinished, dateOf, typeOfExamination, isUrgent, id_room, duration) values(@id_doctor, @id_patient, @isEdited, @isCancelled, @isFinished, @dateOf, @typeOfExamination, @isUrgent, @id_room, @duration)";
 
@@ -85,8 +104,16 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
                 cmd.ExecuteNonQuery();
             }
+            InsertExaminationChanges(TypeOfChange.Add);
         }
-        
+
+        private int GetPatientId(string patientUsername)
+        {
+            string patientIdQuery = "select Patients.id from Patients inner join Users on Patients.user_id = Users.id where Users.usrnm = '" + patientUsername + "'";
+            int patientId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(patientIdQuery, Connection)[0]);
+            return patientId;
+        }
+
         public Dictionary<string, string> GetExamination(int examinationId)
         {
             string query = "select id_doctor, dateOf, id_room from Examination where id = " + examinationId + "";

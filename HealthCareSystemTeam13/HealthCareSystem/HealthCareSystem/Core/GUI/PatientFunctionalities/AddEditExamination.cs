@@ -108,6 +108,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             
             if (isValid)
             {
+                // check for block
                 string time = tbTime.Text;
                 DateTime mergedTime = GetMergedDateTime(ExaminationDate, time);
                 if (IsAddChoosen)
@@ -119,9 +120,9 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 }
                 else
                 {
-                    UpdateContent(mergedTime);
-                    
+                    UpdateContent(mergedTime);          
                 }
+                DatabaseHelpers.BlockSpamPatients(PatientUsername, PatientRep.Connection);
                 this.Close();
             } 
         }

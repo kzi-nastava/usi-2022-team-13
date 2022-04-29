@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using HealthCareSystem.Core.Users.Patients.Repository;
 using HealthCareSystem.Core.GUI.PatientFunctionalities;
+using HealthCareSystem.Core.Users.Patients.Model;
 
 namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 {
@@ -21,7 +22,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             Username = username;
             patientRepository = new PatientRepository(Username);
             patientRepository.PullExaminations();
-       
             InitializeComponent();
             FillDataGridView();
 
@@ -72,7 +72,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-
+            
             if (CanChangeExamination())
             {
                 DialogResult wantToCancel = MessageBox.Show("Are you sure?", "Cancel Examination", MessageBoxButtons.YesNo);
@@ -82,6 +82,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                     if (IsValidDate())
                     {
                         patientRepository.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
+                        patientRepository.InsertExaminationChanges(TypeOfChange.Delete);
+                        DatabaseHelpers.BlockSpamPatients(Username, patientRepository.Connection);
                         MessageBox.Show("Succesfully canceled examination!");
                         RefreshDataGridView();
 
@@ -109,6 +111,11 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
             return true;
 
+        }
+        private bool IsBlocked()
+        {
+
+            return DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection);
         }
 
         private bool CanChangeExamination()

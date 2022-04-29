@@ -100,6 +100,7 @@
     <Compile Include="Core\Users\Model\User.cs" />
     <Compile Include="Core\Users\Patients\Model\BlockedPatient.cs" />
     <Compile Include="Core\Users\Patients\Model\DiseaseHistory.cs" />
+    <Compile Include="Core\Users\Patients\Model\ExaminationChange.cs" />
     <Compile Include="Core\Users\Patients\Model\MedicalRecord.cs" />
     <Compile Include="Core\Users\Patients\Model\Patient.cs" />
     <Compile Include="Core\Users\Patients\Repository\PatientRepository.cs" />
