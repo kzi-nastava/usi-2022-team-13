@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using HealthCareSystem.Core.GUI.SecretaryFunctionalities;
-
 namespace HealthCareSystem.Core.GUI
 {
     public partial class SecretaryView : Form

@@ -66,10 +66,10 @@
     <Compile Include="Core\GUI\PatientFunctionalities\PatientExaminations.Designer.cs">
       <DependentUpon>PatientExaminations.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\PatientCRUDForm.cs">
+    <Compile Include="Core\GUI\SecretaryFunctionalities\PatientCRUDForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\PatientCRUDForm.Designer.cs">
+    <Compile Include="Core\GUI\SecretaryFunctionalities\PatientCRUDForm.Designer.cs">
       <DependentUpon>PatientCRUDForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\GUI\PatientView.cs">
@@ -111,6 +111,7 @@
     <Compile Include="Core\Users\Patients\Model\Patient.cs" />
     <Compile Include="Core\Users\Patients\Repository\PatientRepository.cs" />
     <Compile Include="Core\Users\Secretaries\Model\Secretary.cs" />
+    <Compile Include="Core\Users\Secretaries\Repository\SecretaryRepository.cs" />
     <Compile Include="Core\GUI\DoctorView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,7 +147,7 @@
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\PatientExaminations.resx">
       <DependentUpon>PatientExaminations.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\PatientCRUDForm.resx">
+    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\PatientCRUDForm.resx">
       <DependentUpon>PatientCRUDForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientView.resx">
@@ -179,7 +180,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Data\" />
-    <Folder Include="Core\GUI\NewFolder1\" />
     <Folder Include="Core\Pages\" />
     <Folder Include="Core\Surveys\DoctorSurveys\" />
   </ItemGroup>
