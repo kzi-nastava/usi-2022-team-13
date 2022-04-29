@@ -50,7 +50,7 @@ namespace HealthCareSystem.Core.GUI
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(137, 52);
             this.btnExit.TabIndex = 1;
-            this.btnExit.Text = "Exit";
+            this.btnExit.Text = "Logout";
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
