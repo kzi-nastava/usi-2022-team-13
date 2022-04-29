@@ -3,6 +3,7 @@ using HealthCareSystem.Core.Users.Doctors.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Data.OleDb;
 using System.Linq;
 using System.Text;
@@ -13,14 +14,23 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
     class DoctorRepository
     {
         public OleDbConnection Connection { get; set; }
-        public DoctorRepository()
+
+        public string Username { get; set; }
+        public DataTable examinations { get; set; }
+
+        public DoctorRepository(string username="", bool calledFromDoctor=false)
         {
+            if(username.Length > 0) Username = username;
             try
             {
                 Connection = new OleDbConnection();
 
                 Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=HCDb.mdb;
                 Persist Security Info=False;";
+                if(calledFromDoctor)
+                {
+                    Connection.Open();
+                }
             }
             catch (Exception exception)
             {
@@ -28,6 +38,37 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             }
 
 
+        }
+
+        public void PullExaminations()
+        {
+            examinations = new DataTable();
+
+            string examinationsQuery = "select Examination.id, Patients.FirstName + ' ' + Patients.LastName as Doctor," +
+                " dateOf as [Date and Time], id_room as RoomID, duration, typeOfExamination as Type from Examination" +
+                " left outer join Patiens  on Examination.id_patient = Patiens.id " +
+                "where id_doctor = " + GetDoctorId() + "";
+
+            FillTable(examinations, examinationsQuery);
+        }
+        private void FillTable(DataTable table, string query)
+        {
+
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                OleDbDataReader reader = cmd.ExecuteReader();
+                table.Load(reader);
+
+            }
+        }
+
+        private int GetDoctorId()
+        {
+            string userId = DatabaseHelpers.ExecuteReaderQueries("select id from users where usrnm = '" + Username + "'", Connection)[0];
+
+            int doctorId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries("select id from doctors where user_id = " + Convert.ToInt32(userId) + "", Connection)[0]);
+
+            return doctorId;
         }
 
 
