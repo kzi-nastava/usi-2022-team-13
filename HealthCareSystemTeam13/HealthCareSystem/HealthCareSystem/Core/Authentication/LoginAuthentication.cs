@@ -67,7 +67,7 @@ namespace HealthCareSystem.Core.Authentication
                         doctorView.ShowDialog();
                         break;
                     case UserRole.HospitalManagers:
-                        HospitalManagerView managerView = new HospitalManagerView();
+                        HospitalManagerView managerView = new HospitalManagerView(Username, Login);
                         this.Login.Hide();
                         managerView.ShowDialog();
                         break;

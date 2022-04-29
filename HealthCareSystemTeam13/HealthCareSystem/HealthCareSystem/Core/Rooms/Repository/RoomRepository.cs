@@ -3,6 +3,7 @@ using HealthCareSystem.Core.Rooms.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Data.OleDb;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
     class RoomRepository
     {
         public OleDbConnection Connection { get; set; }
+        public DataTable Rooms { get; set; }
         public RoomRepository()
         {
             try
@@ -22,7 +24,9 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
                 Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=HCDb.mdb;
                 Persist Security Info=False;";
-                
+
+                Connection.Open();
+
             }
             catch (Exception exception)
             {
@@ -30,6 +34,23 @@ namespace HealthCareSystem.Core.Rooms.Repository
             }
 
         }
+        public void PullRooms()
+        {
+            Rooms = new DataTable();
+            string roomsQuery = "select id, type as 'Room type' from Rooms";
+            FillTable(Rooms, roomsQuery);
+        }
+        private void FillTable(DataTable table, string query)
+        {
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                OleDbDataReader reader = cmd.ExecuteReader();
+                table.Load(reader);
+            }
+        }
+
+
+
         public bool isRoomAvailable(int roomId, DateTime examinationTime, List<Examination> examinations)
         {
             // if patients is adding an examination

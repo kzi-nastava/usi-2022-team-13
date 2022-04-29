@@ -43,6 +43,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.dgwExaminations.Location = new System.Drawing.Point(3, 14);
             this.dgwExaminations.Margin = new System.Windows.Forms.Padding(4);
             this.dgwExaminations.Name = "dgwExaminations";
+            this.dgwExaminations.RowHeadersWidth = 51;
             this.dgwExaminations.Size = new System.Drawing.Size(737, 419);
             this.dgwExaminations.TabIndex = 0;
             this.dgwExaminations.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwExaminations_CellContentClick);
@@ -97,7 +98,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             // PatientExaminations
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(795, 556);
             this.Controls.Add(this.btnRefresh);
