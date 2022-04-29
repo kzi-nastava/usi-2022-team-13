@@ -47,6 +47,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         public void ExecuteQueries()
         {
+            if(Connection.State == System.Data.ConnectionState.Closed)
+            {
+                Connection.Open();
+            }
             //Users Insertion
             InsertUsers();
             InsertDoctors();
