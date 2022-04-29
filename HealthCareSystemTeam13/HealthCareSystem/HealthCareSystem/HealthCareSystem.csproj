@@ -53,6 +53,7 @@
     <Compile Include="Core\DatabaseHelpers.cs" />
     <Compile Include="Core\Examinations\Model\Anamnesis.cs" />
     <Compile Include="Core\Examinations\Model\Examination.cs" />
+<<<<<<< Updated upstream
     <Compile Include="Core\Examinations\Repository\ExaminationRepository.cs" />
     <Compile Include="Core\GUI\PatientFunctionalities\AddEditExamination.cs">
       <SubType>Form</SubType>
@@ -65,6 +66,13 @@
     </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\PatientExaminations.Designer.cs">
       <DependentUpon>PatientExaminations.cs</DependentUpon>
+=======
+    <Compile Include="Core\GUI\PatientCRUDForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientCRUDForm.Designer.cs">
+      <DependentUpon>PatientCRUDForm.cs</DependentUpon>
+>>>>>>> Stashed changes
     </Compile>
     <Compile Include="Core\GUI\PatientView.cs">
       <SubType>Form</SubType>
@@ -103,7 +111,11 @@
     <Compile Include="Core\Users\Patients\Model\ExaminationChange.cs" />
     <Compile Include="Core\Users\Patients\Model\MedicalRecord.cs" />
     <Compile Include="Core\Users\Patients\Model\Patient.cs" />
+<<<<<<< Updated upstream
     <Compile Include="Core\Users\Patients\Repository\PatientRepository.cs" />
+=======
+    <Compile Include="Core\Users\Secretaries\Model\PatientCRUD.cs" />
+>>>>>>> Stashed changes
     <Compile Include="Core\Users\Secretaries\Model\Secretary.cs" />
     <Compile Include="Core\GUI\DoctorView.cs">
       <SubType>Form</SubType>
@@ -134,11 +146,16 @@
     <EmbeddedResource Include="Core\GUI\HospitalManagerView.resx">
       <DependentUpon>HospitalManagerView.cs</DependentUpon>
     </EmbeddedResource>
+<<<<<<< Updated upstream
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\AddEditExamination.resx">
       <DependentUpon>AddEditExamination.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\PatientExaminations.resx">
       <DependentUpon>PatientExaminations.cs</DependentUpon>
+=======
+    <EmbeddedResource Include="Core\GUI\PatientCRUDForm.resx">
+      <DependentUpon>PatientCRUDForm.cs</DependentUpon>
+>>>>>>> Stashed changes
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientView.resx">
       <DependentUpon>PatientView.cs</DependentUpon>

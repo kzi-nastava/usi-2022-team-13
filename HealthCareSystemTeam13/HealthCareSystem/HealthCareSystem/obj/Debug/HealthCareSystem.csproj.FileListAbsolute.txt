@@ -52,3 +52,4 @@ C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\Healt
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.csproj.CoreCompileInputs.cache
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.exe
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.pdb
+C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientCRUD.resources
