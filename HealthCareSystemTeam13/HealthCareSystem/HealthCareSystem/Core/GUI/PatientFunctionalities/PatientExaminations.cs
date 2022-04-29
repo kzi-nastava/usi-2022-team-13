@@ -59,10 +59,11 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
             if (CanChangeExamination())
             {
-                if (IsValidDate())
+                int validDate = IsValidDate();
+                if (validDate != 0)
                 {
                     int examinationId = (int)dgwExaminations.SelectedRows[0].Cells[0].Value;
-                    AddEditExamination addEditView = new AddEditExamination(examinationId, false, Username);
+                    AddEditExamination addEditView = new AddEditExamination(examinationId, false, Username, validDate);
 
                     addEditView.ShowDialog();
 
@@ -79,13 +80,18 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
                 if (wantToCancel == DialogResult.Yes)
                 {
-                    if (IsValidDate())
+                    int validDate = IsValidDate();
+                    if (validDate == 1)
                     {
                         patientRepository.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
                         patientRepository.InsertExaminationChanges(TypeOfChange.Delete);
                         DatabaseHelpers.BlockSpamPatients(Username, patientRepository.Connection);
                         MessageBox.Show("Succesfully canceled examination!");
                         RefreshDataGridView();
+                    }else if(validDate == 2)
+                    {
+                        patientRepository.SendExaminationEditRequest((int)dgwExaminations.SelectedRows[0].Cells[0].Value, DateTime.Now, false, 0, DateTime.Now, 0);
+                        MessageBox.Show("Wait for a secretary to aproove this request.");
 
                     }
                 }
@@ -93,23 +99,27 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         }
 
-        private bool IsValidDate()
+        private int IsValidDate()
         {
+
+            // 0 invalid
+            // 1 valid for direct change
+            // 2 valid for secretary request
+
             DateTime examinationDate = (DateTime)dgwExaminations.SelectedRows[0].Cells[2].Value;
 
 
             if (examinationDate.CompareTo(DateTime.Now) < 0)
             {
                 MessageBox.Show("This examination date/time has expired.");
-                return false;
+                return 0;
             }
-            else if ((examinationDate - DateTime.Now).TotalDays < 1)
+            else if ((examinationDate - DateTime.Now).TotalDays < 2)
             {
-                MessageBox.Show("You can only edit/delete an examination atleast 1 day before it starts");
-                return false;
+                return 2;
             }
 
-            return true;
+            return 1;
 
         }
         private bool IsBlocked()
@@ -153,7 +163,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            AddEditExamination addEditView = new AddEditExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value, true, Username);
+            AddEditExamination addEditView = new AddEditExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value, true, Username, 1);
 
             addEditView.ShowDialog();
             

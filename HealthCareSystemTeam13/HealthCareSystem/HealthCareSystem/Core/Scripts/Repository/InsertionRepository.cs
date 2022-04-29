@@ -1027,23 +1027,28 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         private static void InsertPatientEditRequests()
         {
-            List<string> patientIds = GetPatientIds();
             List<string> examinationIds = DatabaseHelpers.ExecuteReaderQueries("select id from examination", Connection);
+            List<string> doctors = GetDoctorIds();
+            List<string> rooms = DatabaseHelpers.ExecuteReaderQueries("select id from rooms where type = '" + TypeOfRoom.ExaminationRoom.ToString() + "'", Connection);
 
-            InsertSinglePatientEditRequest(patientIds[2], examinationIds[2], DateTime.Now.AddDays(4), true, false);
+            InsertSinglePatientEditRequest(Convert.ToInt32(examinationIds[0]), DateTime.Now, true, false, Convert.ToInt32(doctors[0]), DateTime.Now.AddDays(2), Convert.ToInt32(rooms[0]));
+            InsertSinglePatientEditRequest(Convert.ToInt32(examinationIds[1]), DateTime.Now, false, true, Convert.ToInt32(doctors[0]), DateTime.Now, Convert.ToInt32(rooms[0]));
 
         }
 
-        private static void InsertSinglePatientEditRequest(string patientId, string examinationId, DateTime newDateTime, bool isChanged, bool isDeleted)
+        private static void InsertSinglePatientEditRequest(int examinationId, DateTime dateOfChange, bool isEdit, bool isDelete, int doctorId, DateTime newDate, int roomId)
         {
-            var query = "INSERT INTO PatientEditRequest(id_patient, id_examination, dateOf, isChanged, isDeleted) VALUES(@id_patient, @id_examination, @dateOf, @isChanged, @isDeleted)";
+            var query = "INSERT INTO PatientEditRequest(id_examination, dateOf, isChanged, isDeleted, id_doctor, dateTimeOfExamination, id_room) VALUES(@id_examination, @dateOf, @isChanged, @isDeleted, @id_doctor, @dateTimeOfExamination, @id_room)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
-                cmd.Parameters.AddWithValue("@id_patient", Convert.ToInt32(patientId));
-                cmd.Parameters.AddWithValue("@id_examination", Convert.ToInt32(examinationId));
-                cmd.Parameters.AddWithValue("@dateOf", newDateTime.ToString());
-                cmd.Parameters.AddWithValue("@isChanged", isChanged);
-                cmd.Parameters.AddWithValue("@isDeleted", isDeleted);
+                cmd.Parameters.AddWithValue("@id_examination", examinationId);
+                cmd.Parameters.AddWithValue("@dateOf", dateOfChange.ToString());
+                cmd.Parameters.AddWithValue("@isChanged", isEdit);
+                cmd.Parameters.AddWithValue("@isDeleted", isDelete);
+                cmd.Parameters.AddWithValue("@id_doctor", doctorId);
+                cmd.Parameters.AddWithValue("@dateTimeOfExamination", newDate.ToString());
+                cmd.Parameters.AddWithValue("@id_room", roomId);
+
                 cmd.ExecuteNonQuery();
             }
         }
