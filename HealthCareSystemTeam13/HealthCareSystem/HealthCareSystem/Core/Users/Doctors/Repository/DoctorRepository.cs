@@ -44,9 +44,9 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         {
             examinations = new DataTable();
 
-            string examinationsQuery = "select Examination.id, Patients.FirstName + ' ' + Patients.LastName as Doctor," +
-                " dateOf as [Date and Time], id_room as RoomID, duration, typeOfExamination as Type from Examination" +
-                " left outer join Patiens  on Examination.id_patient = Patiens.id " +
+            string examinationsQuery = "select Examination.id, Patients.FirstName + ' ' + Patients.LastName as Patient," +
+                " dateOf as [Date and Time], id_room as RoomID, duration as Duration, typeOfExamination as Type from Examination" +
+                " left outer join Patients  on Examination.id_patient = Patients.id " +
                 "where id_doctor = " + GetDoctorId() + "";
 
             FillTable(examinations, examinationsQuery);
@@ -67,7 +67,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             string userId = DatabaseHelpers.ExecuteReaderQueries("select id from users where usrnm = '" + Username + "'", Connection)[0];
 
             int doctorId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries("select id from doctors where user_id = " + Convert.ToInt32(userId) + "", Connection)[0]);
-
+            Console.WriteLine(doctorId);
             return doctorId;
         }
 

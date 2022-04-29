@@ -21,6 +21,7 @@ namespace HealthCareSystem
             Username = username;
             AuthForm = authForm;
             doctorRepository = new DoctorRepository(username, true);
+            doctorRepository.PullExaminations();
             InitializeComponent();
 
             FillDataGridView();
@@ -30,8 +31,21 @@ namespace HealthCareSystem
         private void FillDataGridView()
         {
 
-            // dgwExaminations.DataSource = patientRepository.examinations;
-            // DataGridViewSettings();
+            dgwExaminations.DataSource = doctorRepository.examinations;
+            DataGridViewSettings();
+        }
+
+        private void DataGridViewSettings()
+        {
+            dgwExaminations.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgwExaminations.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgwExaminations.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgwExaminations.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgwExaminations.Columns[0].Width = 90;
+            dgwExaminations.Columns[3].Width = 90;
+            dgwExaminations.Columns[4].Width = 90;
+            dgwExaminations.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgwExaminations.MultiSelect = false;
         }
 
         private void DoctorView_FormClosing(object sender, FormClosingEventArgs e)
