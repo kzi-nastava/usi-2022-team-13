@@ -31,12 +31,14 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private ExaminationRepository ExaminationRep;
         private string selectedTime;
         private string PatientUsername;
+        private int ValidDate;
 
-        public AddEditExamination(int examinationId, bool isAddChoosen, string patientUsername)
+        public AddEditExamination(int examinationId, bool isAddChoosen, string patientUsername, int validDate)
         {
             ExaminationId = examinationId;
             IsAddChoosen = isAddChoosen;
             PatientUsername = patientUsername;
+            ValidDate = validDate;
             PatientRep = new PatientRepository(patientUsername);
             DoctorRep = new DoctorRepository();
             RoomRep = new RoomRepository();
@@ -120,7 +122,17 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 }
                 else
                 {
-                    UpdateContent(mergedTime);          
+
+                    if (ValidDate == 1)
+                    {
+                        UpdateContent(mergedTime);
+                    }
+                    else
+                    {
+                        PatientRep.SendExaminationEditRequest(ExaminationId, DateTime.Now, true, SelectedDoctor.ID, mergedTime, roomId);
+
+                        MessageBox.Show("Wait for a secretary to aproove this request.");
+                    }
                 }
                 DatabaseHelpers.BlockSpamPatients(PatientUsername, PatientRep.Connection);
                 this.Close();
