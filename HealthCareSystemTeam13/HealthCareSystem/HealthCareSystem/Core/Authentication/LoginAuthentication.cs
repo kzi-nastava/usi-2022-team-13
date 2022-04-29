@@ -72,12 +72,12 @@ namespace HealthCareSystem.Core.Authentication
                         managerView.ShowDialog();
                         break;
                     case UserRole.Patients:
-
+                        DatabaseHelpers.BlockSpamPatients(Username, Connection);
                         bool isBlocked = DatabaseHelpers.IsPatientBlocked(Username, Connection);
                         if (!isBlocked)
                         {
 
-                            PatientView patientView = new PatientView();
+                            PatientView patientView = new PatientView(Username, Login);
                             this.Login.Hide();
                             patientView.ShowDialog();
                         }
@@ -129,7 +129,7 @@ namespace HealthCareSystem.Core.Authentication
         }
         ~LoginAuthentication()
         {
-            Connection.Close();
+            if(Connection.State == ConnectionState.Open) Connection.Close();
         }
     }
 }

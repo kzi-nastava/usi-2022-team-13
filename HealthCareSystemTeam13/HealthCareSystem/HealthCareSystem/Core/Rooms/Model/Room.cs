@@ -8,13 +8,20 @@ namespace HealthCareSystem.Core.Rooms.Model
 {
     public enum TypeOfRoom
     {
-        Warehouse, OperationRoom, ExaminationRoom, DayRoom, DeliveryRoom, IntensiveCareUnit, NurseryRoom, 
+        Warehouse, OperationRoom, ExaminationRoom, DayRoom, DeliveryRoom, IntensiveCareUnit, NurseryRoom 
     }
     class Room
     {
+        public int ID;
         public TypeOfRoom Type { get; set; }
         public Room(TypeOfRoom type)
         {
+            ID = 0;
+            this.Type = type;
+        }
+        public Room(TypeOfRoom type, int id)
+        {
+            ID = id;
             this.Type = type;
         }
     }
