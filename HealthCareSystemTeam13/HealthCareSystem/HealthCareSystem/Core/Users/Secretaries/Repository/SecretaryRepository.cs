@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 using System.Data.OleDb;
 using System.Data;
 using HealthCareSystem.Core;
-
 using HealthCareSystem.Core.Scripts.Repository;
 using HealthCareSystem.Core.Users.Patients.Model;
 
 namespace HealthCareSystem.Core.Users.Patients.Repository
 {
-    class PatientRepository
+    class SecretaryRepository
     {
-        public DataTable examinations { get; set; }
+        public DataTable patients { get; set; }
+        public DataTable blockedPatients { get; set; }
         public OleDbConnection Connection { get; set; }
 
         public SecretaryRepository()
