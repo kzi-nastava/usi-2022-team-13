@@ -140,7 +140,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
 
         public void DeleteSinglePatient(string patientID)
         {
-            var query = "SELECT user_id FROM Patients WHERE id = " + patientID + "";
+            var query = "SELECT user_id FROM Patients WHERE id = " + Convert.ToInt32(patientID) + "";
             string userID = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
             query = "DELETE from Patients WHERE id = " + patientID + "";
             using (var cmd = new OleDbCommand(query, Connection))
