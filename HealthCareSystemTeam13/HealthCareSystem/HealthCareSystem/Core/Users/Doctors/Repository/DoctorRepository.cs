@@ -173,6 +173,21 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             FillTable(examinations, examinationsQuery);
         }
 
-        
+        public void PullExaminationsThreeDays()
+        {
+            examinations = new DataTable();
+            DateTime firstDay = DateTime.Today.AddDays(1);
+            DateTime secondDay = DateTime.Today.AddDays(2);
+            DateTime thirdDay = DateTime.Today.AddDays(3);
+
+
+            string examinationsQuery = "select Examination.id, Patients.FirstName + ' ' + Patients.LastName as Patient," +
+            " dateOf, id_room as RoomID, duration as Duration, typeOfExamination as Type from Examination" +
+            " left outer join Patients  on Examination.id_patient = Patients.id " +
+            "where id_doctor = " + GetDoctorId() + " and (" +
+            "Day(dateOf) = Day('" + firstDay + "') or Day(dateOf) = Day('" + secondDay + "') or Day(dateOf) = Day('" + thirdDay + "'))";
+            FillTable(examinations, examinationsQuery);
+        }
+
     }
 }

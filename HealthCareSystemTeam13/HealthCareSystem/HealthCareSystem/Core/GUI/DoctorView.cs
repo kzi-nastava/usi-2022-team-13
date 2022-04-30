@@ -182,7 +182,9 @@ namespace HealthCareSystem
 
         private void btnShowNextThreeDays_Click(object sender, EventArgs e)
         {
-
+            DoctorRep.PullExaminationsThreeDays();
+            dgwExaminations.DataSource = DoctorRep.examinations;
+            dgwExaminations.Refresh();
         }
     }
 }
