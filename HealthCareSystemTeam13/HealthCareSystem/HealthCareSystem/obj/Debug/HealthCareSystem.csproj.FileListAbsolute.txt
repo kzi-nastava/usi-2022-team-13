@@ -40,10 +40,7 @@ C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\Hea
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\bin\Debug\HealthCareSystem.exe.config
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\bin\Debug\HealthCareSystem.exe
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\bin\Debug\HealthCareSystem.pdb
-<<<<<<< HEAD
-=======
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.csproj.AssemblyReference.cache
->>>>>>> feature/Doctor
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.DoctorView.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.LoginForm.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.HospitalManagerView.resources
@@ -138,3 +135,5 @@ C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\Heal
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.ExaminationRequests.resources
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientCRUDForm.resources
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.UnblockPatient.resources
+C:\Users\pc\Desktop\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.DoctorsFunctionalities.InsertOrChangeExamination.resources
+C:\Users\pc\Desktop\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.DoctorsFunctionalities.PatientMedicalRecord.resources
