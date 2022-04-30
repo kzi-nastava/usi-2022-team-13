@@ -7,13 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.GUI.SecretaryFunctionalities;
+
 namespace HealthCareSystem.Core.GUI
 {
     public partial class SecretaryView : Form
     {
-        public SecretaryView()
+        string Username;
+        public SecretaryView(string username)
         {
             InitializeComponent();
+            this.Username = username;
         }
 
         private void SecretaryView_FormClosing(object sender, FormClosingEventArgs e)
@@ -36,6 +40,7 @@ namespace HealthCareSystem.Core.GUI
 
         private void blockedPatientsButton_Click(object sender, EventArgs e)
         {
+            LoadForm(new BlockedPatientsForm(Username));
 
         }
 
@@ -46,7 +51,7 @@ namespace HealthCareSystem.Core.GUI
 
         private void patientsButton_Click(object sender, EventArgs e)
         {
-            LoadForm(new PatientCRUDForm());
+            LoadForm(new PatientCRUDForm(Username));
         }
     }
 }
