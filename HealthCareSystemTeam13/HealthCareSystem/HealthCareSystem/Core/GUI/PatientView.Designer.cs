@@ -36,22 +36,34 @@ namespace HealthCareSystem.Core.GUI
             // 
             // btnExaminations
             // 
+            this.btnExaminations.BackColor = System.Drawing.Color.Transparent;
+            this.btnExaminations.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnExaminations.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnExaminations.FlatAppearance.BorderSize = 3;
+            this.btnExaminations.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExaminations.Font = new System.Drawing.Font("Lucida Console", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExaminations.Location = new System.Drawing.Point(2, 26);
             this.btnExaminations.Name = "btnExaminations";
             this.btnExaminations.Size = new System.Drawing.Size(137, 88);
             this.btnExaminations.TabIndex = 0;
             this.btnExaminations.Text = "My Examinations";
-            this.btnExaminations.UseVisualStyleBackColor = true;
+            this.btnExaminations.UseVisualStyleBackColor = false;
             this.btnExaminations.Click += new System.EventHandler(this.btnExaminations_Click);
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(2, 513);
+            this.btnExit.BackColor = System.Drawing.Color.Transparent;
+            this.btnExit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnExit.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnExit.FlatAppearance.BorderSize = 3;
+            this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExit.Font = new System.Drawing.Font("Lucida Console", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.Location = new System.Drawing.Point(2, 483);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(137, 52);
+            this.btnExit.Size = new System.Drawing.Size(137, 82);
             this.btnExit.TabIndex = 1;
             this.btnExit.Text = "Logout";
-            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // pnlPatient
@@ -65,6 +77,7 @@ namespace HealthCareSystem.Core.GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.SkyBlue;
             this.ClientSize = new System.Drawing.Size(897, 577);
             this.Controls.Add(this.pnlPatient);
             this.Controls.Add(this.btnExit);
