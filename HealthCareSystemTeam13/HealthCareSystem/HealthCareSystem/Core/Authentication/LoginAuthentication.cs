@@ -50,6 +50,7 @@ namespace HealthCareSystem.Core.Authentication
         {
             User user = GetUser(Username, Password);
 
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
             
             if (user == null)
             {
@@ -127,9 +128,6 @@ namespace HealthCareSystem.Core.Authentication
             return (username == "" || password == "" || username.Contains(" "));
 
         }
-        ~LoginAuthentication()
-        {
-            if(Connection.State == ConnectionState.Open) Connection.Close();
-        }
+       
     }
 }
