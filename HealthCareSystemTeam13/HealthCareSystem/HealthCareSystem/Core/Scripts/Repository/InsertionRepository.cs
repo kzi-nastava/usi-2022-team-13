@@ -312,6 +312,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             users.Add(new User("tinabalerina", "tina123", UserRole.Secretaries));
             users.Add(new User("tomadiploma", "toma123", UserRole.Secretaries));
             users.Add(new User("codabilo", "danilo123", UserRole.Secretaries));
+            users.Add(new User("1", "1", UserRole.Secretaries));
 
             return users;
         }

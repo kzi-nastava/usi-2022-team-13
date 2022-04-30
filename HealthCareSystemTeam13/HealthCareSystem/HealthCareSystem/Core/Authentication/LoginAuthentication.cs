@@ -87,7 +87,7 @@ namespace HealthCareSystem.Core.Authentication
                         }
                         break;
                     case UserRole.Secretaries:
-                        SecretaryView secretacyView = new SecretaryView();
+                        SecretaryView secretacyView = new SecretaryView(Username);
                         this.Login.Hide();
                         secretacyView.ShowDialog();
                         break;
