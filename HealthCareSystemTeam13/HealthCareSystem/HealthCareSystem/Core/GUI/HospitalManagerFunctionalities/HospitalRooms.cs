@@ -1,4 +1,5 @@
-﻿using HealthCareSystem.Core.Rooms.Repository;
+﻿using HealthCareSystem.Core.Rooms.Model;
+using HealthCareSystem.Core.Rooms.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -74,8 +75,20 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            //ubaciti funkciju koja proverava dostupnost sobe
-            if (true)
+
+            int roomId = (int)dgwHospitalRooms.SelectedRows[0].Cells[0].Value;
+            Room room = roomRepository.GetRoom(roomId);
+
+            if(room.Type.ToString().Equals("Warehouse"))
+            {
+                MessageBox.Show("You cannot remove a warehouse");
+
+            }
+            else if (false)
+            {
+                MessageBox.Show("You cannot remove a room that will have future examinations in it");
+            }
+            else
             {
                 DialogResult wantToCancel = MessageBox.Show("Are you sure?", "Cancel removing a room", MessageBoxButtons.YesNo);
 
@@ -98,9 +111,22 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void btnEdit_Click(object sender, EventArgs e)
         {
             int roomId = (int)dgwHospitalRooms.SelectedRows[0].Cells[0].Value;
-            AddEditRooms addEditView = new AddEditRooms(roomId, false);
+            Room room = roomRepository.GetRoom(roomId);
 
-            addEditView.ShowDialog();
+            if (room.Type.ToString().Equals("Warehouse"))
+            {
+                MessageBox.Show("You cannot edit a warehouse");
+
+            }
+            else if (false)
+            {
+                MessageBox.Show("You cannot edit a room that will have future examinations in it");
+            }
+            else
+            {
+                AddEditRooms addEditView = new AddEditRooms(roomId, false);
+                addEditView.ShowDialog();
+            }
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)

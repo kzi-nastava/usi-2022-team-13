@@ -14,15 +14,20 @@ namespace HealthCareSystem.Core.Rooms.Model
     {
         public int ID;
         public TypeOfRoom Type { get; set; }
+        public Room(TypeOfRoom type, int id)
+        {
+            ID = id;
+            this.Type = type;
+        }
+
         public Room(TypeOfRoom type)
         {
             ID = 0;
             this.Type = type;
         }
-        public Room(TypeOfRoom type, int id)
+
+        public Room()
         {
-            ID = id;
-            this.Type = type;
         }
     }
 }

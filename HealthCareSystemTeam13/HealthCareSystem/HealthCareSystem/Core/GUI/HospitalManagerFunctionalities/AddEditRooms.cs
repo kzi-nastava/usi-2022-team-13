@@ -27,6 +27,11 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             InitializeComponent();
 
             FillRoomTypeComboBox();
+
+            if (!IsAddChosen)
+            {
+                LoadEditData();
+            }
         }
         private void FillRoomTypeComboBox()
         {
@@ -45,6 +50,14 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             cbRoomTypes.DataSource = roomTypes; 
         }
 
+        private void LoadEditData()
+        {
+
+            string query = "select * from Rooms where id=" + RoomId;
+            Room room = RoomRep.GetSelectedRoom(query);
+            cbRoomTypes.SelectedIndex = cbRoomTypes.FindStringExact(room.Type.ToString());
+        }
+
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
@@ -57,7 +70,14 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             }
             else
             {
-                //UpdateContent(mergedTime);
+                SelectedRoomType = (TypeOfRoom)cbRoomTypes.SelectedValue;
+
+                Console.WriteLine(RoomId);
+                Console.WriteLine(SelectedRoomType);
+                string updateQuery = "Update Rooms set type = '" + SelectedRoomType.ToString() + "' where id = " + RoomId.ToString();
+
+                RoomRep.UpdateContent(updateQuery);
+                MessageBox.Show("Successfully edited room!");
             }
             this.Close();
         }
