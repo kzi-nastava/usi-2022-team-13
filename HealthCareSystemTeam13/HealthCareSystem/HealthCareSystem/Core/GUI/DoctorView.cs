@@ -1,4 +1,5 @@
-﻿using HealthCareSystem.Core.Users.Doctors.Repository;
+﻿using HealthCareSystem.Core.GUI.DoctorsFunctionalities;
+using HealthCareSystem.Core.Users.Doctors.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,13 +16,13 @@ namespace HealthCareSystem
     {
         public string Username { get; set; }
         public LoginForm AuthForm;
-        private DoctorRepository doctorRepository;
+        private DoctorRepository DoctorRep;
         public DoctorView(string username, LoginForm authForm)
         {
             Username = username;
             AuthForm = authForm;
-            doctorRepository = new DoctorRepository(username, true);
-            doctorRepository.PullExaminations();
+            DoctorRep = new DoctorRepository(username, true);
+            DoctorRep.PullExaminations();
             InitializeComponent();
 
             FillDataGridView();
@@ -31,7 +32,7 @@ namespace HealthCareSystem
         private void FillDataGridView()
         {
 
-            dgwExaminations.DataSource = doctorRepository.examinations;
+            dgwExaminations.DataSource = DoctorRep.examinations;
             DataGridViewSettings();
         }
 
@@ -46,6 +47,16 @@ namespace HealthCareSystem
             dgwExaminations.Columns[4].Width = 90;
             dgwExaminations.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgwExaminations.MultiSelect = false;
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            InsertOrChangeExamination InsertOrChangeExaminationView = new InsertOrChangeExamination(
+                (int)dgwExaminations.SelectedRows[0].Cells[0].Value, true, Username, 1);
+
+            InsertOrChangeExaminationView.ShowDialog();
+
+
         }
 
         private void DoctorView_FormClosing(object sender, FormClosingEventArgs e)
@@ -66,6 +77,18 @@ namespace HealthCareSystem
         private void button1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            RefreshDataGridView();
+        }
+
+        public void RefreshDataGridView()
+        {
+            DoctorRep.PullExaminations();
+            dgwExaminations.DataSource = DoctorRep.examinations;
+            dgwExaminations.Refresh();
         }
     }
 }

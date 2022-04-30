@@ -11,6 +11,7 @@ using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Rooms.Model;
 using HealthCareSystem.Core.Scripts.Repository;
 using HealthCareSystem.Core.Users.Patients.Model;
+using System.ComponentModel;
 
 namespace HealthCareSystem.Core.Users.Patients.Repository
 {
@@ -19,8 +20,8 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         public string Username { get; set; }
         public DataTable examinations { get; set; }
         public OleDbConnection Connection { get; set; }
-        public PatientRepository(string username) { 
-            Username = username;
+        public PatientRepository(string username = "") { 
+            if(username.Length > 0) Username = username;
             try
             {
                 Connection = new OleDbConnection();
@@ -50,7 +51,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         public void PullExaminations()
         {
             examinations = new DataTable();
-   
+    
             string examinationsQuery = "select Examination.id, Doctors.FirstName + ' ' +Doctors.LastName as Doctor, dateOf as [Date and Time], id_room as RoomID, duration, typeOfExamination as Type from Examination left outer join Doctors  on Examination.id_doctor = Doctors.id " +
                 "where id_patient = " + GetPatientId() +"";
 
@@ -114,8 +115,12 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
            
         }
 
-        public void InsertExamination(string patientUsername, int doctorId, DateTime examinationDateTime, int duration, int roomId)
+        public void InsertExamination(string patientUsername, int doctorId, DateTime examinationDateTime,
+            int duration, int roomId, string selectedType="")
         {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+             
             int patientId = GetPatientId(patientUsername);
 
             string insertQuery = "insert into Examination(id_doctor, id_patient, isEdited, isCancelled, isFinished, dateOf, typeOfExamination, isUrgent, id_room, duration) values(@id_doctor, @id_patient, @isEdited, @isCancelled, @isFinished, @dateOf, @typeOfExamination, @isUrgent, @id_room, @duration)";
@@ -128,14 +133,22 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
                 cmd.Parameters.AddWithValue("@isCancelled", false);
                 cmd.Parameters.AddWithValue("@isFinished", false);
                 cmd.Parameters.AddWithValue("@dateOf", examinationDateTime.ToString());
-                cmd.Parameters.AddWithValue("@typeOfExamination", TypeOfExamination.BasicExamination.ToString());
+                if(selectedType.Length == 0 || selectedType == TypeOfExamination.BasicExamination.ToString())
+                {
+                    cmd.Parameters.AddWithValue("@typeOfExamination", TypeOfExamination.BasicExamination.ToString());
+                } else
+                {
+                    cmd.Parameters.AddWithValue("@typeOfExamination", TypeOfExamination.Operation.ToString());
+                }
                 cmd.Parameters.AddWithValue("@isUrgent", false);
                 cmd.Parameters.AddWithValue("@id_room", roomId);
                 cmd.Parameters.AddWithValue("@duration", 15);
 
                 cmd.ExecuteNonQuery();
             }
+            Username = patientUsername;
             InsertExaminationChanges(TypeOfChange.Add);
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
         }
 
         private int GetPatientId(string patientUsername)
@@ -218,7 +231,48 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
             return doctors;
         }
-        
+
+        public BindingList<Patient> GetPatients()
+        {
+            BindingList<Patient> patients = new BindingList<Patient>();
+            try
+            {
+                
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from Patients", Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    
+                    patients.Add(new Patient(
+                        Convert.ToInt32(reader["ID"]), reader["firstName"].ToString(),
+                        reader["lastName"].ToString(), Convert.ToInt32(reader["user_id"]), 
+                        Convert.ToBoolean(reader["isBlocked"])
+                    ));
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return patients;
+        }
+
+        public string GetUsernameFromEntity(Patient patient)
+        {
+            Connection.Open();
+            // string patientIdQuery = "select Patients.id from Patients inner join Users on Patients.user_id = Users.id where Users.usrnm = '" + patientUsername + "'";
+            string query = "select Users.usrnm from Users inner join " +
+                "Patients on Patients.user_id = Users.id where Patients.id = " + patient.ID ;
+            
+            string patientUsername = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
+            Connection.Close();
+            return patientUsername;
+        }
+
 
     }
 }

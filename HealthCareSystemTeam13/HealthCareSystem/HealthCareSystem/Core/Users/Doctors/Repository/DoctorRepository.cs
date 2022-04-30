@@ -62,13 +62,34 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             }
         }
 
-        private int GetDoctorId()
+        public int GetDoctorId()
         {
             string userId = DatabaseHelpers.ExecuteReaderQueries("select id from users where usrnm = '" + Username + "'", Connection)[0];
 
             int doctorId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries("select id from doctors where user_id = " + Convert.ToInt32(userId) + "", Connection)[0]);
             Console.WriteLine(doctorId);
             return doctorId;
+        }
+
+        public Doctor GetDoctorByUsername()
+        {
+            string userId = DatabaseHelpers.ExecuteReaderQueries("select id from users where usrnm = '" + Username + "'", Connection)[0];
+
+            Doctor doctor = new Doctor();
+
+            OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from doctors where user_id = " + Convert.ToInt32(userId) + "", Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                DoctorSpeciality speciality;
+                Enum.TryParse<DoctorSpeciality>(reader["speciality"].ToString(), out speciality);
+
+                doctor = new Doctor(Convert.ToInt32(reader["id"]), reader["firstName"].ToString(), reader["lastName"].ToString(),
+                    Convert.ToInt32(reader["user_id"]), speciality);
+            }
+            return doctor;
+
         }
 
 
