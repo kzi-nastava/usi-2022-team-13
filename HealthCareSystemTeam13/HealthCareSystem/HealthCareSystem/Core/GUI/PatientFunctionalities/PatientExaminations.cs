@@ -57,44 +57,59 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void btnEdit_Click(object sender, EventArgs e)
         {
 
-            if (CanChangeExamination())
+            if (!DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection))
             {
-                int validDate = IsValidDate();
-                if (validDate != 0)
+                if (CanChangeExamination())
                 {
-                    int examinationId = (int)dgwExaminations.SelectedRows[0].Cells[0].Value;
-                    AddEditExamination addEditView = new AddEditExamination(examinationId, false, Username, validDate);
+                    int validDate = IsValidDate();
+                    if (validDate != 0)
+                    {
+                        int examinationId = (int)dgwExaminations.SelectedRows[0].Cells[0].Value;
+                        AddEditExamination addEditView = new AddEditExamination(examinationId, false, Username, validDate);
 
-                    addEditView.ShowDialog();
+                        addEditView.ShowDialog();
 
+                    }
                 }
+            }
+            else
+            {
+                MessageBox.Show("You are blocked");
             }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            
-            if (CanChangeExamination())
+
+            if (!DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection))
             {
-                DialogResult wantToCancel = MessageBox.Show("Are you sure?", "Cancel Examination", MessageBoxButtons.YesNo);
-
-                if (wantToCancel == DialogResult.Yes)
+                if (CanChangeExamination())
                 {
-                    int validDate = IsValidDate();
-                    if (validDate == 1)
-                    {
-                        patientRepository.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
-                        patientRepository.InsertExaminationChanges(TypeOfChange.Delete);
-                        DatabaseHelpers.BlockSpamPatients(Username, patientRepository.Connection);
-                        MessageBox.Show("Succesfully canceled examination!");
-                        RefreshDataGridView();
-                    }else if(validDate == 2)
-                    {
-                        patientRepository.SendExaminationEditRequest((int)dgwExaminations.SelectedRows[0].Cells[0].Value, DateTime.Now, false, 0, DateTime.Now, 0);
-                        MessageBox.Show("Wait for a secretary to aproove this request.");
+                    DialogResult wantToCancel = MessageBox.Show("Are you sure?", "Cancel Examination", MessageBoxButtons.YesNo);
 
+                    if (wantToCancel == DialogResult.Yes)
+                    {
+                        int validDate = IsValidDate();
+                        if (validDate == 1)
+                        {
+                            patientRepository.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
+                            patientRepository.InsertExaminationChanges(TypeOfChange.Delete);
+                            DatabaseHelpers.BlockSpamPatients(Username, patientRepository.Connection);
+                            MessageBox.Show("Succesfully canceled examination!");
+                            RefreshDataGridView();
+                        }
+                        else if (validDate == 2)
+                        {
+                            patientRepository.SendExaminationEditRequest((int)dgwExaminations.SelectedRows[0].Cells[0].Value, DateTime.Now, false, 0, DateTime.Now, 0);
+                            MessageBox.Show("Wait for a secretary to aproove this request.");
+
+                        }
                     }
                 }
+            }
+            else
+            {
+                MessageBox.Show("You are blocked!");
             }
 
         }
@@ -163,9 +178,16 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            AddEditExamination addEditView = new AddEditExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value, true, Username, 1);
+            if (!DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection))
+            {
+                AddEditExamination addEditView = new AddEditExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value, true, Username, 1);
 
-            addEditView.ShowDialog();
+                addEditView.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("You are blocked!");
+            }
             
 
         }
@@ -177,7 +199,17 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            RefreshDataGridView();
+
+            if (!DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection))
+            {
+                RefreshDataGridView();
+
+            }
+            else
+            {
+                MessageBox.Show("You are blocked!");
+            }
+            
         }
     }
 
