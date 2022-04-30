@@ -154,5 +154,11 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             }
             return patient;
         }
+
+        public void CancelExamination(int examinationId)
+        {
+            string query = "delete from Examination where id = " + examinationId + "";
+            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+        }
     }
 }

@@ -91,7 +91,7 @@ namespace HealthCareSystem
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(127, 59);
             this.btnCancel.TabIndex = 9;
-            this.btnCancel.Text = "CANCEL";
+            this.btnCancel.Text = "REMOVE";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
@@ -105,7 +105,7 @@ namespace HealthCareSystem
             this.btnExit.TabIndex = 11;
             this.btnExit.Text = "Log out";
             this.btnExit.UseVisualStyleBackColor = true;
-            this.btnExit.Click += new System.EventHandler(this.button1_Click);
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // DoctorView
             // 

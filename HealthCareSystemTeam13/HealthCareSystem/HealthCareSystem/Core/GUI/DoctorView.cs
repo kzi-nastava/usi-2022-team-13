@@ -1,5 +1,6 @@
 ﻿using HealthCareSystem.Core.GUI.DoctorsFunctionalities;
 using HealthCareSystem.Core.Users.Doctors.Repository;
+using HealthCareSystem.Core.Users.Patients.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,7 +17,7 @@ namespace HealthCareSystem
     {
         public string Username { get; set; }
         public LoginForm AuthForm;
-        private DoctorRepository DoctorRep;
+        private readonly DoctorRepository DoctorRep;
         public DoctorView(string username, LoginForm authForm)
         {
             Username = username;
@@ -71,12 +72,18 @@ namespace HealthCareSystem
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            if (CanChangeExamination())
+            {
+                DialogResult wantToCancel = MessageBox.Show("Are you sure?", "Cancel Examination", MessageBoxButtons.YesNo);
 
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
+                if (wantToCancel == DialogResult.Yes)
+                {
+                        DoctorRep.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
+                        // DoctorRep.InsertExaminationChanges(TypeOfChange.Delete);
+                        MessageBox.Show("Succesfully canceled examination!");
+                        RefreshDataGridView();
+                }
+            }
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -151,6 +158,17 @@ namespace HealthCareSystem
                 MessageBox.Show("Please select only 1 row.");
             }
             return false;
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            DialogResult exit = MessageBox.Show("Are you sure?", "Logout?", MessageBoxButtons.YesNo);
+
+            if (exit == DialogResult.Yes) {
+                LoginForm lf = new LoginForm();
+                this.Hide();
+                lf.ShowDialog();
+            }
         }
     }
 }
