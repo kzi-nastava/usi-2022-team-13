@@ -186,5 +186,15 @@ namespace HealthCareSystem
             dgwExaminations.DataSource = DoctorRep.examinations;
             dgwExaminations.Refresh();
         }
+
+        private void btnMedicalRecord_Click(object sender, EventArgs e)
+        {
+            if (CanChangeExamination())
+            {
+                string patientFullName = dgwExaminations.SelectedRows[0].Cells[1].Value.ToString();
+                PatientMedicalRecord patientMedicalRecordForm = new PatientMedicalRecord(patientFullName);
+                patientMedicalRecordForm.ShowDialog();
+            }
+        }
     }
 }

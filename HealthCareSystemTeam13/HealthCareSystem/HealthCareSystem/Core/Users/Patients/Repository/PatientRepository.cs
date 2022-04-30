@@ -300,5 +300,30 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             return patientUsername;
         }
 
+        public string[] GetMedicalRecord(string query)
+        {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            Console.WriteLine(query);
+
+            string[] data = new string[2];
+
+            while (reader.Read())
+            {
+                string a = reader["weight"].ToString();
+                string b = reader["height"].ToString();
+                data[0] = a;
+                data[1] = b;
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+            return data;
+        }
+
     }
 }
