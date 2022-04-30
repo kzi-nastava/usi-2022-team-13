@@ -31,11 +31,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         {
             this.acceptButton = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
-            this.weightBox = new System.Windows.Forms.TextBox();
             this.passwordBox = new System.Windows.Forms.TextBox();
-            this.heightBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.lastNameBox = new System.Windows.Forms.TextBox();
             this.usernameBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -48,7 +44,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             // 
             // acceptButton
             // 
-            this.acceptButton.Location = new System.Drawing.Point(143, 331);
+            this.acceptButton.Location = new System.Drawing.Point(138, 250);
             this.acceptButton.Margin = new System.Windows.Forms.Padding(4);
             this.acceptButton.Name = "acceptButton";
             this.acceptButton.Size = new System.Drawing.Size(100, 28);
@@ -67,14 +63,6 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             this.label7.TabIndex = 46;
             this.label7.Text = "Patient ID";
             // 
-            // weightBox
-            // 
-            this.weightBox.Location = new System.Drawing.Point(211, 289);
-            this.weightBox.Margin = new System.Windows.Forms.Padding(4);
-            this.weightBox.Name = "weightBox";
-            this.weightBox.Size = new System.Drawing.Size(132, 22);
-            this.weightBox.TabIndex = 57;
-            // 
             // passwordBox
             // 
             this.passwordBox.Location = new System.Drawing.Point(211, 198);
@@ -82,34 +70,6 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             this.passwordBox.Name = "passwordBox";
             this.passwordBox.Size = new System.Drawing.Size(132, 22);
             this.passwordBox.TabIndex = 56;
-            // 
-            // heightBox
-            // 
-            this.heightBox.Location = new System.Drawing.Point(211, 244);
-            this.heightBox.Margin = new System.Windows.Forms.Padding(4);
-            this.heightBox.Name = "heightBox";
-            this.heightBox.Size = new System.Drawing.Size(132, 22);
-            this.heightBox.TabIndex = 55;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(39, 244);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(49, 17);
-            this.label3.TabIndex = 54;
-            this.label3.Text = "Height";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(39, 289);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(52, 17);
-            this.label5.TabIndex = 53;
-            this.label5.Text = "Weight";
             // 
             // lastNameBox
             // 
@@ -187,15 +147,11 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(401, 394);
+            this.ClientSize = new System.Drawing.Size(401, 305);
             this.Controls.Add(this.nameBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.patientIdBox);
-            this.Controls.Add(this.weightBox);
             this.Controls.Add(this.passwordBox);
-            this.Controls.Add(this.heightBox);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.lastNameBox);
             this.Controls.Add(this.usernameBox);
             this.Controls.Add(this.label6);
@@ -213,11 +169,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         #endregion
         private System.Windows.Forms.Button acceptButton;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox weightBox;
         private System.Windows.Forms.TextBox passwordBox;
-        private System.Windows.Forms.TextBox heightBox;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox lastNameBox;
         private System.Windows.Forms.TextBox usernameBox;
         private System.Windows.Forms.Label label6;
