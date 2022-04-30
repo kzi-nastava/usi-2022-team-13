@@ -108,7 +108,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public List<Room> GetRooms()
         {
             List<Room> rooms = new List<Room>();
-            Connection.Close();
+            
             try
             {
                 
