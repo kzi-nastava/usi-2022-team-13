@@ -70,6 +70,24 @@
     <Compile Include="Core\Examinations\Model\Anamnesis.cs" />
     <Compile Include="Core\Examinations\Model\Examination.cs" />
     <Compile Include="Core\Examinations\Repository\ExaminationRepository.cs" />
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.Designer.cs">
+      <DependentUpon>AddEditRooms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.Designer.cs">
+      <DependentUpon>HospitalRooms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerView.Designer.cs">
+      <DependentUpon>HospitalManagerView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\AddEditExamination.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -182,22 +200,22 @@
     <Compile Include="Core\GUI\LoginView.Designer.cs">
       <DependentUpon>LoginView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Core\GUI\HospitalManagerView.Designer.cs">
-      <DependentUpon>HospitalManagerView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Core\GUI\DoctorView.resx">
       <DependentUpon>DoctorView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\LoginView.resx">
-      <DependentUpon>LoginView.cs</DependentUpon>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.resx">
+      <DependentUpon>AddEditRooms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.resx">
+      <DependentUpon>HospitalRooms.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerView.resx">
       <DependentUpon>HospitalManagerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\LoginView.resx">
+      <DependentUpon>LoginView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\AddEditExamination.resx">
       <DependentUpon>AddEditExamination.cs</DependentUpon>
