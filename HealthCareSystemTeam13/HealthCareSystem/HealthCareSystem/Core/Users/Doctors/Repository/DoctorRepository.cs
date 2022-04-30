@@ -1,5 +1,6 @@
 ﻿using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Users.Doctors.Model;
+using HealthCareSystem.Core.Users.Patients.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -133,6 +134,25 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             Connection.Close();
 
             return doctors;
+        }
+
+        public Patient GetSelectedPatient(string query)
+        {
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+
+            Patient patient = new Patient();
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                patient = 
+                new Patient(
+                Convert.ToInt32(reader["Patients.ID"]),
+                reader["firstName"].ToString(), reader["lastName"].ToString(),
+                Convert.ToInt32(reader["user_id"]), false
+                );
+            }
+            return patient;
         }
     }
 }

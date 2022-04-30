@@ -48,6 +48,19 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             return patientId;
         }
 
+        public int GetPatientIdByFirstName(string firstName)
+        {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            int patientId = Convert.ToInt32(
+                DatabaseHelpers.ExecuteReaderQueries("select id from Patients where firstName = '" + firstName + "'", Connection)[0]);
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+            return patientId;
+        }
+
         public void PullExaminations()
         {
             examinations = new DataTable();
@@ -59,11 +72,16 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
 
         }
-        public void UpdateContent(string query)
+        public void UpdateContent(string query, int patiendId = 0)
         {
-            
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
             DatabaseHelpers.ExecuteNonQueries(query, Connection);
-            InsertExaminationChanges(TypeOfChange.Edit);
+            if(patiendId > 0) InsertExaminationChanges(TypeOfChange.Edit, patiendId);
+            else InsertExaminationChanges(TypeOfChange.Edit);
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
         }
 
@@ -98,10 +116,11 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         }
 
-        public void InsertExaminationChanges(TypeOfChange typeOfChange)
+        public void InsertExaminationChanges(TypeOfChange typeOfChange, int parsedPatientId = 0)
         {
-            int patientId = GetPatientId(Username);
-
+            int patientId;
+            if (parsedPatientId == 0) { patientId = GetPatientId(Username); }
+            else { patientId = parsedPatientId; }
             string insertQuery = "insert into PatientExaminationChanges(id_patient, typeOfChange, dateOf) values(@id_patient, @typeOfChange, @dateOf)";
 
             using (var cmd = new OleDbCommand(insertQuery, Connection))
@@ -112,7 +131,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
                 cmd.ExecuteNonQuery();
             }
-           
+
         }
 
         public void InsertExamination(string patientUsername, int doctorId, DateTime examinationDateTime,
@@ -154,13 +173,17 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         private int GetPatientId(string patientUsername)
         {
             string patientIdQuery = "select Patients.id from Patients inner join Users on Patients.user_id = Users.id where Users.usrnm = '" + patientUsername + "'";
+            Console.WriteLine(patientIdQuery);
             int patientId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(patientIdQuery, Connection)[0]);
             return patientId;
         }
 
         public Dictionary<string, string> GetExamination(int examinationId)
         {
-            string query = "select id_doctor, dateOf, id_room from Examination where id = " + examinationId + "";
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            string query = "select id_doctor, dateOf, id_room, typeOfExamination from Examination where id = " + examinationId + "";
 
             Dictionary<string, string> row = new Dictionary<string, string>();
             OleDbCommand cmd = new OleDbCommand();
@@ -175,7 +198,11 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
                 row["doctor_id"] = reader["id_doctor"].ToString();
                 row["dateOf"] = reader["dateOf"].ToString();
                 row["room_id"] = reader["id_room"].ToString();
+                row["typeOfExamination"] = reader["typeOfExamination"].ToString();
             }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
             return row;
         }
 
@@ -272,7 +299,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             Connection.Close();
             return patientUsername;
         }
-
 
     }
 }

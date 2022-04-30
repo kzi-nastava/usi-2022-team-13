@@ -90,5 +90,67 @@ namespace HealthCareSystem
             dgwExaminations.DataSource = DoctorRep.examinations;
             dgwExaminations.Refresh();
         }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (CanChangeExamination())
+            {
+                int validDate = IsValidDate();
+                if (validDate != 0)
+                {
+                    int examinationId = (int)dgwExaminations.SelectedRows[0].Cells[0].Value;
+                    InsertOrChangeExamination insertOrChangeExaminationForm = 
+                        new InsertOrChangeExamination(examinationId, false, Username, validDate);
+
+                    insertOrChangeExaminationForm.ShowDialog();
+
+                }
+            }
+        }
+
+        private int IsValidDate()
+        {
+
+            // 0 invalid
+            // 1 valid for direct change
+
+            DateTime examinationDate = (DateTime)dgwExaminations.SelectedRows[0].Cells[2].Value;
+
+
+            if (examinationDate.CompareTo(DateTime.Now) < 0)
+            {
+                MessageBox.Show("This examination date/time has expired.");
+                return 0;
+            }
+
+            return 1;
+
+        }
+
+        private bool CanChangeExamination()
+        {
+            if (dgwExaminations.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Please select a row first.");
+
+            }
+            else if (dgwExaminations.SelectedRows.Count == 1)
+            {
+                DataGridViewRow row = dgwExaminations.SelectedRows[0];
+                if (row.Cells[0].Value == null)
+                {
+                    MessageBox.Show("You selected an empty row.");
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select only 1 row.");
+            }
+            return false;
+        }
     }
 }

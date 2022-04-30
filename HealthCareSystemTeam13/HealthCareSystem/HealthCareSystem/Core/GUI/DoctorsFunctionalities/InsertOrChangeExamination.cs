@@ -54,7 +54,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             FillTypesComboBox();
             if (!IsAddChoosen)
             {
-                //LoadEditData();
+                LoadEditData();
 
             }
             else
@@ -114,17 +114,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 }
                 else
                 {
-
-                    if (ValidDate == 1)
-                    {
-                        UpdateContent(mergedTime);
-                    }
-                    else
-                    {
-                        PatientRep.SendExaminationEditRequest(ExaminationId, DateTime.Now, true, DoctorEntity.ID, mergedTime, RoomId);
-
-                        MessageBox.Show("Wait for a secretary to aproove this request.");
-                    }
+                    UpdateContent(mergedTime);
                 }
                 this.Close();
             }
@@ -132,9 +122,13 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
         private void UpdateContent(DateTime mergedTime)
         {
-            string updateQuery = "Update Examination set id_doctor = " + DoctorEntity.ID + "," +
-                " isEdited=" + true + ", dateOf = '" + mergedTime + "', id_room = " + RoomId + " where id = " + ExaminationId + "";
-            PatientRep.UpdateContent(updateQuery);
+            int patiendId = PatientRep.GetPatientIdByFirstName(
+                cbPatients.Text.Split(' ')[0]);
+
+            string updateQuery = "Update Examination set id_patient = " + patiendId + "," +
+                " isEdited=" + true + ", dateOf = '" + mergedTime + "', typeOfExamination = '" + cbType.SelectedItem.ToString() + "', " +
+                "id_room = " + RoomId + " where id = " + ExaminationId + "";
+            PatientRep.UpdateContent(updateQuery, patiendId);
             MessageBox.Show("Successfully edited examination!");
 
         }
@@ -200,6 +194,32 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             string[] examinationHourMinute = examinationTime.Split(':');
             DateTime examinationDateTime = new DateTime(examinationDate.Year, examinationDate.Month, examinationDate.Day, Convert.ToInt32(examinationHourMinute[0]), Convert.ToInt32(examinationHourMinute[1]), 0);
             return examinationDateTime;
+        }
+
+        private void LoadEditData()
+        {
+            Dictionary<string, string> data = PatientRep.GetExamination(ExaminationId);
+            tbExaminationId.Text = data["id"];
+
+            tbDuration.Text = "15";
+            tbRoomId.Text = data["room_id"];
+            DateTime dateParsed = DateTime.Parse(data["dateOf"]);
+
+            dtDate.Value = dateParsed;
+            tbTime.Text = dateParsed.Hour.ToString() + ":" + dateParsed.Minute.ToString();
+            string patientName = GetSelectedPatient().FullName.ToString();
+            cbPatients.SelectedIndex = cbPatients.FindString(patientName);
+            cbType.SelectedIndex = cbType.FindStringExact(data["typeOfExamination"]);
+        }
+
+        private Patient GetSelectedPatient()
+        {
+            Patient patient;
+
+            string doctorQuery = "select * from Patients inner join Examination on Patients.ID = Examination.id_patient where Examination.ID = " + ExaminationId;
+            
+            patient = DoctorRep.GetSelectedPatient(doctorQuery);
+            return patient;
         }
 
         private void label7_Click(object sender, EventArgs e)
