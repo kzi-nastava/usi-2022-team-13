@@ -46,7 +46,7 @@ namespace HealthCareSystem.Core.GUI
 
         private void requestsButton_Click(object sender, EventArgs e)
         {
-
+            LoadForm(new ExaminationRequests());
         }
 
         private void patientsButton_Click(object sender, EventArgs e)
