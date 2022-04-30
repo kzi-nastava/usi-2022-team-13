@@ -3,29 +3,21 @@ using HealthCareSystem.Core.Rooms.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-<<<<<<< HEAD
 using System.Data;
-=======
->>>>>>> feature/Doctor
 using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-<<<<<<< HEAD
 using System.Windows.Forms;
-=======
 
->>>>>>> feature/Doctor
 
 namespace HealthCareSystem.Core.Rooms.Repository
 {
     class RoomRepository
     {
         public OleDbConnection Connection { get; set; }
-<<<<<<< HEAD
         public DataTable Rooms { get; set; }
-=======
->>>>>>> feature/Doctor
+
         public RoomRepository()
         {
             try
@@ -34,13 +26,9 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
                 Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=HCDb.mdb;
                 Persist Security Info=False;";
-<<<<<<< HEAD
 
                 Connection.Open();
 
-=======
-                
->>>>>>> feature/Doctor
             }
             catch (Exception exception)
             {
@@ -48,7 +36,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
             }
 
         }
-<<<<<<< HEAD
+
         public void PullRooms()
         {
             Rooms = new DataTable();
@@ -103,9 +91,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
             DatabaseHelpers.ExecuteNonQueries(query, Connection);
         }
 
-
-=======
->>>>>>> feature/Doctor
         public bool isRoomAvailable(int roomId, DateTime examinationTime, List<Examination> examinations)
         {
             // if patients is adding an examination
@@ -125,16 +110,11 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public List<Room> GetRooms()
         {
             List<Room> rooms = new List<Room>();
-<<<<<<< HEAD
             
-            try
-            {
                 
-=======
             try
             {
                 Connection.Open();
->>>>>>> feature/Doctor
 
                 OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from rooms", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -155,7 +135,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
             return rooms;
         }
-<<<<<<< HEAD
 
         public Room GetRoom(int id)
         {
@@ -229,9 +208,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
             return examinations;
 
         }
-=======
-        
->>>>>>> feature/Doctor
+
 
         public int GetAvailableRoomId(DateTime examinationDateTime, List<Examination> examinations)
         {

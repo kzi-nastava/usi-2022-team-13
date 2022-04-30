@@ -57,7 +57,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void btnEdit_Click(object sender, EventArgs e)
         {
 
-<<<<<<< HEAD
             if (!DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection))
             {
                 if (CanChangeExamination())
@@ -77,7 +76,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             {
                 MessageBox.Show("You are blocked");
             }
-=======
             if (CanChangeExamination())
             {
                 int validDate = IsValidDate();
@@ -90,12 +88,11 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
                 }
             }
->>>>>>> feature/Doctor
+
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-<<<<<<< HEAD
 
             if (!DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection))
             {
@@ -127,7 +124,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             {
                 MessageBox.Show("You are blocked!");
             }
-=======
             
             if (CanChangeExamination())
             {
@@ -151,7 +147,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                     }
                 }
             }
->>>>>>> feature/Doctor
 
         }
 
@@ -219,7 +214,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-<<<<<<< HEAD
             if (!DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection))
             {
                 
@@ -231,12 +225,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             {
                 MessageBox.Show("You are blocked!");
             }
-=======
-            AddEditExamination addEditView = new AddEditExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value, true, Username, 1);
 
-            addEditView.ShowDialog();
->>>>>>> feature/Doctor
-            
 
         }
 
@@ -247,7 +236,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-<<<<<<< HEAD
+
 
             if (!DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection))
             {
@@ -259,9 +248,9 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 MessageBox.Show("You are blocked!");
             }
             
-=======
+
             RefreshDataGridView();
->>>>>>> feature/Doctor
+
         }
     }
 

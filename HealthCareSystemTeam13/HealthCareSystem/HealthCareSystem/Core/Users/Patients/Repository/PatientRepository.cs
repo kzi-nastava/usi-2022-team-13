@@ -11,10 +11,7 @@ using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Rooms.Model;
 using HealthCareSystem.Core.Scripts.Repository;
 using HealthCareSystem.Core.Users.Patients.Model;
-<<<<<<< HEAD
-=======
 using System.ComponentModel;
->>>>>>> feature/Doctor
 
 namespace HealthCareSystem.Core.Users.Patients.Repository
 {
@@ -23,13 +20,11 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         public string Username { get; set; }
         public DataTable examinations { get; set; }
         public OleDbConnection Connection { get; set; }
-<<<<<<< HEAD
-        public PatientRepository(string username) { 
-            Username = username;
-=======
+        // public PatientRepository(string username) {
+           // Username = username;
+        // }
         public PatientRepository(string username = "") { 
             if(username.Length > 0) Username = username;
->>>>>>> feature/Doctor
             try
             {
                 Connection = new OleDbConnection();
@@ -56,12 +51,8 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             return patientId;
         }
 
-<<<<<<< HEAD
-        public void PullExaminations()
-        {
-            examinations = new DataTable();
    
-=======
+
         public int GetPatientIdByFirstName(string firstName)
         {
             int checkState = 0;
@@ -79,7 +70,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         {
             examinations = new DataTable();
     
->>>>>>> feature/Doctor
             string examinationsQuery = "select Examination.id, Doctors.FirstName + ' ' +Doctors.LastName as Doctor, dateOf as [Date and Time], id_room as RoomID, duration, typeOfExamination as Type from Examination left outer join Doctors  on Examination.id_doctor = Doctors.id " +
                 "where id_patient = " + GetPatientId() +"";
 
@@ -87,13 +77,12 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
 
         }
-<<<<<<< HEAD
-        public void UpdateContent(string query)
-        {
+       // public void UpdateContent(string query)
+       // {
             
-            DatabaseHelpers.ExecuteNonQueries(query, Connection);
-            InsertExaminationChanges(TypeOfChange.Edit);
-=======
+         //   DatabaseHelpers.ExecuteNonQueries(query, Connection);
+           // InsertExaminationChanges(TypeOfChange.Edit);
+
         public void UpdateContent(string query, int patiendId = 0)
         {
             int checkState = 0;
@@ -104,7 +93,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             else InsertExaminationChanges(TypeOfChange.Edit);
 
             if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
->>>>>>> feature/Doctor
 
         }
 
@@ -139,18 +127,12 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         }
 
-<<<<<<< HEAD
-        public void InsertExaminationChanges(TypeOfChange typeOfChange)
-        {
-            int patientId = GetPatientId(Username);
 
-=======
         public void InsertExaminationChanges(TypeOfChange typeOfChange, int parsedPatientId = 0)
         {
             int patientId;
             if (parsedPatientId == 0) { patientId = GetPatientId(Username); }
             else { patientId = parsedPatientId; }
->>>>>>> feature/Doctor
             string insertQuery = "insert into PatientExaminationChanges(id_patient, typeOfChange, dateOf) values(@id_patient, @typeOfChange, @dateOf)";
 
             using (var cmd = new OleDbCommand(insertQuery, Connection))
@@ -161,15 +143,11 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
                 cmd.ExecuteNonQuery();
             }
-<<<<<<< HEAD
+
            
         }
 
-        public void InsertExamination(string patientUsername, int doctorId, DateTime examinationDateTime, int duration, int roomId)
-        {
-=======
 
-        }
 
         public void InsertExamination(string patientUsername, int doctorId, DateTime examinationDateTime,
             int duration, int roomId, string selectedType="")
@@ -177,7 +155,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             int checkState = 0;
             if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
              
->>>>>>> feature/Doctor
+
             int patientId = GetPatientId(patientUsername);
 
             string insertQuery = "insert into Examination(id_doctor, id_patient, isEdited, isCancelled, isFinished, dateOf, typeOfExamination, isUrgent, id_room, duration) values(@id_doctor, @id_patient, @isEdited, @isCancelled, @isFinished, @dateOf, @typeOfExamination, @isUrgent, @id_room, @duration)";
@@ -190,9 +168,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
                 cmd.Parameters.AddWithValue("@isCancelled", false);
                 cmd.Parameters.AddWithValue("@isFinished", false);
                 cmd.Parameters.AddWithValue("@dateOf", examinationDateTime.ToString());
-<<<<<<< HEAD
                 cmd.Parameters.AddWithValue("@typeOfExamination", TypeOfExamination.BasicExamination.ToString());
-=======
                 if(selectedType.Length == 0 || selectedType == TypeOfExamination.BasicExamination.ToString())
                 {
                     cmd.Parameters.AddWithValue("@typeOfExamination", TypeOfExamination.BasicExamination.ToString());
@@ -200,43 +176,36 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
                 {
                     cmd.Parameters.AddWithValue("@typeOfExamination", TypeOfExamination.Operation.ToString());
                 }
->>>>>>> feature/Doctor
                 cmd.Parameters.AddWithValue("@isUrgent", false);
                 cmd.Parameters.AddWithValue("@id_room", roomId);
                 cmd.Parameters.AddWithValue("@duration", 15);
 
                 cmd.ExecuteNonQuery();
             }
-<<<<<<< HEAD
             InsertExaminationChanges(TypeOfChange.Add);
-=======
             Username = patientUsername;
             InsertExaminationChanges(TypeOfChange.Add);
             if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
->>>>>>> feature/Doctor
+
         }
 
         private int GetPatientId(string patientUsername)
         {
             string patientIdQuery = "select Patients.id from Patients inner join Users on Patients.user_id = Users.id where Users.usrnm = '" + patientUsername + "'";
-<<<<<<< HEAD
-=======
+
             Console.WriteLine(patientIdQuery);
->>>>>>> feature/Doctor
             int patientId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(patientIdQuery, Connection)[0]);
             return patientId;
         }
 
         public Dictionary<string, string> GetExamination(int examinationId)
         {
-<<<<<<< HEAD
-            string query = "select id_doctor, dateOf, id_room from Examination where id = " + examinationId + "";
-=======
+            // string query = "select id_doctor, dateOf, id_room from Examination where id = " + examinationId + "";
             int checkState = 0;
             if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 
             string query = "select id_doctor, dateOf, id_room, typeOfExamination from Examination where id = " + examinationId + "";
->>>>>>> feature/Doctor
+
 
             Dictionary<string, string> row = new Dictionary<string, string>();
             OleDbCommand cmd = new OleDbCommand();
@@ -251,15 +220,11 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
                 row["doctor_id"] = reader["id_doctor"].ToString();
                 row["dateOf"] = reader["dateOf"].ToString();
                 row["room_id"] = reader["id_room"].ToString();
-<<<<<<< HEAD
-            }
-=======
                 row["typeOfExamination"] = reader["typeOfExamination"].ToString();
             }
 
             if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
->>>>>>> feature/Doctor
             return row;
         }
 
@@ -315,9 +280,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
             return doctors;
         }
-<<<<<<< HEAD
-        
-=======
 
         public BindingList<Patient> GetPatients()
         {
@@ -384,7 +346,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
             return data;
         }
->>>>>>> feature/Doctor
 
     }
 }

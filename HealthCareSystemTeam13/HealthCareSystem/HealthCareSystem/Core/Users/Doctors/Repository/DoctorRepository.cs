@@ -1,16 +1,13 @@
 ﻿using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Users.Doctors.Model;
-<<<<<<< HEAD
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-=======
 using HealthCareSystem.Core.Users.Patients.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
->>>>>>> feature/Doctor
 using System.Data.OleDb;
 using System.Linq;
 using System.Text;
@@ -21,10 +18,8 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
     class DoctorRepository
     {
         public OleDbConnection Connection { get; set; }
-<<<<<<< HEAD
-        public DoctorRepository()
-        {
-=======
+        public DoctorRepository() { }
+  
 
         public string Username { get; set; }
         public DataTable examinations { get; set; }
@@ -32,20 +27,18 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public DoctorRepository(string username="", bool calledFromDoctor=false)
         {
             if(username.Length > 0) Username = username;
->>>>>>> feature/Doctor
             try
             {
                 Connection = new OleDbConnection();
 
                 Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=HCDb.mdb;
                 Persist Security Info=False;";
-<<<<<<< HEAD
-=======
+
                 if(calledFromDoctor)
                 {
                     Connection.Open();
                 }
->>>>>>> feature/Doctor
+
             }
             catch (Exception exception)
             {
@@ -55,8 +48,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
         }
 
-<<<<<<< HEAD
-=======
+
         public void PullExaminations()
         {
             examinations = new DataTable();
@@ -109,7 +101,6 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
         }
 
->>>>>>> feature/Doctor
 
         public bool IsDoctorAvailable(Doctor doctor, DateTime ExaminationDateTime, List<Examination> examinations)
         {
@@ -152,8 +143,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
             return doctors;
         }
-<<<<<<< HEAD
-=======
+
 
         public Patient GetSelectedPatient(string query)
         {
@@ -208,6 +198,5 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             FillTable(examinations, examinationsQuery);
         }
 
->>>>>>> feature/Doctor
     }
 }

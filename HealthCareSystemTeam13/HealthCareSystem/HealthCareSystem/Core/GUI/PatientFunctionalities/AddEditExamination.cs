@@ -13,10 +13,7 @@ using HealthCareSystem.Core.Examinations.Repository;
 using HealthCareSystem.Core.Rooms.Repository;
 using HealthCareSystem.Core.Users.Doctors.Model;
 using HealthCareSystem.Core.Users.Doctors.Repository;
-<<<<<<< HEAD
 using HealthCareSystem.Core.Users.Patients.Model;
-=======
->>>>>>> feature/Doctor
 using HealthCareSystem.Core.Users.Patients.Repository;
 
 namespace HealthCareSystem.Core.GUI.PatientFunctionalities
@@ -134,11 +131,9 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                     else
                     {
                         PatientRep.SendExaminationEditRequest(ExaminationId, DateTime.Now, true, SelectedDoctor.ID, mergedTime, roomId);
-<<<<<<< HEAD
-                        PatientRep.InsertExaminationChanges(TypeOfChange.Edit);
-=======
 
->>>>>>> feature/Doctor
+                        PatientRep.InsertExaminationChanges(TypeOfChange.Edit);
+
                         MessageBox.Show("Wait for a secretary to aproove this request.");
                     }
                 }

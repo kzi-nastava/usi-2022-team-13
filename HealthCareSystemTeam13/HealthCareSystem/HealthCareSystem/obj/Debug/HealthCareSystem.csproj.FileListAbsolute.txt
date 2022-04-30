@@ -54,14 +54,12 @@ C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\Healt
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.csproj.CoreCompileInputs.cache
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.exe
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.pdb
-<<<<<<< HEAD
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.AddEditExamination.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.PatientExaminations.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientCRUDForm.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.AddPatient.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.DeletePatient.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.EditPatient.resources
-C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.csproj.AssemblyReference.cache
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.BlockPatient.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.UnblockPatient.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.BlockedPatientsForm.resources
@@ -123,11 +121,20 @@ C:\Users\pc\Desktop\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSys
 C:\Users\pc\Desktop\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.AddEditRooms.resources
 C:\Users\pc\Desktop\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.HospitalRooms.resources
 C:\Users\pc\Desktop\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerView.resources
-=======
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.AddEditExamination.resources
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.PatientExaminations.resources
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientView.resources
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryView.resources
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.DoctorsFunctionalities.InsertOrChangeExamination.resources
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.DoctorsFunctionalities.PatientMedicalRecord.resources
->>>>>>> feature/Doctor
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.AddEditRooms.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.HospitalRooms.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerView.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.AddPatient.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.BlockedPatientsForm.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.BlockPatient.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.DeletePatient.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.EditPatient.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.ExaminationRequests.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientCRUDForm.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.UnblockPatient.resources

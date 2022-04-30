@@ -1,5 +1,4 @@
-﻿
-namespace HealthCareSystem
+﻿namespace HealthCareSystem
 {
     partial class LoginForm
     {
@@ -96,11 +95,7 @@ namespace HealthCareSystem
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(-7, -27);
-<<<<<<< HEAD
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
-=======
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
->>>>>>> feature/Doctor
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(371, 436);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -109,16 +104,10 @@ namespace HealthCareSystem
             // 
             // pictureBox2
             // 
-<<<<<<< HEAD
             this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
             this.pictureBox2.Location = new System.Drawing.Point(460, 269);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(2);
-=======
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(460, 269);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
->>>>>>> feature/Doctor
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(168, 67);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -130,11 +119,7 @@ namespace HealthCareSystem
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
             this.pictureBox3.Location = new System.Drawing.Point(460, 199);
-<<<<<<< HEAD
             this.pictureBox3.Margin = new System.Windows.Forms.Padding(2);
-=======
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
->>>>>>> feature/Doctor
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(168, 66);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -145,11 +130,7 @@ namespace HealthCareSystem
             // 
             this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
             this.pictureBox4.Location = new System.Drawing.Point(460, 106);
-<<<<<<< HEAD
             this.pictureBox4.Margin = new System.Windows.Forms.Padding(2);
-=======
-            this.pictureBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
->>>>>>> feature/Doctor
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(168, 66);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -160,11 +141,7 @@ namespace HealthCareSystem
             // 
             this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
             this.pictureBox5.Location = new System.Drawing.Point(507, 11);
-<<<<<<< HEAD
             this.pictureBox5.Margin = new System.Windows.Forms.Padding(2);
-=======
-            this.pictureBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
->>>>>>> feature/Doctor
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(73, 67);
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -192,10 +169,7 @@ namespace HealthCareSystem
             this.tbPasssword.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbPasssword.Location = new System.Drawing.Point(472, 217);
             this.tbPasssword.Name = "tbPasssword";
-<<<<<<< HEAD
             this.tbPasssword.PasswordChar = '*';
-=======
->>>>>>> feature/Doctor
             this.tbPasssword.Size = new System.Drawing.Size(141, 25);
             this.tbPasssword.TabIndex = 11;
             // 
@@ -247,4 +221,3 @@ namespace HealthCareSystem
         private System.Windows.Forms.TextBox tbPasssword;
     }
 }
-
