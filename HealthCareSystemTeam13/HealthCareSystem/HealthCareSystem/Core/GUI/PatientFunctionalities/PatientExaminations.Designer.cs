@@ -39,89 +39,132 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             // dgwExaminations
             // 
+<<<<<<< HEAD
             this.dgwExaminations.BackgroundColor = System.Drawing.Color.Beige;
+=======
+>>>>>>> feature/Doctor
             this.dgwExaminations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwExaminations.Location = new System.Drawing.Point(3, 14);
             this.dgwExaminations.Margin = new System.Windows.Forms.Padding(4);
             this.dgwExaminations.Name = "dgwExaminations";
+<<<<<<< HEAD
             this.dgwExaminations.RowHeadersWidth = 51;
+=======
+>>>>>>> feature/Doctor
             this.dgwExaminations.Size = new System.Drawing.Size(737, 419);
             this.dgwExaminations.TabIndex = 0;
             this.dgwExaminations.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwExaminations_CellContentClick);
             // 
             // btnAdd
             // 
+<<<<<<< HEAD
             this.btnAdd.BackColor = System.Drawing.Color.Transparent;
             this.btnAdd.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAdd.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btnAdd.FlatAppearance.BorderSize = 3;
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAdd.Font = new System.Drawing.Font("Lucida Console", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+=======
+            this.btnAdd.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+>>>>>>> feature/Doctor
             this.btnAdd.Location = new System.Drawing.Point(284, 451);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(4);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(170, 59);
             this.btnAdd.TabIndex = 1;
             this.btnAdd.Text = "ADD";
+<<<<<<< HEAD
             this.btnAdd.UseVisualStyleBackColor = false;
+=======
+            this.btnAdd.UseVisualStyleBackColor = true;
+>>>>>>> feature/Doctor
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnEdit
             // 
+<<<<<<< HEAD
             this.btnEdit.BackColor = System.Drawing.Color.Transparent;
             this.btnEdit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnEdit.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btnEdit.FlatAppearance.BorderSize = 3;
             this.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEdit.Font = new System.Drawing.Font("Lucida Console", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+=======
+            this.btnEdit.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+>>>>>>> feature/Doctor
             this.btnEdit.Location = new System.Drawing.Point(462, 451);
             this.btnEdit.Margin = new System.Windows.Forms.Padding(4);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(143, 59);
             this.btnEdit.TabIndex = 2;
             this.btnEdit.Text = "EDIT";
+<<<<<<< HEAD
             this.btnEdit.UseVisualStyleBackColor = false;
+=======
+            this.btnEdit.UseVisualStyleBackColor = true;
+>>>>>>> feature/Doctor
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // btnCancel
             // 
+<<<<<<< HEAD
             this.btnCancel.BackColor = System.Drawing.Color.Transparent;
             this.btnCancel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btnCancel.FlatAppearance.BorderSize = 3;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.Font = new System.Drawing.Font("Lucida Console", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+=======
+            this.btnCancel.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+>>>>>>> feature/Doctor
             this.btnCancel.Location = new System.Drawing.Point(613, 451);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(127, 59);
             this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "CANCEL";
+<<<<<<< HEAD
             this.btnCancel.UseVisualStyleBackColor = false;
+=======
+            this.btnCancel.UseVisualStyleBackColor = true;
+>>>>>>> feature/Doctor
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnRefresh
             // 
+<<<<<<< HEAD
             this.btnRefresh.BackColor = System.Drawing.Color.Transparent;
             this.btnRefresh.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRefresh.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btnRefresh.FlatAppearance.BorderSize = 3;
             this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRefresh.Font = new System.Drawing.Font("Lucida Console", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+=======
+            this.btnRefresh.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+>>>>>>> feature/Doctor
             this.btnRefresh.Location = new System.Drawing.Point(13, 463);
             this.btnRefresh.Margin = new System.Windows.Forms.Padding(4);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(137, 47);
             this.btnRefresh.TabIndex = 4;
             this.btnRefresh.Text = "Refresh";
+<<<<<<< HEAD
             this.btnRefresh.UseVisualStyleBackColor = false;
+=======
+            this.btnRefresh.UseVisualStyleBackColor = true;
+>>>>>>> feature/Doctor
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // PatientExaminations
             // 
+<<<<<<< HEAD
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.PowderBlue;
+=======
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+>>>>>>> feature/Doctor
             this.ClientSize = new System.Drawing.Size(795, 556);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnCancel);

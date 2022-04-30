@@ -68,8 +68,11 @@ namespace HealthCareSystem
         {
             LoginAuthentication loginAuthentication = new LoginAuthentication(tbUsername.Text, tbPasssword.Text, this);
             loginAuthentication.OpenViewForm();
+<<<<<<< HEAD
             tbUsername.Text = "";
             tbPasssword.Text = "";
+=======
+>>>>>>> feature/Doctor
         }
     }
 }

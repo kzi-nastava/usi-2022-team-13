@@ -63,7 +63,7 @@ namespace HealthCareSystem.Core.Authentication
                 switch (user.Role)
                 {
                     case UserRole.Doctors:
-                        DoctorView doctorView = new DoctorView();
+                        DoctorView doctorView = new DoctorView(Username, Login);
                         this.Login.Hide();
                         doctorView.ShowDialog();
                         break;
@@ -73,6 +73,10 @@ namespace HealthCareSystem.Core.Authentication
                         managerView.ShowDialog();
                         break;
                     case UserRole.Patients:
+<<<<<<< HEAD
+=======
+                        DatabaseHelpers.BlockSpamPatients(Username, Connection);
+>>>>>>> feature/Doctor
                         bool isBlocked = DatabaseHelpers.IsPatientBlocked(Username, Connection);
                         if (!isBlocked)
                         {
@@ -127,6 +131,13 @@ namespace HealthCareSystem.Core.Authentication
             return (username == "" || password == "" || username.Contains(" "));
 
         }
+<<<<<<< HEAD
        
+=======
+        ~LoginAuthentication()
+        {
+            if(Connection.State == ConnectionState.Open) Connection.Close();
+        }
+>>>>>>> feature/Doctor
     }
 }
