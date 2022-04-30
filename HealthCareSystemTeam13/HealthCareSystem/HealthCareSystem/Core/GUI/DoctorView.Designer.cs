@@ -35,16 +35,19 @@ namespace HealthCareSystem
             this.dgwExaminations = new System.Windows.Forms.DataGridView();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
+            this.btnShowDay = new System.Windows.Forms.Button();
+            this.btnShowNextThreeDays = new System.Windows.Forms.Button();
+            this.dtDate = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.dgwExaminations)).BeginInit();
             this.SuspendLayout();
             // 
             // btnRefresh
             // 
             this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefresh.Location = new System.Drawing.Point(13, 380);
+            this.btnRefresh.Location = new System.Drawing.Point(227, 17);
             this.btnRefresh.Margin = new System.Windows.Forms.Padding(4);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(137, 47);
+            this.btnRefresh.Size = new System.Drawing.Size(177, 59);
             this.btnRefresh.TabIndex = 8;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
@@ -77,7 +80,7 @@ namespace HealthCareSystem
             // dgwExaminations
             // 
             this.dgwExaminations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgwExaminations.Location = new System.Drawing.Point(217, 84);
+            this.dgwExaminations.Location = new System.Drawing.Point(217, 134);
             this.dgwExaminations.Margin = new System.Windows.Forms.Padding(4);
             this.dgwExaminations.Name = "dgwExaminations";
             this.dgwExaminations.Size = new System.Drawing.Size(769, 421);
@@ -98,20 +101,54 @@ namespace HealthCareSystem
             // btnExit
             // 
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExit.Location = new System.Drawing.Point(13, 458);
+            this.btnExit.Location = new System.Drawing.Point(13, 508);
             this.btnExit.Margin = new System.Windows.Forms.Padding(4);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(137, 47);
+            this.btnExit.Size = new System.Drawing.Size(184, 47);
             this.btnExit.TabIndex = 11;
             this.btnExit.Text = "Log out";
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // btnShowDay
+            // 
+            this.btnShowDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnShowDay.Location = new System.Drawing.Point(13, 260);
+            this.btnShowDay.Margin = new System.Windows.Forms.Padding(4);
+            this.btnShowDay.Name = "btnShowDay";
+            this.btnShowDay.Size = new System.Drawing.Size(184, 84);
+            this.btnShowDay.TabIndex = 12;
+            this.btnShowDay.Text = "Show examinations for the specific day";
+            this.btnShowDay.UseVisualStyleBackColor = true;
+            this.btnShowDay.Click += new System.EventHandler(this.btnShowDay_Click);
+            // 
+            // btnShowNextThreeDays
+            // 
+            this.btnShowNextThreeDays.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnShowNextThreeDays.Location = new System.Drawing.Point(13, 365);
+            this.btnShowNextThreeDays.Margin = new System.Windows.Forms.Padding(4);
+            this.btnShowNextThreeDays.Name = "btnShowNextThreeDays";
+            this.btnShowNextThreeDays.Size = new System.Drawing.Size(184, 82);
+            this.btnShowNextThreeDays.TabIndex = 13;
+            this.btnShowNextThreeDays.Text = "Show examinations for the next 3 days";
+            this.btnShowNextThreeDays.UseVisualStyleBackColor = true;
+            this.btnShowNextThreeDays.Click += new System.EventHandler(this.btnShowNextThreeDays_Click);
+            // 
+            // dtDate
+            // 
+            this.dtDate.Location = new System.Drawing.Point(12, 103);
+            this.dtDate.Name = "dtDate";
+            this.dtDate.Size = new System.Drawing.Size(200, 20);
+            this.dtDate.TabIndex = 14;
+            // 
             // DoctorView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1019, 602);
+            this.ClientSize = new System.Drawing.Size(1014, 568);
+            this.Controls.Add(this.dtDate);
+            this.Controls.Add(this.btnShowNextThreeDays);
+            this.Controls.Add(this.btnShowDay);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnRefresh);
@@ -135,5 +172,8 @@ namespace HealthCareSystem
         private System.Windows.Forms.DataGridView dgwExaminations;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.Button btnShowDay;
+        private System.Windows.Forms.Button btnShowNextThreeDays;
+        private System.Windows.Forms.DateTimePicker dtDate;
     }
 }

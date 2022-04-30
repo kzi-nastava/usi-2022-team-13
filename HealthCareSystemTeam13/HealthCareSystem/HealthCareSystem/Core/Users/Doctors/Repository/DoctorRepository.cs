@@ -160,5 +160,19 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             string query = "delete from Examination where id = " + examinationId + "";
             DatabaseHelpers.ExecuteNonQueries(query, Connection);
         }
+
+        public void PullExaminationsByDate(DateTime date)
+        {
+            examinations = new DataTable();
+
+
+            string examinationsQuery = "select Examination.id, Patients.FirstName + ' ' + Patients.LastName as Patient," +
+            " dateOf, id_room as RoomID, duration as Duration, typeOfExamination as Type from Examination" +
+            " left outer join Patients  on Examination.id_patient = Patients.id " +
+            "where id_doctor = " + GetDoctorId() + " and Day(dateOf) = Day('" + date + "')";
+            FillTable(examinations, examinationsQuery);
+        }
+
+        
     }
 }
