@@ -84,7 +84,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                 MessageBox.Show("You cannot remove a warehouse");
 
             }
-            else if (false)
+            else if (roomRepository.DoesRoomHaveFutureExaminations(room))
             {
                 MessageBox.Show("You cannot remove a room that will have future examinations in it");
             }
@@ -118,7 +118,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                 MessageBox.Show("You cannot edit a warehouse");
 
             }
-            else if (false)
+            else if (roomRepository.DoesRoomHaveFutureExaminations(room))
             {
                 MessageBox.Show("You cannot edit a room that will have future examinations in it");
             }

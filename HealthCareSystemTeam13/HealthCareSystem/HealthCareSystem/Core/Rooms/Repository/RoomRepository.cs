@@ -108,9 +108,10 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public List<Room> GetRooms()
         {
             List<Room> rooms = new List<Room>();
+            Connection.Close();
             try
             {
-                Connection.Open();
+                
 
                 OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from rooms", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -142,26 +143,31 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public bool DoesRoomHaveFutureExaminations(Room room)
         {
             
-            List<Examination> examinations = GetExaminations();
-            
+            List<Examination> examinations = GetExaminations(room);
+            Console.WriteLine(examinations.Count);
             foreach (Examination examination in examinations)
             {
-                Console.WriteLine(examination.DateOf);
+                if(DateTime.Compare(DateTime.Now, examination.DateOf) < 0)
+                {
+                    return true;
+                }
             }
             
             return false;
         }
 
-        public List<Examination> GetExaminations()
+        public List<Examination> GetExaminations(Room room)
         {
             List<Examination> examinations = new List<Examination>();
-            OleDbConnection connection = new OleDbConnection();
 
             try
             {
+                if(Connection.State == ConnectionState.Closed)
+                {
+                    Connection.Open();
+                }
                 
-                connection.Open();
-                OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from Examination", connection);
+                OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from Examination where id_room = " + room.ID, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
                 
                 while (reader.Read())
@@ -184,16 +190,18 @@ namespace HealthCareSystem.Core.Rooms.Repository
                         isUrgent, roomId, duration);
 
                     examinations.Add(examination);
-                    Console.WriteLine("ikksdeee");
                 }
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.ToString());
             }
-            connection.Close();
+            
+            if(Connection.State == ConnectionState.Closed)
+                {
+                    Connection.Open();
+                }
 
-            Console.WriteLine("ikksdeee");
             return examinations;
 
         }
