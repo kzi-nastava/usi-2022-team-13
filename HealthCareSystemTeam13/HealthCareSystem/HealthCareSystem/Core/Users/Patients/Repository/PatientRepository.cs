@@ -168,7 +168,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
                 cmd.Parameters.AddWithValue("@isCancelled", false);
                 cmd.Parameters.AddWithValue("@isFinished", false);
                 cmd.Parameters.AddWithValue("@dateOf", examinationDateTime.ToString());
-                cmd.Parameters.AddWithValue("@typeOfExamination", TypeOfExamination.BasicExamination.ToString());
+                
                 if(selectedType.Length == 0 || selectedType == TypeOfExamination.BasicExamination.ToString())
                 {
                     cmd.Parameters.AddWithValue("@typeOfExamination", TypeOfExamination.BasicExamination.ToString());
@@ -182,17 +182,19 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
                 cmd.ExecuteNonQuery();
             }
-            InsertExaminationChanges(TypeOfChange.Add);
             Username = patientUsername;
             InsertExaminationChanges(TypeOfChange.Add);
             if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
         }
 
+
+
         private int GetPatientId(string patientUsername)
         {
-            string patientIdQuery = "select Patients.id from Patients inner join Users on Patients.user_id = Users.id where Users.usrnm = '" + patientUsername + "'";
 
+
+            string patientIdQuery = "select Patients.id from Patients inner join Users on Patients.user_id = Users.id where Users.usrnm = '" + patientUsername + "'";
             Console.WriteLine(patientIdQuery);
             int patientId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(patientIdQuery, Connection)[0]);
             return patientId;

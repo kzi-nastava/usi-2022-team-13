@@ -4,9 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using HealthCareSystem.Core.Users.Patients.Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Linq;
@@ -18,7 +15,6 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
     class DoctorRepository
     {
         public OleDbConnection Connection { get; set; }
-        public DoctorRepository() { }
   
 
         public string Username { get; set; }

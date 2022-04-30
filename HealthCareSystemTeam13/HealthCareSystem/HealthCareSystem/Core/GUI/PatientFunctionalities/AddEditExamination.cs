@@ -30,7 +30,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private DoctorRepository DoctorRep;
         private RoomRepository RoomRep;
         private ExaminationRepository ExaminationRep;
-        private string selectedTime;
+        // private string selectedTime;
         private string PatientUsername;
         private int ValidDate;
 
