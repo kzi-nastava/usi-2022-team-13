@@ -62,7 +62,7 @@ namespace HealthCareSystem.Core.Authentication
                 switch (user.Role)
                 {
                     case UserRole.Doctors:
-                        DoctorView doctorView = new DoctorView();
+                        DoctorView doctorView = new DoctorView(Username, Login);
                         this.Login.Hide();
                         doctorView.ShowDialog();
                         break;
