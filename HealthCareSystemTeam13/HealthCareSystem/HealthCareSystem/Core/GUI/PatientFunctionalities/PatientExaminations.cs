@@ -180,7 +180,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         {
             if (!DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection))
             {
-                AddEditExamination addEditView = new AddEditExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value, true, Username, 1);
+                
+                AddEditExamination addEditView = new AddEditExamination(0, true, Username, 1);
 
                 addEditView.ShowDialog();
             }
