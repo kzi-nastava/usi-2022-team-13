@@ -60,6 +60,12 @@
     <Compile Include="Core\GUI\DoctorsFunctionalities\InsertOrChangeExamination.Designer.cs">
       <DependentUpon>InsertOrChangeExamination.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\DoctorsFunctionalities\PatientMedicalRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\DoctorsFunctionalities\PatientMedicalRecord.Designer.cs">
+      <DependentUpon>PatientMedicalRecord.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\AddEditExamination.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,6 +139,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\InsertOrChangeExamination.resx">
       <DependentUpon>InsertOrChangeExamination.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\PatientMedicalRecord.resx">
+      <DependentUpon>PatientMedicalRecord.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\DoctorView.resx">
       <DependentUpon>DoctorView.cs</DependentUpon>

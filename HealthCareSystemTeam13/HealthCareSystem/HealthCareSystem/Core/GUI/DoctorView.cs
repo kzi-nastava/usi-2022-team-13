@@ -1,4 +1,5 @@
-﻿using HealthCareSystem.Core.GUI.DoctorsFunctionalities;
+﻿using HealthCareSystem.Core.Examinations.Model;
+using HealthCareSystem.Core.GUI.DoctorsFunctionalities;
 using HealthCareSystem.Core.Users.Doctors.Repository;
 using HealthCareSystem.Core.Users.Patients.Model;
 using System;
@@ -168,6 +169,31 @@ namespace HealthCareSystem
                 LoginForm lf = new LoginForm();
                 this.Hide();
                 lf.ShowDialog();
+            }
+        }
+
+        private void btnShowDay_Click(object sender, EventArgs e)
+        {
+            DateTime date = dtDate.Value;
+            DoctorRep.PullExaminationsByDate(date);
+            dgwExaminations.DataSource = DoctorRep.examinations;
+            dgwExaminations.Refresh();
+        }
+
+        private void btnShowNextThreeDays_Click(object sender, EventArgs e)
+        {
+            DoctorRep.PullExaminationsThreeDays();
+            dgwExaminations.DataSource = DoctorRep.examinations;
+            dgwExaminations.Refresh();
+        }
+
+        private void btnMedicalRecord_Click(object sender, EventArgs e)
+        {
+            if (CanChangeExamination())
+            {
+                string patientFullName = dgwExaminations.SelectedRows[0].Cells[1].Value.ToString();
+                PatientMedicalRecord patientMedicalRecordForm = new PatientMedicalRecord(patientFullName);
+                patientMedicalRecordForm.ShowDialog();
             }
         }
     }
