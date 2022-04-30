@@ -73,7 +73,6 @@ namespace HealthCareSystem.Core.Authentication
                         managerView.ShowDialog();
                         break;
                     case UserRole.Patients:
-                        DatabaseHelpers.BlockSpamPatients(Username, Connection);
                         bool isBlocked = DatabaseHelpers.IsPatientBlocked(Username, Connection);
                         if (!isBlocked)
                         {
