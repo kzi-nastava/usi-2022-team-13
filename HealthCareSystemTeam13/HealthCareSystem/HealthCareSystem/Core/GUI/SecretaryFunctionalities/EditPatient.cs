@@ -23,17 +23,15 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         private void acceptButton_Click(object sender, EventArgs e)
         {
             string patientID = patientIdBox.Text;
-            List<String> information = secretaryRepository.GetPatientInformation(patientID);
-            string name = information[0];
-            Console.WriteLine(information[0]);
-            string lastname = information[1];
-            string username = information[2];
-            string password = information[3];
+            Dictionary<string, string> information = secretaryRepository.GetPatientInformation(patientID);
+            string name = information["firstName"];
+            string lastname = information["lastName"];
+            string username = information["usrnm"];
+            string password = information["pass"];
             if (nameBox.Text != "") { name = nameBox.Text; }
             if (lastNameBox.Text != "") { lastname = lastNameBox.Text; }
             if (usernameBox.Text != "") { username = usernameBox.Text; }
             if (passwordBox.Text != "") { password = passwordBox.Text; }
-            Console.WriteLine(patientID, username, password, name, lastname);
             secretaryRepository.UpdatePatient(patientID, username, password, name, lastname);
             this.Close();
         }

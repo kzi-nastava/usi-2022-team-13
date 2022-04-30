@@ -112,6 +112,12 @@
     <Compile Include="Core\GUI\SecretaryFunctionalities\EditPatient.Designer.cs">
       <DependentUpon>EditPatient.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\ExaminationRequests.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\ExaminationRequests.Designer.cs">
+      <DependentUpon>ExaminationRequests.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\SecretaryFunctionalities\PatientCRUDForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -213,6 +219,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\EditPatient.resx">
       <DependentUpon>EditPatient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\ExaminationRequests.resx">
+      <DependentUpon>ExaminationRequests.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\PatientCRUDForm.resx">
       <DependentUpon>PatientCRUDForm.cs</DependentUpon>

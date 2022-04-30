@@ -34,12 +34,6 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         private void DataGridViewSettings()
         {
             blockedPatientsDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            //patientsDataGrid.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            //patientsDataGrid.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            //patientsDataGrid.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            //patientsDataGrid.Columns[0].Width = 90;
-            // patientsDataGrid.Columns[3].Width = 90;
-            // patientsDataGrid.Columns[4].Width = 90;
             blockedPatientsDataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             blockedPatientsDataGrid.MultiSelect = false;
         }
