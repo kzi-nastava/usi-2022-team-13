@@ -57,3 +57,4 @@ C:\Users\dusan\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\Healt
 C:\Users\dusan\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryView.resources
 C:\Users\dusan\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.HospitalRooms.resources
 C:\Users\dusan\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerView.resources
+C:\Users\dusan\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.AddEditRooms.resources

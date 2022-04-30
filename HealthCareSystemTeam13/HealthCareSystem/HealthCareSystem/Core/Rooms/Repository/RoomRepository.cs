@@ -8,7 +8,7 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows.Forms;
 
 namespace HealthCareSystem.Core.Rooms.Repository
 {
@@ -49,6 +49,22 @@ namespace HealthCareSystem.Core.Rooms.Repository
             }
         }
 
+        public void RemoveRoom(int roomId)
+        {
+            string query = "delete from Rooms where id = " + roomId + "";
+            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+        }
+
+        public void InsertRoom(TypeOfRoom roomType)
+        {
+            var insertQuery = "INSERT INTO rooms(type) VALUES(@type)";
+            using (var cmd = new OleDbCommand(insertQuery, Connection))
+            {
+                cmd.Parameters.AddWithValue("@type", roomType.ToString());
+                cmd.ExecuteNonQuery();
+
+            }
+        }
 
 
         public bool isRoomAvailable(int roomId, DateTime examinationTime, List<Examination> examinations)

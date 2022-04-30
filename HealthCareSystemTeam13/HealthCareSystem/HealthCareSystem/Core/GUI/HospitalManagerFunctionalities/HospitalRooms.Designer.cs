@@ -30,7 +30,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void InitializeComponent()
         {
             this.btnRefresh = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnRemove = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.dgwHospitalRooms = new System.Windows.Forms.DataGridView();
@@ -47,17 +47,19 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             this.btnRefresh.TabIndex = 9;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
-            // btnCancel
+            // btnRemove
             // 
-            this.btnCancel.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(614, 450);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(127, 59);
-            this.btnCancel.TabIndex = 8;
-            this.btnCancel.Text = "CANCEL";
-            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnRemove.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRemove.Location = new System.Drawing.Point(614, 450);
+            this.btnRemove.Margin = new System.Windows.Forms.Padding(4);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Size = new System.Drawing.Size(127, 59);
+            this.btnRemove.TabIndex = 8;
+            this.btnRemove.Text = "REMOVE";
+            this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
             // btnEdit
             // 
@@ -69,6 +71,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             this.btnEdit.TabIndex = 7;
             this.btnEdit.Text = "EDIT";
             this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // btnAdd
             // 
@@ -80,6 +83,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             this.btnAdd.TabIndex = 6;
             this.btnAdd.Text = "ADD";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // dgwHospitalRooms
             // 
@@ -97,13 +101,13 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(795, 556);
             this.Controls.Add(this.btnRefresh);
-            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.dgwHospitalRooms);
             this.Font = new System.Drawing.Font("Lucida Bright", 12F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "HospitalRooms";
             this.Text = "HospitalRooms";
             ((System.ComponentModel.ISupportInitialize)(this.dgwHospitalRooms)).EndInit();
@@ -114,7 +118,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         #endregion
 
         private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.DataGridView dgwHospitalRooms;

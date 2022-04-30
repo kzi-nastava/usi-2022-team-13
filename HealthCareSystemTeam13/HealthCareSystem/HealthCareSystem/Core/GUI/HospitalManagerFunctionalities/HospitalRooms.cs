@@ -39,5 +39,73 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
 
         }
+
+        private bool CanChangeRoom()
+        {
+            if (dgwHospitalRooms.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Please select a row first.");
+
+            }
+            else if (dgwHospitalRooms.SelectedRows.Count == 1)
+            {
+                DataGridViewRow row = dgwHospitalRooms.SelectedRows[0];
+                if (row.Cells[0].Value == null)
+                {
+                    MessageBox.Show("You selected an empty row.");
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select only 1 row.");
+            }
+            return false;
+        }
+        public void RefreshDataGridView()
+        {
+            roomRepository.PullRooms();
+            dgwHospitalRooms.DataSource = roomRepository.Rooms;
+            dgwHospitalRooms.Refresh();
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            //ubaciti funkciju koja proverava dostupnost sobe
+            if (true)
+            {
+                DialogResult wantToCancel = MessageBox.Show("Are you sure?", "Cancel removing a room", MessageBoxButtons.YesNo);
+
+                if (wantToCancel == DialogResult.Yes)
+                {
+                        roomRepository.RemoveRoom((int)dgwHospitalRooms.SelectedRows[0].Cells[0].Value);
+                        MessageBox.Show("Succesfully removed a room!");
+                        RefreshDataGridView();
+                }
+            }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            AddEditRooms addEditView = new AddEditRooms((int)dgwHospitalRooms.SelectedRows[0].Cells[0].Value, true);
+
+            addEditView.ShowDialog();
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            int roomId = (int)dgwHospitalRooms.SelectedRows[0].Cells[0].Value;
+            AddEditRooms addEditView = new AddEditRooms(roomId, false);
+
+            addEditView.ShowDialog();
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            RefreshDataGridView();
+        }
     }
 }

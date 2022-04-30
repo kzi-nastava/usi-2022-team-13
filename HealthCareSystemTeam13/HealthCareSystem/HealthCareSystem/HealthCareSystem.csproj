@@ -140,6 +140,9 @@
     <EmbeddedResource Include="Core\GUI\DoctorView.resx">
       <DependentUpon>DoctorView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.resx">
+      <DependentUpon>AddEditRooms.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.resx">
       <DependentUpon>HospitalRooms.cs</DependentUpon>
     </EmbeddedResource>
