@@ -54,6 +54,7 @@ namespace HealthCareSystem.Core
 
         public static bool IsPatientBlocked(string patientUsername, OleDbConnection connection)
         {
+            if (connection.State == System.Data.ConnectionState.Closed) connection.Open();
 
             List<string> userIds = ExecuteReaderQueries("select id from users where usrnm= '" + patientUsername + "'", connection);
 
