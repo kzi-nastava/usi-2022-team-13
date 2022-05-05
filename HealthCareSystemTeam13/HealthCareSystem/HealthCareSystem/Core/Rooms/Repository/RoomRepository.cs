@@ -114,7 +114,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
                 
             try
             {
-                Connection.Open();
+                if(Connection.State == ConnectionState.Closed) Connection.Open();
 
                 OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from rooms", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();

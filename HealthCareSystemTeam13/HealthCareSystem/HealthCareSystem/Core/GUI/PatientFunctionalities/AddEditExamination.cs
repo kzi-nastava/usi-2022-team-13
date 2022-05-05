@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HealthCareSystem.Core;
+using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Examinations.Repository;
 using HealthCareSystem.Core.Rooms.Repository;
 using HealthCareSystem.Core.Users.Doctors.Model;
@@ -155,7 +156,10 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             var regex = @"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$";
             string time = tbTime.Text;
 
+            List<Examination> otherExaminations = ExaminationRep.GetAllOtherExaminations(ExaminationId);
+            DateTime mergedExaminationTime = GetMergedDateTime(ExaminationDate, time);
             var match = System.Text.RegularExpressions.Regex.Match(tbTime.Text, regex);
+
             if (ExaminationDate <= DateTime.Now)
             {
 
@@ -163,7 +167,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 return false;
 
             }
-            else if (!DoctorRep.IsDoctorAvailable(SelectedDoctor, GetMergedDateTime(ExaminationDate, time), ExaminationRep.GetAllOtherExaminations(ExaminationId)))
+            else if (!DoctorRep.IsDoctorAvailable(SelectedDoctor, mergedExaminationTime, otherExaminations))
             {
 
                 MessageBox.Show("Doctor is not available at that time.");
@@ -177,10 +181,10 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 return false;
 
             }
-            else if (!RoomRep.isRoomAvailable(Convert.ToInt32(tbRoomId.Text), GetMergedDateTime(ExaminationDate, time), ExaminationRep.GetAllOtherExaminations(ExaminationId)))
+            else if (!RoomRep.isRoomAvailable(Convert.ToInt32(tbRoomId.Text), mergedExaminationTime, otherExaminations))
             {
 
-                int availableRoomId = RoomRep.GetAvailableRoomId(GetMergedDateTime(ExaminationDate, time), ExaminationRep.GetAllOtherExaminations(ExaminationId));
+                int availableRoomId = RoomRep.GetAvailableRoomId(mergedExaminationTime, otherExaminations);
                 if (availableRoomId == 0)
                 {
                     MessageBox.Show("No available rooms at this date/time.");
