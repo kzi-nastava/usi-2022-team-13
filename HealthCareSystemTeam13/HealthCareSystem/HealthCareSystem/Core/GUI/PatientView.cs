@@ -74,5 +74,17 @@ namespace HealthCareSystem.Core.GUI
 
         }
 
+        private void btnAptRecc_Click(object sender, EventArgs e)
+        {
+            if (!PatientRep.IsPatientBlocked(Username))
+            {
+                LoadForm(new PatientRecommendation(Username));
+            }
+            else
+            {
+                MessageBox.Show("You are blocked!");
+                SuperForm.Show(); this.Close();
+            }
+        }
     }
 }

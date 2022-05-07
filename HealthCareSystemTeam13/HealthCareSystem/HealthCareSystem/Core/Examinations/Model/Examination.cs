@@ -47,5 +47,18 @@ namespace HealthCareSystem.Core.Examinations.Model
             this.IdRoom = idRoom;
             this.Duration = Duration;
         }
+
+        public Examination(int idDoctor, DateTime dateOf, TypeOfExamination type, int idRoom)
+        {
+            IdDoctor = idDoctor;
+            DateOf = dateOf;
+            TypeOfExamination = type;
+            IdRoom = idRoom;
+
+        }
+        public override string ToString()
+        {
+            return Convert.ToString(IdDoctor) + "; " + DateOf.ToString() + "; " + Convert.ToString(IdRoom);
+         }
     }
 }

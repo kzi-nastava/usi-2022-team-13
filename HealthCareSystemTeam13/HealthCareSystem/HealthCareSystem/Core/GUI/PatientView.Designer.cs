@@ -31,6 +31,7 @@
             this.btnExaminations = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.pnlPatient = new System.Windows.Forms.Panel();
+            this.btnAptRecc = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnExaminations
@@ -72,12 +73,29 @@
             this.pnlPatient.Size = new System.Drawing.Size(749, 573);
             this.pnlPatient.TabIndex = 3;
             // 
+            // btnAptRecc
+            // 
+            this.btnAptRecc.BackColor = System.Drawing.Color.Transparent;
+            this.btnAptRecc.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAptRecc.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnAptRecc.FlatAppearance.BorderSize = 3;
+            this.btnAptRecc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAptRecc.Font = new System.Drawing.Font("Lucida Console", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAptRecc.Location = new System.Drawing.Point(2, 130);
+            this.btnAptRecc.Name = "btnAptRecc";
+            this.btnAptRecc.Size = new System.Drawing.Size(137, 88);
+            this.btnAptRecc.TabIndex = 4;
+            this.btnAptRecc.Text = "Appointment Reccomendation";
+            this.btnAptRecc.UseVisualStyleBackColor = false;
+            this.btnAptRecc.Click += new System.EventHandler(this.btnAptRecc_Click);
+            // 
             // PatientView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SkyBlue;
             this.ClientSize = new System.Drawing.Size(897, 577);
+            this.Controls.Add(this.btnAptRecc);
             this.Controls.Add(this.pnlPatient);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnExaminations);
@@ -94,5 +112,6 @@
         private System.Windows.Forms.Button btnExaminations;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Panel pnlPatient;
+        private System.Windows.Forms.Button btnAptRecc;
     }
 }
