@@ -30,8 +30,7 @@ namespace HealthCareSystem
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-
-           InsertionRepository dbInsertion = new InsertionRepository();
+            InsertionRepository dbInsertion = new InsertionRepository();
             dbInsertion.DeleteRecords();
            dbInsertion.ExecuteQueries();
 
@@ -70,6 +69,7 @@ namespace HealthCareSystem
             loginAuthentication.OpenViewForm();
             tbUsername.Text = "";
             tbPasssword.Text = "";
+
 
         }
     }

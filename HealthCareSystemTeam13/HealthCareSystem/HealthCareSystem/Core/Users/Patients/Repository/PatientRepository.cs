@@ -20,9 +20,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         public string Username { get; set; }
         public DataTable examinations { get; set; }
         public OleDbConnection Connection { get; set; }
-        // public PatientRepository(string username) {
-           // Username = username;
-        // }
+
         public PatientRepository(string username = "") { 
             if(username.Length > 0) Username = username;
             try
@@ -77,11 +75,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
 
         }
-       // public void UpdateContent(string query)
-       // {
-            
-         //   DatabaseHelpers.ExecuteNonQueries(query, Connection);
-           // InsertExaminationChanges(TypeOfChange.Edit);
 
         public void UpdateContent(string query, int patiendId = 0)
         {
@@ -349,5 +342,71 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             return data;
         }
 
+        public bool IsPatientBlocked(string patientUsername)
+        {
+            if (Connection.State == System.Data.ConnectionState.Closed) Connection.Open();
+
+            List<string> userIds = DatabaseHelpers.ExecuteReaderQueries("select id from users where usrnm= '" + patientUsername + "'", Connection);
+
+            List<string> blockedPatients = DatabaseHelpers.ExecuteReaderQueries("select isBlocked from Patients where user_id = " + Convert.ToInt32(userIds[0]) + "", Connection);
+
+            return blockedPatients[0] == "True";
+        }
+        public void BlockSpamPatients(string patientUsername)
+        {
+            int patientId = GetPatientId(patientUsername);
+            List<ExaminationChange> changes = GetExaminationChanges(patientId);
+            int adds = 0, edits = 0;
+
+            for (int i = 0; i < changes.Count(); i++)
+            {
+
+                if (DateTime.Now.Subtract(changes[i].DateOfChange).TotalDays <= 30)
+                {
+                    if (changes[i].Change == TypeOfChange.Add) adds++;
+                    else if (changes[i].Change == TypeOfChange.Edit || changes[i].Change == TypeOfChange.Delete) edits++;
+                }
+            }
+
+            if (adds > 8 || edits > 4)
+            {
+                BlockPatient(patientId);
+            }
+
+        }
+        private void BlockPatient(int patientId)
+        {
+            string query = "Update Patients set isBlocked = " + true + " where id = " + patientId + "";
+            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+
+
+            query = "INSERT INTO BlockedPatients(id_patient, id_secretary, dateOf) VALUES(@id_patient, @id_secretary, @dateOf)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_patient", patientId);
+                cmd.Parameters.AddWithValue("@id_secretary", DBNull.Value);
+                cmd.Parameters.AddWithValue("@dateOf", DateTime.Now.ToString());
+                cmd.ExecuteNonQuery();
+            }
+
+        }
+
+        private List<ExaminationChange> GetExaminationChanges(int patientId)
+        {
+            List<ExaminationChange> changes = new List<ExaminationChange>();
+            string query = "select * from PatientExaminationChanges where id_patient = " + patientId + "";
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                TypeOfChange typeOfChange;
+                Enum.TryParse<TypeOfChange>(reader["typeOfChange"].ToString(), out typeOfChange);
+                changes.Add(new ExaminationChange(patientId, typeOfChange, (DateTime)reader["dateOf"]));
+
+            }
+            return changes;
+        }
+       
     }
 }

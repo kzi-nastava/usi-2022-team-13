@@ -58,7 +58,7 @@ namespace HealthCareSystem.Core.GUI
 
         private void btnExaminations_Click(object sender, EventArgs e)
         {
-            if (!DatabaseHelpers.IsPatientBlocked(Username, PatientRep.Connection))
+            if (!PatientRep.IsPatientBlocked(Username))
             {
                 LoadForm(new PatientExaminations(Username));
             }

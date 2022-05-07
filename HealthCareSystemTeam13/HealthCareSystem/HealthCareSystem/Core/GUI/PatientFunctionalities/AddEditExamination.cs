@@ -138,7 +138,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                         MessageBox.Show("Wait for a secretary to aproove this request.");
                     }
                 }
-                DatabaseHelpers.BlockSpamPatients(PatientUsername, PatientRep.Connection);
+                PatientRep.BlockSpamPatients(PatientUsername);
                 this.Close();
             } 
         }

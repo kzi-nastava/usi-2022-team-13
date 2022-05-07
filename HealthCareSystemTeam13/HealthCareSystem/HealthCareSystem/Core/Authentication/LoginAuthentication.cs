@@ -13,6 +13,7 @@ using HealthCareSystem.Core.Users.Model;
 using HealthCareSystem.Core.Authentication;
 using HealthCareSystem.Core;
 using HealthCareSystem.Core.GUI;
+using HealthCareSystem.Core.Users.Patients.Repository;
 
 namespace HealthCareSystem.Core.Authentication
 {
@@ -21,13 +22,15 @@ namespace HealthCareSystem.Core.Authentication
         public string Username { get; set; }
         public string Password { get; set; }
         public LoginForm Login { get; set; }
+        private PatientRepository PatientRep;
         private static OleDbConnection Connection;
+
         public LoginAuthentication(string username, string password, LoginForm loginForm)
         {
             this.Username = username;
             this.Password = password;
             this.Login = loginForm;
-
+            PatientRep = new PatientRepository();
             try
             {
                 Connection = new OleDbConnection();
@@ -73,7 +76,7 @@ namespace HealthCareSystem.Core.Authentication
                         managerView.ShowDialog();
                         break;
                     case UserRole.Patients:
-                        bool isBlocked = DatabaseHelpers.IsPatientBlocked(Username, Connection);
+                        bool isBlocked = PatientRep.IsPatientBlocked(Username);
                         if (!isBlocked)
                         {
 

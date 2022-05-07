@@ -57,7 +57,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void btnEdit_Click(object sender, EventArgs e)
         {
 
-            if (!DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection))
+            if (!patientRepository.IsPatientBlocked(Username))
             {
                 if (CanChangeExamination())
                 {
@@ -82,7 +82,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void btnCancel_Click(object sender, EventArgs e)
         {
 
-            if (!DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection))
+            if (!patientRepository.IsPatientBlocked(Username))
             {
                 if (CanChangeExamination())
                 {
@@ -95,7 +95,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                         {
                             patientRepository.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
                             patientRepository.InsertExaminationChanges(TypeOfChange.Delete);
-                            DatabaseHelpers.BlockSpamPatients(Username, patientRepository.Connection);
+                            patientRepository.BlockSpamPatients(Username);
                             MessageBox.Show("Succesfully canceled examination!");
                             RefreshDataGridView();
                         }
@@ -175,7 +175,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (!DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection))
+            if (!patientRepository.IsPatientBlocked(Username))
             {
                 
                 AddEditExamination addEditView = new AddEditExamination(0, true, Username, 1);
@@ -199,7 +199,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         {
 
 
-            if (!DatabaseHelpers.IsPatientBlocked(Username, patientRepository.Connection))
+            if (!patientRepository.IsPatientBlocked(Username))
             {
                 RefreshDataGridView();
 

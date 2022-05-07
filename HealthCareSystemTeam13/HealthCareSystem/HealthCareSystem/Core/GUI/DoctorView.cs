@@ -63,7 +63,7 @@ namespace HealthCareSystem
 
         private void DoctorView_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Application.Exit();
+            AuthForm.Show();
         }
 
         private void DoctorView_Load(object sender, EventArgs e)
@@ -165,11 +165,7 @@ namespace HealthCareSystem
         {
             DialogResult exit = MessageBox.Show("Are you sure?", "Logout?", MessageBoxButtons.YesNo);
 
-            if (exit == DialogResult.Yes) {
-                LoginForm lf = new LoginForm();
-                this.Hide();
-                lf.ShowDialog();
-            }
+            if (exit == DialogResult.Yes) { AuthForm.Show(); this.Close(); }
         }
 
         private void btnShowDay_Click(object sender, EventArgs e)
