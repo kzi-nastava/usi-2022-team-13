@@ -18,6 +18,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public OleDbConnection Connection { get; set; }
         public DataTable Rooms { get; set; }
 
+        public DataTable Equipment { get; set; }
+
         public RoomRepository()
         {
             try
@@ -34,6 +36,18 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
+
+        }
+
+        public void PullEquipment()
+        {
+            Equipment = new DataTable();
+            //string roomsQuery = "select id, nameOf as 'Equipment name', type as 'Equipment type' from Equipment";
+            //string roomsQuery = "select id_room as 'Room', id_equipment as 'Equipment', e.nameOf as 'Equipment name', amount from RoomHasEquipment, Equipment e where e.id = id_equipment";
+            string roomsQuery = "select rhe.id_room as 'Room id', r.type as 'Room type', rhe.id_equipment as 'Equipment id', e.nameOf as 'Equipment name', e.type as 'Equipment type', rhe.amount as 'Amount' " +
+                                "from Equipment e, Rooms r, RoomHasEquipment rhe " +
+                                "where rhe.id_room = r.ID and rhe.id_equipment = e.ID";
+            FillTable(Equipment, roomsQuery);
 
         }
 

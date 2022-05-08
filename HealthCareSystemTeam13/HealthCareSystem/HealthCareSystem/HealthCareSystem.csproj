@@ -76,6 +76,12 @@
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.Designer.cs">
       <DependentUpon>AddEditRooms.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.Designer.cs">
+      <DependentUpon>EquipmentMover.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,7 +118,6 @@
     <Compile Include="Core\GUI\PatientFunctionalities\PatientExaminations.Designer.cs">
       <DependentUpon>PatientExaminations.cs</DependentUpon>
     </Compile>
-
     <Compile Include="Core\GUI\SecretaryFunctionalities\AddPatient.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,7 +160,6 @@
     <Compile Include="Core\GUI\SecretaryFunctionalities\PatientCRUDForm.Designer.cs">
       <DependentUpon>PatientCRUDForm.cs</DependentUpon>
     </Compile>
-
     <Compile Include="Core\GUI\PatientView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -228,24 +232,24 @@
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.resx">
       <DependentUpon>AddEditRooms.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.resx">
+      <DependentUpon>EquipmentMover.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.resx">
       <DependentUpon>HospitalRooms.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerView.resx">
       <DependentUpon>HospitalManagerView.cs</DependentUpon>
     </EmbeddedResource>
-
     <EmbeddedResource Include="Core\GUI\LoginView.resx">
       <DependentUpon>LoginView.cs</DependentUpon>
     </EmbeddedResource>
-
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\AddEditExamination.resx">
       <DependentUpon>AddEditExamination.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\PatientExaminations.resx">
       <DependentUpon>PatientExaminations.cs</DependentUpon>
     </EmbeddedResource>
-
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\AddPatient.resx">
       <DependentUpon>AddPatient.cs</DependentUpon>
     </EmbeddedResource>
@@ -267,7 +271,6 @@
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\PatientCRUDForm.resx">
       <DependentUpon>PatientCRUDForm.cs</DependentUpon>
     </EmbeddedResource>
-
     <EmbeddedResource Include="Core\GUI\PatientView.resx">
       <DependentUpon>PatientView.cs</DependentUpon>
     </EmbeddedResource>

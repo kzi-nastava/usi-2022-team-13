@@ -16,6 +16,7 @@ namespace HealthCareSystem.Core.GUI
     {
         public string Username { get; set; }
         public LoginForm SuperForm;
+        public Form SelectedButton;
         public HospitalManagerView(string username, LoginForm superForm)
         {
             Username = username;
@@ -27,12 +28,12 @@ namespace HealthCareSystem.Core.GUI
         private void LoadForm(object Form)
         {
            
-            Form selectedButton = Form as Form;
-            selectedButton.TopLevel = false;
-            selectedButton.Dock = DockStyle.Fill;
-            this.pnlHospitalManager.Controls.Add(selectedButton);
-            this.pnlHospitalManager.Tag = selectedButton;
-            selectedButton.Show();
+            SelectedButton = Form as Form;
+            SelectedButton.TopLevel = false;
+            SelectedButton.Dock = DockStyle.Fill;
+            this.pnlHospitalManager.Controls.Add(SelectedButton);
+            this.pnlHospitalManager.Tag = SelectedButton;
+            SelectedButton.Show();
         }
 
         private void HospitalManagerView_FormClosing(object sender, FormClosingEventArgs e)
@@ -49,7 +50,14 @@ namespace HealthCareSystem.Core.GUI
 
         private void btnRooms_Click(object sender, EventArgs e)
         {
+            if (SelectedButton != null) SelectedButton.Hide();
             LoadForm(new HospitalRooms());
+        }
+
+        private void btnEquipment_Click(object sender, EventArgs e)
+        {
+            if (SelectedButton != null) SelectedButton.Hide();
+            LoadForm(new EquipmentMover());
         }
 
         private void HospitalManagerView_Load(object sender, EventArgs e)
