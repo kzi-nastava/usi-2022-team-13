@@ -40,6 +40,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             // btnOk
             // 
+            this.btnOk.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnOk.FlatAppearance.BorderSize = 3;
             this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOk.Font = new System.Drawing.Font("Lucida Bright", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -118,7 +119,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.Controls.Add(this.rtbNotice);
             this.Controls.Add(this.btnOk);
             this.Font = new System.Drawing.Font("Lucida Bright", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "AnamnesisView";
             this.Text = "AnamnesisView";
             this.ResumeLayout(false);

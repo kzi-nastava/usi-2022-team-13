@@ -30,15 +30,32 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void SetValues()
         {
             PatientId = PatientRep.GetPatientId();
+            
+            SetTextValues();
+            SetDgwExaminations();
+            SetListBoxDiseases();
+        }
+        private void SetTextValues()
+        {
             Dictionary<string, string> information = PatientRep.GetPatientNameAndMedicalStats(PatientId);
             lbHeight.Text = information["height"] + " cm";
             lbWeight.Text = information["weight"] + " kg";
             lbName.Text = information["firstName"] + " " + information["lastName"];
+        }
+        private void SetDgwExaminations()
+        {
             PatientRep.PullPastExaminations();
             dgwExaminations.DataSource = PatientRep.examinations;
             Helpers.DataGridViewSettings(dgwExaminations);
             dgwExaminations.Font = new Font("Lucida Bright", 10);
+        }
+        private void SetListBoxDiseases()
+        {
+            
 
+            int medicalRecordId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries("select id from MedicalRecord where id_patient = " + PatientId + "", PatientRep.Connection)[0]);
+            List<string> diseases = DatabaseHelpers.ExecuteReaderQueries("select nameOfDisease from DiseaseHistory where id_medicalRecord = " + medicalRecordId + "", PatientRep.Connection);
+            lbDiseases.DataSource = diseases;
 
         }
 
