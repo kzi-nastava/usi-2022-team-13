@@ -28,7 +28,7 @@ namespace HealthCareSystem.Core.Examinations.Model
         public bool IsUrgent = false;
         public int IdRoom { get; set; }
         public int Duration { get; set; }
-
+        public int Id { get; set; }
         public Examination()
         {
 
@@ -36,6 +36,21 @@ namespace HealthCareSystem.Core.Examinations.Model
         public Examination(int idDoctor, int idPatient, bool isEdited, bool isCancelled, bool isFinished, DateTime dateOf, 
             TypeOfExamination typeOfExamination, bool isUrgent, int idRoom, int Duration)
         {
+            this.IdDoctor = idDoctor;
+            this.IdPatient = idPatient;
+            this.IsEdited = isEdited;
+            this.IsCancelled = isCancelled;
+            this.IsFinished = isFinished;
+            this.DateOf = dateOf;
+            this.TypeOfExamination = typeOfExamination;
+            this.IsUrgent = isUrgent;
+            this.IdRoom = idRoom;
+            this.Duration = Duration;
+        }
+        public Examination(int id, int idDoctor, int idPatient, bool isEdited, bool isCancelled, bool isFinished, DateTime dateOf,
+            TypeOfExamination typeOfExamination, bool isUrgent, int idRoom, int Duration)
+        {
+            this.Id = id;
             this.IdDoctor = idDoctor;
             this.IdPatient = idPatient;
             this.IsEdited = isEdited;

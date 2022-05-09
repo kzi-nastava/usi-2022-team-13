@@ -19,11 +19,28 @@ namespace HealthCareSystem.Core
         {
             dgw.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgw.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            dgw.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            dgw.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            
+
             dgw.Columns[0].Width = 90;
-            dgw.Columns[3].Width = 90;
-            dgw.Columns[4].Width = 90;
+
+            if(dgw.Columns.Count > 3)
+            {
+                dgw.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgw.Columns[3].Width = 90;
+            }
+            
+            if (dgw.Columns.Count > 4)
+            {
+                
+                dgw.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgw.Columns[4].Width = 90;
+            }
+            if (dgw.Columns.Count > 5)
+            {
+
+                dgw.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgw.Columns[5].Width = 90;
+            }
             dgw.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgw.MultiSelect = false;
 

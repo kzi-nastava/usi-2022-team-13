@@ -12,6 +12,7 @@ using HealthCareSystem.Core.Rooms.Model;
 using HealthCareSystem.Core.Scripts.Repository;
 using HealthCareSystem.Core.Users.Patients.Model;
 using System.ComponentModel;
+using HealthCareSystem.Core.Examinations.Repository;
 
 namespace HealthCareSystem.Core.Users.Patients.Repository
 {
@@ -20,6 +21,8 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         public string Username { get; set; }
         public DataTable examinations { get; set; }
         public OleDbConnection Connection { get; set; }
+        private ExaminationRepository ExaminationRep;
+
 
         public PatientRepository(string username = "") { 
             if(username.Length > 0) Username = username;
@@ -37,7 +40,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-
+            ExaminationRep = new ExaminationRepository();
         
         }
         public int GetPatientId()
@@ -48,6 +51,8 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
             return patientId;
         }
+
+
         public Dictionary<string, string> GetPatientNameAndMedicalStats(int patientId)
         {
             var query = "select Patients.firstName, Patients.lastName, MedicalRecord.height, MedicalRecord.weight from Patients inner join MedicalRecord on Patients.ID = MedicalRecord.id_patient WHERE patients.id = " + patientId + "";
@@ -65,6 +70,31 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             return patientInfo;
         }
 
+
+        internal List<DoctorAnamnesis> GetAnamnesises(List<Examination> examinations)
+        {
+            List<DoctorAnamnesis> anamnesises = new List<DoctorAnamnesis>();
+
+            foreach (Examination examination in examinations)
+            {
+                DoctorAnamnesis anamnesis = ExaminationRep.GetDoctorAnamnesis(examination.Id);
+                if (anamnesis != null) anamnesises.Add(anamnesis);
+            }
+
+
+            return anamnesises;
+        }
+
+        
+        public List<DoctorAnamnesis> GetAnamnesisesByKeyword(List<DoctorAnamnesis> anamnesises, string keyword)
+        {
+            List<DoctorAnamnesis> filteredAnamnesises = new List<DoctorAnamnesis>();
+            foreach(DoctorAnamnesis anamnesis in anamnesises)
+            {
+                if (anamnesis.Notice.ToLower().Contains(keyword.ToLower()) || anamnesis.Conclusions.ToLower().Contains(keyword.ToLower())) filteredAnamnesises.Add(anamnesis);
+            }
+            return filteredAnamnesises;
+        }
 
         public int GetPatientIdByFirstName(string firstName)
         {

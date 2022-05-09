@@ -35,6 +35,22 @@ namespace HealthCareSystem.Core.Examinations.Repository
             RoomRep = new RoomRepository();
             DoctorRep = new DoctorRepository();
         }
+        public List<Examination> GetFinishedExaminations(int patientId)
+        {
+            if (Connection.State == System.Data.ConnectionState.Closed) Connection.Open();
+
+            List<Examination> examinations = new List<Examination>();
+
+            OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from Examination where id_patient = " + patientId + " and dateOf < #" + DateTime.Now.ToString() + "#", Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                SetExaminationValues(examinations, reader);
+            }
+
+            return examinations;
+        }
         public List<Examination> GetAllOtherExaminations(int currentExaminationId)
         {
             List<Examination> examinations = new List<Examination>();
@@ -45,32 +61,65 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
             while (reader.Read())
             {
-                TypeOfExamination typeOfExamination;
-                Enum.TryParse<TypeOfExamination>(reader["typeOfExamination"].ToString(), out typeOfExamination);
-
-                examinations.Add(new Examination(
-                    Convert.ToInt32(reader["id_doctor"]),
-                    Convert.ToInt32(reader["id_patient"]),
-                    false,
-                    false,
-                    false,
-                    (DateTime)reader["dateOf"],
-                    typeOfExamination,
-                    false,
-                    Convert.ToInt32(reader["id_room"]),
-                    Convert.ToInt32(reader["duration"])
-                    ));
+                SetExaminationValues(examinations, reader);
             }
             Connection.Close();
 
             return examinations;
+        }
+
+        private static void SetExaminationValues(List<Examination> examinations, OleDbDataReader reader)
+        {
+            TypeOfExamination typeOfExamination;
+            Enum.TryParse<TypeOfExamination>(reader["typeOfExamination"].ToString(), out typeOfExamination);
+
+            examinations.Add(new Examination(
+                Convert.ToInt32(reader["ID"]),
+                Convert.ToInt32(reader["id_doctor"]),
+                Convert.ToInt32(reader["id_patient"]),
+                false,
+                false,
+                false,
+                (DateTime)reader["dateOf"],
+                typeOfExamination,
+                false,
+                Convert.ToInt32(reader["id_room"]),
+                Convert.ToInt32(reader["duration"])
+                ));
+        }
+
+        public DoctorAnamnesis GetDoctorAnamnesis(int examinationId)
+        {
+            if (Connection.State == System.Data.ConnectionState.Closed) Connection.Open();
+
+            string query = "select a.id_examination as ExaminationId, a.notice as Notice, a.conclusions as Conclusions, e.dateOf as DateOfExamination, d.firstName + ' ' + d.lastName as Doctor, d.speciality as Speciality from (Anamnesises a inner join Examination e on a.id_examination = e.id) inner join doctors d on e.id_doctor = d.id where e.id = " + examinationId + "";
+
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            DoctorAnamnesis anamnesis = null;
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+
+                anamnesis = new DoctorAnamnesis(Convert.ToInt32(
+                                            reader["ExaminationId"]),
+                                            reader["Notice"].ToString(),
+                                            reader["Conclusions"].ToString(),
+                                            (DateTime)reader["DateOfExamination"],
+                                            reader["Doctor"].ToString(),
+                                            reader["Speciality"].ToString()
+                                            ) ;
+            }
+
+            return anamnesis;
         }
         public Anamnesis GetAnamnesis(int examinationId)
         {
             if (Connection.State == System.Data.ConnectionState.Closed) Connection.Open();
 
             OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from Anamnesises where id_examination = " + examinationId + "", Connection);
-            Anamnesis anamnesis = new Anamnesis();
+            Anamnesis anamnesis = null;
 
             OleDbDataReader reader = cmd.ExecuteReader();
 
@@ -84,6 +133,8 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
             return anamnesis;
         }
+
+
 
         public List<Examination> GetRecommendedExaminations(Doctor selectedDoctor, string startTime, string endTime, DateTime examinationFinalDate, bool isDoctorPriority)
         {

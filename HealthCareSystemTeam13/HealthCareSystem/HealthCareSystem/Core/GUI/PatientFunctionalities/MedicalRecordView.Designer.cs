@@ -38,11 +38,17 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.lbDiseases = new System.Windows.Forms.ListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnShowAnamnesis = new System.Windows.Forms.Button();
             this.tbAnamnesis = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.dgwAnamnesis = new System.Windows.Forms.DataGridView();
-            this.btnShowAnamnesis = new System.Windows.Forms.Button();
+            this.btnSearchAnamnesis = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnSortByDoctor = new System.Windows.Forms.Button();
+            this.btnSortBySpeciality = new System.Windows.Forms.Button();
+            this.btnShowAnamnesisInSearch = new System.Windows.Forms.Button();
+            this.btnSortByDate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgwExaminations)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -141,6 +147,19 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Examination/Operation History";
             // 
+            // btnShowAnamnesis
+            // 
+            this.btnShowAnamnesis.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnShowAnamnesis.FlatAppearance.BorderSize = 3;
+            this.btnShowAnamnesis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowAnamnesis.Location = new System.Drawing.Point(456, 246);
+            this.btnShowAnamnesis.Name = "btnShowAnamnesis";
+            this.btnShowAnamnesis.Size = new System.Drawing.Size(233, 40);
+            this.btnShowAnamnesis.TabIndex = 9;
+            this.btnShowAnamnesis.Text = "Show Anamnesis";
+            this.btnShowAnamnesis.UseVisualStyleBackColor = true;
+            this.btnShowAnamnesis.Click += new System.EventHandler(this.btnShowAnamnesis_Click);
+            // 
             // tbAnamnesis
             // 
             this.tbAnamnesis.Location = new System.Drawing.Point(206, 49);
@@ -160,13 +179,19 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnSortByDate);
+            this.groupBox3.Controls.Add(this.btnShowAnamnesisInSearch);
+            this.groupBox3.Controls.Add(this.btnSortBySpeciality);
+            this.groupBox3.Controls.Add(this.btnSortByDoctor);
+            this.groupBox3.Controls.Add(this.label3);
+            this.groupBox3.Controls.Add(this.btnSearchAnamnesis);
             this.groupBox3.Controls.Add(this.dgwAnamnesis);
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.tbAnamnesis);
             this.groupBox3.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.Location = new System.Drawing.Point(17, 643);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(674, 296);
+            this.groupBox3.Size = new System.Drawing.Size(702, 411);
             this.groupBox3.TabIndex = 18;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Search Anamnesis";
@@ -174,23 +199,85 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // dgwAnamnesis
             // 
             this.dgwAnamnesis.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgwAnamnesis.Location = new System.Drawing.Point(15, 95);
+            this.dgwAnamnesis.Location = new System.Drawing.Point(15, 156);
             this.dgwAnamnesis.Name = "dgwAnamnesis";
             this.dgwAnamnesis.Size = new System.Drawing.Size(643, 180);
             this.dgwAnamnesis.TabIndex = 18;
             // 
-            // btnShowAnamnesis
+            // btnSearchAnamnesis
             // 
-            this.btnShowAnamnesis.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnShowAnamnesis.FlatAppearance.BorderSize = 3;
-            this.btnShowAnamnesis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowAnamnesis.Location = new System.Drawing.Point(456, 245);
-            this.btnShowAnamnesis.Name = "btnShowAnamnesis";
-            this.btnShowAnamnesis.Size = new System.Drawing.Size(233, 40);
-            this.btnShowAnamnesis.TabIndex = 9;
-            this.btnShowAnamnesis.Text = "Show Anamnesis";
-            this.btnShowAnamnesis.UseVisualStyleBackColor = true;
-            this.btnShowAnamnesis.Click += new System.EventHandler(this.btnShowAnamnesis_Click);
+            this.btnSearchAnamnesis.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSearchAnamnesis.FlatAppearance.BorderSize = 3;
+            this.btnSearchAnamnesis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSearchAnamnesis.Location = new System.Drawing.Point(434, 46);
+            this.btnSearchAnamnesis.Name = "btnSearchAnamnesis";
+            this.btnSearchAnamnesis.Size = new System.Drawing.Size(149, 35);
+            this.btnSearchAnamnesis.TabIndex = 10;
+            this.btnSearchAnamnesis.Text = "Search";
+            this.btnSearchAnamnesis.UseVisualStyleBackColor = true;
+            this.btnSearchAnamnesis.Click += new System.EventHandler(this.btnSearchAnamnesis_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(11, 113);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(75, 22);
+            this.label3.TabIndex = 19;
+            this.label3.Text = "Sort By";
+            // 
+            // btnSortByDoctor
+            // 
+            this.btnSortByDoctor.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSortByDoctor.FlatAppearance.BorderSize = 3;
+            this.btnSortByDoctor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSortByDoctor.Location = new System.Drawing.Point(331, 107);
+            this.btnSortByDoctor.Name = "btnSortByDoctor";
+            this.btnSortByDoctor.Size = new System.Drawing.Size(149, 35);
+            this.btnSortByDoctor.TabIndex = 20;
+            this.btnSortByDoctor.Text = "Doctor";
+            this.btnSortByDoctor.UseVisualStyleBackColor = true;
+            this.btnSortByDoctor.Click += new System.EventHandler(this.btnSortByDoctor_Click);
+            // 
+            // btnSortBySpeciality
+            // 
+            this.btnSortBySpeciality.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSortBySpeciality.FlatAppearance.BorderSize = 3;
+            this.btnSortBySpeciality.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSortBySpeciality.Location = new System.Drawing.Point(509, 107);
+            this.btnSortBySpeciality.Name = "btnSortBySpeciality";
+            this.btnSortBySpeciality.Size = new System.Drawing.Size(149, 35);
+            this.btnSortBySpeciality.TabIndex = 21;
+            this.btnSortBySpeciality.Text = "Speciality";
+            this.btnSortBySpeciality.UseVisualStyleBackColor = true;
+            this.btnSortBySpeciality.Click += new System.EventHandler(this.btnSortBySpeciality_Click);
+            // 
+            // btnShowAnamnesisInSearch
+            // 
+            this.btnShowAnamnesisInSearch.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnShowAnamnesisInSearch.FlatAppearance.BorderSize = 3;
+            this.btnShowAnamnesisInSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowAnamnesisInSearch.Location = new System.Drawing.Point(425, 359);
+            this.btnShowAnamnesisInSearch.Name = "btnShowAnamnesisInSearch";
+            this.btnShowAnamnesisInSearch.Size = new System.Drawing.Size(233, 40);
+            this.btnShowAnamnesisInSearch.TabIndex = 10;
+            this.btnShowAnamnesisInSearch.Text = "Show Anamnesis";
+            this.btnShowAnamnesisInSearch.UseVisualStyleBackColor = true;
+            this.btnShowAnamnesisInSearch.Click += new System.EventHandler(this.btnShowAnamnesisInSearch_Click);
+            // 
+            // btnSortByDate
+            // 
+            this.btnSortByDate.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSortByDate.FlatAppearance.BorderSize = 3;
+            this.btnSortByDate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSortByDate.Location = new System.Drawing.Point(151, 107);
+            this.btnSortByDate.Name = "btnSortByDate";
+            this.btnSortByDate.Size = new System.Drawing.Size(149, 35);
+            this.btnSortByDate.TabIndex = 22;
+            this.btnSortByDate.Text = "Date";
+            this.btnSortByDate.UseVisualStyleBackColor = true;
+            this.btnSortByDate.Click += new System.EventHandler(this.btnSortByDate_Click);
             // 
             // MedicalRecordView
             // 
@@ -210,7 +297,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.Controls.Add(this.lbName);
             this.Font = new System.Drawing.Font("Lucida Bright", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "MedicalRecordView";
             this.Text = "MedicalRecordView";
             this.Load += new System.EventHandler(this.MedicalRecordView_Load);
@@ -241,5 +328,11 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.DataGridView dgwAnamnesis;
         private System.Windows.Forms.Button btnShowAnamnesis;
+        private System.Windows.Forms.Button btnSearchAnamnesis;
+        private System.Windows.Forms.Button btnSortBySpeciality;
+        private System.Windows.Forms.Button btnSortByDoctor;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnShowAnamnesisInSearch;
+        private System.Windows.Forms.Button btnSortByDate;
     }
 }

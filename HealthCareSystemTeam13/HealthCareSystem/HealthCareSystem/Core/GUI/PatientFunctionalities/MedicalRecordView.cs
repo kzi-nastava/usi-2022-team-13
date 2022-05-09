@@ -1,4 +1,6 @@
-﻿using HealthCareSystem.Core.Users.Patients.Repository;
+﻿using HealthCareSystem.Core.Examinations.Model;
+using HealthCareSystem.Core.Examinations.Repository;
+using HealthCareSystem.Core.Users.Patients.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,11 +17,14 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     {
         public string Username { get; set; }
         private PatientRepository PatientRep;
+        private ExaminationRepository ExaminationRep;
         private int PatientId;
+        private List<DoctorAnamnesis> anamnesises;
         public MedicalRecordView(string username)
         {
             Username = username;
             PatientRep = new PatientRepository(Username);
+            ExaminationRep = new ExaminationRepository();
             InitializeComponent();
         }
 
@@ -34,6 +39,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             SetTextValues();
             SetDgwExaminations();
             SetListBoxDiseases();
+            SetDgwAnamnesis();
         }
         private void SetTextValues()
         {
@@ -48,11 +54,23 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             dgwExaminations.DataSource = PatientRep.examinations;
             Helpers.DataGridViewSettings(dgwExaminations);
             dgwExaminations.Font = new Font("Lucida Bright", 10);
+
         }
+        private void SetDgwAnamnesis()
+        {
+            List<Examination> examinations = ExaminationRep.GetFinishedExaminations(PatientId);
+
+            anamnesises = PatientRep.GetAnamnesises(examinations);
+
+            dgwAnamnesis.DataSource = anamnesises;
+
+            Helpers.DataGridViewSettings(dgwAnamnesis);
+            dgwAnamnesis.Font = new Font("Lucida Bright", 10);
+        }
+
         private void SetListBoxDiseases()
         {
             
-
             int medicalRecordId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries("select id from MedicalRecord where id_patient = " + PatientId + "", PatientRep.Connection)[0]);
             List<string> diseases = DatabaseHelpers.ExecuteReaderQueries("select nameOfDisease from DiseaseHistory where id_medicalRecord = " + medicalRecordId + "", PatientRep.Connection);
             lbDiseases.DataSource = diseases;
@@ -68,6 +86,40 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 anamnesisView.ShowDialog();
             }
         }
-        
+
+        private void btnShowAnamnesisInSearch_Click(object sender, EventArgs e)
+        {
+            if (Helpers.IsDgwRowSelected(dgwAnamnesis))
+            {
+                int examinationId = (int)dgwAnamnesis.SelectedRows[0].Cells[0].Value;
+                AnamnesisView anamnesisView = new AnamnesisView(examinationId);
+                anamnesisView.ShowDialog();
+            }
+        }
+
+        private void btnSearchAnamnesis_Click(object sender, EventArgs e)
+        {
+            string keyword = tbAnamnesis.Text;
+            if (keyword.Trim() != "") dgwAnamnesis.DataSource = PatientRep.GetAnamnesisesByKeyword(anamnesises, keyword);
+            else MessageBox.Show("No input.");
+        }
+
+        private void btnSortByDoctor_Click(object sender, EventArgs e)
+        {
+            // sort by doctor names and set new datasource to sorted list
+
+        }
+
+        private void btnSortBySpeciality_Click(object sender, EventArgs e)
+        {
+            // sort by speciality and set new datasource to sorted list
+
+        }
+
+        private void btnSortByDate_Click(object sender, EventArgs e)
+        {
+            // sort by date and set new datasource to sorted list
+
+        }
     }
 }
