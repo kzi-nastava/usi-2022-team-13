@@ -893,9 +893,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<MedicalRecord> medicalRecords = new List<MedicalRecord>();
             List<String> patientIDs = GetPatientIds();
 
-            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[0]), 185, 85));
-            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[1]), 192, 92));
-            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[2]), 183, 75));
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[0]), 85, 185));
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[1]), 92, 192));
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[2]), 75, 183));
 
             return medicalRecords;
         }

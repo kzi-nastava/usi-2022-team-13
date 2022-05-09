@@ -32,7 +32,7 @@ namespace HealthCareSystem
         {
             InsertionRepository dbInsertion = new InsertionRepository();
             dbInsertion.DeleteRecords();
-           dbInsertion.ExecuteQueries();
+            dbInsertion.ExecuteQueries();
 
         }
 

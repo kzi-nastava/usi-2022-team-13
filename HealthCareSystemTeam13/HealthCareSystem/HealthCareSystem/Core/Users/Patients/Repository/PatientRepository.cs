@@ -40,7 +40,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         
         }
-        private int GetPatientId()
+        public int GetPatientId()
         {
             string userId = DatabaseHelpers.ExecuteReaderQueries("select id from users where usrnm = '" + Username + "'", Connection)[0];
 
@@ -48,8 +48,23 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
             return patientId;
         }
+        public Dictionary<string, string> GetPatientNameAndMedicalStats(int patientId)
+        {
+            var query = "select Patients.firstName, Patients.lastName, MedicalRecord.height, MedicalRecord.weight from Patients inner join MedicalRecord on Patients.ID = MedicalRecord.id_patient WHERE patients.id = " + patientId + "";
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+            Dictionary<string, string> patientInfo = new Dictionary<string, string>();
+            while (reader.Read())
+            {
+                patientInfo["firstName"] = reader["firstName"].ToString();
+                patientInfo["lastName"] = reader["lastName"].ToString();
+                patientInfo["height"] = reader["height"].ToString();
+                patientInfo["weight"] = reader["weight"].ToString();
 
-   
+            }
+            return patientInfo;
+        }
+
 
         public int GetPatientIdByFirstName(string firstName)
         {
@@ -64,6 +79,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             return patientId;
         }
 
+
         public void PullExaminations()
         {
             examinations = new DataTable();
@@ -73,7 +89,15 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
             FillTable(examinations, examinationsQuery);
 
+        }
+        public void PullPastExaminations()
+        {
+            examinations = new DataTable();
 
+            string examinationsQuery = "select Examination.id, Doctors.FirstName + ' ' +Doctors.LastName as Doctor, Examination.dateOf as [Date and Time], Examination.id_room as RoomID, Examination.duration, typeOfExamination as Type from Examination left outer join Doctors on Examination.id_doctor = Doctors.id " +
+                "where id_patient = " + GetPatientId() + " and Examination.dateOf < #"+DateTime.Now.ToString()+"#";
+
+            FillTable(examinations, examinationsQuery);
         }
 
         public void UpdateContent(string query, int patiendId = 0)
@@ -195,7 +219,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         public Dictionary<string, string> GetExamination(int examinationId)
         {
-            // string query = "select id_doctor, dateOf, id_room from Examination where id = " + examinationId + "";
             int checkState = 0;
             if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 

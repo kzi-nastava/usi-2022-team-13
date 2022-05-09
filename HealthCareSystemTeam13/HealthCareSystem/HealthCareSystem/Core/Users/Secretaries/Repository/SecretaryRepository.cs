@@ -209,7 +209,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             }
             return row;
         }
-
+        
         public void UpdatePatient(string patientID, string username, string password, string name, string lastname)
         {
             var query = "SELECT user_id FROM Patients WHERE id = " + patientID + "";

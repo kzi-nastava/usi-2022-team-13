@@ -71,15 +71,21 @@ namespace HealthCareSystem.Core.GUI
 
         private void PatientView_Load(object sender, EventArgs e)
         {
-
         }
 
         private void btnAptRecc_Click(object sender, EventArgs e)
         {
-            if (!PatientRep.IsPatientBlocked(Username))
+            if (!PatientRep.IsPatientBlocked(Username)) LoadForm(new PatientRecommendation(Username));
+            else
             {
-                LoadForm(new PatientRecommendation(Username));
+                MessageBox.Show("You are blocked!");
+                SuperForm.Show(); this.Close();
             }
+        }
+
+        private void btnMedicalRecord_Click(object sender, EventArgs e)
+        {
+            if (!PatientRep.IsPatientBlocked(Username)) LoadForm(new MedicalRecordView(Username));
             else
             {
                 MessageBox.Show("You are blocked!");

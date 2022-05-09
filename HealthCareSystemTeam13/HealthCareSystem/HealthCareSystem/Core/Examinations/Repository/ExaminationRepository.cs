@@ -65,6 +65,25 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
             return examinations;
         }
+        public Anamnesis GetAnamnesis(int examinationId)
+        {
+            if (Connection.State == System.Data.ConnectionState.Closed) Connection.Open();
+
+            OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from Anamnesises where id_examination = " + examinationId + "", Connection);
+            Anamnesis anamnesis = new Anamnesis();
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                anamnesis = new Anamnesis(Convert.ToInt32(reader["id_examination"]),
+                                            reader["notice"].ToString(),
+                                            reader["conclusions"].ToString(),
+                                            (DateTime)reader["dateOf"]);
+            }
+
+            return anamnesis;
+        }
 
         public List<Examination> GetRecommendedExaminations(Doctor selectedDoctor, string startTime, string endTime, DateTime examinationFinalDate, bool isDoctorPriority)
         {

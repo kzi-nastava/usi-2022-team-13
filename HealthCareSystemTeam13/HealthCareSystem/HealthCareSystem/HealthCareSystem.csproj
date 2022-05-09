@@ -106,6 +106,18 @@
     <Compile Include="Core\GUI\PatientFunctionalities\AddEditExamination.Designer.cs">
       <DependentUpon>AddEditExamination.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\AnamnesisView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\AnamnesisView.Designer.cs">
+      <DependentUpon>AnamnesisView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\MedicalRecordView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\MedicalRecordView.Designer.cs">
+      <DependentUpon>MedicalRecordView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\PatientExaminations.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -244,6 +256,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\AddEditExamination.resx">
       <DependentUpon>AddEditExamination.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\AnamnesisView.resx">
+      <DependentUpon>AnamnesisView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\MedicalRecordView.resx">
+      <DependentUpon>MedicalRecordView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\PatientExaminations.resx">
       <DependentUpon>PatientExaminations.cs</DependentUpon>
