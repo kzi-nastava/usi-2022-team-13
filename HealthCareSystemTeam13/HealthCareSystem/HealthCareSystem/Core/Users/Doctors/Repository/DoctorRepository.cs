@@ -113,7 +113,16 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
             return true;
         }
+        public Doctor GetAvailableDoctor(DateTime examinationDateTime, List<Examination> examinations)
+        {
+            BindingList<Doctor> doctors = GetDoctors();
+            foreach(Doctor doctor in doctors)
+            {
+                if (IsDoctorAvailable(doctor, examinationDateTime, examinations)) return doctor;
+            }
+            return null;
 
+        }
         public BindingList<Doctor> GetDoctors()
         {
             BindingList<Doctor> doctors = new BindingList<Doctor>();

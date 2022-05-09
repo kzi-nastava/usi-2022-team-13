@@ -1,6 +1,7 @@
 ﻿using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Rooms.Repository;
 using HealthCareSystem.Core.Users.Doctors.Model;
+using HealthCareSystem.Core.Users.Doctors.Repository;
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
@@ -14,6 +15,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
     {
         OleDbConnection Connection;
         RoomRepository RoomRep;
+        DoctorRepository DoctorRep;
         public ExaminationRepository()
         {
             try
@@ -31,7 +33,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 Console.WriteLine(exception.ToString());
             }
             RoomRep = new RoomRepository();
-
+            DoctorRep = new DoctorRepository();
         }
         public List<Examination> GetAllOtherExaminations(int currentExaminationId)
         {
@@ -66,96 +68,131 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
         public List<Examination> GetRecommendedExaminations(Doctor selectedDoctor, string startTime, string endTime, DateTime examinationFinalDate, bool isDoctorPriority)
         {
-            bool isExaminationFound = false;
-            List<Examination> examinations = new List<Examination>();
+            List<Examination> examinations;
 
             // get taken appointments in criteria
-            List<Examination> takenExaminations = GetTakenExaminations(selectedDoctor.ID, startTime, endTime, examinationFinalDate, isDoctorPriority);
+            List<Examination> takenExaminations = GetTakenExaminations(selectedDoctor.ID, startTime, endTime, examinationFinalDate);
 
-            DateTime startDate = Helpers.GetMergedDateTime(DateTime.Now.AddDays(1), startTime);
-            DateTime endDate = Helpers.GetMergedDateTime(examinationFinalDate, endTime);
-            int startHour = startDate.Hour;
-            int startMinute = startDate.Minute;
-            int endHour = endDate.Hour;
-            int endMinute = endDate.Minute;
+            // gets free examinations based on the taken ones
+            examinations = GetFreeExaminations(selectedDoctor.ID, examinationFinalDate, startTime, endTime, isDoctorPriority, false, takenExaminations);
 
-            /*
-                KAKO URADITI
-                    
-
-                SELEKTOVATI SVE EXAMINATIONE PRVO ZNACI (PROMENITI GETTAKENEXAMINATIONS U NES DRUGO)
-                PA ZATIM KAD SE GLEDA DOKTOR POREDIMO ID-OVE SA DOKTOROM I UBACUJEMO U NEKU LISTICU GDE SE POKLAPAJU
-                BEZ OBIZRA NA VREME, AKO SE VREME POKLOPI UBACUJEMO U KONACNU NEKU DRUGU LISTU I NJU VRACAMO
-
-                ISTO I ZA TIME
-                POREDIMO VREMEENA DA LI SU U OPSEGU I ONDA JOS AKO JE I DOKTOR SLOBODAN U TO VREME OPET U NEKU SUPER LISTU, U SUPROTNOM U OBICNU
-
-                AKO NEKIM CUDOM SE TERMIN NE NADJE, ONDA NEKI TOP 3 SE ODRADI SA NEKIM NAJBLIZIM TERMINIMA ZELEJNOM
-                OPSEGU
-             
-             */
-
-
-            if (isDoctorPriority)
+            if (examinations.Count() == 0)
             {
-                // extending the search for doctors just slightly
-                endDate.AddDays(2);
+                examinations = GetFreeExaminations(selectedDoctor.ID, examinationFinalDate, startTime, endTime, isDoctorPriority, true, takenExaminations);
 
-                while(startDate.CompareTo(endDate) <= 0)
+                if(examinations.Count() == 0)
                 {
-                    foreach(Examination takenExam in takenExaminations)
-                    {
-                        TimeSpan difference = startDate.Subtract(takenExam.DateOf);
-                        if (Math.Abs(difference.TotalMinutes) < 15 && selectedDoctor.ID == takenExam.IdDoctor)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            int roomId = RoomRep.GetAvailableRoomId(startDate, takenExaminations);
-                            if (roomId > 0) {
+                    // find top 3 that fit
 
-                                examinations.Add(new Examination(selectedDoctor.ID, startDate, TypeOfExamination.BasicExamination, roomId));
-
-                                isExaminationFound = true;
-                                break;
-
-                            }
-                        }
-                        
-                    }
-                    if (isExaminationFound)
-                    {
-                        break;
-                    }
-
-                    startDate.AddMinutes(15);
-                    if(startDate.Hour  > endHour)
-                    {
-                        if(startDate.Minute > endMinute)
-                        {
-                            startDate.AddDays(1).AddHours(-(endHour - startHour)).AddMinutes(-(endMinute - startMinute));
-
-                        }
-                    }
                 }
-                
-            }
-            else
-            {
-                
-
-            }
-            if(examinations.Count() == 0)
-            {
-                // select top 3 from examination where date between startDate and endDate + 2, startTime - 2h, endTime + 2h
             }
 
 
             return examinations;
         }
 
-        private List<Examination> GetTakenExaminations(int doctorId, string startTime, string endTime, DateTime examinationFinalDate, bool isDoctorPriority)
+        private List<Examination> GetFreeExaminations(int doctorId, DateTime examinationFinalDate, string startTime, string endTime, bool isDoctorPriority, bool isPriorityUsed, List<Examination> takenExaminations, bool isTopThree = false)
+        {
+            List<Examination> examinations = new List<Examination>();
+
+            // setting dates and times
+            DateTime startDate = Helpers.GetMergedDateTime(DateTime.Now.AddDays(1), startTime);
+            DateTime endDate = Helpers.GetMergedDateTime(examinationFinalDate, endTime);
+            int startHour = startDate.Hour;
+            int startMinute = startDate.Minute;
+            int endHour = endDate.Hour;
+            int endMinute = endDate.Minute;
+            int totalFoundExaminations = 0;
+            int roomId;
+
+            if (isPriorityUsed && isDoctorPriority)
+            {
+                startDate = startDate.AddHours(-4);
+                endDate = endDate.AddDays(2).AddHours(4);
+            } else if (isTopThree)
+            {
+                endDate = endDate.AddDays(2);
+                startHour = startDate.AddHours(-2).Hour;
+                endHour = endDate.AddHours(2).Hour;
+
+            }
+
+            while (startDate.CompareTo(endDate) <= 0)
+            {
+                bool isExaminationFound = true;
+                roomId = RoomRep.GetAvailableRoomId(startDate, takenExaminations);
+                if (roomId != 0)
+                {
+                    if (!isPriorityUsed || (isPriorityUsed && isDoctorPriority))
+                    {
+                        foreach (Examination takenExam in takenExaminations)
+                        {
+
+                            if (!IsValidTimeDoctor(startDate, takenExam, doctorId))
+                            {
+                                isExaminationFound = false;
+                                continue;
+                            }
+                            else totalFoundExaminations++;
+
+                        }
+                    }
+                    else if ((isPriorityUsed && !isDoctorPriority) || isTopThree)
+                    {
+                        Doctor availableDoctor = DoctorRep.GetAvailableDoctor(startDate, examinations);
+                        if (availableDoctor != null)
+                        {
+                            doctorId = availableDoctor.ID;
+                            roomId = RoomRep.GetAvailableRoomId(startDate, takenExaminations);
+                            if (roomId > 0) { totalFoundExaminations++; }
+
+                        }
+                        else { isExaminationFound = false; }
+
+                    }
+
+                    if (isExaminationFound)
+                    {
+                        examinations.Add(new Examination(doctorId, startDate, TypeOfExamination.BasicExamination, roomId));
+                        totalFoundExaminations++;
+                        if (totalFoundExaminations > 4) break;
+                    }
+                }
+                startDate = GetNewStartDate(startDate, startHour, startMinute, endHour, endMinute);
+            }
+            if (isTopThree) return examinations.GetRange(0, 3);
+  
+            return examinations;
+
+        }
+
+        private static DateTime GetNewStartDate(DateTime startDate, int startHour, int startMinute, int endHour, int endMinute)
+        {
+            startDate = startDate.AddMinutes(15);
+            if (startDate.Hour > endHour)
+            {
+                startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day, startHour, startMinute, 0).AddDays(1);
+            }
+            return startDate;
+        }
+
+        private bool IsDoctorEqual(int doctorId, Examination takenExamination)
+        {
+            return doctorId == takenExamination.IdDoctor;
+        }
+        private bool IsValidTime(DateTime startDate, Examination takenExamination)
+        {
+            TimeSpan difference = startDate.Subtract(takenExamination.DateOf);
+            if (Math.Abs(difference.TotalMinutes) < 15) return false;
+            return true;
+        }
+        private bool IsValidTimeDoctor(DateTime startDate, Examination takenExamination, int doctorId)
+        {
+
+            return !(!IsValidTime(startDate, takenExamination) && IsDoctorEqual(doctorId, takenExamination));
+        }
+
+        private List<Examination> GetTakenExaminations(int doctorId, string startTime, string endTime, DateTime examinationFinalDate)
         {
             List<Examination> examinations = new List<Examination>();
             Connection.Open();
@@ -164,7 +201,6 @@ namespace HealthCareSystem.Core.Examinations.Repository
             DateTime end = Helpers.GetMergedDateTime(examinationFinalDate, endTime);
 
             string query = "select * from examination where id_doctor = " + doctorId + " and dateOf between #" + start.ToString() + "# and #" + end.ToString() + "#";
-
             OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
             OleDbDataReader reader = cmd.ExecuteReader();
 

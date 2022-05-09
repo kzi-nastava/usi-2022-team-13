@@ -89,7 +89,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertDynamicEquipmentRequests();
 
             //InsertRenovations();
-            InsertTransferHistoryOfEquipment();
+            //InsertTransferHistoryOfEquipment();
           
             InsertPatientEditRequests();
 
@@ -391,7 +391,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
         }*/
 
-        private static List<TransferHistoryOfEquipment> GetTransferHistoryOfEquipment()
+        /*private static List<TransferHistoryOfEquipment> GetTransferHistoryOfEquipment()
         {
             List<TransferHistoryOfEquipment> transferHistoryOfEquipment = new List<TransferHistoryOfEquipment>();
             List<String> roomIDs = GetRoomIDs();
@@ -422,7 +422,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.Parameters.AddWithValue("@transferDate", transferHistoryOfEquipment.TransferDate.ToString());
                 cmd.ExecuteNonQuery();
             }
-        }
+        }*/
 
         private static List<RoomHasEquipment> GetRoomHasEquipment()
         {
