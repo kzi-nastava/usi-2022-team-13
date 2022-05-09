@@ -49,7 +49,9 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         private void btnManage_Click(object sender, EventArgs e)
         {
+            MoveEquipmentDialog moveEquipmentView = new MoveEquipmentDialog();
 
+            moveEquipmentView.ShowDialog();
         }
 
         private bool CanChangeRoom()

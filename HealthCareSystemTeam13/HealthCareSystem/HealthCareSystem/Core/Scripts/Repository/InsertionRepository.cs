@@ -395,9 +395,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
         {
             List<TransferHistoryOfEquipment> transferHistoryOfEquipment = new List<TransferHistoryOfEquipment>();
             List<String> roomIDs = GetRoomIDs();
+            List<String> equipmentIDs = GetEquipmentIDs();
 
-            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[0]), Convert.ToInt32(roomIDs[5]), DateTime.Now));
-            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[1]), Convert.ToInt32(roomIDs[6]), DateTime.Now));
+            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[0]), Convert.ToInt32(roomIDs[4]), DateTime.Now, true, 5, Convert.ToInt32(equipmentIDs[0]))); 
+            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[1]), Convert.ToInt32(roomIDs[3]), DateTime.Now, true, 4, Convert.ToInt32(equipmentIDs[1]))); 
 
             return transferHistoryOfEquipment;
         }
@@ -414,12 +415,16 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         private static void InsertSingleTransferHistoryOfEquipment(TransferHistoryOfEquipment transferHistoryOfEquipment)
         {
-            var query = "INSERT INTO EquipmentTransferHistory(id_original_room, id_new_room, dateOfChange) VALUES(@first_room_id, @second_room_id, @transferDate)";
+            var query = "INSERT INTO EquipmentTransferHistory(id_original_room, id_new_room, dateOfChange, isExecuted, amount, id_equipment) " +
+                "VALUES(@first_room_id, @second_room_id, @transferDate, @isExecuted, @amount, @id_equipment)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@first_room_id", transferHistoryOfEquipment.FirstRoomId);
                 cmd.Parameters.AddWithValue("@second_room_id", transferHistoryOfEquipment.SecondRoomId);
                 cmd.Parameters.AddWithValue("@transferDate", transferHistoryOfEquipment.TransferDate.ToString());
+                cmd.Parameters.AddWithValue("@isExecuted", transferHistoryOfEquipment.IsExecuted);
+                cmd.Parameters.AddWithValue("@amount", transferHistoryOfEquipment.Amount);
+                cmd.Parameters.AddWithValue("@id_equpment", transferHistoryOfEquipment.EquipmentId);
                 cmd.ExecuteNonQuery();
             }
         }
@@ -430,7 +435,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> roomIDs = GetRoomIDs();
             List<String> equipmentIDs = GetEquipmentIDs();
             
-            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[0]), Convert.ToInt32(roomIDs[4]), 5));
+            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[0]), Convert.ToInt32(roomIDs[4]), 5)); 
             roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[1]), Convert.ToInt32(roomIDs[3]), 4));
 
             return roomHasEquipment;

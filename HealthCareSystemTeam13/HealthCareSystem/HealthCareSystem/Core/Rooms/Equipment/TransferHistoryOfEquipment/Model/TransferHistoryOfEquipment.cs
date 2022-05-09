@@ -13,11 +13,18 @@ namespace HealthCareSystem.Core.Rooms.Equipment.TransferHistoryOfEquipment.Model
 
         public DateTime TransferDate { get; set; }
 
-        public TransferHistoryOfEquipment(int firstRoomId, int secondRoomId, DateTime transferDate)
+        public bool IsExecuted { get; set; }
+
+        public int Amount { get; set; }
+        public int EquipmentId { get; set; }
+        public TransferHistoryOfEquipment(int firstRoomId, int secondRoomId, DateTime transferDate, bool isExecuted, int amount, int equipmentId)
         {
             this.FirstRoomId = firstRoomId;
             this.SecondRoomId = secondRoomId;
             this.TransferDate = transferDate;
+            this.IsExecuted = isExecuted;
+            this.Amount = amount;
+            this.EquipmentId = equipmentId;
         }
     }
 }
