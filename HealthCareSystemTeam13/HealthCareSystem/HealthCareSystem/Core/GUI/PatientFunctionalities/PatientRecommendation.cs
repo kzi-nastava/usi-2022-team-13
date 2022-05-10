@@ -109,7 +109,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             {
                 start = DateTime.ParseExact(StartTime, "HH:mm", CultureInfo.InvariantCulture);
                 end = DateTime.ParseExact(EndTime, "HH:mm", CultureInfo.InvariantCulture);
-            }catch(Exception exception)
+            }catch(Exception)
             {
                 MessageBox.Show("Time Format Must be HH:mm !");
                 return false;

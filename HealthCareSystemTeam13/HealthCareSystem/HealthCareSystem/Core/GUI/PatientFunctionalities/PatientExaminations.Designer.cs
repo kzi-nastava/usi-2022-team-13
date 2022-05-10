@@ -38,7 +38,7 @@
             // 
             // dgwExaminations
             // 
-            this.dgwExaminations.BackgroundColor = System.Drawing.Color.Beige;
+            this.dgwExaminations.BackgroundColor = System.Drawing.Color.LightSkyBlue;
             this.dgwExaminations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwExaminations.Location = new System.Drawing.Point(3, 14);
             this.dgwExaminations.Margin = new System.Windows.Forms.Padding(4);
@@ -120,7 +120,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.PowderBlue;
+            this.BackColor = System.Drawing.Color.LightSkyBlue;
             this.ClientSize = new System.Drawing.Size(773, 535);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnCancel);

@@ -184,6 +184,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             // dgwRecommendations
             // 
+            this.dgwRecommendations.BackgroundColor = System.Drawing.Color.LightSkyBlue;
             this.dgwRecommendations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwRecommendations.Location = new System.Drawing.Point(43, 362);
             this.dgwRecommendations.Name = "dgwRecommendations";
@@ -217,7 +218,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Aqua;
+            this.BackColor = System.Drawing.Color.LightSkyBlue;
             this.ClientSize = new System.Drawing.Size(749, 573);
             this.ControlBox = false;
             this.Controls.Add(this.btnAppoint);
@@ -236,6 +237,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.Controls.Add(this.dtLatestDate);
             this.Controls.Add(this.cbDoctors);
             this.Font = new System.Drawing.Font("Lucida Bright", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "PatientRecommendation";

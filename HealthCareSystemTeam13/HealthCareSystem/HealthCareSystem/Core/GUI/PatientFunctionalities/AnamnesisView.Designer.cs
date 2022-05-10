@@ -108,7 +108,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.PaleTurquoise;
+            this.BackColor = System.Drawing.Color.SkyBlue;
             this.ClientSize = new System.Drawing.Size(485, 550);
             this.ControlBox = false;
             this.Controls.Add(this.lbDate);

@@ -42,13 +42,13 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.tbAnamnesis = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.dgwAnamnesis = new System.Windows.Forms.DataGridView();
-            this.btnSearchAnamnesis = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.btnSortByDoctor = new System.Windows.Forms.Button();
-            this.btnSortBySpeciality = new System.Windows.Forms.Button();
-            this.btnShowAnamnesisInSearch = new System.Windows.Forms.Button();
             this.btnSortByDate = new System.Windows.Forms.Button();
+            this.btnShowAnamnesisInSearch = new System.Windows.Forms.Button();
+            this.btnSortBySpeciality = new System.Windows.Forms.Button();
+            this.btnSortByDoctor = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnSearchAnamnesis = new System.Windows.Forms.Button();
+            this.dgwAnamnesis = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dgwExaminations)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -108,6 +108,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             // dgwExaminations
             // 
+            this.dgwExaminations.BackgroundColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.dgwExaminations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwExaminations.Location = new System.Drawing.Point(15, 42);
             this.dgwExaminations.Name = "dgwExaminations";
@@ -116,7 +117,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             // lbDiseases
             // 
-            this.lbDiseases.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.lbDiseases.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.lbDiseases.FormattingEnabled = true;
             this.lbDiseases.ItemHeight = 18;
             this.lbDiseases.Location = new System.Drawing.Point(36, 25);
@@ -188,6 +189,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.groupBox3.Controls.Add(this.dgwAnamnesis);
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.tbAnamnesis);
+            this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBox3.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.Location = new System.Drawing.Point(17, 643);
             this.groupBox3.Name = "groupBox3";
@@ -195,76 +197,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.groupBox3.TabIndex = 18;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Search Anamnesis";
-            // 
-            // dgwAnamnesis
-            // 
-            this.dgwAnamnesis.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgwAnamnesis.Location = new System.Drawing.Point(15, 156);
-            this.dgwAnamnesis.Name = "dgwAnamnesis";
-            this.dgwAnamnesis.Size = new System.Drawing.Size(643, 180);
-            this.dgwAnamnesis.TabIndex = 18;
-            // 
-            // btnSearchAnamnesis
-            // 
-            this.btnSearchAnamnesis.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSearchAnamnesis.FlatAppearance.BorderSize = 3;
-            this.btnSearchAnamnesis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSearchAnamnesis.Location = new System.Drawing.Point(434, 46);
-            this.btnSearchAnamnesis.Name = "btnSearchAnamnesis";
-            this.btnSearchAnamnesis.Size = new System.Drawing.Size(149, 35);
-            this.btnSearchAnamnesis.TabIndex = 10;
-            this.btnSearchAnamnesis.Text = "Search";
-            this.btnSearchAnamnesis.UseVisualStyleBackColor = true;
-            this.btnSearchAnamnesis.Click += new System.EventHandler(this.btnSearchAnamnesis_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(11, 113);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(75, 22);
-            this.label3.TabIndex = 19;
-            this.label3.Text = "Sort By";
-            // 
-            // btnSortByDoctor
-            // 
-            this.btnSortByDoctor.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSortByDoctor.FlatAppearance.BorderSize = 3;
-            this.btnSortByDoctor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSortByDoctor.Location = new System.Drawing.Point(331, 107);
-            this.btnSortByDoctor.Name = "btnSortByDoctor";
-            this.btnSortByDoctor.Size = new System.Drawing.Size(149, 35);
-            this.btnSortByDoctor.TabIndex = 20;
-            this.btnSortByDoctor.Text = "Doctor";
-            this.btnSortByDoctor.UseVisualStyleBackColor = true;
-            this.btnSortByDoctor.Click += new System.EventHandler(this.btnSortByDoctor_Click);
-            // 
-            // btnSortBySpeciality
-            // 
-            this.btnSortBySpeciality.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSortBySpeciality.FlatAppearance.BorderSize = 3;
-            this.btnSortBySpeciality.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSortBySpeciality.Location = new System.Drawing.Point(509, 107);
-            this.btnSortBySpeciality.Name = "btnSortBySpeciality";
-            this.btnSortBySpeciality.Size = new System.Drawing.Size(149, 35);
-            this.btnSortBySpeciality.TabIndex = 21;
-            this.btnSortBySpeciality.Text = "Speciality";
-            this.btnSortBySpeciality.UseVisualStyleBackColor = true;
-            this.btnSortBySpeciality.Click += new System.EventHandler(this.btnSortBySpeciality_Click);
-            // 
-            // btnShowAnamnesisInSearch
-            // 
-            this.btnShowAnamnesisInSearch.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnShowAnamnesisInSearch.FlatAppearance.BorderSize = 3;
-            this.btnShowAnamnesisInSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowAnamnesisInSearch.Location = new System.Drawing.Point(425, 359);
-            this.btnShowAnamnesisInSearch.Name = "btnShowAnamnesisInSearch";
-            this.btnShowAnamnesisInSearch.Size = new System.Drawing.Size(233, 40);
-            this.btnShowAnamnesisInSearch.TabIndex = 10;
-            this.btnShowAnamnesisInSearch.Text = "Show Anamnesis";
-            this.btnShowAnamnesisInSearch.UseVisualStyleBackColor = true;
-            this.btnShowAnamnesisInSearch.Click += new System.EventHandler(this.btnShowAnamnesisInSearch_Click);
             // 
             // btnSortByDate
             // 
@@ -279,12 +211,83 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.btnSortByDate.UseVisualStyleBackColor = true;
             this.btnSortByDate.Click += new System.EventHandler(this.btnSortByDate_Click);
             // 
+            // btnShowAnamnesisInSearch
+            // 
+            this.btnShowAnamnesisInSearch.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnShowAnamnesisInSearch.FlatAppearance.BorderSize = 3;
+            this.btnShowAnamnesisInSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowAnamnesisInSearch.Location = new System.Drawing.Point(425, 359);
+            this.btnShowAnamnesisInSearch.Name = "btnShowAnamnesisInSearch";
+            this.btnShowAnamnesisInSearch.Size = new System.Drawing.Size(233, 40);
+            this.btnShowAnamnesisInSearch.TabIndex = 10;
+            this.btnShowAnamnesisInSearch.Text = "Show Anamnesis";
+            this.btnShowAnamnesisInSearch.UseVisualStyleBackColor = true;
+            this.btnShowAnamnesisInSearch.Click += new System.EventHandler(this.btnShowAnamnesisInSearch_Click);
+            // 
+            // btnSortBySpeciality
+            // 
+            this.btnSortBySpeciality.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSortBySpeciality.FlatAppearance.BorderSize = 3;
+            this.btnSortBySpeciality.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSortBySpeciality.Location = new System.Drawing.Point(509, 107);
+            this.btnSortBySpeciality.Name = "btnSortBySpeciality";
+            this.btnSortBySpeciality.Size = new System.Drawing.Size(149, 35);
+            this.btnSortBySpeciality.TabIndex = 21;
+            this.btnSortBySpeciality.Text = "Speciality";
+            this.btnSortBySpeciality.UseVisualStyleBackColor = true;
+            this.btnSortBySpeciality.Click += new System.EventHandler(this.btnSortBySpeciality_Click);
+            // 
+            // btnSortByDoctor
+            // 
+            this.btnSortByDoctor.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSortByDoctor.FlatAppearance.BorderSize = 3;
+            this.btnSortByDoctor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSortByDoctor.Location = new System.Drawing.Point(331, 107);
+            this.btnSortByDoctor.Name = "btnSortByDoctor";
+            this.btnSortByDoctor.Size = new System.Drawing.Size(149, 35);
+            this.btnSortByDoctor.TabIndex = 20;
+            this.btnSortByDoctor.Text = "Doctor";
+            this.btnSortByDoctor.UseVisualStyleBackColor = true;
+            this.btnSortByDoctor.Click += new System.EventHandler(this.btnSortByDoctor_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Lucida Bright", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(11, 113);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(75, 22);
+            this.label3.TabIndex = 19;
+            this.label3.Text = "Sort By";
+            // 
+            // btnSearchAnamnesis
+            // 
+            this.btnSearchAnamnesis.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSearchAnamnesis.FlatAppearance.BorderSize = 3;
+            this.btnSearchAnamnesis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSearchAnamnesis.Location = new System.Drawing.Point(434, 46);
+            this.btnSearchAnamnesis.Name = "btnSearchAnamnesis";
+            this.btnSearchAnamnesis.Size = new System.Drawing.Size(149, 35);
+            this.btnSearchAnamnesis.TabIndex = 10;
+            this.btnSearchAnamnesis.Text = "Search";
+            this.btnSearchAnamnesis.UseVisualStyleBackColor = true;
+            this.btnSearchAnamnesis.Click += new System.EventHandler(this.btnSearchAnamnesis_Click);
+            // 
+            // dgwAnamnesis
+            // 
+            this.dgwAnamnesis.BackgroundColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.dgwAnamnesis.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgwAnamnesis.Location = new System.Drawing.Point(15, 156);
+            this.dgwAnamnesis.Name = "dgwAnamnesis";
+            this.dgwAnamnesis.Size = new System.Drawing.Size(643, 180);
+            this.dgwAnamnesis.TabIndex = 18;
+            // 
             // MedicalRecordView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.SystemColors.GrayText;
+            this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(765, 571);
             this.ControlBox = false;
             this.Controls.Add(this.groupBox3);

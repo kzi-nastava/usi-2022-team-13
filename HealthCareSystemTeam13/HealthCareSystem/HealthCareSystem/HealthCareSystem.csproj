@@ -114,6 +114,12 @@
     <Compile Include="Core\GUI\PatientFunctionalities\AnamnesisView.Designer.cs">
       <DependentUpon>AnamnesisView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\HomeView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\HomeView.Designer.cs">
+      <DependentUpon>HomeView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\MedicalRecordView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -261,6 +267,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\AnamnesisView.resx">
       <DependentUpon>AnamnesisView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\HomeView.resx">
+      <DependentUpon>HomeView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\MedicalRecordView.resx">
       <DependentUpon>MedicalRecordView.cs</DependentUpon>

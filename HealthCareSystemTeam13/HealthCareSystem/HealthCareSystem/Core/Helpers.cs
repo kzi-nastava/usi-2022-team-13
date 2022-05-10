@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,6 +71,16 @@ namespace HealthCareSystem.Core
                 MessageBox.Show("Please select only 1 row.");
             }
             return false;
+        }
+        public static void ButtonEnter(Button button)
+        {
+            button.BackColor = Color.White;
+            button.ForeColor = Color.Black;
+        }
+        public static void ButtonLeave(Button button)
+        {
+            button.BackColor = Color.Transparent;
+            button.ForeColor = Color.White;
         }
     }
 }
