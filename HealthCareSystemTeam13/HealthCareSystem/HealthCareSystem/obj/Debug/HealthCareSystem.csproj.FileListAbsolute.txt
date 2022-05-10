@@ -149,3 +149,7 @@ C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\Hea
 C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.ExaminationRequests.resources
 C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientCRUDForm.resources
 C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.UnblockPatient.resources
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.PatientRecommendation.resources
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.MedicalRecordView.resources
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.AnamnesisView.resources
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.HomeView.resources

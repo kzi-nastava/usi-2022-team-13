@@ -12,6 +12,7 @@ using HealthCareSystem.Core.Rooms.Model;
 using HealthCareSystem.Core.Scripts.Repository;
 using HealthCareSystem.Core.Users.Patients.Model;
 using System.ComponentModel;
+using HealthCareSystem.Core.Examinations.Repository;
 
 namespace HealthCareSystem.Core.Users.Patients.Repository
 {
@@ -20,6 +21,8 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         public string Username { get; set; }
         public DataTable examinations { get; set; }
         public OleDbConnection Connection { get; set; }
+        private ExaminationRepository ExaminationRep;
+
 
         public PatientRepository(string username = "") { 
             if(username.Length > 0) Username = username;
@@ -37,10 +40,10 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-
+            ExaminationRep = new ExaminationRepository();
         
         }
-        private int GetPatientId()
+        public int GetPatientId()
         {
             string userId = DatabaseHelpers.ExecuteReaderQueries("select id from users where usrnm = '" + Username + "'", Connection)[0];
 
@@ -49,7 +52,49 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             return patientId;
         }
 
-   
+
+        public Dictionary<string, string> GetPatientNameAndMedicalStats(int patientId)
+        {
+            var query = "select Patients.firstName, Patients.lastName, MedicalRecord.height, MedicalRecord.weight from Patients inner join MedicalRecord on Patients.ID = MedicalRecord.id_patient WHERE patients.id = " + patientId + "";
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+            Dictionary<string, string> patientInfo = new Dictionary<string, string>();
+            while (reader.Read())
+            {
+                patientInfo["firstName"] = reader["firstName"].ToString();
+                patientInfo["lastName"] = reader["lastName"].ToString();
+                patientInfo["height"] = reader["height"].ToString();
+                patientInfo["weight"] = reader["weight"].ToString();
+
+            }
+            return patientInfo;
+        }
+
+
+        internal List<DoctorAnamnesis> GetAnamnesises(List<Examination> examinations)
+        {
+            List<DoctorAnamnesis> anamnesises = new List<DoctorAnamnesis>();
+
+            foreach (Examination examination in examinations)
+            {
+                DoctorAnamnesis anamnesis = ExaminationRep.GetDoctorAnamnesis(examination.Id);
+                if (anamnesis != null) anamnesises.Add(anamnesis);
+            }
+
+
+            return anamnesises;
+        }
+
+        
+        public List<DoctorAnamnesis> GetAnamnesisesByKeyword(List<DoctorAnamnesis> anamnesises, string keyword)
+        {
+            List<DoctorAnamnesis> filteredAnamnesises = new List<DoctorAnamnesis>();
+            foreach(DoctorAnamnesis anamnesis in anamnesises)
+            {
+                if (anamnesis.Notice.ToLower().Contains(keyword.ToLower()) || anamnesis.Conclusions.ToLower().Contains(keyword.ToLower())) filteredAnamnesises.Add(anamnesis);
+            }
+            return filteredAnamnesises;
+        }
 
         public int GetPatientIdByFirstName(string firstName)
         {
@@ -64,8 +109,10 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             return patientId;
         }
 
-        public void PullExaminations()
+
+        public void PullExaminationForPatient()
         {
+
             examinations = new DataTable();
     
             string examinationsQuery = "select Examination.id, Doctors.FirstName + ' ' +Doctors.LastName as Doctor, dateOf as [Date and Time], id_room as RoomID, duration, typeOfExamination as Type from Examination left outer join Doctors  on Examination.id_doctor = Doctors.id " +
@@ -73,7 +120,15 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
             FillTable(examinations, examinationsQuery);
 
+        }
+        public void PullPastExaminations()
+        {
+            examinations = new DataTable();
 
+            string examinationsQuery = "select Examination.id, Doctors.FirstName + ' ' +Doctors.LastName as Doctor, Examination.dateOf as [Date and Time], Examination.id_room as RoomID, Examination.duration, typeOfExamination as Type from Examination left outer join Doctors on Examination.id_doctor = Doctors.id " +
+                "where id_patient = " + GetPatientId() + " and Examination.dateOf < #"+DateTime.Now.ToString()+"#";
+
+            FillTable(examinations, examinationsQuery);
         }
 
         public void UpdateContent(string query, int patiendId = 0)
@@ -91,6 +146,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         public void SendExaminationEditRequest(int examinationId, DateTime currentTime, bool isEdit, int doctorId, DateTime newDateTime, int roomId)
         {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
             string query = "insert into PatientEditRequest (id_examination, dateOf, isChanged, isDeleted, id_doctor, dateTimeOfExamination, id_room) VALUES(@id_examination, @dateOf, @isChanged, @isDeleted, @id_doctor, @dateTimeOfExamination, @id_room)";
 
             using (var cmd = new OleDbCommand(query, Connection))
@@ -140,8 +196,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
            
         }
 
-
-
         public void InsertExamination(string patientUsername, int doctorId, DateTime examinationDateTime,
             int duration, int roomId, string selectedType="")
         {
@@ -185,8 +239,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         private int GetPatientId(string patientUsername)
         {
-
-
             string patientIdQuery = "select Patients.id from Patients inner join Users on Patients.user_id = Users.id where Users.usrnm = '" + patientUsername + "'";
             Console.WriteLine(patientIdQuery);
             int patientId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(patientIdQuery, Connection)[0]);
@@ -195,7 +247,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         public Dictionary<string, string> GetExamination(int examinationId)
         {
-            // string query = "select id_doctor, dateOf, id_room from Examination where id = " + examinationId + "";
             int checkState = 0;
             if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 
@@ -231,14 +282,14 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         private void FillTable(DataTable table, string query)
         {
-
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 OleDbDataReader reader = cmd.ExecuteReader();
                 table.Load(reader);
-
-
             }
+            if (Connection.State == ConnectionState.Open) Connection.Close();
+
         }
 
         public Doctor GetSelectedDoctor(string query)
@@ -278,17 +329,16 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         public BindingList<Patient> GetPatients()
         {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+
             BindingList<Patient> patients = new BindingList<Patient>();
             try
             {
-                
-
                 OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from Patients", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    
                     patients.Add(new Patient(
                         Convert.ToInt32(reader["ID"]), reader["firstName"].ToString(),
                         reader["lastName"].ToString(), Convert.ToInt32(reader["user_id"]), 
@@ -300,20 +350,20 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
+            if(Connection.State == ConnectionState.Open) Connection.Close();
 
             return patients;
         }
 
         public string GetUsernameFromEntity(Patient patient)
         {
-            Connection.Open();
-            // string patientIdQuery = "select Patients.id from Patients inner join Users on Patients.user_id = Users.id where Users.usrnm = '" + patientUsername + "'";
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+
             string query = "select Users.usrnm from Users inner join " +
                 "Patients on Patients.user_id = Users.id where Patients.id = " + patient.ID ;
             
             string patientUsername = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
-            Connection.Close();
+            if (Connection.State == ConnectionState.Open) Connection.Close();
             return patientUsername;
         }
 
@@ -349,6 +399,8 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             List<string> userIds = DatabaseHelpers.ExecuteReaderQueries("select id from users where usrnm= '" + patientUsername + "'", Connection);
 
             List<string> blockedPatients = DatabaseHelpers.ExecuteReaderQueries("select isBlocked from Patients where user_id = " + Convert.ToInt32(userIds[0]) + "", Connection);
+
+            if (Connection.State == ConnectionState.Open) Connection.Close();
 
             return blockedPatients[0] == "True";
         }

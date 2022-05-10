@@ -71,8 +71,97 @@ namespace HealthCareSystem.Core.GUI
 
         private void PatientView_Load(object sender, EventArgs e)
         {
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            LoadForm(new HomeView(Username));
+        }
+
+        private void btnAptRecc_Click(object sender, EventArgs e)
+        {
+            if (!PatientRep.IsPatientBlocked(Username)) LoadForm(new PatientRecommendation(Username));
+            else
+            {
+                MessageBox.Show("You are blocked!");
+                SuperForm.Show(); this.Close();
+            }
+        }
+
+        private void btnMedicalRecord_Click(object sender, EventArgs e)
+        {
+            if (!PatientRep.IsPatientBlocked(Username)) LoadForm(new MedicalRecordView(Username));
+            else
+            {
+                MessageBox.Show("You are blocked!");
+                SuperForm.Show(); this.Close();
+            }
+        }
+
+        private void btnHome_Click(object sender, EventArgs e)
+        {
+            if (!PatientRep.IsPatientBlocked(Username)) LoadForm(new HomeView(Username));
+            else
+            {
+                MessageBox.Show("You are blocked!");
+                SuperForm.Show(); this.Close();
+            }
+        }
+        
+
+        private void btnHome_MouseEnter(object sender, EventArgs e)
+        {
+            Helpers.ButtonEnter(btnHome);
+        }
+
+        private void btnHome_MouseLeave(object sender, EventArgs e)
+        {
+            Helpers.ButtonLeave(btnHome);
+        }
+
+        private void btnExaminations_MouseEnter(object sender, EventArgs e)
+        {
+            Helpers.ButtonEnter(btnExaminations);
 
         }
 
+        private void btnExaminations_MouseLeave(object sender, EventArgs e)
+        {
+            Helpers.ButtonLeave(btnExaminations);
+        }
+
+        private void btnAptRecc_MouseEnter(object sender, EventArgs e)
+        {
+            Helpers.ButtonEnter(btnAptRecc);
+        }
+
+        private void btnAptRecc_MouseLeave(object sender, EventArgs e)
+        {
+            Helpers.ButtonLeave(btnAptRecc);
+        }
+
+        private void btnMedicalRecord_MouseEnter(object sender, EventArgs e)
+        {
+            Helpers.ButtonEnter(btnMedicalRecord);
+        }
+
+        private void btnMedicalRecord_MouseLeave(object sender, EventArgs e)
+        {
+            Helpers.ButtonLeave(btnMedicalRecord);
+        }
+
+        private void btnExit_MouseEnter(object sender, EventArgs e)
+        {
+            Helpers.ButtonEnter(btnExit);
+        }
+
+        private void btnExit_MouseLeave(object sender, EventArgs e)
+        {
+            Helpers.ButtonLeave(btnExit);
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            LoadForm(new HomeView(Username));
+        }
     }
 }

@@ -91,9 +91,9 @@ namespace HealthCareSystem.Core.Rooms.Repository
             DatabaseHelpers.ExecuteNonQueries(query, Connection);
         }
 
-        public bool isRoomAvailable(int roomId, DateTime examinationTime, List<Examination> examinations)
+        public bool IsRoomAvailable(int roomId, DateTime examinationTime, List<Examination> examinations)
         {
-            // if patients is adding an examination
+            // if patient is adding an examination
             if (roomId == 0) return false;
 
             for(int i = 0; i < examinations.Count(); i++)
@@ -110,8 +110,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public List<Room> GetRooms()
         {
             List<Room> rooms = new List<Room>();
-            
-                
+
             try
             {
                 if(Connection.State == ConnectionState.Closed) Connection.Open();
@@ -146,7 +145,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public bool DoesRoomHaveFutureExaminations(Room room)
         {
             
-            List<Examination> examinations = GetExaminations(room);
+            List<Examination> examinations = GetExaminationsInRoom(room);
             Console.WriteLine(examinations.Count);
             foreach (Examination examination in examinations)
             {
@@ -159,7 +158,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
             return false;
         }
 
-        public List<Examination> GetExaminations(Room room)
+        public List<Examination> GetExaminationsInRoom(Room room)
         {
             List<Examination> examinations = new List<Examination>();
 
@@ -175,22 +174,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
                 
                 while (reader.Read())
                 {
-                    TypeOfExamination typeOfExamination;
-                    Enum.TryParse<TypeOfExamination>(reader["typeOfExamination"].ToString(), out typeOfExamination);
-                    int id = Convert.ToInt32(reader["id"]);
-                    int doctorId = Convert.ToInt32(reader["id_doctor"]);
-                    int patientId = Convert.ToInt32(reader["id_patient"]);
-                    bool isEdited = Convert.ToBoolean(reader["isEdited"]);
-                    bool isCancelled = Convert.ToBoolean(reader["isCancelled"]);
-                    bool isFinished = Convert.ToBoolean(reader["isFinished"]);
-                    DateTime dateOf = Convert.ToDateTime(reader["dateOf"]);
-                    bool isUrgent = Convert.ToBoolean(reader["isUrgent"]);
-                    int roomId = Convert.ToInt32(reader["id_room"]);
-                    int duration = Convert.ToInt32(reader["duration"]);
-
-
-                    Examination examination = new Examination(doctorId, patientId, isEdited, isCancelled, isFinished, dateOf, typeOfExamination,
-                        isUrgent, roomId, duration);
+                    Examination examination = SetExaminationValues(reader);
 
                     examinations.Add(examination);
                 }
@@ -209,6 +193,26 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         }
 
+        private static Examination SetExaminationValues(OleDbDataReader reader)
+        {
+            TypeOfExamination typeOfExamination;
+            Enum.TryParse<TypeOfExamination>(reader["typeOfExamination"].ToString(), out typeOfExamination);
+            int id = Convert.ToInt32(reader["id"]);
+            int doctorId = Convert.ToInt32(reader["id_doctor"]);
+            int patientId = Convert.ToInt32(reader["id_patient"]);
+            bool isEdited = Convert.ToBoolean(reader["isEdited"]);
+            bool isCancelled = Convert.ToBoolean(reader["isCancelled"]);
+            bool isFinished = Convert.ToBoolean(reader["isFinished"]);
+            DateTime dateOf = Convert.ToDateTime(reader["dateOf"]);
+            bool isUrgent = Convert.ToBoolean(reader["isUrgent"]);
+            int roomId = Convert.ToInt32(reader["id_room"]);
+            int duration = Convert.ToInt32(reader["duration"]);
+
+
+            Examination examination = new Examination(doctorId, patientId, isEdited, isCancelled, isFinished, dateOf, typeOfExamination,
+                isUrgent, roomId, duration);
+            return examination;
+        }
 
         public int GetAvailableRoomId(DateTime examinationDateTime, List<Examination> examinations)
         {
@@ -217,14 +221,32 @@ namespace HealthCareSystem.Core.Rooms.Repository
             List<Room> rooms = GetRooms();
 
             // set all to true at first, then eliminate the rest
-            for(int i = 0; i < rooms.Count(); i++)
+            SetRoomsToAvailable(availableRooms, rooms);
+
+            // elimination
+            EliminateUnavailableRooms(examinationDateTime, examinations, availableRooms, rooms);
+
+            // return first free room id
+            foreach (KeyValuePair<int, bool> room in availableRooms)
             {
-                if(rooms[i].Type == TypeOfRoom.ExaminationRoom)
+                if (room.Value == true) return room.Key;
+            }
+
+            return 0;
+        }
+
+        private static void SetRoomsToAvailable(Dictionary<int, bool> availableRooms, List<Room> rooms)
+        {
+            for (int i = 0; i < rooms.Count(); i++)
+            {
+                if (rooms[i].Type == TypeOfRoom.ExaminationRoom)
                     availableRooms.Add(rooms[i].ID, true);
             }
-            
-            // elimination
-            for(int i = 0; i < examinations.Count(); i++)
+        }
+
+        private static void EliminateUnavailableRooms(DateTime examinationDateTime, List<Examination> examinations, Dictionary<int, bool> availableRooms, List<Room> rooms)
+        {
+            for (int i = 0; i < examinations.Count(); i++)
             {
                 TimeSpan difference = examinationDateTime.Subtract(examinations[i].DateOf);
                 for (int j = 0; j < rooms.Count(); j++)
@@ -234,16 +256,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
                         availableRooms[rooms[i].ID] = false;
                     }
                 }
-
             }
-
-            // return first free room id
-            foreach(KeyValuePair<int, bool> room in availableRooms)
-            {
-                if (room.Value == true) return room.Key;
-            }
-
-            return 0;
         }
     }
 }
