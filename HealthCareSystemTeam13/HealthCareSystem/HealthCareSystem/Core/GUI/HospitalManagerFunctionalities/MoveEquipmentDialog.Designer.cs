@@ -31,45 +31,39 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         {
             this.dtpExecutionDate = new System.Windows.Forms.DateTimePicker();
             this.btnMove = new System.Windows.Forms.Button();
-            this.txbAmount = new System.Windows.Forms.TextBox();
             this.lblOrigin = new System.Windows.Forms.Label();
             this.lblAmount = new System.Windows.Forms.Label();
             this.lblMoving = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.cmbOrigin = new System.Windows.Forms.ComboBox();
             this.cmbDestination = new System.Windows.Forms.ComboBox();
-            this.cmbType = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.lblAmountInRoom = new System.Windows.Forms.Label();
+            this.lblEquipmentName = new System.Windows.Forms.Label();
+            this.lblTrueAmount = new System.Windows.Forms.Label();
+            this.lblRoomId = new System.Windows.Forms.Label();
+            this.nudAmount = new System.Windows.Forms.NumericUpDown();
+            this.lblEquipmentId = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAmount)).BeginInit();
             this.SuspendLayout();
             // 
             // dtpExecutionDate
             // 
-            this.dtpExecutionDate.Location = new System.Drawing.Point(311, 263);
+            this.dtpExecutionDate.Location = new System.Drawing.Point(201, 266);
             this.dtpExecutionDate.Name = "dtpExecutionDate";
-            this.dtpExecutionDate.Size = new System.Drawing.Size(200, 22);
+            this.dtpExecutionDate.Size = new System.Drawing.Size(283, 22);
             this.dtpExecutionDate.TabIndex = 0;
             // 
             // btnMove
             // 
-            this.btnMove.Location = new System.Drawing.Point(348, 327);
+            this.btnMove.Location = new System.Drawing.Point(330, 327);
             this.btnMove.Name = "btnMove";
-            this.btnMove.Size = new System.Drawing.Size(136, 83);
+            this.btnMove.Size = new System.Drawing.Size(154, 53);
             this.btnMove.TabIndex = 2;
             this.btnMove.Text = "MOVE";
             this.btnMove.UseVisualStyleBackColor = true;
             // 
-            // txbAmount
-            // 
-            this.txbAmount.Location = new System.Drawing.Point(311, 201);
-            this.txbAmount.Name = "txbAmount";
-            this.txbAmount.Size = new System.Drawing.Size(200, 22);
-            this.txbAmount.TabIndex = 3;
-            // 
             // lblOrigin
             // 
             this.lblOrigin.AutoSize = true;
-            this.lblOrigin.Location = new System.Drawing.Point(141, 58);
+            this.lblOrigin.Location = new System.Drawing.Point(31, 61);
             this.lblOrigin.Name = "lblOrigin";
             this.lblOrigin.Size = new System.Drawing.Size(82, 17);
             this.lblOrigin.TabIndex = 4;
@@ -78,7 +72,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             // lblAmount
             // 
             this.lblAmount.AutoSize = true;
-            this.lblAmount.Location = new System.Drawing.Point(141, 206);
+            this.lblAmount.Location = new System.Drawing.Point(31, 209);
             this.lblAmount.Name = "lblAmount";
             this.lblAmount.Size = new System.Drawing.Size(142, 17);
             this.lblAmount.TabIndex = 5;
@@ -87,7 +81,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             // lblMoving
             // 
             this.lblMoving.AutoSize = true;
-            this.lblMoving.Location = new System.Drawing.Point(141, 268);
+            this.lblMoving.Location = new System.Drawing.Point(31, 271);
             this.lblMoving.Name = "lblMoving";
             this.lblMoving.Size = new System.Drawing.Size(85, 17);
             this.lblMoving.TabIndex = 6;
@@ -96,74 +90,93 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(141, 106);
+            this.label4.Location = new System.Drawing.Point(31, 109);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(115, 17);
             this.label4.TabIndex = 7;
             this.label4.Text = "Destination room";
             // 
-            // cmbOrigin
-            // 
-            this.cmbOrigin.FormattingEnabled = true;
-            this.cmbOrigin.Location = new System.Drawing.Point(311, 51);
-            this.cmbOrigin.Name = "cmbOrigin";
-            this.cmbOrigin.Size = new System.Drawing.Size(200, 24);
-            this.cmbOrigin.TabIndex = 8;
-            // 
             // cmbDestination
             // 
             this.cmbDestination.FormattingEnabled = true;
-            this.cmbDestination.Location = new System.Drawing.Point(311, 99);
+            this.cmbDestination.Location = new System.Drawing.Point(201, 102);
             this.cmbDestination.Name = "cmbDestination";
-            this.cmbDestination.Size = new System.Drawing.Size(200, 24);
+            this.cmbDestination.Size = new System.Drawing.Size(283, 24);
             this.cmbDestination.TabIndex = 9;
             // 
-            // cmbType
+            // lblEquipmentName
             // 
-            this.cmbType.FormattingEnabled = true;
-            this.cmbType.Location = new System.Drawing.Point(311, 151);
-            this.cmbType.Name = "cmbType";
-            this.cmbType.Size = new System.Drawing.Size(200, 24);
-            this.cmbType.TabIndex = 10;
+            this.lblEquipmentName.AutoSize = true;
+            this.lblEquipmentName.Location = new System.Drawing.Point(31, 161);
+            this.lblEquipmentName.Name = "lblEquipmentName";
+            this.lblEquipmentName.Size = new System.Drawing.Size(114, 17);
+            this.lblEquipmentName.TabIndex = 11;
+            this.lblEquipmentName.Text = "Equipment name";
             // 
-            // label1
+            // lblTrueAmount
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(141, 158);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(114, 17);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "Equipment name";
+            this.lblTrueAmount.AutoSize = true;
+            this.lblTrueAmount.Location = new System.Drawing.Point(500, 161);
+            this.lblTrueAmount.Name = "lblTrueAmount";
+            this.lblTrueAmount.Size = new System.Drawing.Size(210, 17);
+            this.lblTrueAmount.TabIndex = 12;
+            this.lblTrueAmount.Text = "Available amount from this room";
+            this.lblTrueAmount.Visible = false;
             // 
-            // lblAmountInRoom
+            // lblRoomId
             // 
-            this.lblAmountInRoom.AutoSize = true;
-            this.lblAmountInRoom.Location = new System.Drawing.Point(537, 204);
-            this.lblAmountInRoom.Name = "lblAmountInRoom";
-            this.lblAmountInRoom.Size = new System.Drawing.Size(210, 17);
-            this.lblAmountInRoom.TabIndex = 12;
-            this.lblAmountInRoom.Text = "Available amount from this room";
-            this.lblAmountInRoom.Visible = false;
+            this.lblRoomId.AutoSize = true;
+            this.lblRoomId.Location = new System.Drawing.Point(198, 61);
+            this.lblRoomId.Name = "lblRoomId";
+            this.lblRoomId.Size = new System.Drawing.Size(0, 17);
+            this.lblRoomId.TabIndex = 13;
+            // 
+            // nudAmount
+            // 
+            this.nudAmount.Location = new System.Drawing.Point(201, 207);
+            this.nudAmount.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudAmount.Name = "nudAmount";
+            this.nudAmount.Size = new System.Drawing.Size(283, 22);
+            this.nudAmount.TabIndex = 14;
+            this.nudAmount.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblEquipmentId
+            // 
+            this.lblEquipmentId.AutoSize = true;
+            this.lblEquipmentId.Location = new System.Drawing.Point(198, 161);
+            this.lblEquipmentId.Name = "lblEquipmentId";
+            this.lblEquipmentId.Size = new System.Drawing.Size(0, 17);
+            this.lblEquipmentId.TabIndex = 15;
             // 
             // MoveEquipmentDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.lblAmountInRoom);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.cmbType);
+            this.Controls.Add(this.lblEquipmentId);
+            this.Controls.Add(this.nudAmount);
+            this.Controls.Add(this.lblRoomId);
+            this.Controls.Add(this.lblTrueAmount);
+            this.Controls.Add(this.lblEquipmentName);
             this.Controls.Add(this.cmbDestination);
-            this.Controls.Add(this.cmbOrigin);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.lblMoving);
             this.Controls.Add(this.lblAmount);
             this.Controls.Add(this.lblOrigin);
-            this.Controls.Add(this.txbAmount);
             this.Controls.Add(this.btnMove);
             this.Controls.Add(this.dtpExecutionDate);
             this.Name = "MoveEquipmentDialog";
             this.Text = "Move Equipment";
+            this.Load += new System.EventHandler(this.MoveEquipmentDialog_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.nudAmount)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -173,15 +186,15 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         private System.Windows.Forms.DateTimePicker dtpExecutionDate;
         private System.Windows.Forms.Button btnMove;
-        private System.Windows.Forms.TextBox txbAmount;
         private System.Windows.Forms.Label lblOrigin;
         private System.Windows.Forms.Label lblAmount;
         private System.Windows.Forms.Label lblMoving;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox cmbOrigin;
         private System.Windows.Forms.ComboBox cmbDestination;
-        private System.Windows.Forms.ComboBox cmbType;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label lblAmountInRoom;
+        private System.Windows.Forms.Label lblEquipmentName;
+        private System.Windows.Forms.Label lblTrueAmount;
+        private System.Windows.Forms.Label lblRoomId;
+        private System.Windows.Forms.NumericUpDown nudAmount;
+        private System.Windows.Forms.Label lblEquipmentId;
     }
 }

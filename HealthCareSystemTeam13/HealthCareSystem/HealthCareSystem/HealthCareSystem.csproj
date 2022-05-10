@@ -191,9 +191,9 @@
     <Compile Include="Core\Medications\Model\RejectedMedication.cs" />
     <Compile Include="Core\Medications\Receipts\Model\Instruction.cs" />
     <Compile Include="Core\Rooms\DynamicEquipmentRequests\Model\DynamicEquipmentRequest.cs" />
-    <Compile Include="Core\Rooms\Equipment\Model\Equipment.cs" />
-    <Compile Include="Core\Rooms\Equipment\RoomHasEquipment\Model\RoomHasEquipment.cs" />
-    <Compile Include="Core\Rooms\Equipment\TransferHistoryOfEquipment\Model\TransferHistoryOfEquipment.cs" />
+    <Compile Include="Core\Rooms\HospitalEquipment\Model\Equipment.cs" />
+    <Compile Include="Core\Rooms\HospitalEquipment\RoomHasEquipment\Model\RoomHasEquipment.cs" />
+    <Compile Include="Core\Rooms\HospitalEquipment\TransferHistoryOfEquipment\Model\TransferHistoryOfEquipment.cs" />
     <Compile Include="Core\Rooms\Model\Room.cs" />
     <Compile Include="Core\Rooms\Renovations\Model\Renovation.cs" />
     <Compile Include="Core\Rooms\Repository\RoomRepository.cs" />

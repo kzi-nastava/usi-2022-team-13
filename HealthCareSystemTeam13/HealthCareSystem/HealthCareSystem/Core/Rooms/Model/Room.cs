@@ -30,5 +30,10 @@ namespace HealthCareSystem.Core.Rooms.Model
         public Room()
         {
         }
+
+        public override string ToString()
+        {
+            return "Id: " + ID + " Type: " + Type.ToString();
+        }
     }
 }

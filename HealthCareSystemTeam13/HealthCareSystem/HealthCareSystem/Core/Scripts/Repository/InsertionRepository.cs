@@ -11,15 +11,15 @@ using HealthCareSystem.Core.Users.Secretaries.Model;
 using HealthCareSystem.Core.Medications.Model;
 using HealthCareSystem.Core.Users.HospitalManagers;
 using HealthCareSystem.Core.Rooms.Model;
-using HealthCareSystem.Core.Rooms.Equipment.Model;
 using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
 using HealthCareSystem.Core.Ingredients.Model;
 using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Medications.Receipts.Model;
 using HealthCareSystem.Core.Rooms.Renovations.Model;
-using HealthCareSystem.Core.Rooms.Equipment.TransferHistoryOfEquipment.Model;
 using HealthCareSystem.Core.Rooms.DynamicEqipmentRequests.Model;
-using HealthCareSystem.Core.Rooms.Equipment.RoomHasEquipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
@@ -396,8 +396,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<TransferHistoryOfEquipment> transferHistoryOfEquipment = new List<TransferHistoryOfEquipment>();
             List<String> roomIDs = GetRoomIDs();
             List<String> equipmentIDs = GetEquipmentIDs();
-
-            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[0]), Convert.ToInt32(roomIDs[4]), DateTime.Now, true, 5, Convert.ToInt32(equipmentIDs[0]))); 
+                                                          
+            
+            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[0]), Convert.ToInt32(roomIDs[4]), DateTime.Now, true, 5, Convert.ToInt32(equipmentIDs[0])));
             transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[1]), Convert.ToInt32(roomIDs[3]), DateTime.Now, true, 4, Convert.ToInt32(equipmentIDs[1]))); 
 
             return transferHistoryOfEquipment;
@@ -435,7 +436,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> roomIDs = GetRoomIDs();
             List<String> equipmentIDs = GetEquipmentIDs();
             
-            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[0]), Convert.ToInt32(roomIDs[4]), 5)); 
+            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[0]), Convert.ToInt32(roomIDs[4]), 5));
             roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[1]), Convert.ToInt32(roomIDs[3]), 4));
 
             return roomHasEquipment;

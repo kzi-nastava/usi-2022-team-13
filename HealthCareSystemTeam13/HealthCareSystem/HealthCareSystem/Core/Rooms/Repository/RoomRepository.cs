@@ -1,5 +1,6 @@
 ﻿using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Rooms.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using static HealthCareSystem.Core.Rooms.HospitalEquipment.Model.Equipment;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
 
 namespace HealthCareSystem.Core.Rooms.Repository
 {
@@ -129,6 +132,118 @@ namespace HealthCareSystem.Core.Rooms.Repository
                 if(Connection.State == ConnectionState.Closed) Connection.Open();
 
                 OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from rooms", Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    TypeOfRoom typeOfRoom;
+                    Enum.TryParse<TypeOfRoom>(reader["type"].ToString(), out typeOfRoom);
+
+                    rooms.Add(new Room(typeOfRoom, Convert.ToInt32(reader["id"])));
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return rooms;
+        }
+
+        public List<Equipment> GetEquipment(string query)
+        {
+            List<Equipment> equipment = new List<Equipment>();
+
+
+            try
+            {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    EquipmentType typeOfEquipment;
+                    Enum.TryParse<EquipmentType>(reader["type"].ToString(), out typeOfEquipment);
+
+                    equipment.Add(new Equipment(Convert.ToInt32(reader["id"]), reader["nameOf"].ToString(), typeOfEquipment));
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return equipment;
+        }
+
+        public List<RoomHasEquipment> GetEquipmentInRoom(string query)
+        {
+            List<RoomHasEquipment> equipmentInRoom = new List<RoomHasEquipment>();
+
+
+            try
+            {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    equipmentInRoom.Add(new RoomHasEquipment(Convert.ToInt32(reader["id_equipment"]), Convert.ToInt32(reader["id_room"]), Convert.ToInt32(reader["amount"])));
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return equipmentInRoom;
+        }
+
+        public List<TransferHistoryOfEquipment> GetTransferHistory(string query)
+        {
+            List<TransferHistoryOfEquipment> transferHistory = new List<TransferHistoryOfEquipment>();
+
+
+            try
+            {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    transferHistory.Add(new TransferHistoryOfEquipment(Convert.ToInt32(reader["id_original_room"]), Convert.ToInt32(reader["id_new_room"]), Convert.ToDateTime(reader["dateOfChange"]), 
+                        Convert.ToBoolean(reader["isExecuted"]), Convert.ToInt32(reader["amount"]), Convert.ToInt32(reader["id_equipment"])));
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return transferHistory;
+        }
+
+
+        public List<Room> GetRooms(string query)
+        {
+            List<Room> rooms = new List<Room>();
+
+
+            try
+            {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())

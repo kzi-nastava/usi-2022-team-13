@@ -1,4 +1,5 @@
-﻿using HealthCareSystem.Core.Rooms.Repository;
+﻿using HealthCareSystem.Core.Rooms.Model;
+using HealthCareSystem.Core.Rooms.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,7 +50,15 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         private void btnManage_Click(object sender, EventArgs e)
         {
-            MoveEquipmentDialog moveEquipmentView = new MoveEquipmentDialog();
+
+            int roomId = (int)dgwEquipment.SelectedRows[0].Cells[0].Value;
+            TypeOfRoom roomType;
+            Enum.TryParse((string)dgwEquipment.SelectedRows[0].Cells[1].Value, out roomType);
+            int equipmentId = (int)dgwEquipment.SelectedRows[0].Cells[2].Value;
+            string equipmentName = (string)dgwEquipment.SelectedRows[0].Cells[3].Value;
+            int amount = (int)dgwEquipment.SelectedRows[0].Cells[5].Value;
+
+            MoveEquipmentDialog moveEquipmentView = new MoveEquipmentDialog(roomId, roomType, amount, equipmentId, equipmentName);
 
             moveEquipmentView.ShowDialog();
         }

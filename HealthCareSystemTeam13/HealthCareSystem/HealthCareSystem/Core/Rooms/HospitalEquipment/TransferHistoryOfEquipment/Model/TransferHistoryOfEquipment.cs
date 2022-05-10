@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HealthCareSystem.Core.Rooms.Equipment.TransferHistoryOfEquipment.Model
+namespace HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model
 {
     class TransferHistoryOfEquipment
     {
