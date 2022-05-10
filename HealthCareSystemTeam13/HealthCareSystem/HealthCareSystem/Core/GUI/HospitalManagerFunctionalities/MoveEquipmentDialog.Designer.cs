@@ -46,7 +46,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             // 
             // dtpExecutionDate
             // 
-            this.dtpExecutionDate.Location = new System.Drawing.Point(201, 266);
+            this.dtpExecutionDate.Location = new System.Drawing.Point(201, 281);
             this.dtpExecutionDate.Name = "dtpExecutionDate";
             this.dtpExecutionDate.Size = new System.Drawing.Size(283, 22);
             this.dtpExecutionDate.TabIndex = 0;
@@ -59,6 +59,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             this.btnMove.TabIndex = 2;
             this.btnMove.Text = "MOVE";
             this.btnMove.UseVisualStyleBackColor = true;
+            this.btnMove.Click += new System.EventHandler(this.btnMove_Click);
             // 
             // lblOrigin
             // 
@@ -81,7 +82,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             // lblMoving
             // 
             this.lblMoving.AutoSize = true;
-            this.lblMoving.Location = new System.Drawing.Point(31, 271);
+            this.lblMoving.Location = new System.Drawing.Point(31, 281);
             this.lblMoving.Name = "lblMoving";
             this.lblMoving.Size = new System.Drawing.Size(85, 17);
             this.lblMoving.TabIndex = 6;
@@ -116,7 +117,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             // lblTrueAmount
             // 
             this.lblTrueAmount.AutoSize = true;
-            this.lblTrueAmount.Location = new System.Drawing.Point(500, 161);
+            this.lblTrueAmount.Location = new System.Drawing.Point(198, 232);
             this.lblTrueAmount.Name = "lblTrueAmount";
             this.lblTrueAmount.Size = new System.Drawing.Size(210, 17);
             this.lblTrueAmount.TabIndex = 12;

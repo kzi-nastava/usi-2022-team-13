@@ -20,9 +20,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
     {
         public OleDbConnection Connection { get; set; }
         public DataTable Rooms { get; set; }
-
         public DataTable Equipment { get; set; }
-
+ 
         public RoomRepository()
         {
             try
@@ -42,6 +41,9 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         }
 
+       
+
+
         public void PullEquipment()
         {
             Equipment = new DataTable();
@@ -60,11 +62,14 @@ namespace HealthCareSystem.Core.Rooms.Repository
         }
         private void FillTable(DataTable table, string query)
         {
+
             using (var cmd = new OleDbCommand(query, Connection))
             {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
                 OleDbDataReader reader = cmd.ExecuteReader();
                 table.Load(reader);
             }
+            Connection.Close();
         }
 
         public void RemoveRoom(int roomId)
@@ -83,6 +88,26 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
             }
         }
+
+        public void InsertTransferHistoryOfEquipment(TransferHistoryOfEquipment transferHistoryOfEquipment)
+        {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            var query = "INSERT INTO EquipmentTransferHistory(id_original_room, id_new_room, dateOfChange, isExecuted, amount, id_equipment) " +
+                "VALUES(@first_room_id, @second_room_id, @transferDate, @isExecuted, @amount, @id_equipment)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@first_room_id", transferHistoryOfEquipment.FirstRoomId);
+                cmd.Parameters.AddWithValue("@second_room_id", transferHistoryOfEquipment.SecondRoomId);
+                cmd.Parameters.AddWithValue("@transferDate", transferHistoryOfEquipment.TransferDate.ToString());
+                cmd.Parameters.AddWithValue("@isExecuted", transferHistoryOfEquipment.IsExecuted);
+                cmd.Parameters.AddWithValue("@amount", transferHistoryOfEquipment.Amount);
+                cmd.Parameters.AddWithValue("@id_equpment", transferHistoryOfEquipment.EquipmentId);
+                cmd.ExecuteNonQuery();
+            }
+
+            Connection.Close();
+        }
+
 
         public Room GetSelectedRoom(string query)
         {
@@ -103,6 +128,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         public void UpdateContent(string query)
         {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
             DatabaseHelpers.ExecuteNonQueries(query, Connection);
         }
 

@@ -3,6 +3,7 @@ using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
 using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
 using HealthCareSystem.Core.Rooms.Model;
 using HealthCareSystem.Core.Rooms.Repository;
+using HealthCareSystem.Core.Scripts.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,19 +18,24 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 {
     public partial class MoveEquipmentDialog : Form
     {
-        public int RoomId { get; set; }
+        public int OriginRoomId { get; set; }
+        public int DestinationRoomId { get; set; }
         public TypeOfRoom RoomType { get; set; }
         public int Amount { get; set; }
+
+        public int TrueAmount { get; set; }
         public int EquipmentId { get; set; }
         public string EquipmentName { get; set; }
-        
+
+        public DateTime TransferDate { get; set; }
+
         private RoomRepository RoomRepository;
 
         public MoveEquipmentDialog(int roomId, TypeOfRoom roomType, int amount, int equipmentId, string equipmentName)
         {
             this.Amount = amount;
             this.RoomType = roomType;
-            this.RoomId = roomId;
+            this.OriginRoomId = roomId;
             this.EquipmentId = equipmentId;
             this.EquipmentName = equipmentName;
             
@@ -43,22 +49,33 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void LoadEditData()
         {
 
-            lblRoomId.Text = "Selected room id: " + RoomId + "\nSelected room type: " + RoomType.ToString();
+            lblRoomId.Text = "Selected room id: " + OriginRoomId + "\nSelected room type: " + RoomType.ToString();
             lblEquipmentId.Text = "Selected equipment id: " + EquipmentId + "\nSelected equipment name: " + EquipmentName;
 
             //From full amount of equipment we subtract amount of those transfers from that room that haven't been realised yet
-            string query = "select * from EquipmentTransferHistory where id_original_room = " + RoomId + " and id_equipment = " + EquipmentId;
+            string query = "select * from EquipmentTransferHistory where id_original_room = " + OriginRoomId + " and id_equipment = " + EquipmentId + " and isExecuted = false";
             List<TransferHistoryOfEquipment> transferHistory = RoomRepository.GetTransferHistory(query);
-            int trueAmount = Amount - transferHistory.Count;
-            lblTrueAmount.Text = trueAmount.ToString();
-            
-            nudAmount.Maximum = Amount;
+   
+            TrueAmount = GetTrueAmount(transferHistory);
+
+            lblTrueAmount.Text = "Max amount for selection is: " + TrueAmount + " (Due to future transfers)";
+            nudAmount.Maximum = TrueAmount;
+            if (TrueAmount < Amount)
+            {
+                lblTrueAmount.Visible = true;
+            }
+        }
+        private int GetTrueAmount(List<TransferHistoryOfEquipment> transferHistory)
+        {
+            int sum = 0;
+            foreach (TransferHistoryOfEquipment singleTransfer in transferHistory) sum += singleTransfer.Amount;
+            return Amount - sum;
         }
 
         private void FillDestinationComboBox()
         {
             //query selects every room that is not the origin of equipment
-            string query = "select * from Rooms where ID <> " + RoomId;
+            string query = "select * from Rooms where ID <> " + OriginRoomId;
             List<Room> rooms = RoomRepository.GetRooms(query);
 
             cmbDestination.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -66,9 +83,49 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             cmbDestination.SelectedIndex = -1;
         }
 
+        private bool IsFormValid()
+        {
+            DateTime transferDate = dtpExecutionDate.Value;
+            if(transferDate <= DateTime.Now)
+            {
+                MessageBox.Show("You cannot make a transfer with a past date");
+                return false;
+
+            }else if(cmbDestination.SelectedIndex == -1){
+
+                MessageBox.Show("You must select destination room");
+                return false;
+
+            }else if(TrueAmount == 0){
+                MessageBox.Show("You cannot put 0 for the amount");
+                return false;
+            }
+            Room destinationRoom = (Room)cmbDestination.SelectedItem;
+            DestinationRoomId = destinationRoom.ID;
+            this.TransferDate = transferDate;
+            return true;
+        }
+
+
+
+
+
         private void MoveEquipmentDialog_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnMove_Click(object sender, EventArgs e)
+        {
+            if (IsFormValid())
+            {
+                int amountForTransfer = (int)nudAmount.Value;
+                TransferHistoryOfEquipment newTransfer = new TransferHistoryOfEquipment(OriginRoomId, DestinationRoomId,TransferDate, false, amountForTransfer, EquipmentId);
+                RoomRepository.InsertTransferHistoryOfEquipment(newTransfer);
+                MessageBox.Show("Succesfully added new tranfer for date: " + TransferDate.ToString());
+                this.Hide();
+            }
+     
         }
     }
 }
