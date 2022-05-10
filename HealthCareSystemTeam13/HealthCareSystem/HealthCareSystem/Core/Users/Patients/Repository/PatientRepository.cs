@@ -112,6 +112,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         public void PullExaminationForPatient()
         {
+
             examinations = new DataTable();
     
             string examinationsQuery = "select Examination.id, Doctors.FirstName + ' ' +Doctors.LastName as Doctor, dateOf as [Date and Time], id_room as RoomID, duration, typeOfExamination as Type from Examination left outer join Doctors  on Examination.id_doctor = Doctors.id " +
@@ -145,6 +146,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         public void SendExaminationEditRequest(int examinationId, DateTime currentTime, bool isEdit, int doctorId, DateTime newDateTime, int roomId)
         {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
             string query = "insert into PatientEditRequest (id_examination, dateOf, isChanged, isDeleted, id_doctor, dateTimeOfExamination, id_room) VALUES(@id_examination, @dateOf, @isChanged, @isDeleted, @id_doctor, @dateTimeOfExamination, @id_room)";
 
             using (var cmd = new OleDbCommand(query, Connection))
@@ -280,12 +282,14 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         private void FillTable(DataTable table, string query)
         {
-
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 OleDbDataReader reader = cmd.ExecuteReader();
                 table.Load(reader);
             }
+            if (Connection.State == ConnectionState.Open) Connection.Close();
+
         }
 
         public Doctor GetSelectedDoctor(string query)

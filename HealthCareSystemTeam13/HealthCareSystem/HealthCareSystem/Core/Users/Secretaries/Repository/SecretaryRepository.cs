@@ -172,7 +172,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
 
         public void DeleteSinglePatientRequest(string requestID)
         {
-            var query = "DELETE from PatientEditRequest WHERE ID = " + requestID + "";
+            var query = "DELETE from PatientEditRequest WHERE ID = " + Convert.ToInt32(requestID) + "";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.ExecuteNonQuery();

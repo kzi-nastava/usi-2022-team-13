@@ -14,6 +14,7 @@ namespace HealthCareSystem.Core
        
         public static void ExecuteNonQueries(string query, OleDbConnection connection)
         {
+            if (connection.State == System.Data.ConnectionState.Closed) connection.Open();
             using (var cmd = new OleDbCommand(query, connection))
             {
                 cmd.ExecuteNonQuery();
@@ -22,6 +23,7 @@ namespace HealthCareSystem.Core
         }
         public static List<string> ExecuteReaderQueries(string query, OleDbConnection connection)
         {
+            if (connection.State == System.Data.ConnectionState.Closed) connection.Open();
             Console.WriteLine(query);
 
             List<string> data = new List<string>();
