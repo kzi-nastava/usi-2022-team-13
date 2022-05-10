@@ -98,13 +98,22 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
  
             var startMatch = System.Text.RegularExpressions.Regex.Match(StartTime, regex);
             var endMatch = System.Text.RegularExpressions.Regex.Match(EndTime, regex);
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now;
             if (!startMatch.Success || !endMatch.Success)
             {
                 MessageBox.Show("Invalid time format. Please enter like: HH:MM ");
                 return false;
             }
-            DateTime start = DateTime.ParseExact(StartTime, "HH:mm", CultureInfo.InvariantCulture);
-            DateTime end = DateTime.ParseExact(EndTime, "HH:mm", CultureInfo.InvariantCulture);
+            try
+            {
+                start = DateTime.ParseExact(StartTime, "HH:mm", CultureInfo.InvariantCulture);
+                end = DateTime.ParseExact(EndTime, "HH:mm", CultureInfo.InvariantCulture);
+            }catch(Exception exception)
+            {
+                MessageBox.Show("Time Format Must be HH:mm !");
+                return false;
+            }
             if(start.CompareTo(end) > 0)
             {
                 MessageBox.Show("Start time is after end time. Please change it.");
