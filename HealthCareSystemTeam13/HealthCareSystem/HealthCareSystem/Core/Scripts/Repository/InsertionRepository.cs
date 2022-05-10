@@ -122,8 +122,13 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
 
             diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[0]), "Dementia"));
+            diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[0]), "Alzheimer"));
             diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[1]), "Alzheimer"));
+            diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[1]), "Diabetes"));
             diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[2]), "Diabetes"));
+            diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[2]), "Alzheimer"));
+
+
 
             return diseaseHistory;
         }
@@ -934,6 +939,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             examinations.Add(new Examination(Convert.ToInt32(doctorIDs[0]), Convert.ToInt32(patientIDs[0]), false, false, false, DateTime.Now.AddDays(2),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
             examinations.Add(new Examination(Convert.ToInt32(doctorIDs[1]), Convert.ToInt32(patientIDs[1]), false, false, false, DateTime.Now.AddDays(2),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[5]), 15));
             examinations.Add(new Examination(Convert.ToInt32(doctorIDs[2]), Convert.ToInt32(patientIDs[2]), false, false, false, DateTime.Now.AddDays(3),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIDs[0]), Convert.ToInt32(patientIDs[2]), false, false, false, new DateTime(2022, 4, 28, 10, 10, 10), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIDs[1]), Convert.ToInt32(patientIDs[2]), false, false, false, new DateTime(2022, 4, 24, 10, 10, 10), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
 
             return examinations;
         }
@@ -980,6 +987,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> examinationIDs = GetExaminationIDs();
 
             anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[0]), "Runny nose and coughs alot.", "Patient should drink antibiotics.", new DateTime(2022, 4, 26)));
+            anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[4]), "Patient showed signs of Corona Virus: Headeches, High Temperature, Cough and Sleep Depravation", "Patient should go and take his blood and come back with results.", new DateTime(2022, 4, 28)));
+            anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[5]), "Patient is Fatigueing very quickly when training", "Rest for a few days and come back for a check up", new DateTime(2022, 4, 24)));
 
             return anamnesises;
         }

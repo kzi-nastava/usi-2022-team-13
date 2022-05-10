@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Core\Authentication\LoginAuthentication.cs" />
     <Compile Include="Core\DatabaseHelpers.cs" />
+    <Compile Include="Core\Examinations\Controller\ExaminationController.cs" />
     <Compile Include="Core\Examinations\Model\Anamnesis.cs" />
     <Compile Include="Core\Examinations\Model\DoctorAnamnesis.cs" />
     <Compile Include="Core\Examinations\Model\Examination.cs" />

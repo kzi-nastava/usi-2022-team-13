@@ -1,4 +1,5 @@
-﻿using HealthCareSystem.Core.Examinations.Model;
+﻿using HealthCareSystem.Core.Examinations.Controller;
+using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Examinations.Repository;
 using HealthCareSystem.Core.Users.Patients.Repository;
 using System;
@@ -106,19 +107,25 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnSortByDoctor_Click(object sender, EventArgs e)
         {
-            // sort by doctor names and set new datasource to sorted list
+            anamnesises = ExaminationController.SortAnamnesises(anamnesises, 1);
+            dgwAnamnesis.DataSource = anamnesises;
+            dgwAnamnesis.Refresh();
 
         }
 
         private void btnSortBySpeciality_Click(object sender, EventArgs e)
         {
-            // sort by speciality and set new datasource to sorted list
-
+            anamnesises = ExaminationController.SortAnamnesises(anamnesises, 2);
+            dgwAnamnesis.DataSource = anamnesises;
+            dgwAnamnesis.Refresh();
         }
 
         private void btnSortByDate_Click(object sender, EventArgs e)
         {
-            // sort by date and set new datasource to sorted list
+            anamnesises = ExaminationController.SortAnamnesises(anamnesises);
+            dgwAnamnesis.DataSource = anamnesises;
+            dgwAnamnesis.Refresh();
+
 
         }
     }

@@ -25,5 +25,7 @@ namespace HealthCareSystem.Core.Examinations.Model
             DoctorName = doctorName;
             DoctorSpeciality = doctorSpeciality;
         }
+
+     
     }
 }

@@ -71,6 +71,9 @@ namespace HealthCareSystem.Core.GUI
 
         private void PatientView_Load(object sender, EventArgs e)
         {
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
         }
 
         private void btnAptRecc_Click(object sender, EventArgs e)
