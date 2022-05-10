@@ -181,7 +181,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 return false;
 
             }
-            else if (!RoomRep.isRoomAvailable(Convert.ToInt32(tbRoomId.Text), mergedExaminationTime, otherExaminations))
+            else if (!RoomRep.IsRoomAvailable(Convert.ToInt32(tbRoomId.Text), mergedExaminationTime, otherExaminations))
             {
 
                 int availableRoomId = RoomRep.GetAvailableRoomId(mergedExaminationTime, otherExaminations);

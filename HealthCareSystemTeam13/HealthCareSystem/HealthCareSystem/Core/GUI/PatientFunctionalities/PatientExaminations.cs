@@ -21,7 +21,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         {
             Username = username;
             patientRepository = new PatientRepository(Username);
-            patientRepository.PullExaminations();
+            patientRepository.PullExaminationForPatient();
             InitializeComponent();
             FillDataGridView();
 
@@ -155,7 +155,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         public void RefreshDataGridView()
         {
-            patientRepository.PullExaminations();
+            patientRepository.PullExaminationForPatient();
             dgwExaminations.DataSource = patientRepository.examinations;
             dgwExaminations.Refresh();
         }

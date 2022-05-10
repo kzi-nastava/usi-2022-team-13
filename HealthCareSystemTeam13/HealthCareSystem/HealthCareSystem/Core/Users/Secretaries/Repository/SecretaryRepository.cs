@@ -194,11 +194,9 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         {
             var query = "select Patients.firstName, Patients.lastName, Users.usrnm, Users.pass from Patients INNER JOIN Users ON users.id = patients.user_id WHERE patients.id = " + patientID + "";
             Dictionary<string, string> row = new Dictionary<string, string>();
-            OleDbCommand cmd = new OleDbCommand();
-            cmd.Connection = Connection;
-            cmd.CommandType = System.Data.CommandType.Text;
-            cmd.CommandText = query;
 
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+ 
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -214,7 +212,6 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         {
             var query = "SELECT user_id FROM Patients WHERE id = " + patientID + "";
             string userID = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
-
 
             query = "UPDATE Users SET usrnm = @usrnm, pass = @pass WHERE ID = @userID";
             using (var cmd = new OleDbCommand(query, Connection))

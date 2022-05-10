@@ -110,7 +110,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         }
 
 
-        public void PullExaminations()
+        public void PullExaminationForPatient()
         {
             examinations = new DataTable();
     
@@ -194,8 +194,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
            
         }
 
-
-
         public void InsertExamination(string patientUsername, int doctorId, DateTime examinationDateTime,
             int duration, int roomId, string selectedType="")
         {
@@ -239,8 +237,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         private int GetPatientId(string patientUsername)
         {
-
-
             string patientIdQuery = "select Patients.id from Patients inner join Users on Patients.user_id = Users.id where Users.usrnm = '" + patientUsername + "'";
             Console.WriteLine(patientIdQuery);
             int patientId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(patientIdQuery, Connection)[0]);
@@ -289,8 +285,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             {
                 OleDbDataReader reader = cmd.ExecuteReader();
                 table.Load(reader);
-
-
             }
         }
 
@@ -331,17 +325,16 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         public BindingList<Patient> GetPatients()
         {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+
             BindingList<Patient> patients = new BindingList<Patient>();
             try
             {
-                
-
                 OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from Patients", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    
                     patients.Add(new Patient(
                         Convert.ToInt32(reader["ID"]), reader["firstName"].ToString(),
                         reader["lastName"].ToString(), Convert.ToInt32(reader["user_id"]), 
@@ -353,20 +346,20 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
+            if(Connection.State == ConnectionState.Open) Connection.Close();
 
             return patients;
         }
 
         public string GetUsernameFromEntity(Patient patient)
         {
-            Connection.Open();
-            // string patientIdQuery = "select Patients.id from Patients inner join Users on Patients.user_id = Users.id where Users.usrnm = '" + patientUsername + "'";
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+
             string query = "select Users.usrnm from Users inner join " +
                 "Patients on Patients.user_id = Users.id where Patients.id = " + patient.ID ;
             
             string patientUsername = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
-            Connection.Close();
+            if (Connection.State == ConnectionState.Open) Connection.Close();
             return patientUsername;
         }
 
@@ -402,6 +395,8 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             List<string> userIds = DatabaseHelpers.ExecuteReaderQueries("select id from users where usrnm= '" + patientUsername + "'", Connection);
 
             List<string> blockedPatients = DatabaseHelpers.ExecuteReaderQueries("select isBlocked from Patients where user_id = " + Convert.ToInt32(userIds[0]) + "", Connection);
+
+            if (Connection.State == ConnectionState.Open) Connection.Close();
 
             return blockedPatients[0] == "True";
         }

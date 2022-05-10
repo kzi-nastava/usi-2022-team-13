@@ -159,14 +159,18 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                patient = 
-                new Patient(
-                Convert.ToInt32(reader["Patients.ID"]),
-                reader["firstName"].ToString(), reader["lastName"].ToString(),
-                Convert.ToInt32(reader["user_id"]), false
-                );
+                patient = SetPatientValues(reader);
             }
             return patient;
+        }
+
+        private static Patient SetPatientValues(OleDbDataReader reader)
+        {
+            return new Patient(
+            Convert.ToInt32(reader["Patients.ID"]),
+            reader["firstName"].ToString(), reader["lastName"].ToString(),
+            Convert.ToInt32(reader["user_id"]), false
+            );
         }
 
         public void CancelExamination(int examinationId)

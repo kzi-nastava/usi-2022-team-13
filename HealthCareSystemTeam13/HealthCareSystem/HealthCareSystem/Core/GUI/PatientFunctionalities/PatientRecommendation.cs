@@ -73,8 +73,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private bool CheckSelectedValues()
         {
             var regex = @"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$";
-            DateTime startDateTime = GetMergedDateTime(DateTime.Now, StartTime);
-            DateTime endDateTime = GetMergedDateTime(ExaminationFinalDate, EndTime);
+            DateTime startDateTime = Helpers.GetMergedDateTime(DateTime.Now, StartTime);
+            DateTime endDateTime = Helpers.GetMergedDateTime(ExaminationFinalDate, EndTime);
 
             if (!IsTimeValid(regex)) return false;
             else if (!IsDateValid()) return false;
@@ -134,13 +134,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void PatientRecommendation_Load(object sender, EventArgs e)
         {
 
-        }
-
-        private static DateTime GetMergedDateTime(DateTime examinationDate, string examinationTime)
-        {
-            string[] examinationHourMinute = examinationTime.Split(':');
-            DateTime examinationDateTime = new DateTime(examinationDate.Year, examinationDate.Month, examinationDate.Day, Convert.ToInt32(examinationHourMinute[0]), Convert.ToInt32(examinationHourMinute[1]), 0);
-            return examinationDateTime;
         }
 
         private void rbDoctor_CheckedChanged(object sender, EventArgs e)

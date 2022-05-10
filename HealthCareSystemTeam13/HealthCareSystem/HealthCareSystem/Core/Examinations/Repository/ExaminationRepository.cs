@@ -101,19 +101,24 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
             while (reader.Read())
             {
-
-                anamnesis = new DoctorAnamnesis(Convert.ToInt32(
-                                            reader["ExaminationId"]),
-                                            reader["Notice"].ToString(),
-                                            reader["Conclusions"].ToString(),
-                                            (DateTime)reader["DateOfExamination"],
-                                            reader["Doctor"].ToString(),
-                                            reader["Speciality"].ToString()
-                                            ) ;
+                anamnesis = SetDoctorAnamnesisValues(reader);
             }
 
             return anamnesis;
         }
+
+        private static DoctorAnamnesis SetDoctorAnamnesisValues(OleDbDataReader reader)
+        {
+            return new DoctorAnamnesis(Convert.ToInt32(
+                                                        reader["ExaminationId"]),
+                                                        reader["Notice"].ToString(),
+                                                        reader["Conclusions"].ToString(),
+                                                        (DateTime)reader["DateOfExamination"],
+                                                        reader["Doctor"].ToString(),
+                                                        reader["Speciality"].ToString()
+                                                        );
+        }
+
         public Anamnesis GetAnamnesis(int examinationId)
         {
             if (Connection.State == System.Data.ConnectionState.Closed) Connection.Open();
@@ -125,15 +130,19 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
             while (reader.Read())
             {
-                anamnesis = new Anamnesis(Convert.ToInt32(reader["id_examination"]),
-                                            reader["notice"].ToString(),
-                                            reader["conclusions"].ToString(),
-                                            (DateTime)reader["dateOf"]);
+                anamnesis = SetAnamnesisValues(reader);
             }
 
             return anamnesis;
         }
 
+        private static Anamnesis SetAnamnesisValues(OleDbDataReader reader)
+        {
+            return new Anamnesis(Convert.ToInt32(reader["id_examination"]),
+                                                        reader["notice"].ToString(),
+                                                        reader["conclusions"].ToString(),
+                                                        (DateTime)reader["dateOf"]);
+        }
 
 
         public List<Examination> GetRecommendedExaminations(Doctor selectedDoctor, string startTime, string endTime, DateTime examinationFinalDate, bool isDoctorPriority)
@@ -152,7 +161,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
                 if(examinations.Count() == 0)
                 {
-                    // find top 3 that fit
+                    examinations = GetFreeExaminations(selectedDoctor.ID, examinationFinalDate, startTime, endTime, isDoctorPriority, false, takenExaminations, true);
 
                 }
             }
@@ -175,17 +184,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
             int totalFoundExaminations = 0;
             int roomId;
 
-            if (isPriorityUsed && isDoctorPriority)
-            {
-                startDate = startDate.AddHours(-4);
-                endDate = endDate.AddDays(2).AddHours(4);
-            } else if (isTopThree)
-            {
-                endDate = endDate.AddDays(2);
-                startHour = startDate.AddHours(-2).Hour;
-                endHour = endDate.AddHours(2).Hour;
-
-            }
+            SetTimeDateValuesBasedOnPriorities(isDoctorPriority, isPriorityUsed, isTopThree, ref startDate, ref endDate, ref startHour, ref endHour);
 
             while (startDate.CompareTo(endDate) <= 0)
             {
@@ -193,33 +192,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 roomId = RoomRep.GetAvailableRoomId(startDate, takenExaminations);
                 if (roomId != 0)
                 {
-                    if (!isPriorityUsed || (isPriorityUsed && isDoctorPriority))
-                    {
-                        foreach (Examination takenExam in takenExaminations)
-                        {
-
-                            if (!IsValidTimeDoctor(startDate, takenExam, doctorId))
-                            {
-                                isExaminationFound = false;
-                                continue;
-                            }
-                            else totalFoundExaminations++;
-
-                        }
-                    }
-                    else if ((isPriorityUsed && !isDoctorPriority) || isTopThree)
-                    {
-                        Doctor availableDoctor = DoctorRep.GetAvailableDoctor(startDate, examinations);
-                        if (availableDoctor != null)
-                        {
-                            doctorId = availableDoctor.ID;
-                            roomId = RoomRep.GetAvailableRoomId(startDate, takenExaminations);
-                            if (roomId > 0) { totalFoundExaminations++; }
-
-                        }
-                        else { isExaminationFound = false; }
-
-                    }
+                    CountValidExaminations(ref doctorId, isDoctorPriority, isPriorityUsed, takenExaminations, isTopThree, examinations, startDate, ref totalFoundExaminations, ref roomId, ref isExaminationFound);
 
                     if (isExaminationFound)
                     {
@@ -231,9 +204,52 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 startDate = GetNewStartDate(startDate, startHour, startMinute, endHour, endMinute);
             }
             if (isTopThree) return examinations.GetRange(0, 3);
-  
+
             return examinations;
 
+        }
+
+        private void CountValidExaminations(ref int doctorId, bool isDoctorPriority, bool isPriorityUsed, List<Examination> takenExaminations, bool isTopThree, List<Examination> examinations, DateTime startDate, ref int totalFoundExaminations, ref int roomId, ref bool isExaminationFound)
+        {
+            if (!isPriorityUsed || (isPriorityUsed && isDoctorPriority))
+            {
+                foreach (Examination takenExam in takenExaminations)
+                {
+                    if (!IsValidTimeAndDoctor(startDate, takenExam, doctorId))
+                    {
+                        isExaminationFound = false;
+                        continue;
+                    }
+                    else totalFoundExaminations++;
+                }
+            }
+            else if ((isPriorityUsed && !isDoctorPriority) || isTopThree)
+            {
+                Doctor availableDoctor = DoctorRep.GetAvailableDoctor(startDate, examinations);
+                if (availableDoctor != null)
+                {
+                    doctorId = availableDoctor.ID;
+                    roomId = RoomRep.GetAvailableRoomId(startDate, takenExaminations);
+                    if (roomId > 0) { totalFoundExaminations++; }
+                }
+                else { isExaminationFound = false; }
+
+            }
+        }
+
+        private static void SetTimeDateValuesBasedOnPriorities(bool isDoctorPriority, bool isPriorityUsed, bool isTopThree, ref DateTime startDate, ref DateTime endDate, ref int startHour, ref int endHour)
+        {
+            if (isPriorityUsed && isDoctorPriority)
+            {
+                startDate = startDate.AddHours(-4);
+                endDate = endDate.AddDays(2).AddHours(4);
+            }
+            else if (isTopThree)
+            {
+                endDate = endDate.AddDays(2);
+                startHour = startDate.AddHours(-2).Hour;
+                endHour = endDate.AddHours(2).Hour;
+            }
         }
 
         private static DateTime GetNewStartDate(DateTime startDate, int startHour, int startMinute, int endHour, int endMinute)
@@ -256,7 +272,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
             if (Math.Abs(difference.TotalMinutes) < 15) return false;
             return true;
         }
-        private bool IsValidTimeDoctor(DateTime startDate, Examination takenExamination, int doctorId)
+        private bool IsValidTimeAndDoctor(DateTime startDate, Examination takenExamination, int doctorId)
         {
 
             return !(!IsValidTime(startDate, takenExamination) && IsDoctorEqual(doctorId, takenExamination));
@@ -265,36 +281,44 @@ namespace HealthCareSystem.Core.Examinations.Repository
         private List<Examination> GetTakenExaminations(int doctorId, string startTime, string endTime, DateTime examinationFinalDate)
         {
             List<Examination> examinations = new List<Examination>();
-            Connection.Open();
+            if(Connection.State == System.Data.ConnectionState.Closed) Connection.Open();
 
             DateTime start = Helpers.GetMergedDateTime(DateTime.Now, startTime);
             DateTime end = Helpers.GetMergedDateTime(examinationFinalDate, endTime);
 
             string query = "select * from examination where id_doctor = " + doctorId + " and dateOf between #" + start.ToString() + "# and #" + end.ToString() + "#";
+
             OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
             OleDbDataReader reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
-                TypeOfExamination typeOfExamination;
-                Enum.TryParse<TypeOfExamination>(reader["typeOfExamination"].ToString(), out typeOfExamination);
-
-                examinations.Add(new Examination(
-                    Convert.ToInt32(reader["id_doctor"]),
-                    Convert.ToInt32(reader["id_patient"]),
-                    false,
-                    false,
-                    false,
-                    (DateTime)reader["dateOf"],
-                    typeOfExamination,
-                    false,
-                    Convert.ToInt32(reader["id_room"]),
-                    Convert.ToInt32(reader["duration"])
-                    ));
+                Examination examination = SetExaminationValues(reader);
+                examinations.Add(examination);
             }
-            Connection.Close();
+            if(Connection.State == System.Data.ConnectionState.Open) Connection.Close();
 
             return examinations;
+        }
+
+        private static Examination SetExaminationValues(OleDbDataReader reader)
+        {
+            TypeOfExamination typeOfExamination;
+            Enum.TryParse<TypeOfExamination>(reader["typeOfExamination"].ToString(), out typeOfExamination);
+
+            Examination examination = new Examination(
+                Convert.ToInt32(reader["id_doctor"]),
+                Convert.ToInt32(reader["id_patient"]),
+                false,
+                false,
+                false,
+                (DateTime)reader["dateOf"],
+                typeOfExamination,
+                false,
+                Convert.ToInt32(reader["id_room"]),
+                Convert.ToInt32(reader["duration"])
+                );
+            return examination;
         }
     }
 }
