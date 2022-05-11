@@ -42,7 +42,6 @@ C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\Healt
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.csproj.AssemblyReference.cache
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.DoctorView.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.LoginForm.resources
-C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.HospitalManagerView.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientView.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryView.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Properties.Resources.resources
@@ -59,7 +58,6 @@ C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\Healt
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.BlockPatient.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.UnblockPatient.resources
 C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.BlockedPatientsForm.resources
-C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.ExeminationRequests.resources
 C:\Users\Djordje\Desktop\course-project-t-13-2\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\bin\Debug\HealthCareSystem.exe.config
 C:\Users\Djordje\Desktop\course-project-t-13-2\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\bin\Debug\HealthCareSystem.exe
 C:\Users\Djordje\Desktop\course-project-t-13-2\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\bin\Debug\HealthCareSystem.pdb
@@ -153,3 +151,15 @@ C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\Hea
 C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.MedicalRecordView.resources
 C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.AnamnesisView.resources
 C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.HomeView.resources
+C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.DoctorsFunctionalities.InsertOrChangeExamination.resources
+C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.DoctorsFunctionalities.PatientMedicalRecord.resources
+C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.AddEditRooms.resources
+C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.HospitalRooms.resources
+C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerView.resources
+C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.AnamnesisView.resources
+C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.HomeView.resources
+C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.MedicalRecordView.resources
+C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.PatientRecommendation.resources
+C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.ExaminationRequests.resources
+C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.ReferralLettersForm.resources
+C:\Users\Admin\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.AddExamination.resources

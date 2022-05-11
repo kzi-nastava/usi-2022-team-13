@@ -10,18 +10,19 @@ namespace HealthCareSystem.Core.Users.Doctors.Model
 {
     class ReferralLetter
     {
-        public Doctor CurrentDoctor { get; set; }
-        public Patient CurrentPatient { get; set; }
-        public Doctor ForwardedDoctor { get; set; }
+        public int CurrentDoctorID { get; set; }
+        public int CurrentPatientID { get; set; }
+        public int ForwardedDoctorID { get; set; }
         public TypeOfExamination ExaminationType { get; set; }
-        public ReferralLetter(Doctor currentDoctor, Patient currentPatient, Doctor forwardedDoctor, TypeOfExamination examinationType)
+        public DoctorSpeciality Speciality { get; set; }
+        public ReferralLetter(int currentDoctorID, int currentPatientID, int forwardedDoctorID, TypeOfExamination examinationType, DoctorSpeciality speciality)
         {
-            CurrentDoctor = currentDoctor;
-            CurrentPatient = currentPatient;
-            ForwardedDoctor = forwardedDoctor;
+            CurrentDoctorID = currentDoctorID;
+            CurrentPatientID = currentPatientID;
+            ForwardedDoctorID = forwardedDoctorID;
             ExaminationType = examinationType;
+            Speciality = speciality;
         }
-
 
     }
 }

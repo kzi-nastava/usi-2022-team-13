@@ -18,6 +18,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public DataTable patients { get; set; }
         public DataTable blockedPatients { get; set; }
         public DataTable requestsPatients { get; set; }
+        public DataTable referralLetters { get; set; }
         public OleDbConnection Connection { get; set; }
 
         public SecretaryRepository()
@@ -40,7 +41,6 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
 
         private void FillTable(DataTable table, string query)
         {
-
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -68,7 +68,14 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             var query = "select * from PatientEditRequest";
             FillTable(requestsPatients, query);
         }
-        
+
+        public void PullReferralLetters()
+        {
+            referralLetters = new DataTable();
+            var query = "select * from ReferralLetter";
+            FillTable(referralLetters, query);
+        }
+
         public void InsertSingleUser(User user)
         {
             var query = "INSERT INTO users(usrnm, pass, role) VALUES(@usrnm, @pass, @role)";

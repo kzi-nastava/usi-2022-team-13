@@ -68,6 +68,23 @@ namespace HealthCareSystem.Core.Examinations.Repository
             return examinations;
         }
 
+        public List<Examination> GetAllExaminations()
+        {
+            List<Examination> examinations = new List<Examination>();
+            Connection.Open();
+
+            OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from Examination", Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                SetExaminationValues(examinations, reader);
+            }
+            Connection.Close();
+
+            return examinations;
+        }
+
         private static void SetExaminationValues(List<Examination> examinations, OleDbDataReader reader)
         {
             TypeOfExamination typeOfExamination;
