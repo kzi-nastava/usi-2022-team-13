@@ -128,5 +128,12 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
 
         }
+
+        private void tbAnamnesis_TextChanged(object sender, EventArgs e)
+        {
+            if (tbAnamnesis.Text.Trim() != "") dgwAnamnesis.DataSource = PatientRep.GetAnamnesisesByKeyword(anamnesises, tbAnamnesis.Text);
+            else dgwAnamnesis.DataSource = anamnesises;
+
+        }
     }
 }
