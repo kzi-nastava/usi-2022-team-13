@@ -18,6 +18,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public DataTable patients { get; set; }
         public DataTable blockedPatients { get; set; }
         public DataTable requestsPatients { get; set; }
+        public DataTable referralLetters { get; set; }
         public OleDbConnection Connection { get; set; }
 
         public SecretaryRepository()
@@ -40,7 +41,6 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
 
         private void FillTable(DataTable table, string query)
         {
-
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -68,7 +68,14 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             var query = "select * from PatientEditRequest";
             FillTable(requestsPatients, query);
         }
-        
+
+        public void PullReferralLetters()
+        {
+            referralLetters = new DataTable();
+            var query = "select * from ReferralLetter";
+            FillTable(referralLetters, query);
+        }
+
         public void InsertSingleUser(User user)
         {
             var query = "INSERT INTO users(usrnm, pass, role) VALUES(@usrnm, @pass, @role)";
@@ -172,7 +179,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
 
         public void DeleteSinglePatientRequest(string requestID)
         {
-            var query = "DELETE from PatientEditRequest WHERE ID = " + requestID + "";
+            var query = "DELETE from PatientEditRequest WHERE ID = " + Convert.ToInt32(requestID) + "";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.ExecuteNonQuery();
@@ -194,11 +201,9 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         {
             var query = "select Patients.firstName, Patients.lastName, Users.usrnm, Users.pass from Patients INNER JOIN Users ON users.id = patients.user_id WHERE patients.id = " + patientID + "";
             Dictionary<string, string> row = new Dictionary<string, string>();
-            OleDbCommand cmd = new OleDbCommand();
-            cmd.Connection = Connection;
-            cmd.CommandType = System.Data.CommandType.Text;
-            cmd.CommandText = query;
 
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+ 
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -209,12 +214,11 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             }
             return row;
         }
-
+        
         public void UpdatePatient(string patientID, string username, string password, string name, string lastname)
         {
             var query = "SELECT user_id FROM Patients WHERE id = " + patientID + "";
             string userID = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
-
 
             query = "UPDATE Users SET usrnm = @usrnm, pass = @pass WHERE ID = @userID";
             using (var cmd = new OleDbCommand(query, Connection))

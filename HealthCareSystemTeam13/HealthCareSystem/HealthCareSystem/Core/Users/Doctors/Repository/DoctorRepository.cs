@@ -114,6 +114,31 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             return true;
         }
 
+        public bool IsDoctorAvailable(int doctorID, DateTime ExaminationDateTime, List<Examination> examinations)
+        {
+            for (int i = 0; i < examinations.Count(); i++)
+            {
+                TimeSpan difference = ExaminationDateTime.Subtract(examinations[i].DateOf);
+                Console.WriteLine(ExaminationDateTime.ToString());
+
+                if (Math.Abs(difference.TotalMinutes) < 15 && doctorID == examinations[i].IdDoctor)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        public Doctor GetAvailableDoctor(DateTime examinationDateTime, List<Examination> examinations)
+        {
+            BindingList<Doctor> doctors = GetDoctors();
+            foreach(Doctor doctor in doctors)
+            {
+                if (IsDoctorAvailable(doctor, examinationDateTime, examinations)) return doctor;
+            }
+            return null;
+
+        }
         public BindingList<Doctor> GetDoctors()
         {
             BindingList<Doctor> doctors = new BindingList<Doctor>();
@@ -150,14 +175,18 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                patient = 
-                new Patient(
-                Convert.ToInt32(reader["Patients.ID"]),
-                reader["firstName"].ToString(), reader["lastName"].ToString(),
-                Convert.ToInt32(reader["user_id"]), false
-                );
+                patient = SetPatientValues(reader);
             }
             return patient;
+        }
+
+        private static Patient SetPatientValues(OleDbDataReader reader)
+        {
+            return new Patient(
+            Convert.ToInt32(reader["Patients.ID"]),
+            reader["firstName"].ToString(), reader["lastName"].ToString(),
+            Convert.ToInt32(reader["user_id"]), false
+            );
         }
 
         public void CancelExamination(int examinationId)

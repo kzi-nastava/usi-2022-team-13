@@ -68,6 +68,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertMedications();
             InsertIngredients();
 
+            InsertReferralLetters();
+
             InsertMedicationsIngredients();
             InsertRejectedMedications();
 
@@ -92,8 +94,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             //InsertRenovations();
             InsertTransferHistoryOfEquipment();
-            
-
+          
             InsertPatientEditRequests();
 
             InsertReceipts();
@@ -103,7 +104,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             UpdateTransfers();
             
-
             Connection.Close();
         }
 
@@ -192,8 +192,13 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
 
             diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[0]), "Dementia"));
+            diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[0]), "Alzheimer"));
             diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[1]), "Alzheimer"));
+            diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[1]), "Diabetes"));
             diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[2]), "Diabetes"));
+            diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[2]), "Alzheimer"));
+
+
 
             return diseaseHistory;
         }
@@ -241,6 +246,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 DatabaseHelpers.ExecuteNonQueries("Delete from rooms", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from medications", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Ingredients", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from ReferralLetter", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from MedicationContainsIngredient", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from RejectedMedications", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Equipment", Connection);
@@ -969,9 +975,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<MedicalRecord> medicalRecords = new List<MedicalRecord>();
             List<String> patientIDs = GetPatientIds();
 
-            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[0]), 185, 85));
-            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[1]), 192, 92));
-            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[2]), 183, 75));
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[0]), 85, 185));
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[1]), 92, 192));
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[2]), 75, 183));
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[3]), 64, 170));
 
             return medicalRecords;
         }
@@ -1006,10 +1013,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> roomIDs = GetRoomIDs();
 
 
-            examinations.Add(new Examination(Convert.ToInt32(doctorIDs[0]), Convert.ToInt32(patientIDs[2]), false, false, false, new DateTime(2022, 4, 26), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIDs[0]), Convert.ToInt32(patientIDs[2]), false, false, false, new DateTime(2022, 4, 26, 10, 10, 10), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
             examinations.Add(new Examination(Convert.ToInt32(doctorIDs[0]), Convert.ToInt32(patientIDs[0]), false, false, false, DateTime.Now.AddDays(2),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
             examinations.Add(new Examination(Convert.ToInt32(doctorIDs[1]), Convert.ToInt32(patientIDs[1]), false, false, false, DateTime.Now.AddDays(2),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[5]), 15));
             examinations.Add(new Examination(Convert.ToInt32(doctorIDs[2]), Convert.ToInt32(patientIDs[2]), false, false, false, DateTime.Now.AddDays(3),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIDs[0]), Convert.ToInt32(patientIDs[2]), false, false, false, new DateTime(2022, 4, 28, 10, 10, 10), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIDs[1]), Convert.ToInt32(patientIDs[2]), false, false, false, new DateTime(2022, 4, 24, 10, 10, 10), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
 
             return examinations;
         }
@@ -1056,6 +1065,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> examinationIDs = GetExaminationIDs();
 
             anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[0]), "Runny nose and coughs alot.", "Patient should drink antibiotics.", new DateTime(2022, 4, 26)));
+            anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[4]), "Patient showed signs of Corona Virus: Headeches, High Temperature, Cough and Sleep Depravation", "Patient should go and take his blood and come back with results.", new DateTime(2022, 4, 28)));
+            anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[5]), "Patient is Fatigueing very quickly when training", "Rest for a few days and come back for a check up", new DateTime(2022, 4, 24)));
 
             return anamnesises;
         }
@@ -1149,9 +1160,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_instructions", receipt.InstructionId);
-                cmd.Parameters.AddWithValue("@id_instructions", receipt.DoctorId);
-                cmd.Parameters.AddWithValue("@id_instructions", receipt.PatientId);
-                cmd.Parameters.AddWithValue("@id_instructions", receipt.DateOfHandout.ToString());
+                cmd.Parameters.AddWithValue("@id_doctor", receipt.DoctorId);
+                cmd.Parameters.AddWithValue("@id_patient", receipt.PatientId);
+                cmd.Parameters.AddWithValue("@dateOf", receipt.DateOfHandout.ToString());
                 cmd.ExecuteNonQuery();
             }
         }
@@ -1213,6 +1224,37 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.ExecuteNonQuery();
             }
         }
-      
+        private static List<ReferralLetter> GetInsertReferralLetters()
+        {
+            List<ReferralLetter> letters = new List<ReferralLetter>();
+            List<string> patientsIds = GetPatientIds();
+            List<string> doctorsIds = GetDoctorIds();
+            letters.Add(new ReferralLetter(Convert.ToInt32(doctorsIds[0]), Convert.ToInt32(patientsIds[2]), Convert.ToInt32(doctorsIds[1]), TypeOfExamination.BasicExamination, DoctorSpeciality.Neurology));
+
+            return letters;
+        }
+
+        private static void InsertReferralLetters()
+        {
+            List<ReferralLetter> referralLetters = GetInsertReferralLetters();
+
+            foreach (ReferralLetter referralLetter in referralLetters)
+            {
+                InsertSingleReferralLetter(referralLetter);
+            }
+        }
+        private static void InsertSingleReferralLetter(ReferralLetter referralLetter)
+        {
+            var query = "INSERT INTO ReferralLetter(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) VALUES(@id_doctor, @id_patient, @id_forwarded_doctor, @typeOfExamination, @speciality)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_doctor", referralLetter.CurrentDoctorID);
+                cmd.Parameters.AddWithValue("@id_patient", referralLetter.CurrentPatientID);
+                cmd.Parameters.AddWithValue("@id_forwarded_doctor", referralLetter.ForwardedDoctorID);
+                cmd.Parameters.AddWithValue("@typeOfExamination", referralLetter.ExaminationType);
+                cmd.Parameters.AddWithValue("@speciality", referralLetter.Speciality);
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         {
             Username = username;
             patientRepository = new PatientRepository(Username);
-            patientRepository.PullExaminations();
+            patientRepository.PullExaminationForPatient();
             InitializeComponent();
             FillDataGridView();
 
@@ -31,24 +31,11 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         {
 
             dgwExaminations.DataSource = patientRepository.examinations;
-            DataGridViewSettings();
+            Helpers.DataGridViewSettings(dgwExaminations);
 
 
         }
-        private void DataGridViewSettings()
-        {
-            dgwExaminations.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgwExaminations.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            dgwExaminations.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            dgwExaminations.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            dgwExaminations.Columns[0].Width = 90;
-            dgwExaminations.Columns[3].Width = 90;
-            dgwExaminations.Columns[4].Width = 90;
-            dgwExaminations.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwExaminations.MultiSelect = false;
-
-
-        }
+        
         private void dgwExaminations_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -169,7 +156,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         public void RefreshDataGridView()
         {
-            patientRepository.PullExaminations();
+            patientRepository.PullExaminationForPatient();
             dgwExaminations.DataSource = patientRepository.examinations;
             dgwExaminations.Refresh();
         }

@@ -67,7 +67,9 @@
   <ItemGroup>
     <Compile Include="Core\Authentication\LoginAuthentication.cs" />
     <Compile Include="Core\DatabaseHelpers.cs" />
+    <Compile Include="Core\Examinations\Controller\ExaminationController.cs" />
     <Compile Include="Core\Examinations\Model\Anamnesis.cs" />
+    <Compile Include="Core\Examinations\Model\DoctorAnamnesis.cs" />
     <Compile Include="Core\Examinations\Model\Examination.cs" />
     <Compile Include="Core\Examinations\Repository\ExaminationRepository.cs" />
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.cs">
@@ -118,11 +120,41 @@
     <Compile Include="Core\GUI\PatientFunctionalities\AddEditExamination.Designer.cs">
       <DependentUpon>AddEditExamination.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\AnamnesisView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\AnamnesisView.Designer.cs">
+      <DependentUpon>AnamnesisView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\HomeView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\HomeView.Designer.cs">
+      <DependentUpon>HomeView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\MedicalRecordView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\MedicalRecordView.Designer.cs">
+      <DependentUpon>MedicalRecordView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\PatientExaminations.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\PatientExaminations.Designer.cs">
       <DependentUpon>PatientExaminations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\PatientRecommendation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\PatientRecommendation.Designer.cs">
+      <DependentUpon>PatientRecommendation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\AddExamination.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\AddExamination.Designer.cs">
+      <DependentUpon>AddExamination.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\GUI\SecretaryFunctionalities\AddPatient.cs">
       <SubType>Form</SubType>
@@ -172,6 +204,12 @@
     <Compile Include="Core\GUI\PatientView.Designer.cs">
       <DependentUpon>PatientView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\ReferralLettersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\ReferralLettersForm.Designer.cs">
+      <DependentUpon>ReferralLettersForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\SecretaryFunctionalities\UnblockPatient.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -184,6 +222,7 @@
     <Compile Include="Core\GUI\SecretaryView.Designer.cs">
       <DependentUpon>SecretaryView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\Helpers.cs" />
     <Compile Include="Core\Medications\Ingredients\Model\Ingredient.cs" />
     <Compile Include="Core\Medications\Model\Medication.cs" />
     <Compile Include="Core\Medications\Model\MedicationsIngredient.cs" />
@@ -256,8 +295,23 @@
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\AddEditExamination.resx">
       <DependentUpon>AddEditExamination.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\AnamnesisView.resx">
+      <DependentUpon>AnamnesisView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\HomeView.resx">
+      <DependentUpon>HomeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\MedicalRecordView.resx">
+      <DependentUpon>MedicalRecordView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\PatientExaminations.resx">
       <DependentUpon>PatientExaminations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\PatientRecommendation.resx">
+      <DependentUpon>PatientRecommendation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\AddExamination.resx">
+      <DependentUpon>AddExamination.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\AddPatient.resx">
       <DependentUpon>AddPatient.cs</DependentUpon>
@@ -282,6 +336,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientView.resx">
       <DependentUpon>PatientView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\ReferralLettersForm.resx">
+      <DependentUpon>ReferralLettersForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\UnblockPatient.resx">
       <DependentUpon>UnblockPatient.cs</DependentUpon>

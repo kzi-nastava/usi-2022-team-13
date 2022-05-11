@@ -79,7 +79,6 @@ namespace HealthCareSystem.Core.Authentication
                         bool isBlocked = PatientRep.IsPatientBlocked(Username);
                         if (!isBlocked)
                         {
-
                             PatientView patientView = new PatientView(Username, Login);
                             this.Login.Hide();
                             patientView.ShowDialog();
@@ -90,11 +89,10 @@ namespace HealthCareSystem.Core.Authentication
                         }
                         break;
                     case UserRole.Secretaries:
-                        SecretaryView secretacyView = new SecretaryView(Username);
+                        SecretaryView secretacyView = new SecretaryView(Username, Login);
                         this.Login.Hide();
                         secretacyView.ShowDialog();
                         break;
-                     
                 }
                 Connection.Close();
             }
@@ -104,19 +102,12 @@ namespace HealthCareSystem.Core.Authentication
         {
 
             bool isInvalid = IsInvalidInput(username, password);
-
             if (isInvalid) return null;
 
             string query = "select role from users where usrnm = '" + username + "' and pass = '" + password + "'";
-
             List<string> roles = DatabaseHelpers.ExecuteReaderQueries(query, Connection);
-            
 
-            if(roles.Count() == 0)
-            {
-
-                return null;
-            }
+            if (roles.Count() == 0) return null;
             else
             {
                 UserRole role;
