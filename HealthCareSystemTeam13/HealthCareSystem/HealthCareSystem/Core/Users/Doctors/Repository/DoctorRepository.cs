@@ -113,6 +113,22 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
             return true;
         }
+
+        public bool IsDoctorAvailable(int doctorID, DateTime ExaminationDateTime, List<Examination> examinations)
+        {
+            for (int i = 0; i < examinations.Count(); i++)
+            {
+                TimeSpan difference = ExaminationDateTime.Subtract(examinations[i].DateOf);
+                Console.WriteLine(ExaminationDateTime.ToString());
+
+                if (Math.Abs(difference.TotalMinutes) < 15 && doctorID == examinations[i].IdDoctor)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
         public Doctor GetAvailableDoctor(DateTime examinationDateTime, List<Examination> examinations)
         {
             BindingList<Doctor> doctors = GetDoctors();

@@ -66,6 +66,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertMedications();
             InsertIngredients();
 
+            InsertReferralLetters();
+
             InsertMedicationsIngredients();
             InsertRejectedMedications();
 
@@ -97,6 +99,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertReceiptMedication();
 
             InsertPatientExaminationChanges();
+
 
             Connection.Close();
         }
@@ -176,6 +179,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 DatabaseHelpers.ExecuteNonQueries("Delete from rooms", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from medications", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Ingredients", Connection);
+                DatabaseHelpers.ExecuteNonQueries("Delete from ReferralLetter", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from MedicationContainsIngredient", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from RejectedMedications", Connection);
                 DatabaseHelpers.ExecuteNonQueries("Delete from Equipment", Connection);
@@ -1147,6 +1151,37 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 cmd.ExecuteNonQuery();
             }
         }
-      
+        private static List<ReferralLetter> GetInsertReferralLetters()
+        {
+            List<ReferralLetter> letters = new List<ReferralLetter>();
+            List<string> patientsIds = GetPatientIds();
+            List<string> doctorsIds = GetDoctorIds();
+            letters.Add(new ReferralLetter(Convert.ToInt32(doctorsIds[0]), Convert.ToInt32(patientsIds[2]), Convert.ToInt32(doctorsIds[1]), TypeOfExamination.BasicExamination, DoctorSpeciality.Neurology));
+
+            return letters;
+        }
+
+        private static void InsertReferralLetters()
+        {
+            List<ReferralLetter> referralLetters = GetInsertReferralLetters();
+
+            foreach (ReferralLetter referralLetter in referralLetters)
+            {
+                InsertSingleReferralLetter(referralLetter);
+            }
+        }
+        private static void InsertSingleReferralLetter(ReferralLetter referralLetter)
+        {
+            var query = "INSERT INTO ReferralLetter(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) VALUES(@id_doctor, @id_patient, @id_forwarded_doctor, @typeOfExamination, @speciality)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_doctor", referralLetter.CurrentDoctorID);
+                cmd.Parameters.AddWithValue("@id_patient", referralLetter.CurrentPatientID);
+                cmd.Parameters.AddWithValue("@id_forwarded_doctor", referralLetter.ForwardedDoctorID);
+                cmd.Parameters.AddWithValue("@typeOfExamination", referralLetter.ExaminationType);
+                cmd.Parameters.AddWithValue("@speciality", referralLetter.Speciality);
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }

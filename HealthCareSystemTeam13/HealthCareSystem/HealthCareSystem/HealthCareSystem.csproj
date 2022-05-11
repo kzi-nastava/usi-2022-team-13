@@ -138,6 +138,12 @@
     <Compile Include="Core\GUI\PatientFunctionalities\PatientRecommendation.Designer.cs">
       <DependentUpon>PatientRecommendation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\AddExamination.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\AddExamination.Designer.cs">
+      <DependentUpon>AddExamination.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\SecretaryFunctionalities\AddPatient.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -185,6 +191,12 @@
     </Compile>
     <Compile Include="Core\GUI\PatientView.Designer.cs">
       <DependentUpon>PatientView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\ReferralLettersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\ReferralLettersForm.Designer.cs">
+      <DependentUpon>ReferralLettersForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\GUI\SecretaryFunctionalities\UnblockPatient.cs">
       <SubType>Form</SubType>
@@ -280,6 +292,9 @@
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\PatientRecommendation.resx">
       <DependentUpon>PatientRecommendation.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\AddExamination.resx">
+      <DependentUpon>AddExamination.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\AddPatient.resx">
       <DependentUpon>AddPatient.cs</DependentUpon>
     </EmbeddedResource>
@@ -303,6 +318,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientView.resx">
       <DependentUpon>PatientView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\ReferralLettersForm.resx">
+      <DependentUpon>ReferralLettersForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\UnblockPatient.resx">
       <DependentUpon>UnblockPatient.cs</DependentUpon>

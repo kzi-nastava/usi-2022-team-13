@@ -14,17 +14,25 @@ namespace HealthCareSystem.Core.GUI
     public partial class SecretaryView : Form
     {
         string Username;
-        public SecretaryView(string username)
+        public LoginForm SuperForm;
+        public SecretaryView(string username, LoginForm superForm)
         {
             InitializeComponent();
+            SuperForm = superForm;
             this.Username = username;
         }
 
         private void SecretaryView_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Application.Exit();
+            SuperForm.Show();
         }
 
+        private void LogOutButton_Click(object sender, EventArgs e)
+        {
+            DialogResult exit = MessageBox.Show("Are you sure?", "Logout?", MessageBoxButtons.YesNo);
+
+            if (exit == DialogResult.Yes) { SuperForm.Show(); this.Close(); }
+        }
         public void LoadForm(object Form)
         {
             if (this.mainPanel.Controls.Count > 0)
@@ -41,7 +49,6 @@ namespace HealthCareSystem.Core.GUI
         private void blockedPatientsButton_Click(object sender, EventArgs e)
         {
             LoadForm(new BlockedPatientsForm(Username));
-
         }
 
         private void requestsButton_Click(object sender, EventArgs e)
@@ -52,6 +59,11 @@ namespace HealthCareSystem.Core.GUI
         private void patientsButton_Click(object sender, EventArgs e)
         {
             LoadForm(new PatientCRUDForm(Username));
+        }
+
+        private void lettersButton_Click(object sender, EventArgs e)
+        {
+            LoadForm(new ReferralLettersForm());
         }
     }
 }
