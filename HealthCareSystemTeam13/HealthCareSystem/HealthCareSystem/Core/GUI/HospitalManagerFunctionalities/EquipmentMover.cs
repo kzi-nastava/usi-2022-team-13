@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static HealthCareSystem.Core.Rooms.HospitalEquipment.Model.Equipment;
 
 namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 {
@@ -21,7 +22,53 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             RoomRepository.PullEquipment();
             InitializeComponent();
             FillDataGridView();
+            FillRoomTypeComboBox();
+            FillAmountTypeComboBox();
+            FillEquipmentTypeComboBox();
         }
+        private void FillRoomTypeComboBox()
+        {
+            List<string> roomTypes = new List<string>
+            {
+                "Any",
+                TypeOfRoom.DayRoom.ToString(),
+                TypeOfRoom.DeliveryRoom.ToString(),
+                TypeOfRoom.ExaminationRoom.ToString(),
+                TypeOfRoom.IntensiveCareUnit.ToString(),
+                TypeOfRoom.NurseryRoom.ToString(),
+                TypeOfRoom.OperationRoom.ToString(),
+            };
+            cmbRoomType.ValueMember = null;
+            cmbRoomType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbRoomType.DataSource = roomTypes;
+        }
+
+        private void FillEquipmentTypeComboBox()
+        {
+            List<string> equipmentTypes = new List<string>
+            {
+                "Any",
+                EquipmentType.Dynamic.ToString(),
+                EquipmentType.Static.ToString()
+            };
+            cmbEquipmentType.ValueMember = null;
+            cmbEquipmentType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbEquipmentType.DataSource = equipmentTypes;
+        }
+
+        private void FillAmountTypeComboBox()
+        {
+            List<string> amounts = new List<string>
+            {
+                "Any",
+                "1-10",
+                "10+"
+            };
+            cmbAmount.ValueMember = null;
+            cmbAmount.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbAmount.DataSource = amounts;
+        }
+
         private void FillDataGridView()
         {
             dgwEquipment.DataSource = RoomRepository.Equipment;
@@ -38,13 +85,14 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         public void RefreshDataGridView()
         {
-            RoomRepository.PullEquipment();
+            
             dgwEquipment.DataSource = RoomRepository.Equipment;
             dgwEquipment.Refresh();
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            RoomRepository.PullEquipment();
             RefreshDataGridView();
         }
 
@@ -89,5 +137,19 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             return false;
         }
 
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string amount = (string)cmbAmount.SelectedItem;
+            string roomType = (string)cmbRoomType.SelectedItem;
+            string equipmentType = (string)cmbEquipmentType.SelectedItem;
+            
+            RoomRepository.PullFoundRows(tbxSearch.Text, amount, roomType, equipmentType);
+            RefreshDataGridView();
+        }
+
+        private void btnFilter_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -47,17 +47,58 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public void PullEquipment()
         {
             Equipment = new DataTable();
-            string roomsQuery = "select rhe.id_room as 'Room id', r.type as 'Room type', rhe.id_equipment as 'Equipment id', e.nameOf as 'Equipment name', e.type as 'Equipment type', rhe.amount as 'Amount' " +
+            string equipmentQuery = "select rhe.id_room as 'Room id', r.type as 'Room type', rhe.id_equipment as 'Equipment id', e.nameOf as 'Equipment name', e.type as 'Equipment type', rhe.amount as 'Amount' " +
                                 "from Equipment e, Rooms r, RoomHasEquipment rhe " +
                                 "where rhe.id_room = r.ID and rhe.id_equipment = e.ID";
-            FillTable(Equipment, roomsQuery);
+            FillTable(Equipment, equipmentQuery);
 
         }
+
+        public void PullFoundRows(string search, string amount, string roomType, string equipmentType)
+        {
+            Equipment = new DataTable();
+            string equipmentQuery = "select rhe.id_room as 'Room id', r.type as 'Room type', rhe.id_equipment as 'Equipment id', e.nameOf as 'Equipment name', e.type as 'Equipment type', rhe.amount as 'Amount' " +
+                                "from Equipment e, Rooms r, RoomHasEquipment rhe " +
+                                "where rhe.id_room = r.ID and rhe.id_equipment = e.ID and (e.nameOf like '%" + search + "%' or e.type like '%" + search + "%')";
+
+            if (amount != "Any");
+            {
+                if(amount == "10+")
+                {
+                    equipmentQuery += " and rhe.amount > 10";
+                }
+                else
+                {
+                    equipmentQuery += " and rhe.amount > 1 and rhe.amount <= 10";
+                }
+            }
+
+            if(roomType != "Any")
+            {
+                equipmentQuery += " and r.type like '" + roomType + "'";
+            }
+
+            if (equipmentType != "Any")
+            {
+                equipmentQuery += " and e.type like '" + equipmentType + "'";
+            }
+
+            FillTable(Equipment, equipmentQuery);
+        }
+
+        private string AddFilters(string equipmentQuery)
+        {
+
+
+            return equipmentQuery;
+        }
+
 
         public void PullRooms()
         {
             Rooms = new DataTable();
             string roomsQuery = "select id, type as 'Room type' from Rooms";
+            
             FillTable(Rooms, roomsQuery);
         }
         private void FillTable(DataTable table, string query)
