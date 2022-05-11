@@ -131,7 +131,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void tbAnamnesis_TextChanged(object sender, EventArgs e)
         {
-            if (tbAnamnesis.Text.Trim() != "") dgwAnamnesis.DataSource = PatientRep.GetAnamnesisesByKeyword(anamnesises, tbAnamnesis.Text);
+            string keyword = tbAnamnesis.Text.Trim();
+            if (keyword != "") dgwAnamnesis.DataSource = PatientRep.GetAnamnesisesByKeyword(anamnesises, keyword);
             else dgwAnamnesis.DataSource = anamnesises;
 
         }
