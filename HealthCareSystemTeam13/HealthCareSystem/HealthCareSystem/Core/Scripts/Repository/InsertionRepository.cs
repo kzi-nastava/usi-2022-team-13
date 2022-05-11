@@ -1172,7 +1172,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
         }
         private static void InsertSingleReferralLetter(ReferralLetter referralLetter)
         {
-            var query = "INSERT INTO ReferralLetter(id_doctor, id_patient, dateOf, id_forwarded_doctor, typeOfExamination, speciality) VALUES(@id_doctor, @id_patient, @dateOf, @id_forwarded_doctor, @typeOfExamination, @speciality)";
+            var query = "INSERT INTO ReferralLetter(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) VALUES(@id_doctor, @id_patient, @id_forwarded_doctor, @typeOfExamination, @speciality)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_doctor", referralLetter.CurrentDoctorID);
