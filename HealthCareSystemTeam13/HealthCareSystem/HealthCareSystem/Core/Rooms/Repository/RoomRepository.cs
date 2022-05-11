@@ -115,6 +115,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         public void RemoveRoom(int roomId)
         {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
             string query = "delete from Rooms where id = " + roomId + "";
             DatabaseHelpers.ExecuteNonQueries(query, Connection);
         }
@@ -152,6 +153,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         public Room GetSelectedRoom(string query)
         {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
             OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
 
             Room room = new Room();
