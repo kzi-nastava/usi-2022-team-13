@@ -1,5 +1,6 @@
 ﻿using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Rooms.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using static HealthCareSystem.Core.Rooms.HospitalEquipment.Model.Equipment;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
 
 namespace HealthCareSystem.Core.Rooms.Repository
 {
@@ -17,7 +20,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
     {
         public OleDbConnection Connection { get; set; }
         public DataTable Rooms { get; set; }
-
+        public DataTable Equipment { get; set; }
+ 
         public RoomRepository()
         {
             try
@@ -37,23 +41,81 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         }
 
+       
+
+
+        public void PullEquipment()
+        {
+            Equipment = new DataTable();
+            string equipmentQuery = "select rhe.id_room as 'Room id', r.type as 'Room type', rhe.id_equipment as 'Equipment id', e.nameOf as 'Equipment name', e.type as 'Equipment type', rhe.amount as 'Amount' " +
+                                "from Equipment e, Rooms r, RoomHasEquipment rhe " +
+                                "where rhe.id_room = r.ID and rhe.id_equipment = e.ID";
+            FillTable(Equipment, equipmentQuery);
+
+        }
+
+        public void PullFoundRows(string search, string amount, string roomType, string equipmentType)
+        {
+            Equipment = new DataTable();
+            string equipmentQuery = "select rhe.id_room as 'Room id', r.type as 'Room type', rhe.id_equipment as 'Equipment id', e.nameOf as 'Equipment name', e.type as 'Equipment type', rhe.amount as 'Amount' " +
+                                "from Equipment e, Rooms r, RoomHasEquipment rhe " +
+                                "where rhe.id_room = r.ID and rhe.id_equipment = e.ID and (e.nameOf like '%" + search + "%' or e.type like '%" + search + "%')";
+
+            if (amount != "Any");
+            {
+                if(amount == "10+")
+                {
+                    equipmentQuery += " and rhe.amount > 10";
+                }
+                else
+                {
+                    equipmentQuery += " and rhe.amount > 1 and rhe.amount <= 10";
+                }
+            }
+
+            if(roomType != "Any")
+            {
+                equipmentQuery += " and r.type like '" + roomType + "'";
+            }
+
+            if (equipmentType != "Any")
+            {
+                equipmentQuery += " and e.type like '" + equipmentType + "'";
+            }
+
+            FillTable(Equipment, equipmentQuery);
+        }
+
+        private string AddFilters(string equipmentQuery)
+        {
+
+
+            return equipmentQuery;
+        }
+
+
         public void PullRooms()
         {
             Rooms = new DataTable();
             string roomsQuery = "select id, type as 'Room type' from Rooms";
+            
             FillTable(Rooms, roomsQuery);
         }
         private void FillTable(DataTable table, string query)
         {
+
             using (var cmd = new OleDbCommand(query, Connection))
             {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
                 OleDbDataReader reader = cmd.ExecuteReader();
                 table.Load(reader);
             }
+            Connection.Close();
         }
 
         public void RemoveRoom(int roomId)
         {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
             string query = "delete from Rooms where id = " + roomId + "";
             DatabaseHelpers.ExecuteNonQueries(query, Connection);
         }
@@ -69,8 +131,29 @@ namespace HealthCareSystem.Core.Rooms.Repository
             }
         }
 
+        public void InsertTransferHistoryOfEquipment(TransferHistoryOfEquipment transferHistoryOfEquipment)
+        {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            var query = "INSERT INTO EquipmentTransferHistory(id_original_room, id_new_room, dateOfChange, isExecuted, amount, id_equipment) " +
+                "VALUES(@first_room_id, @second_room_id, @transferDate, @isExecuted, @amount, @id_equipment)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@first_room_id", transferHistoryOfEquipment.FirstRoomId);
+                cmd.Parameters.AddWithValue("@second_room_id", transferHistoryOfEquipment.SecondRoomId);
+                cmd.Parameters.AddWithValue("@transferDate", transferHistoryOfEquipment.TransferDate.ToString());
+                cmd.Parameters.AddWithValue("@isExecuted", transferHistoryOfEquipment.IsExecuted);
+                cmd.Parameters.AddWithValue("@amount", transferHistoryOfEquipment.Amount);
+                cmd.Parameters.AddWithValue("@id_equpment", transferHistoryOfEquipment.EquipmentId);
+                cmd.ExecuteNonQuery();
+            }
+
+            Connection.Close();
+        }
+
+
         public Room GetSelectedRoom(string query)
         {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
             OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
 
             Room room = new Room();
@@ -88,6 +171,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         public void UpdateContent(string query)
         {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
             DatabaseHelpers.ExecuteNonQueries(query, Connection);
         }
 
@@ -116,6 +200,118 @@ namespace HealthCareSystem.Core.Rooms.Repository
                 if(Connection.State == ConnectionState.Closed) Connection.Open();
 
                 OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from rooms", Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    TypeOfRoom typeOfRoom;
+                    Enum.TryParse<TypeOfRoom>(reader["type"].ToString(), out typeOfRoom);
+
+                    rooms.Add(new Room(typeOfRoom, Convert.ToInt32(reader["id"])));
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return rooms;
+        }
+
+        public List<Equipment> GetEquipment(string query)
+        {
+            List<Equipment> equipment = new List<Equipment>();
+
+
+            try
+            {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    EquipmentType typeOfEquipment;
+                    Enum.TryParse<EquipmentType>(reader["type"].ToString(), out typeOfEquipment);
+
+                    equipment.Add(new Equipment(Convert.ToInt32(reader["id"]), reader["nameOf"].ToString(), typeOfEquipment));
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return equipment;
+        }
+
+        public List<RoomHasEquipment> GetEquipmentInRoom(string query)
+        {
+            List<RoomHasEquipment> equipmentInRoom = new List<RoomHasEquipment>();
+
+
+            try
+            {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    equipmentInRoom.Add(new RoomHasEquipment(Convert.ToInt32(reader["id_equipment"]), Convert.ToInt32(reader["id_room"]), Convert.ToInt32(reader["amount"])));
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return equipmentInRoom;
+        }
+
+        public List<TransferHistoryOfEquipment> GetTransferHistory(string query)
+        {
+            List<TransferHistoryOfEquipment> transferHistory = new List<TransferHistoryOfEquipment>();
+
+
+            try
+            {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    transferHistory.Add(new TransferHistoryOfEquipment(Convert.ToInt32(reader["id_original_room"]), Convert.ToInt32(reader["id_new_room"]), Convert.ToDateTime(reader["dateOfChange"]), 
+                        Convert.ToBoolean(reader["isExecuted"]), Convert.ToInt32(reader["amount"]), Convert.ToInt32(reader["id_equipment"])));
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return transferHistory;
+        }
+
+
+        public List<Room> GetRooms(string query)
+        {
+            List<Room> rooms = new List<Room>();
+
+
+            try
+            {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())

@@ -52,6 +52,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                     if (validDate != 0)
                     {
                         int examinationId = (int)dgwExaminations.SelectedRows[0].Cells[0].Value;
+                        
                         AddEditExamination addEditView = new AddEditExamination(examinationId, false, Username, validDate);
 
                         addEditView.ShowDialog();

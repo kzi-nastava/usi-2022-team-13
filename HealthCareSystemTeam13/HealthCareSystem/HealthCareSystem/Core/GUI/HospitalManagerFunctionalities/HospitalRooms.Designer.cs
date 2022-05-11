@@ -99,6 +99,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(795, 556);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnRemove);

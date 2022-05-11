@@ -11,24 +11,26 @@ using HealthCareSystem.Core.Users.Secretaries.Model;
 using HealthCareSystem.Core.Medications.Model;
 using HealthCareSystem.Core.Users.HospitalManagers;
 using HealthCareSystem.Core.Rooms.Model;
-using HealthCareSystem.Core.Rooms.Equipment.Model;
 using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
 using HealthCareSystem.Core.Ingredients.Model;
 using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Medications.Receipts.Model;
 using HealthCareSystem.Core.Rooms.Renovations.Model;
-using HealthCareSystem.Core.Rooms.Equipment.TransferHistoryOfEquipment.Model;
 using HealthCareSystem.Core.Rooms.DynamicEqipmentRequests.Model;
-using HealthCareSystem.Core.Rooms.Equipment.RoomHasEquipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
+using HealthCareSystem.Core.Rooms.Repository;
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
     class InsertionRepository
     {
         private static OleDbConnection Connection;
-
+        private RoomRepository RoomRepository;
         public InsertionRepository()
         {
+            RoomRepository = new RoomRepository();
             try
             {
                 Connection = new OleDbConnection();
@@ -91,7 +93,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertDynamicEquipmentRequests();
 
             //InsertRenovations();
-            //InsertTransferHistoryOfEquipment();
+            InsertTransferHistoryOfEquipment();
           
             InsertPatientEditRequests();
 
@@ -100,12 +102,77 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             InsertPatientExaminationChanges();
 
-
+            UpdateTransfers();
+            
             Connection.Close();
         }
 
+        public void UpdateTransfers()
+        {
+
+            string unrealizedTransfersQuery = "select * from EquipmentTransferHistory where isExecuted = false";
+
+            List<TransferHistoryOfEquipment> unrealizedTransfers;
+            unrealizedTransfers = RoomRepository.GetTransferHistory(unrealizedTransfersQuery);
 
 
+            foreach (TransferHistoryOfEquipment transfer in unrealizedTransfers)
+            {
+                if (transfer.TransferDate < DateTime.Now)
+                {
+                    string originRoomHasEquipmentQuery = "select * from RoomHasEquipment where " + transfer.FirstRoomId + " = id_room and " + transfer.EquipmentId + " = id_equipment";
+                    RoomHasEquipment originRoomHasEquipment = RoomRepository.GetEquipmentInRoom(originRoomHasEquipmentQuery)[0];
+
+
+                    string destinationRoomHasEquipmentQuery = "select * from RoomHasEquipment where " + transfer.SecondRoomId + " = id_room and " + transfer.EquipmentId + " = id_equipment";
+                    List<RoomHasEquipment> DestinationRoomHasEquipmentHelper = RoomRepository.GetEquipmentInRoom(destinationRoomHasEquipmentQuery);
+
+                    RoomHasEquipment destinationRoomHasEquipment;
+                    if (DestinationRoomHasEquipmentHelper.Count != 1)
+                    {
+                        destinationRoomHasEquipment = new RoomHasEquipment(transfer.EquipmentId, transfer.SecondRoomId, 0);
+
+                        string insertQueryDestination = "insert into RoomHasEquipment (id_room, id_equipment, amount) values (" + transfer.SecondRoomId + ", " + transfer.EquipmentId + ", 0)";
+                        RoomRepository.UpdateContent(insertQueryDestination);
+                    }
+                    else
+                    {
+                        destinationRoomHasEquipment = DestinationRoomHasEquipmentHelper[0];
+                    }
+
+
+
+                    originRoomHasEquipment.Quantity -= transfer.Amount;
+                    destinationRoomHasEquipment.Quantity += transfer.Amount;
+
+
+
+                    if (originRoomHasEquipment.Quantity == 0)
+                    {
+                        string deleteQueryOrigin = "delete from RoomHasEquipment where id_room = " + originRoomHasEquipment.RoomId + " and id_equipment = " + originRoomHasEquipment.EquipmentId;
+                        RoomRepository.UpdateContent(deleteQueryOrigin);
+                    }
+                    else
+                    {
+                        string updateQueryOrigin = "update RoomHasEquipment set amount = " + originRoomHasEquipment.Quantity + " where id_equipment = " + originRoomHasEquipment.EquipmentId +
+                            " and id_room = " + originRoomHasEquipment.RoomId;
+                        RoomRepository.UpdateContent(updateQueryOrigin);
+                    }
+
+
+                    string updateQueryDestination = "update RoomHasEquipment set amount = " + destinationRoomHasEquipment.Quantity + " where id_equipment = " + destinationRoomHasEquipment.EquipmentId +
+                            " and id_room = " + destinationRoomHasEquipment.RoomId;
+                    RoomRepository.UpdateContent(updateQueryDestination);
+
+
+
+                    string updateTransfer = "update EquipmentTransferHistory set isExecuted = true where isExecuted = false and id_original_room = " + transfer.FirstRoomId + " and id_new_room = " + transfer.SecondRoomId +
+                        " and amount = " + transfer.Amount + " and id_equipment = " + transfer.EquipmentId;
+                    RoomRepository.UpdateContent(updateTransfer);
+                }
+
+            }
+        }
 
 
         private static void InsertDiseaseHistories()
@@ -248,7 +315,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 InsertSingleEquipment(singleEquipment);
             }
 
-        }
+        } 
 
         private static void InsertSingleEquipment(Equipment equipment)
         {
@@ -400,13 +467,15 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
         }*/
 
-        /*private static List<TransferHistoryOfEquipment> GetTransferHistoryOfEquipment()
+        private static List<TransferHistoryOfEquipment> GetTransferHistoryOfEquipment()
         {
             List<TransferHistoryOfEquipment> transferHistoryOfEquipment = new List<TransferHistoryOfEquipment>();
             List<String> roomIDs = GetRoomIDs();
-
-            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[0]), Convert.ToInt32(roomIDs[5]), DateTime.Now));
-            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[1]), Convert.ToInt32(roomIDs[6]), DateTime.Now));
+            List<String> equipmentIDs = GetEquipmentIDs();
+                                                          
+            
+            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[0]), Convert.ToInt32(roomIDs[4]), DateTime.Now, true, 5, Convert.ToInt32(equipmentIDs[0])));
+            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[1]), Convert.ToInt32(roomIDs[3]), DateTime.Now, true, 4, Convert.ToInt32(equipmentIDs[1]))); 
 
             return transferHistoryOfEquipment;
         }
@@ -423,15 +492,19 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         private static void InsertSingleTransferHistoryOfEquipment(TransferHistoryOfEquipment transferHistoryOfEquipment)
         {
-            var query = "INSERT INTO EquipmentTransferHistory(id_original_room, id_new_room, dateOfChange) VALUES(@first_room_id, @second_room_id, @transferDate)";
+            var query = "INSERT INTO EquipmentTransferHistory(id_original_room, id_new_room, dateOfChange, isExecuted, amount, id_equipment) " +
+                "VALUES(@first_room_id, @second_room_id, @transferDate, @isExecuted, @amount, @id_equipment)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@first_room_id", transferHistoryOfEquipment.FirstRoomId);
                 cmd.Parameters.AddWithValue("@second_room_id", transferHistoryOfEquipment.SecondRoomId);
                 cmd.Parameters.AddWithValue("@transferDate", transferHistoryOfEquipment.TransferDate.ToString());
+                cmd.Parameters.AddWithValue("@isExecuted", transferHistoryOfEquipment.IsExecuted);
+                cmd.Parameters.AddWithValue("@amount", transferHistoryOfEquipment.Amount);
+                cmd.Parameters.AddWithValue("@id_equpment", transferHistoryOfEquipment.EquipmentId);
                 cmd.ExecuteNonQuery();
             }
-        }*/
+        }
 
         private static List<RoomHasEquipment> GetRoomHasEquipment()
         {
@@ -1087,9 +1160,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_instructions", receipt.InstructionId);
-                cmd.Parameters.AddWithValue("@id_instructions", receipt.DoctorId);
-                cmd.Parameters.AddWithValue("@id_instructions", receipt.PatientId);
-                cmd.Parameters.AddWithValue("@id_instructions", receipt.DateOfHandout.ToString());
+                cmd.Parameters.AddWithValue("@id_doctor", receipt.DoctorId);
+                cmd.Parameters.AddWithValue("@id_patient", receipt.PatientId);
+                cmd.Parameters.AddWithValue("@dateOf", receipt.DateOfHandout.ToString());
                 cmd.ExecuteNonQuery();
             }
         }

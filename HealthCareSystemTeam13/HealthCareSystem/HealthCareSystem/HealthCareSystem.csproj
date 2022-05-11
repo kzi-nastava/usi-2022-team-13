@@ -78,11 +78,23 @@
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.Designer.cs">
       <DependentUpon>AddEditRooms.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.Designer.cs">
+      <DependentUpon>EquipmentMover.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.Designer.cs">
       <DependentUpon>HospitalRooms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.Designer.cs">
+      <DependentUpon>MoveEquipmentDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\GUI\HospitalManagerView.cs">
       <SubType>Form</SubType>
@@ -218,9 +230,9 @@
     <Compile Include="Core\Medications\Model\RejectedMedication.cs" />
     <Compile Include="Core\Medications\Receipts\Model\Instruction.cs" />
     <Compile Include="Core\Rooms\DynamicEquipmentRequests\Model\DynamicEquipmentRequest.cs" />
-    <Compile Include="Core\Rooms\Equipment\Model\Equipment.cs" />
-    <Compile Include="Core\Rooms\Equipment\RoomHasEquipment\Model\RoomHasEquipment.cs" />
-    <Compile Include="Core\Rooms\Equipment\TransferHistoryOfEquipment\Model\TransferHistoryOfEquipment.cs" />
+    <Compile Include="Core\Rooms\HospitalEquipment\Model\Equipment.cs" />
+    <Compile Include="Core\Rooms\HospitalEquipment\RoomHasEquipment\Model\RoomHasEquipment.cs" />
+    <Compile Include="Core\Rooms\HospitalEquipment\TransferHistoryOfEquipment\Model\TransferHistoryOfEquipment.cs" />
     <Compile Include="Core\Rooms\Model\Room.cs" />
     <Compile Include="Core\Rooms\Renovations\Model\Renovation.cs" />
     <Compile Include="Core\Rooms\Repository\RoomRepository.cs" />
@@ -265,8 +277,14 @@
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.resx">
       <DependentUpon>AddEditRooms.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.resx">
+      <DependentUpon>EquipmentMover.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.resx">
       <DependentUpon>HospitalRooms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.resx">
+      <DependentUpon>MoveEquipmentDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerView.resx">
       <DependentUpon>HospitalManagerView.cs</DependentUpon>
