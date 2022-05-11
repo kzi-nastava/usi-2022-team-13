@@ -905,6 +905,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[0]), 85, 185));
             medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[1]), 92, 192));
             medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[2]), 75, 183));
+            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[3]), 64, 170));
 
             return medicalRecords;
         }
