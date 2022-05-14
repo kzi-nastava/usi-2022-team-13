@@ -142,9 +142,12 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public BindingList<Doctor> GetDoctors()
         {
             BindingList<Doctor> doctors = new BindingList<Doctor>();
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
             try
             {
-                Connection.Open();
+
+               
 
                 OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from doctors", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -160,7 +163,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
             return doctors;
         }
@@ -221,6 +224,46 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             "where id_doctor = " + GetDoctorId() + " and (" +
             "Day(dateOf) = Day('" + firstDay + "') or Day(dateOf) = Day('" + secondDay + "') or Day(dateOf) = Day('" + thirdDay + "'))";
             FillTable(examinations, examinationsQuery);
+        }
+
+        public void InsertReferral(ReferralLetter referralLetter, int option)
+        {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            string query;
+            if (option == 1)
+            {
+                query = "INSERT INTO ReferralLetter" +
+                "(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) " +
+                "VALUES (@id_doctor, @id_patient," +
+                " @id_forwarded_doctor, @typeOfExamination, @speciality)";
+            }
+            else
+            {
+                query = "INSERT INTO ReferralLetter" +
+                "(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) " +
+                "VALUES (@id_doctor, @id_patient," +
+                "@id_forwarded_doctor, @typeOfExamination, @speciality)";
+            }
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_doctor", referralLetter.CurrentDoctorID);
+                cmd.Parameters.AddWithValue("@id_patient", referralLetter.CurrentPatientID);
+                if(option == 1)
+                    cmd.Parameters.AddWithValue("@id_forwarded_doctor", referralLetter.ForwardedDoctorID);
+                else if (option == 2)
+                    cmd.Parameters.AddWithValue("@id_forwarded_doctor", DBNull.Value);
+                Console.WriteLine(referralLetter.ExaminationType);
+                cmd.Parameters.AddWithValue("@typeOfExamination", referralLetter.ExaminationType);
+                if(option == 2)
+                    cmd.Parameters.AddWithValue("@speciality", referralLetter.Speciality);
+                else if (option == 1)
+                    cmd.Parameters.AddWithValue("@id_forwarded_doctor", DBNull.Value);
+                cmd.ExecuteNonQuery();
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
         }
 
     }
