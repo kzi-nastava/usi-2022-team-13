@@ -11,15 +11,15 @@ using HealthCareSystem.Core.Users.Secretaries.Model;
 using HealthCareSystem.Core.Medications.Model;
 using HealthCareSystem.Core.Users.HospitalManagers;
 using HealthCareSystem.Core.Rooms.Model;
-using HealthCareSystem.Core.Rooms.Equipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
 using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
 using HealthCareSystem.Core.Ingredients.Model;
 using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Medications.Receipts.Model;
 using HealthCareSystem.Core.Rooms.Renovations.Model;
-using HealthCareSystem.Core.Rooms.Equipment.TransferHistoryOfEquipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
 using HealthCareSystem.Core.Rooms.DynamicEqipmentRequests.Model;
-using HealthCareSystem.Core.Rooms.Equipment.RoomHasEquipment.Model;
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
@@ -1171,7 +1171,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
         }
         private static void InsertSingleReferralLetter(ReferralLetter referralLetter)
         {
-            var query = "INSERT INTO ReferralLetter(id_doctor, id_patient, dateOf, id_forwarded_doctor, typeOfExamination, speciality) VALUES(@id_doctor, @id_patient, @dateOf, @id_forwarded_doctor, @typeOfExamination, @speciality)";
+            var query = "INSERT INTO ReferralLetter(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) VALUES(@id_doctor, @id_patient, @id_forwarded_doctor, @typeOfExamination, @speciality)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_doctor", referralLetter.CurrentDoctorID);
