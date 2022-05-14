@@ -226,5 +226,45 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             FillTable(examinations, examinationsQuery);
         }
 
+        public void InsertReferral(ReferralLetter referralLetter, int option)
+        {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            string query;
+            if (option == 1)
+            {
+                query = "INSERT INTO ReferralLetter" +
+                "(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) " +
+                "VALUES (@id_doctor, @id_patient," +
+                " @id_forwarded_doctor, @typeOfExamination, @speciality)";
+            }
+            else
+            {
+                query = "INSERT INTO ReferralLetter" +
+                "(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) " +
+                "VALUES (@id_doctor, @id_patient," +
+                "@id_forwarded_doctor, @typeOfExamination, @speciality)";
+            }
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_doctor", referralLetter.CurrentDoctorID);
+                cmd.Parameters.AddWithValue("@id_patient", referralLetter.CurrentPatientID);
+                if(option == 1)
+                    cmd.Parameters.AddWithValue("@id_forwarded_doctor", referralLetter.ForwardedDoctorID);
+                else if (option == 2)
+                    cmd.Parameters.AddWithValue("@id_forwarded_doctor", DBNull.Value);
+                Console.WriteLine(referralLetter.ExaminationType);
+                cmd.Parameters.AddWithValue("@typeOfExamination", referralLetter.ExaminationType);
+                if(option == 2)
+                    cmd.Parameters.AddWithValue("@speciality", referralLetter.Speciality);
+                else if (option == 1)
+                    cmd.Parameters.AddWithValue("@id_forwarded_doctor", DBNull.Value);
+                cmd.ExecuteNonQuery();
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+        }
+
     }
 }

@@ -130,6 +130,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             this.btnRefer.TabIndex = 32;
             this.btnRefer.Text = "Refer";
             this.btnRefer.UseVisualStyleBackColor = true;
+            this.btnRefer.Click += new System.EventHandler(this.btnRefer_Click);
             // 
             // StartedExamination
             // 

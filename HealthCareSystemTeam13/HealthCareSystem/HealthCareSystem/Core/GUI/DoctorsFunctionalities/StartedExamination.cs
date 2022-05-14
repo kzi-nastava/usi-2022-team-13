@@ -1,4 +1,5 @@
-﻿using HealthCareSystem.Core.Users.Doctors.Model;
+﻿using HealthCareSystem.Core.Examinations.Model;
+using HealthCareSystem.Core.Users.Doctors.Model;
 using HealthCareSystem.Core.Users.Doctors.Repository;
 using HealthCareSystem.Core.Users.Patients.Repository;
 using System;
@@ -86,6 +87,33 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 cbDoctor.Enabled = true;
                 cbSpeciality.Enabled = false;
             }
+        }
+
+        private void btnRefer_Click(object sender, EventArgs e)
+        {
+            ReferralLetter referralLetter;
+            int option;
+            if (rbDoctor.Checked)
+            {
+                Doctor forwardedDoctor = (Doctor)cbDoctor.SelectedValue;
+                referralLetter = new ReferralLetter
+                (ExaminingDoctor.ID, PatientId,
+                forwardedDoctor.ID, TypeOfExamination.BasicExamination);
+                option = 1;
+            }
+
+            else
+            {
+                DoctorSpeciality doctorSpeciality = (DoctorSpeciality)cbSpeciality.SelectedValue;
+                referralLetter = new ReferralLetter
+                (ExaminingDoctor.ID, PatientId,
+                 TypeOfExamination.BasicExamination, doctorSpeciality);
+                option = 2;
+            }
+
+            DoctorRep.InsertReferral(referralLetter, option);
+            MessageBox.Show("Successfully created a referral for the patient");
+
         }
     }
 }
