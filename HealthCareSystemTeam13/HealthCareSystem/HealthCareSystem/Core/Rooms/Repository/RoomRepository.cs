@@ -13,6 +13,8 @@ using System.Windows.Forms;
 using static HealthCareSystem.Core.Rooms.HospitalEquipment.Model.Equipment;
 using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
 using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
+using HealthCareSystem.Core.Rooms.Renovations.Model;
+using static HealthCareSystem.Core.Rooms.Renovations.Model.Renovation;
 
 namespace HealthCareSystem.Core.Rooms.Repository
 {
@@ -21,6 +23,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public OleDbConnection Connection { get; set; }
         public DataTable Rooms { get; set; }
         public DataTable Equipment { get; set; }
+        public DataTable Renovations { get; set; }
+
  
         public RoomRepository()
         {
@@ -41,8 +45,12 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         }
 
-       
-
+        public void PullRenovations()
+        {
+            Renovations = new DataTable();
+            string renovationsQuery = "select * from renovations";
+            FillTable(Renovations, renovationsQuery);
+        }
 
         public void PullEquipment()
         {
@@ -130,6 +138,32 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
             }
         }
+        public void InsertRenovation(Renovation renovation)
+        {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            var query = "INSERT INTO Renovations(id_room, dateOfStart, dateOfFinish, id_other_room, renovationType) VALUES(@id_room, @startingDate, @ending_date, @id_other_room, @renovationType)";
+
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_room", renovation.RoomId);
+                cmd.Parameters.AddWithValue("@startingDate", renovation.StartingDate.ToString());
+                cmd.Parameters.AddWithValue("@ending_date", renovation.EndingDate.ToString());
+                if (renovation.SecondRoomId == -1)
+                {
+                    cmd.Parameters.Add("@id_other_room", OleDbType.Integer).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@id_other_room", renovation.SecondRoomId);
+                }
+
+                cmd.Parameters.AddWithValue("@renovationType", renovation.Type.ToString());
+                cmd.ExecuteNonQuery();
+            }
+
+            Connection.Close();
+        }
+
 
         public void InsertTransferHistoryOfEquipment(TransferHistoryOfEquipment transferHistoryOfEquipment)
         {
@@ -168,6 +202,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
             }
             return room;
         }
+
+        
 
         public void UpdateContent(string query)
         {
@@ -246,6 +282,45 @@ namespace HealthCareSystem.Core.Rooms.Repository
             Connection.Close();
 
             return equipment;
+        }
+
+        public List<Renovation> GetRenovations(string query)
+        {
+            List<Renovation> renovations = new List<Renovation>();
+
+
+            try
+            {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    TypeOfRenovation typeOfRenovation;
+                    Enum.TryParse<TypeOfRenovation>(reader["renovationType"].ToString(), out typeOfRenovation);
+
+                    try
+                    {
+                        renovations.Add(new Renovation(Convert.ToInt32(reader["id_room"]), Convert.ToDateTime(reader["dateOfStart"]), Convert.ToDateTime(reader["dateOfFinish"]), Convert.ToInt32(reader["id_other_room"]), typeOfRenovation));
+                    }
+                    catch (Exception)
+                    {
+                        renovations.Add(new Renovation(Convert.ToInt32(reader["id_room"]), Convert.ToDateTime(reader["dateOfStart"]), Convert.ToDateTime(reader["dateOfFinish"]), -1, typeOfRenovation));
+                    }
+
+
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return renovations;
         }
 
         public List<RoomHasEquipment> GetEquipmentInRoom(string query)

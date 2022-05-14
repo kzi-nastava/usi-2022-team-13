@@ -84,6 +84,12 @@
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.Designer.cs">
       <DependentUpon>AddEditRooms.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddRenovations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddRenovations.Designer.cs">
+      <DependentUpon>AddRenovations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +107,12 @@
     </Compile>
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.Designer.cs">
       <DependentUpon>MoveEquipmentDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\Renovations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\Renovations.Designer.cs">
+      <DependentUpon>Renovations.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\GUI\HospitalManagerView.cs">
       <SubType>Form</SubType>
@@ -298,6 +310,9 @@
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.resx">
       <DependentUpon>AddEditRooms.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddRenovations.resx">
+      <DependentUpon>AddRenovations.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.resx">
       <DependentUpon>EquipmentMover.cs</DependentUpon>
     </EmbeddedResource>
@@ -306,6 +321,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.resx">
       <DependentUpon>MoveEquipmentDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\Renovations.resx">
+      <DependentUpon>Renovations.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerView.resx">
       <DependentUpon>HospitalManagerView.cs</DependentUpon>
