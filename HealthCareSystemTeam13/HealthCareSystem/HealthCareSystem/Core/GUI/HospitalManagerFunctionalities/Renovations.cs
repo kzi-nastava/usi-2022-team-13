@@ -1,4 +1,5 @@
 ﻿using HealthCareSystem.Core.Rooms.Repository;
+using HealthCareSystem.Core.Scripts.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -60,7 +61,8 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            InsertionRepository a = new InsertionRepository();
+            a.UpdateRenovations();
         }
     }
 }
