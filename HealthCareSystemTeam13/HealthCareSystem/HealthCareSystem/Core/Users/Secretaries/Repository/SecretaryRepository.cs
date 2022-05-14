@@ -84,7 +84,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             closestExaminations = new DataTable();
             DateTime fromDateTime = DateTime.Now;
             DateTime toDateTime = DateTime.Now.AddHours(2);
-            var query = "select * from (select * from Examiantion WHERE dateOf BETWEEN (" + fromDateTime + ", " + toDateTime + ") and id_room  = " + roomId + " and isUrgent = 0 ORDER BY dateOf) where rownum < 5 ";
+            var query = "select * from (select * from Examination WHERE dateOf >#" + fromDateTime.ToString() + "# and dateOf <#" + toDateTime + "# and id_room  = " + roomId + " and isUrgent = 0 ORDER BY dateOf) where rownum < 5 ";
             FillTable(closestExaminations, query);
         }
 
@@ -93,7 +93,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             closestExaminations = new DataTable();
             DateTime fromDateTime = DateTime.Now;
             DateTime toDateTime = DateTime.Now.AddHours(2);
-            var query = "select * from (select * from Examiantion WHERE dateOf BETWEEN (" + fromDateTime + ", " + toDateTime + ") and id_doctor in (SELECT id FROM doctors WHERE speciality = " + speciality + " ) ORDER BY dateOf) where rownum < 5 ";
+            var query = "select * from (select * from Examination WHERE dateOf > #" + fromDateTime.ToString() + "# and dateOf < #" + toDateTime.ToString() + "# and id_doctor in (SELECT id FROM doctors WHERE speciality = " + speciality.ToString() + " ) ORDER BY dateOf) where rownum < 5 ";
             FillTable(closestExaminations, query);
         }
 
@@ -349,7 +349,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
 
         public List<string> GetSpecialistsIds(DoctorSpeciality speciality)
         {
-            var query = "SELECT ID FROM Doctors WHERE speciality = '" + speciality + "'";
+            var query = "SELECT ID FROM Doctors WHERE speciality = '" + speciality.ToString() + "'";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
 
@@ -371,7 +371,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             DateTime fromDateTime = DateTime.Now;
             DateTime toDateTime = DateTime.Now.AddHours(2);
             var query = "SELECT id, id_doctor, id_patient, isEdited, isCancelled, isFinished, dateOf, typeOfExamination, isUrgent, id_room, duration FROM Examination " +
-                "WHERE dateOf BETWEEN (" + fromDateTime + ", " + toDateTime + ") and id_doctor  = " + doctorId + "";
+                "WHERE dateOf > #" + fromDateTime.ToString() + "# and dateof < #" + toDateTime.ToString() + "# and id_doctor  = " + doctorId + "";
             Dictionary<string, string> row = new Dictionary<string, string>();
             OleDbCommand cmd = new OleDbCommand();
             cmd.Connection = Connection;
@@ -413,7 +413,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         {
             List<Examination> examinations = new List<Examination>();
             var query = "SELECT id, id_doctor, id_patient, isEdited, isCancelled, isFinished, dateOf, typeOfExamination, isUrgent, id_room, duration FROM Examination " +
-                "WHERE dateOf BETWEEN (" + from + ", " + to + ") and id_doctor  = " + doctorId + "";
+                "WHERE dateOf > #" + from.ToString() + "# and dateOf < #" + to.ToString() + "# and id_doctor  = " + doctorId + "";
             //Dictionary<string, string> row = new Dictionary<string, string>();
             OleDbCommand cmd = new OleDbCommand();
             cmd.Connection = Connection;
@@ -438,7 +438,9 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             {
                 List<Examination> examinations = GetDoctorsEximanitonsInNextTwoHours(doctorID);
                 examinations = examinations.OrderBy(examination => examination.DateOf).ToList();
-                TimeSpan timeSpan = DateTime.Now - examinations[0].DateOf;
+                TimeSpan timeSpan = TimeSpan.FromSeconds(0);
+                if(examinations.Count() > 0)
+                    timeSpan = DateTime.Now - examinations[0].DateOf;
                 if (timeSpan.TotalMinutes <= duration)
                 {
                     closestTimeAndDoctor = new Tuple<string, DateTime>(doctorID, DateTime.Now);
@@ -454,9 +456,11 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
                         }
                     }
                 }
-                timeSpan = DateTime.Now.AddHours(2) - examinations[examinations.Count - 1].DateOf;
+                if(examinations.Count() > 0)
+                    timeSpan = DateTime.Now.AddHours(2) - examinations[examinations.Count - 1].DateOf;
                 if (timeSpan.TotalMinutes <= duration)
                 {
+
                     if (examinations[examinations.Count - 1].DateOf.AddMinutes(examinations[examinations.Count - 1].Duration) < closestTimeAndDoctor.Item2)
                     {
                         closestTimeAndDoctor = new Tuple<string, DateTime>(doctorID, examinations[examinations.Count - 1].DateOf.AddMinutes(examinations[examinations.Count - 1].Duration));

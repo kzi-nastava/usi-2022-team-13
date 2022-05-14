@@ -64,8 +64,8 @@ namespace HealthCareSystem.Core.GUI
 
         private void urgentButton_Click(object sender, EventArgs e)
         {
-            //ChooseSpeciality chooseSpeciality = new ChooseSpeciality((int)patientsDataGrid.SelectedRows[0].Cells[0].Value);
-            //chooseSpeciality.ShowDialog();
+            ChooseSpeciality chooseSpeciality = new ChooseSpeciality((int)patientsDataGrid.SelectedRows[0].Cells[0].Value);
+            chooseSpeciality.ShowDialog();
         }
     }
 }

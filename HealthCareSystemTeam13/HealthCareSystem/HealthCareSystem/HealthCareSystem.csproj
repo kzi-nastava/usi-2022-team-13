@@ -180,6 +180,12 @@
     <Compile Include="Core\GUI\SecretaryFunctionalities\BlockPatient.Designer.cs">
       <DependentUpon>BlockPatient.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\ChooseSpeciality.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\ChooseSpeciality.Designer.cs">
+      <DependentUpon>ChooseSpeciality.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\SecretaryFunctionalities\DeletePatient.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -221,6 +227,12 @@
     </Compile>
     <Compile Include="Core\GUI\SecretaryFunctionalities\UnblockPatient.Designer.cs">
       <DependentUpon>UnblockPatient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\UrgentExaminations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\SecretaryFunctionalities\UrgentExaminations.Designer.cs">
+      <DependentUpon>UrgentExaminations.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\GUI\SecretaryView.cs">
       <SubType>Form</SubType>
@@ -331,6 +343,9 @@
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\BlockPatient.resx">
       <DependentUpon>BlockPatient.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\ChooseSpeciality.resx">
+      <DependentUpon>ChooseSpeciality.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\DeletePatient.resx">
       <DependentUpon>DeletePatient.cs</DependentUpon>
     </EmbeddedResource>
@@ -351,6 +366,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\UnblockPatient.resx">
       <DependentUpon>UnblockPatient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\UrgentExaminations.resx">
+      <DependentUpon>UrgentExaminations.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryView.resx">
       <DependentUpon>SecretaryView.cs</DependentUpon>
