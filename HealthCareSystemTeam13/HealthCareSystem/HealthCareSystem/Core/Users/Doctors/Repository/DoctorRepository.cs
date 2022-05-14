@@ -142,9 +142,12 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public BindingList<Doctor> GetDoctors()
         {
             BindingList<Doctor> doctors = new BindingList<Doctor>();
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
             try
             {
-                Connection.Open();
+
+               
 
                 OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from doctors", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -160,7 +163,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
             return doctors;
         }
