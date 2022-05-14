@@ -32,7 +32,6 @@ namespace HealthCareSystem.Core.GUI
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SecretaryView));
             this.panel1 = new System.Windows.Forms.Panel();
             this.LogOutButton = new System.Windows.Forms.Button();
-            this.urgentExaminationsButton = new System.Windows.Forms.Button();
             this.lettersButton = new System.Windows.Forms.Button();
             this.patientsButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -47,7 +46,6 @@ namespace HealthCareSystem.Core.GUI
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.panel1.Controls.Add(this.LogOutButton);
-            this.panel1.Controls.Add(this.urgentExaminationsButton);
             this.panel1.Controls.Add(this.lettersButton);
             this.panel1.Controls.Add(this.patientsButton);
             this.panel1.Controls.Add(this.pictureBox1);
@@ -72,19 +70,6 @@ namespace HealthCareSystem.Core.GUI
             this.LogOutButton.Text = "Log Out";
             this.LogOutButton.UseVisualStyleBackColor = false;
             this.LogOutButton.Click += new System.EventHandler(this.LogOutButton_Click);
-            // 
-            // urgentExaminationsButton
-            // 
-            this.urgentExaminationsButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.urgentExaminationsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.urgentExaminationsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.urgentExaminationsButton.ForeColor = System.Drawing.Color.White;
-            this.urgentExaminationsButton.Location = new System.Drawing.Point(26, 361);
-            this.urgentExaminationsButton.Name = "urgentExaminationsButton";
-            this.urgentExaminationsButton.Size = new System.Drawing.Size(209, 38);
-            this.urgentExaminationsButton.TabIndex = 6;
-            this.urgentExaminationsButton.Text = "Requests";
-            this.urgentExaminationsButton.UseVisualStyleBackColor = false;
             // 
             // lettersButton
             // 
@@ -187,7 +172,6 @@ namespace HealthCareSystem.Core.GUI
         private System.Windows.Forms.Button blockedPatientsButton;
         private System.Windows.Forms.Button patientsButton;
         private System.Windows.Forms.Button LogOutButton;
-        private System.Windows.Forms.Button urgentExaminationsButton;
         private System.Windows.Forms.Button lettersButton;
     }
 }

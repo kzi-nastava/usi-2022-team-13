@@ -905,7 +905,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[0]), 85, 185));
             medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[1]), 92, 192));
             medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[2]), 75, 183));
-            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[3]), 64, 170));
 
             return medicalRecords;
         }
@@ -1172,7 +1171,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
         }
         private static void InsertSingleReferralLetter(ReferralLetter referralLetter)
         {
-            var query = "INSERT INTO ReferralLetter(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) VALUES(@id_doctor, @id_patient, @id_forwarded_doctor, @typeOfExamination, @speciality)";
+            var query = "INSERT INTO ReferralLetter(id_doctor, id_patient, dateOf, id_forwarded_doctor, typeOfExamination, speciality) VALUES(@id_doctor, @id_patient, @dateOf, @id_forwarded_doctor, @typeOfExamination, @speciality)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_doctor", referralLetter.CurrentDoctorID);

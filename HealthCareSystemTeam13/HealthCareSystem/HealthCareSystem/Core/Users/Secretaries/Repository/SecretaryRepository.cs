@@ -10,6 +10,8 @@ using HealthCareSystem.Core.Scripts.Repository;
 using HealthCareSystem.Core.Users.Patients.Model;
 using HealthCareSystem.Core.Users.Model;
 using HealthCareSystem.Core.Examinations.Model;
+using HealthCareSystem.Core.Users.Doctors.Model;
+using HealthCareSystem.Core.Rooms.Model;
 
 namespace HealthCareSystem.Core.Users.Secretaries.Repository
 {
@@ -19,6 +21,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public DataTable blockedPatients { get; set; }
         public DataTable requestsPatients { get; set; }
         public DataTable referralLetters { get; set; }
+        public DataTable closestExaminations { get; set; }
         public OleDbConnection Connection { get; set; }
 
         public SecretaryRepository()
@@ -61,7 +64,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             string blockedPatientsQuery = "select BlockedPatients.id, Patients.FirstName as FirstName, Patients.LastName as LastName, BlockedPatients.id_secretary as BlockedBy from BlockedPatients inner join Patients on Patients.id = BlockedPatients.id_patient";
             FillTable(blockedPatients, blockedPatientsQuery);
         }
-        
+
         public void PullExaminationRequests()
         {
             requestsPatients = new DataTable();
@@ -74,6 +77,24 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             referralLetters = new DataTable();
             var query = "select * from ReferralLetter";
             FillTable(referralLetters, query);
+        }
+
+        public void PullClosestExaminations(string roomId)
+        {
+            closestExaminations = new DataTable();
+            DateTime fromDateTime = DateTime.Now;
+            DateTime toDateTime = DateTime.Now.AddHours(2);
+            var query = "select * from (select * from Examiantion WHERE dateOf BETWEEN (" + fromDateTime + ", " + toDateTime + ") and id_room  = " + roomId + " and isUrgent = 0 ORDER BY dateOf) where rownum < 5 ";
+            FillTable(closestExaminations, query);
+        }
+
+        public void PullClosestExaminations(DoctorSpeciality speciality)
+        {
+            closestExaminations = new DataTable();
+            DateTime fromDateTime = DateTime.Now;
+            DateTime toDateTime = DateTime.Now.AddHours(2);
+            var query = "select * from (select * from Examiantion WHERE dateOf BETWEEN (" + fromDateTime + ", " + toDateTime + ") and id_doctor in (SELECT id FROM doctors WHERE speciality = " + speciality + " ) ORDER BY dateOf) where rownum < 5 ";
+            FillTable(closestExaminations, query);
         }
 
         public void InsertSingleUser(User user)
@@ -93,7 +114,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             var query = "SELECT id FROM Users WHERE usrnm = '" + username + "'";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
-        
+
         public List<string> GetPatientId(string userID)
         {
             var query = "SELECT id FROM Patients WHERE user_id = " + userID + "";
@@ -185,12 +206,21 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
                 cmd.ExecuteNonQuery();
             }
         }
-        
+
         public void DeleteSingleExamination(string requestID)
         {
             var query = "SELECT id_examination from PatientEditRequest WHERE id = " + requestID + "";
             string examinationID = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
             query = "UPDATE Examination SET iscancelled = 1 WHERE ID = " + examinationID + "";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void DeleteSingleReferralLetter(string letterID)
+        {
+            var query = "DELETE from ReferralLetter WHERE id = " + Convert.ToInt32(letterID) + "";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.ExecuteNonQuery();
@@ -203,7 +233,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             Dictionary<string, string> row = new Dictionary<string, string>();
 
             OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
- 
+
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -214,7 +244,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             }
             return row;
         }
-        
+
         public void UpdatePatient(string patientID, string username, string password, string name, string lastname)
         {
             var query = "SELECT user_id FROM Patients WHERE id = " + patientID + "";
@@ -315,6 +345,231 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
                 row["room_id"] = reader["id_room"].ToString();
             }
             return row;
+        }
+
+        public List<string> GetSpecialistsIds(DoctorSpeciality speciality)
+        {
+            var query = "SELECT ID FROM Doctors WHERE speciality = '" + speciality + "'";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+
+        public List<string> GetOperationRooms()
+        {
+            var query = "SELECT ID FROM Rooms WHERE type = operation";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+
+        public List<string> GetExaminationRooms()
+        {
+            var query = "SELECT ID FROM Rooms WHERE type = examination";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+
+        public List<Examination> GetDoctorsEximanitonsInNextTwoHours(string doctorId)
+        {
+            List<Examination> examinations = new List<Examination>();
+            DateTime fromDateTime = DateTime.Now;
+            DateTime toDateTime = DateTime.Now.AddHours(2);
+            var query = "SELECT id, id_doctor, id_patient, isEdited, isCancelled, isFinished, dateOf, typeOfExamination, isUrgent, id_room, duration FROM Examination " +
+                "WHERE dateOf BETWEEN (" + fromDateTime + ", " + toDateTime + ") and id_doctor  = " + doctorId + "";
+            Dictionary<string, string> row = new Dictionary<string, string>();
+            OleDbCommand cmd = new OleDbCommand();
+            cmd.Connection = Connection;
+            cmd.CommandType = System.Data.CommandType.Text;
+            cmd.CommandText = query;
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                examinations.Add(new Examination((int)reader["id"], (int)reader["id_doctor"], (int)reader["id_patient"], (bool)reader["isEdited"], (bool)reader["isCancelled"], (bool)reader["isFinished"], (DateTime)reader["dateOf"],
+                                                 (TypeOfExamination)reader["typeOfExamination"], (bool)reader["isUrgent"], (int)reader["id_room"], (int)reader["duration"]));
+            }
+
+            return examinations;
+        }
+
+        public List<Examination> GetRoomEximanitonsFromTo(DateTime fromDateTime, DateTime toDateTime, string roomId)
+        {
+            List<Examination> examinations = new List<Examination>();
+            var query = "SELECT id, id_doctor, id_patient, isEdited, isCancelled, isFinished, dateOf, typeOfExamination, isUrgent, id_room, duration FROM Examination " +
+                "WHERE dateOf BETWEEN (" + fromDateTime + ", " + toDateTime + ") and id_room  = " + roomId + "";
+            Dictionary<string, string> row = new Dictionary<string, string>();
+            OleDbCommand cmd = new OleDbCommand();
+            cmd.Connection = Connection;
+            cmd.CommandType = System.Data.CommandType.Text;
+            cmd.CommandText = query;
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                examinations.Add(new Examination((int)reader["id"], (int)reader["id_doctor"], (int)reader["id_patient"], (bool)reader["isEdited"], (bool)reader["isCancelled"], (bool)reader["isFinished"], (DateTime)reader["dateOf"],
+                                                 (TypeOfExamination)reader["typeOfExamination"], (bool)reader["isUrgent"], (int)reader["id_room"], (int)reader["duration"]));
+            }
+
+            return examinations;
+        }
+
+        public List<Examination> GetDoctorsExamiantions(DateTime from, DateTime to, string doctorId)
+        {
+            List<Examination> examinations = new List<Examination>();
+            var query = "SELECT id, id_doctor, id_patient, isEdited, isCancelled, isFinished, dateOf, typeOfExamination, isUrgent, id_room, duration FROM Examination " +
+                "WHERE dateOf BETWEEN (" + from + ", " + to + ") and id_doctor  = " + doctorId + "";
+            //Dictionary<string, string> row = new Dictionary<string, string>();
+            OleDbCommand cmd = new OleDbCommand();
+            cmd.Connection = Connection;
+            cmd.CommandType = System.Data.CommandType.Text;
+            cmd.CommandText = query;
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                examinations.Add(new Examination((int)reader["id"], (int)reader["id_doctor"], (int)reader["id_patient"], (bool)reader["isEdited"], (bool)reader["isCancelled"], (bool)reader["isFinished"], (DateTime)reader["dateOf"],
+                                                 (TypeOfExamination)reader["typeOfExamination"], (bool)reader["isUrgent"], (int)reader["id_room"], (int)reader["duration"]));
+            }
+
+            return examinations;
+        }
+
+        public Tuple<string, DateTime> AvailableExamination(DoctorSpeciality speciality, int duration)
+        {
+            List<string> doctorsID = GetSpecialistsIds(speciality);
+            Tuple<string, DateTime> closestTimeAndDoctor = new Tuple<string, DateTime>("none", DateTime.Now.AddHours(2)); 
+            foreach (string doctorID in doctorsID)
+            {
+                List<Examination> examinations = GetDoctorsEximanitonsInNextTwoHours(doctorID);
+                examinations = examinations.OrderBy(examination => examination.DateOf).ToList();
+                TimeSpan timeSpan = DateTime.Now - examinations[0].DateOf;
+                if (timeSpan.TotalMinutes <= duration)
+                {
+                    closestTimeAndDoctor = new Tuple<string, DateTime>(doctorID, DateTime.Now);
+                }
+                for (int index = 0; index < examinations.Count() - 1; index++)
+                {
+                    timeSpan = examinations[index + 1].DateOf - examinations[index].DateOf;
+                    if (timeSpan.TotalMinutes <= duration)
+                    {
+                        if(examinations[index].DateOf.AddMinutes(examinations[index].Duration) < closestTimeAndDoctor.Item2 )
+                        {
+                            closestTimeAndDoctor = new Tuple<string, DateTime>(doctorID, examinations[index].DateOf.AddMinutes(examinations[index].Duration));
+                        }
+                    }
+                }
+                timeSpan = DateTime.Now.AddHours(2) - examinations[examinations.Count - 1].DateOf;
+                if (timeSpan.TotalMinutes <= duration)
+                {
+                    if (examinations[examinations.Count - 1].DateOf.AddMinutes(examinations[examinations.Count - 1].Duration) < closestTimeAndDoctor.Item2)
+                    {
+                        closestTimeAndDoctor = new Tuple<string, DateTime>(doctorID, examinations[examinations.Count - 1].DateOf.AddMinutes(examinations[examinations.Count - 1].Duration));
+                    }
+                }
+            }
+            return closestTimeAndDoctor;
+        }
+
+        public int GetAvailableRoom(DateTime dateTime, int duration)
+        {
+            if(duration > 15)
+            {
+                List<string> roomsId = GetOperationRooms();
+                foreach(string roomId in roomsId)
+                {
+                    if(IsRoomAvailable(roomId, dateTime, duration))
+                    {
+                        return Convert.ToInt32(roomId);
+                    }    
+                }
+            } else
+            {
+                List<string> roomsId = GetExaminationRooms();
+                foreach (string roomId in roomsId)
+                {
+                    if (IsRoomAvailable(roomId, dateTime, duration))
+                    {
+                        return Convert.ToInt32(roomId);
+                    }
+                }
+            }
+
+            return 0;
+        }
+
+        public bool IsRoomAvailable(string roomId, DateTime dateTime, int duration)
+        {
+            DateTime fromDateTime = DateTime.Now;
+            DateTime toDateTime = DateTime.Now.AddHours(2);
+            List<Examination> examinations = GetRoomEximanitonsFromTo(fromDateTime, toDateTime, roomId);
+            foreach(Examination examination in examinations)
+            {
+                if (examination.DateOf < dateTime.AddMinutes(duration) && examination.DateOf > dateTime)
+                    return false;
+            }
+            return true;
+        }
+
+        /* public void MoveExaminations(DateTime from, DateTime to, int doctorId, int roomId)
+        {
+            MoveExaminationsFromRoom(from, to, roomId);
+        }
+        public void MoveExaminationsFromRoom(DateTime from, DateTime to, int roomId)
+        {
+            List<Examination> movingExaminations = GetRoomEximanitonsFromTo(from, to, roomId.ToString());
+            foreach(Examination movingExamination in movingExaminations)
+            {
+                List<Examination> examinations = GetDoctorsExamiantions((movingExamination.IdDoctor).ToString());
+                examinations = examinations.OrderBy(examination => examination.DateOf).ToList();
+                bool found = false;
+
+                for (int index = 0; index < examinations.Count() - 1; index++)
+                {
+                    TimeSpan timeSpan = examinations[index + 1].DateOf - examinations[index].DateOf.AddMinutes(examinations[index].Duration);
+                    if (timeSpan.TotalMinutes <= movingExamination.Duration && IsRoomAvailable((movingExamination.IdRoom).ToString(), examinations[index].DateOf.AddMinutes(examinations[index].Duration), movingExamination.Duration))
+                    {
+                        MoveExamination(examinations[examinations.Count() - 1].Id, examinations[index].DateOf.AddMinutes(examinations[index].Duration));
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found)
+                { 
+                    MoveExamination(examinations[examinations.Count() - 1].Id, examinations[examinations.Count() - 1].DateOf.AddMinutes(examinations[examinations.Count() - 1].Duration));
+                }
+
+            }
+        }*/
+
+        void MoveExamination(int id, DateTime dateTime)
+        {
+            var query = "UPDATE Examination SET dateOf = " + dateTime + " WHERE ID = " + id + "";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void MoveDoctorsExaminations(DateTime from, DateTime to, int doctorId)
+        {
+            List<Examination> movingExaminations = GetDoctorsExamiantions(from, to, doctorId.ToString());
+            foreach (Examination movingExamination in movingExaminations)
+            {
+                List<Examination> examinations = GetDoctorsExamiantions(to, DateTime.Now.AddDays(30), (movingExamination.IdDoctor).ToString());
+                examinations = examinations.OrderBy(examination => examination.DateOf).ToList();
+                bool found = false;
+
+                for (int index = 0; index < examinations.Count() - 1; index++)
+                {
+                    TimeSpan timeSpan = examinations[index + 1].DateOf - examinations[index].DateOf.AddMinutes(examinations[index].Duration);
+                    if (timeSpan.TotalMinutes <= movingExamination.Duration )
+                    {
+                        MoveExamination(examinations[index].Id, examinations[index].DateOf.AddMinutes(examinations[index].Duration));
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    MoveExamination(examinations[examinations.Count() - 1].Id, examinations[examinations.Count() - 1].DateOf.AddMinutes(examinations[examinations.Count() - 1].Duration));
+                }
+            }
         }
     }
 }
