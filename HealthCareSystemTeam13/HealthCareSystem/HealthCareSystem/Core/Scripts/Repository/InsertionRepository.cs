@@ -726,7 +726,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             medications.Add(new Medication("Brufen", MedicationStatus.Approved));
             medications.Add(new Medication("Analgin", MedicationStatus.Denied));
             medications.Add(new Medication("Panklav", MedicationStatus.Approved));
-            
+            medications.Add(new Medication("Aspirin", MedicationStatus.Approved));
+
             return medications;
         }
 
@@ -869,8 +870,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> ingredientsIDs = DatabaseHelpers.ExecuteReaderQueries("select id from Ingredients", Connection);
 
             medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[0]), Convert.ToInt32(ingredientsIDs[0])));
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[1]), Convert.ToInt32(ingredientsIDs[0])));
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[2]), Convert.ToInt32(ingredientsIDs[0])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[1]), Convert.ToInt32(ingredientsIDs[1])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[2]), Convert.ToInt32(ingredientsIDs[2])));
 
             return medicationsIngredients;
         }
@@ -1025,20 +1026,27 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<Instruction> instructions = new List<Instruction>();
             DateTime tomorrow = DateTime.Now.AddHours(20);
 
-            instructions.Add(new Instruction(tomorrow, 3));
-            instructions.Add(new Instruction(tomorrow, 4));
-            instructions.Add(new Instruction(tomorrow, 2));
+            instructions.Add(new Instruction(tomorrow, 3,
+                "Morbi tincidunt augue interdum velit euismod in pellentesque massa placerat. Pharetra convallis posuere " +
+                "morbi leo urna molestie. Mattis ania at quis risus sed vulputate. Et netus et malesuada falis nibh praesent ."));
+            instructions.Add(new Instruction(tomorrow, 4,
+                "Morbi tincidunt augue interdum velit euismod in pellentesque massa placerat. Pharetra convallis posuere"
+                ));
+            instructions.Add(new Instruction(tomorrow, 2,
+                "Morbi tincidunt augue interdum velit euismod in pellentesque massa placerat. Pharetra convallis posuere"
+                ));
 
             return instructions;
         }
 
         private static void InsertSingleInstruction(Instruction instruction)
         {
-            var query = "INSERT INTO Instructions(startTime, timesPerDay) VALUES(@startTime, @timesPerDay)";
+            var query = "INSERT INTO Instructions(startTime, timesPerDay, description) VALUES(@startTime, @timesPerDay, @description)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@startTime", instruction.StartTime.ToString());
                 cmd.Parameters.AddWithValue("@timesPerDay", instruction.TimesPerDay);
+                cmd.Parameters.AddWithValue("@description", instruction.Description);
                 cmd.ExecuteNonQuery();
             }
         }

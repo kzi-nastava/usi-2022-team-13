@@ -31,7 +31,26 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             PatientFullName = patientFullName;
             ExaminationId = examinationId;
             ExaminingDoctor = DoctorRep.GetDoctorByUsername();
-            
+            DoctorRep.PullMedicine();
+            FillDataGridView();
+        }
+
+        private void FillDataGridView()
+        {
+
+            dgwMedications.DataSource = DoctorRep.medicine;
+            DataGridViewSettings();
+        }
+
+        private void DataGridViewSettings()
+        {
+            dgwMedications.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgwMedications.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgwMedications.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgwMedications.Columns[0].Width = 90;
+            dgwMedications.Columns[1].Width = 90;
+            dgwMedications.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            // dgwMedications.MultiSelect = false;
         }
 
         private void ShowData()
@@ -114,6 +133,116 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             DoctorRep.InsertReferral(referralLetter, option);
             MessageBox.Show("Successfully created a referral for the patient");
 
+        }
+
+        private void cbDoctor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbSpeciality_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rbDoctor_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lbWeight_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private bool CanChangeExamination()
+        {
+            if (dgwMedications.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Please select a row first.");
+
+            }
+            else
+            {
+                DataGridViewRow row = dgwMedications.SelectedRows[0];
+                if (row.Cells[0].Value == null)
+                {
+                    MessageBox.Show("You selected an empty row.");
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void btnPrescribe_Click(object sender, EventArgs e)
+        {
+            if(CanChangeExamination())
+            {
+                List<int> medicationIds = new List<int>();
+                var rows = dgwMedications.SelectedRows;
+                for (int i = 0; i < dgwMedications.SelectedRows.Count; i++)
+                {
+                    medicationIds.Add((int)rows[i].Cells[0].Value);
+
+                }
+
+                if (!RejectIfPatientIsAlergic(medicationIds)) return;
+
+                if (!CreateReceipt(medicationIds)) return;
+
+                MessageBox.Show("Successfully created medical prescription for the patient!");
+            }
+
+
+
+        }
+
+        private bool CreateReceipt(List<int> medicationIds)
+        {
+            if(rtbInstructions.Text == "")
+            {
+                MessageBox.Show("Instructions for the receipt can't be empty!");
+                return false;
+            }
+            DoctorRep.InsertInstruction(rtbInstructions.Text);
+            DateTime currentTime = DateTime.Now;
+
+            DoctorRep.InsertReceipt(ExaminingDoctor.ID, PatientId, currentTime);
+            int lastReceiptId = DoctorRep.getLastReceiptId();
+
+            foreach (int medicationId in medicationIds)
+            {
+                DoctorRep.InsertConnectionOfReceiptAndMedication(lastReceiptId, medicationId);
+            }
+            return true;
+        }
+
+        private bool RejectIfPatientIsAlergic(List<int> medicationIds)
+        {
+            List<int> alergicMedicationIds = DoctorRep.getAlergicMedicationsIds(PatientId);
+
+            foreach (int medicationId in medicationIds)
+            {
+                foreach (int alergicMedicationId in alergicMedicationIds)
+                {
+                    if (medicationId == alergicMedicationId)
+                    {
+                        MessageBox.Show(PatientFullName + " is alergic to " +
+                            DoctorRep.getMedicationNameById(alergicMedicationId) +
+                            "! Try again.");
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }
