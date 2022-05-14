@@ -48,9 +48,11 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void FillFirstRoomComboBox()
         {
 
-            string firstQuery = "select * from Rooms where type <> 'Warehouse'";
+            string firstQuery = "select * from Rooms where type <> 'Warehouse' and ID not in (select id_room from Examination where isFinished = false) and " +
+                "ID not in (select id_room from Renovations where dateOfFinish > #" + DateTime.Now.ToString() + "#) and " +
+                "ID not in (select isnull(id_other_room) from Renovations where dateOfFinish > #" + DateTime.Now.ToString() + "#)";
             List<Room> firstRooms = RoomRepository.GetRooms(firstQuery);
-
+            Console.WriteLine(firstQuery);
             cmbFirstRoom.ValueMember = null;
             cmbFirstRoom.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbFirstRoom.DataSource = firstRooms;
@@ -60,7 +62,10 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void FillSecondRoomComboBox()
         {
             Room selectedFirst = (Room)cmbFirstRoom.SelectedItem;
-            string secondQuery = "select * from Rooms where type <> 'Warehouse' and Id <> " + selectedFirst.ID; 
+            string secondQuery = "select * from Rooms where type <> 'Warehouse' and Id <> " + selectedFirst.ID + 
+                " and ID not in (select id_room from Examination where isFinished = false) and " +
+                "ID not in (select id_room from Renovations where dateOfFinish > #" + DateTime.Now.ToString() + "#) and " +
+                "ID not in (select isnull(id_other_room) from Renovations where dateOfFinish > #" + DateTime.Now.ToString() + "#)"; 
             List<Room> secondRooms = RoomRepository.GetRooms(secondQuery);
 
             cmbSecondRoom.ValueMember = null;
