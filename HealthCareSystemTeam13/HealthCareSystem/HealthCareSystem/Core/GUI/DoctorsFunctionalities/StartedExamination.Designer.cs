@@ -40,7 +40,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             this.btnRefer = new System.Windows.Forms.Button();
             this.dgwMedications = new System.Windows.Forms.DataGridView();
             this.btnPrescribe = new System.Windows.Forms.Button();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.rtbInstructions = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -161,17 +161,17 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             this.btnPrescribe.Name = "btnPrescribe";
             this.btnPrescribe.Size = new System.Drawing.Size(158, 31);
             this.btnPrescribe.TabIndex = 34;
-            this.btnPrescribe.Text = "Refer";
+            this.btnPrescribe.Text = "Prescribe";
             this.btnPrescribe.UseVisualStyleBackColor = true;
             this.btnPrescribe.Click += new System.EventHandler(this.btnPrescribe_Click);
             // 
-            // richTextBox1
+            // rtbInstructions
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(460, 409);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(197, 117);
-            this.richTextBox1.TabIndex = 35;
-            this.richTextBox1.Text = "";
+            this.rtbInstructions.Location = new System.Drawing.Point(460, 409);
+            this.rtbInstructions.Name = "rtbInstructions";
+            this.rtbInstructions.Size = new System.Drawing.Size(197, 117);
+            this.rtbInstructions.TabIndex = 35;
+            this.rtbInstructions.Text = "";
             // 
             // label2
             // 
@@ -211,7 +211,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.rtbInstructions);
             this.Controls.Add(this.btnPrescribe);
             this.Controls.Add(this.dgwMedications);
             this.Controls.Add(this.btnRefer);
@@ -244,7 +244,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private System.Windows.Forms.Button btnRefer;
         private System.Windows.Forms.DataGridView dgwMedications;
         private System.Windows.Forms.Button btnPrescribe;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox rtbInstructions;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
