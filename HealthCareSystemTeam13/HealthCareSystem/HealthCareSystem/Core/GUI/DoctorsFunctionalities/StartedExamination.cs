@@ -31,7 +31,26 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             PatientFullName = patientFullName;
             ExaminationId = examinationId;
             ExaminingDoctor = DoctorRep.GetDoctorByUsername();
-            
+            DoctorRep.PullMedicine();
+            FillDataGridView();
+        }
+
+        private void FillDataGridView()
+        {
+
+            dgwMedications.DataSource = DoctorRep.medicine;
+            DataGridViewSettings();
+        }
+
+        private void DataGridViewSettings()
+        {
+            dgwMedications.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgwMedications.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgwMedications.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgwMedications.Columns[0].Width = 90;
+            dgwMedications.Columns[1].Width = 90;
+            dgwMedications.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            // dgwMedications.MultiSelect = false;
         }
 
         private void ShowData()
@@ -113,6 +132,31 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
             DoctorRep.InsertReferral(referralLetter, option);
             MessageBox.Show("Successfully created a referral for the patient");
+
+        }
+
+        private void cbDoctor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbSpeciality_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rbDoctor_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lbWeight_Click(object sender, EventArgs e)
+        {
 
         }
     }

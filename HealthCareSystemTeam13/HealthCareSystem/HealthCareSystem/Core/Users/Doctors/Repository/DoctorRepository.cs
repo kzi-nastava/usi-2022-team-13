@@ -19,6 +19,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
         public string Username { get; set; }
         public DataTable examinations { get; set; }
+        public DataTable medicine { get; set; }
 
         public DoctorRepository(string username="", bool calledFromDoctor=false)
         {
@@ -56,6 +57,17 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
             FillTable(examinations, examinationsQuery);
         }
+
+        public void PullMedicine()
+        {
+            medicine = new DataTable();
+
+            string medicineQuery = "select id, nameOfMedication as Name" +
+                " from Medications ";
+
+            FillTable(medicine, medicineQuery);
+        }
+
         private void FillTable(DataTable table, string query)
         {
 
@@ -231,21 +243,11 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             int checkState = 0;
             if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 
-            string query;
-            if (option == 1)
-            {
-                query = "INSERT INTO ReferralLetter" +
+            string query = "INSERT INTO ReferralLetter" +
                 "(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) " +
                 "VALUES (@id_doctor, @id_patient," +
                 " @id_forwarded_doctor, @typeOfExamination, @speciality)";
-            }
-            else
-            {
-                query = "INSERT INTO ReferralLetter" +
-                "(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) " +
-                "VALUES (@id_doctor, @id_patient," +
-                "@id_forwarded_doctor, @typeOfExamination, @speciality)";
-            }
+
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_doctor", referralLetter.CurrentDoctorID);
