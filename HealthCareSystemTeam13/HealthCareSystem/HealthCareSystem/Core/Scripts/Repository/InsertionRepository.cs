@@ -21,6 +21,7 @@ using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
 using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
 using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
 using HealthCareSystem.Core.Rooms.Repository;
+using static HealthCareSystem.Core.Rooms.Renovations.Model.Renovation;
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
@@ -92,7 +93,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertRoomHasEquipment();
             InsertDynamicEquipmentRequests();
 
-            //InsertRenovations();
+            InsertRenovations();
             InsertTransferHistoryOfEquipment();
           
             InsertPatientEditRequests();
@@ -435,17 +436,11 @@ namespace HealthCareSystem.Core.Scripts.Repository
             renovations.Add(new Renovation(Convert.ToInt32(roomIDs[1]), DateTime.Now, DateTime.Now.AddMonths(1)));
             renovations.Add(new Renovation(Convert.ToInt32(roomIDs[2]), DateTime.Now, DateTime.Now.AddMonths(3)));
             renovations.Add(new Renovation(Convert.ToInt32(roomIDs[3]), DateTime.Now, DateTime.Now.AddMonths(4)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[4]), DateTime.Now, DateTime.Now.AddMonths(5)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[5]), DateTime.Now, DateTime.Now.AddMonths(1)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[6]), DateTime.Now, DateTime.Now.AddDays(15)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[7]), DateTime.Now, DateTime.Now.AddDays(25)));
 
             return renovations;
         }
 
-        // FOR LATER PURPOSES
-
-        /*private static void InsertRenovations()
+        private static void InsertRenovations()
         {
             List<Renovation> renovations = GetRenovations();
 
@@ -453,19 +448,29 @@ namespace HealthCareSystem.Core.Scripts.Repository
             {
                 InsertSingleRenovation(renovation);
             }
-        }*/
+        }
 
-       /* private static void InsertSingleRenovation(Renovation renovation)
+        private static void InsertSingleRenovation(Renovation renovation)
         {
-            var query = "INSERT INTO Renovations(id_room, dateOfStart, dateOfFinish) VALUES(@id_room, @startingDate, @ending_date)";
+            var query = "INSERT INTO Renovations(id_room, dateOfStart, dateOfFinish, id_other_room, renovationType) VALUES(@id_room, @startingDate, @ending_date, @id_other_room, @renovationType)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_room", renovation.RoomId);
                 cmd.Parameters.AddWithValue("@startingDate", renovation.StartingDate.ToString());
                 cmd.Parameters.AddWithValue("@ending_date", renovation.EndingDate.ToString());
+                if(renovation.SecondRoomId == -1)
+                {
+                    cmd.Parameters.Add("@id_other_room", OleDbType.Integer).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@id_other_room", renovation.SecondRoomId);
+                }
+                
+                cmd.Parameters.AddWithValue("@renovationType", renovation.Type.ToString());
                 cmd.ExecuteNonQuery();
             }
-        }*/
+        }
 
         private static List<TransferHistoryOfEquipment> GetTransferHistoryOfEquipment()
         {

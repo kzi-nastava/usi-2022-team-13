@@ -21,6 +21,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public OleDbConnection Connection { get; set; }
         public DataTable Rooms { get; set; }
         public DataTable Equipment { get; set; }
+        public DataTable Renovations { get; set; }
+
  
         public RoomRepository()
         {
@@ -41,8 +43,12 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         }
 
-       
-
+        public void PullRenovations()
+        {
+            Renovations = new DataTable();
+            string renovationsQuery = "select * from renovations";
+            FillTable(Renovations, renovationsQuery);
+        }
 
         public void PullEquipment()
         {

@@ -64,5 +64,11 @@ namespace HealthCareSystem.Core.GUI
         {
 
         }
+
+        private void btnRenovations_Click(object sender, EventArgs e)
+        {
+            if (SelectedButton != null) SelectedButton.Hide();
+            LoadForm(new Renovations());
+        }
     }
 }

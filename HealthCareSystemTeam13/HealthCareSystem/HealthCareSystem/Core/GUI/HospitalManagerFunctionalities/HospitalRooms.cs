@@ -14,11 +14,11 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 {
     public partial class HospitalRooms : Form
     {
-        private RoomRepository roomRepository;
+        private RoomRepository RoomRepository;
         public HospitalRooms()
         {
-            roomRepository = new RoomRepository();
-            roomRepository.PullRooms();
+            RoomRepository = new RoomRepository();
+            RoomRepository.PullRooms();
             InitializeComponent();
             FillDataGridView();
         }
@@ -26,7 +26,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void FillDataGridView()
         {
 
-            dgwHospitalRooms.DataSource = roomRepository.Rooms;
+            dgwHospitalRooms.DataSource = RoomRepository.Rooms;
             DataGridViewSettings();
 
 
@@ -68,8 +68,8 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         }
         public void RefreshDataGridView()
         {
-            roomRepository.PullRooms();
-            dgwHospitalRooms.DataSource = roomRepository.Rooms;
+            RoomRepository.PullRooms();
+            dgwHospitalRooms.DataSource = RoomRepository.Rooms;
             dgwHospitalRooms.Refresh();
         }
 
@@ -77,14 +77,14 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         {
 
             int roomId = (int)dgwHospitalRooms.SelectedRows[0].Cells[0].Value;
-            Room room = roomRepository.GetRoom(roomId);
+            Room room = RoomRepository.GetRoom(roomId);
 
             if(room.Type.ToString().Equals("Warehouse"))
             {
                 MessageBox.Show("You cannot remove a warehouse");
 
             }
-            else if (roomRepository.DoesRoomHaveFutureExaminations(room))
+            else if (RoomRepository.DoesRoomHaveFutureExaminations(room))
             {
                 MessageBox.Show("You cannot remove a room that will have future examinations in it");
             }
@@ -94,7 +94,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
                 if (wantToCancel == DialogResult.Yes)
                 {
-                        roomRepository.RemoveRoom((int)dgwHospitalRooms.SelectedRows[0].Cells[0].Value);
+                        RoomRepository.RemoveRoom((int)dgwHospitalRooms.SelectedRows[0].Cells[0].Value);
                         MessageBox.Show("Succesfully removed a room!");
                         RefreshDataGridView();
                 }
@@ -111,14 +111,14 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void btnEdit_Click(object sender, EventArgs e)
         {
             int roomId = (int)dgwHospitalRooms.SelectedRows[0].Cells[0].Value;
-            Room room = roomRepository.GetRoom(roomId);
+            Room room = RoomRepository.GetRoom(roomId);
 
             if (room.Type.ToString().Equals("Warehouse"))
             {
                 MessageBox.Show("You cannot edit a warehouse");
 
             }
-            else if (roomRepository.DoesRoomHaveFutureExaminations(room))
+            else if (RoomRepository.DoesRoomHaveFutureExaminations(room))
             {
                 MessageBox.Show("You cannot edit a room that will have future examinations in it");
             }
