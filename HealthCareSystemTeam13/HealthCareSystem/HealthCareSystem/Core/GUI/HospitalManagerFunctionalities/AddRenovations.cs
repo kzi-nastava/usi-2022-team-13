@@ -1,4 +1,5 @@
 ﻿using HealthCareSystem.Core.Rooms.Model;
+using HealthCareSystem.Core.Rooms.Renovations.Model;
 using HealthCareSystem.Core.Rooms.Repository;
 using System;
 using System.Collections.Generic;
@@ -52,7 +53,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                 "ID not in (select id_room from Renovations where dateOfFinish > #" + DateTime.Now.ToString() + "#) and " +
                 "ID not in (select isnull(id_other_room) from Renovations where dateOfFinish > #" + DateTime.Now.ToString() + "#)";
             List<Room> firstRooms = RoomRepository.GetRooms(firstQuery);
-            Console.WriteLine(firstQuery);
+            
             cmbFirstRoom.ValueMember = null;
             cmbFirstRoom.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbFirstRoom.DataSource = firstRooms;
@@ -140,8 +141,29 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
 
         private void btnCreate_Click(object sender, EventArgs e)
-        {
-            IsFormValid();
+        { 
+            if (IsFormValid())
+            {
+               
+                int roomId = ((Room)cmbFirstRoom.SelectedItem).ID;
+                DateTime startingDate = dtpDateStart.Value;
+                DateTime endingDate = dtpDateEnd.Value;
+                int secondRoomId;
+                try {
+                    secondRoomId = ((Room)cmbSecondRoom.SelectedItem).ID;
+                }catch(Exception)
+                {
+                    secondRoomId = -1;
+                }
+                
+                TypeOfRenovation type = (TypeOfRenovation)cmbType.SelectedItem;
+
+                Renovation newRenovation = new Renovation(roomId, startingDate, endingDate, secondRoomId, type);
+              
+                RoomRepository.InsertRenovation(newRenovation);
+                MessageBox.Show("Succesfully added new renovation");
+                this.Hide();
+            }
         }
 
         private void dtpDateEnd_ValueChanged(object sender, EventArgs e)

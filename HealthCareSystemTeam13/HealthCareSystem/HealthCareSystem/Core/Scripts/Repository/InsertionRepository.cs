@@ -104,8 +104,39 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertPatientExaminationChanges();
 
             UpdateTransfers();
+            UpdateRenovations();
             
             Connection.Close();
+        }
+
+        public void UpdateRenovations()
+        {
+
+            string unrealizedRenovationsQuery = "select * from Renovations where dateOfFinish";
+            //string unrealizedRenovationsQuery = "select * from Renovations where dateOfFinish < #" + DateTime.Now.ToString() + "#";
+            List<Renovation> unrealizedRenovations;
+            unrealizedRenovations = RoomRepository.GetRenovations(unrealizedRenovationsQuery);
+
+            foreach(Renovation renovation in unrealizedRenovations)
+            {
+                Console.WriteLine(renovation.Type + "  " + renovation.RoomId + "  " + renovation.SecondRoomId);
+                if(renovation.Type == TypeOfRenovation.Regular)
+                {
+                    
+                    string deleteRegularRenovationQuery = "delete from Renovations where id_room = " + renovation.RoomId;
+                    RoomRepository.UpdateContent(deleteRegularRenovationQuery);
+                }
+                else if(renovation.Type == TypeOfRenovation.Merging)
+                {
+
+                    
+                }
+                else
+                {
+
+                    
+                }
+            }
         }
 
         public void UpdateTransfers()
@@ -432,10 +463,13 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<Renovation> renovations = new List<Renovation>();
             List<String> roomIDs = GetRoomIDs();
 
-            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[0]), DateTime.Now, DateTime.Now.AddMonths(2)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[1]), DateTime.Now, DateTime.Now.AddMonths(1)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[0]), DateTime.Now, DateTime.Now.AddMonths(1)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[1]), DateTime.Now, DateTime.Now.AddMonths(2)));
             renovations.Add(new Renovation(Convert.ToInt32(roomIDs[2]), DateTime.Now, DateTime.Now.AddMonths(3)));
             renovations.Add(new Renovation(Convert.ToInt32(roomIDs[3]), DateTime.Now, DateTime.Now.AddMonths(4)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[4]), DateTime.Now, DateTime.Now.AddMonths(5), Convert.ToInt32(roomIDs[5]), TypeOfRenovation.Merging));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[6]), DateTime.Now, DateTime.Now.AddMonths(6), -1, TypeOfRenovation.Splitting));
+
 
             return renovations;
         }
