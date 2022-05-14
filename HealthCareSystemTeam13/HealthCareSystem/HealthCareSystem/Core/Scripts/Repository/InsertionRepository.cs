@@ -942,8 +942,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> ingredientsIDs = DatabaseHelpers.ExecuteReaderQueries("select id from Ingredients", Connection);
 
             medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[0]), Convert.ToInt32(ingredientsIDs[0])));
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[1]), Convert.ToInt32(ingredientsIDs[0])));
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[2]), Convert.ToInt32(ingredientsIDs[0])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[1]), Convert.ToInt32(ingredientsIDs[1])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[2]), Convert.ToInt32(ingredientsIDs[2])));
 
             return medicationsIngredients;
         }

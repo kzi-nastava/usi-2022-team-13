@@ -63,7 +63,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             medicine = new DataTable();
 
             string medicineQuery = "select id, nameOfMedication as Name" +
-                " from Medications ";
+                " from Medications where status = 'Approved'";
 
             FillTable(medicine, medicineQuery);
         }
@@ -193,6 +193,46 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 patient = SetPatientValues(reader);
             }
             return patient;
+        }
+
+        public List<int> getAlergicMedicationsIds(int patientId)
+        {
+
+            List<int> alergicMedicationIds = new List<int>();
+
+            string query = "" +
+                "select MedicationContainsIngredient.id_medication" +
+                " from MedicationContainsIngredient inner join PatientAlergicTo " +
+                "on MedicationContainsIngredient.id_ingredient = PatientAlergicTo.id_ingredient " +
+                " where PatientAlergicTo.id_patient = " + patientId;
+            
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while(reader.Read())
+            {
+                alergicMedicationIds.Add(Convert.ToInt32
+                    (reader["id_medication"]));
+            }
+
+
+
+            return alergicMedicationIds;
+        }
+
+        public String getMedicationNameById(int medicationId)
+        {
+            string medicationName = "";
+            string query = "select nameOfMedication from Medications where ID = " + medicationId;
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                medicationName = reader["nameOfMedication"].ToString();
+            }
+
+            return medicationName;
         }
 
         private static Patient SetPatientValues(OleDbDataReader reader)

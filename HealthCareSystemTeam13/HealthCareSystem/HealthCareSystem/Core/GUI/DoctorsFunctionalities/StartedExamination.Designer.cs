@@ -43,6 +43,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgwMedications)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,7 +51,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             // 
             this.lbPatientName.AutoSize = true;
             this.lbPatientName.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPatientName.Location = new System.Drawing.Point(168, 20);
+            this.lbPatientName.Location = new System.Drawing.Point(260, 9);
             this.lbPatientName.Name = "lbPatientName";
             this.lbPatientName.Size = new System.Drawing.Size(229, 31);
             this.lbPatientName.TabIndex = 3;
@@ -146,7 +147,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             // dgwMedications
             // 
             this.dgwMedications.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgwMedications.Location = new System.Drawing.Point(438, 121);
+            this.dgwMedications.Location = new System.Drawing.Point(440, 166);
             this.dgwMedications.Margin = new System.Windows.Forms.Padding(4);
             this.dgwMedications.Name = "dgwMedications";
             this.dgwMedications.Size = new System.Drawing.Size(261, 195);
@@ -155,17 +156,18 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             // btnPrescribe
             // 
             this.btnPrescribe.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPrescribe.Location = new System.Drawing.Point(475, 488);
+            this.btnPrescribe.Location = new System.Drawing.Point(477, 533);
             this.btnPrescribe.Margin = new System.Windows.Forms.Padding(4);
             this.btnPrescribe.Name = "btnPrescribe";
             this.btnPrescribe.Size = new System.Drawing.Size(158, 31);
             this.btnPrescribe.TabIndex = 34;
             this.btnPrescribe.Text = "Refer";
             this.btnPrescribe.UseVisualStyleBackColor = true;
+            this.btnPrescribe.Click += new System.EventHandler(this.btnPrescribe_Click);
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(458, 364);
+            this.richTextBox1.Location = new System.Drawing.Point(460, 409);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(197, 117);
             this.richTextBox1.TabIndex = 35;
@@ -175,7 +177,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(470, 81);
+            this.label2.Location = new System.Drawing.Point(472, 85);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(205, 25);
             this.label2.TabIndex = 36;
@@ -185,17 +187,28 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(382, 332);
+            this.label3.Location = new System.Drawing.Point(384, 377);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(382, 16);
             this.label3.TabIndex = 37;
             this.label3.Text = "How frequently should the patient drink medicine, when to stop...";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(506, 146);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(114, 16);
+            this.label4.TabIndex = 38;
+            this.label4.Text = "Active medication";
+            // 
             // StartedExamination
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(776, 532);
+            this.ClientSize = new System.Drawing.Size(795, 585);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.richTextBox1);
@@ -234,5 +247,6 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
     }
 }

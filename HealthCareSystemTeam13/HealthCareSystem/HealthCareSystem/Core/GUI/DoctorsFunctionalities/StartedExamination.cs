@@ -159,5 +159,35 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         {
 
         }
+
+        private void btnPrescribe_Click(object sender, EventArgs e)
+        {
+            List<int> medicationIds = new List<int>();
+            var rows = dgwMedications.SelectedRows;
+            for(int i = 0; i < dgwMedications.SelectedRows.Count; i++)
+            {
+                medicationIds.Add((int)rows[i].Cells[0].Value);
+
+            }
+
+
+            List<int> alergicMedicationIds = DoctorRep.getAlergicMedicationsIds(PatientId);
+
+            foreach (int medicationId in medicationIds)
+            {
+                foreach(int alergicMedicationId in alergicMedicationIds)
+                {
+                    if(medicationId == alergicMedicationId)
+                    {
+                        MessageBox.Show(PatientFullName + "is alergic to " + 
+                            DoctorRep.getMedicationNameById(alergicMedicationId) +
+                            "! Try again.");
+                        return;
+                    }
+                }
+            }
+
+
+        }
     }
 }
