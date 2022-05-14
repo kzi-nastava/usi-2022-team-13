@@ -20,14 +20,15 @@ using HealthCareSystem.Core.Medications.Receipts.Model;
 using HealthCareSystem.Core.Rooms.Renovations.Model;
 using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
 using HealthCareSystem.Core.Rooms.Repository;
-using static HealthCareSystem.Core.Rooms.Renovations.Model.Renovation;
 using HealthCareSystem.Core.Rooms.DynamicEqipmentRequests.Model;
+using static HealthCareSystem.Core.Rooms.Renovations.Model.Renovation;
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
     class InsertionRepository
     {
         private static OleDbConnection Connection;
+        RoomRepository roomRep;
 
         public InsertionRepository()
         {
@@ -45,6 +46,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
+            roomRep = new RoomRepository();
         }
 
         public void ExecuteQueries()
@@ -116,7 +118,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             string unrealizedRenovationsQuery = "select * from Renovations where dateOfFinish < #" + DateTime.Now.ToString() + "#";   
        
             List<Renovation> unrealizedRenovations;
-            unrealizedRenovations = RoomRepository.GetRenovations(unrealizedRenovationsQuery);
+            unrealizedRenovations = roomRep.GetRenovations(unrealizedRenovationsQuery);
 
             foreach(Renovation renovation in unrealizedRenovations)
             {
@@ -144,14 +146,14 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private void ExecuteRegularRenovations(Renovation renovation)
         {
             string deleteRegularRenovationQuery = "delete from Renovations where id_room = " + renovation.RoomId;
-            RoomRepository.UpdateContent(deleteRegularRenovationQuery);
+            roomRep.UpdateContent(deleteRegularRenovationQuery);
         }
 
         private void ExecuteMergingRenovations(Renovation renovation)
         {
             //getting all equipment that we need from room that we are merging into another
             string getEquipmentInRoomQuery = "select * from RoomHasEquipment where id_room = " + renovation.SecondRoomId;
-            List<RoomHasEquipment> equipmentToBeMoved = RoomRepository.GetEquipmentInRoom(getEquipmentInRoomQuery);
+            List<RoomHasEquipment> equipmentToBeMoved = roomRep.GetEquipmentInRoom(getEquipmentInRoomQuery);
 
 
             //going through every amount of equipment for each type to be moved to the first room
@@ -159,55 +161,55 @@ namespace HealthCareSystem.Core.Scripts.Repository
             {
                 //checking to see if there is an instance of RoomhasEquipment for room that we are putting equipment in
                 string checkQuery = "select * from RoomHasEquipment where id_room = " + renovation.RoomId + " and id_equipment = " + equipment.EquipmentId + "";
-                List<RoomHasEquipment> checkNumber = RoomRepository.GetEquipmentInRoom(checkQuery);
+                List<RoomHasEquipment> checkNumber = roomRep.GetEquipmentInRoom(checkQuery);
 
 
                 if (checkNumber.Count == 0)
                 {
                     //if there is not that particular instance we create new one with amount of 0
                     string insertQueryDestination = "insert into RoomHasEquipment (id_room, id_equipment, amount) values (" + renovation.RoomId + ", " + equipment.EquipmentId + ", 0)";
-                    RoomRepository.UpdateContent(insertQueryDestination);
+                    roomRep.UpdateContent(insertQueryDestination);
                 }
 
                 string updateFirstRoomEquipment = "update RoomHasEquipment set amount = amount + " + equipment.Quantity + " where id_room = " + renovation.RoomId + " and id_equipment = " + equipment.EquipmentId;
-                RoomRepository.UpdateContent(updateFirstRoomEquipment);
+                roomRep.UpdateContent(updateFirstRoomEquipment);
 
             }
 
             //we delete merge renovation order
             string deleteMergingRenovationQuery = "delete from Renovations where id_room = " + renovation.RoomId + " and id_other_room = " + renovation.SecondRoomId;
-            RoomRepository.UpdateContent(deleteMergingRenovationQuery);
+            roomRep.UpdateContent(deleteMergingRenovationQuery);
 
 
             //and then we delete room that was merged into the first one
             string deleteOtherRoomQuery = "delete from Rooms where ID = " + renovation.SecondRoomId;
-            RoomRepository.UpdateContent(deleteOtherRoomQuery);
+            roomRep.UpdateContent(deleteOtherRoomQuery);
         }
 
         private void ExecuteSplitingRenovations(Renovation renovation)
         {
             string getEquipmentInFirstRoomQuery = "select * from RoomHasEquipment where id_room = " + renovation.RoomId;
-            List<RoomHasEquipment> equipmentToBeMovedToWarehouse = RoomRepository.GetEquipmentInRoom(getEquipmentInFirstRoomQuery);
+            List<RoomHasEquipment> equipmentToBeMovedToWarehouse = roomRep.GetEquipmentInRoom(getEquipmentInFirstRoomQuery);
 
-            Room warehouse = RoomRepository.GetRooms("select * from Rooms where Type = 'Warehouse'")[0];
-            Room firstRoom = RoomRepository.GetRooms("select * from Rooms where ID = " + renovation.RoomId)[0];
+            Room warehouse = roomRep.GetRooms("select * from Rooms where Type = 'Warehouse'")[0];
+            Room firstRoom = roomRep.GetRooms("select * from Rooms where ID = " + renovation.RoomId)[0];
 
 
 
             foreach (RoomHasEquipment equipment in equipmentToBeMovedToWarehouse)
             {
                 string checkQuery = "select * from RoomHasEquipment where id_equipment = " + equipment.EquipmentId + " and id_room in (select ID from Rooms where Type = 'Warehouse'";
-                List<RoomHasEquipment> checkNumber = RoomRepository.GetEquipmentInRoom(checkQuery);
+                List<RoomHasEquipment> checkNumber = roomRep.GetEquipmentInRoom(checkQuery);
 
 
                 if (checkNumber.Count == 0)
                 {
                     string insertQueryDestination = "insert into RoomHasEquipment (id_room, id_equipment, amount) values (" + warehouse.ID + ", " + equipment.EquipmentId + ", 0)";
-                    RoomRepository.UpdateContent(insertQueryDestination);
+                    roomRep.UpdateContent(insertQueryDestination);
                 }
 
                 string updateWarehouseEquipment = "update RoomHasEquipment set amount = amount + " + equipment.Quantity + " where id_room = " + warehouse.ID + " and id_equipment = " + equipment.EquipmentId;
-                RoomRepository.UpdateContent(updateWarehouseEquipment);
+                roomRep.UpdateContent(updateWarehouseEquipment);
 
             }
 
@@ -215,7 +217,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
 
             string deleteSplittingRenovationQuery = "delete from Renovations where id_room = " + renovation.RoomId;
-            RoomRepository.UpdateContent(deleteSplittingRenovationQuery);
+            roomRep.UpdateContent(deleteSplittingRenovationQuery);
 
 
             InsertSingleRoom(firstRoom);
@@ -230,7 +232,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             string unrealizedTransfersQuery = "select * from EquipmentTransferHistory where isExecuted = false";
 
             List<TransferHistoryOfEquipment> unrealizedTransfers;
-            unrealizedTransfers = RoomRepository.GetTransferHistory(unrealizedTransfersQuery);
+            unrealizedTransfers = roomRep.GetTransferHistory(unrealizedTransfersQuery);
 
             Connection.Close();
         }

@@ -46,6 +46,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             this.dgwRenovations.RowTemplate.Height = 24;
             this.dgwRenovations.Size = new System.Drawing.Size(737, 419);
             this.dgwRenovations.TabIndex = 0;
+            this.dgwRenovations.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwRenovations_CellContentClick);
             // 
             // btnRefresh
             // 
@@ -84,7 +85,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             // 
             // Renovations
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 23F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(795, 556);
             this.Controls.Add(this.button1);

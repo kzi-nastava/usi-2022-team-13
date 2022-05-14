@@ -64,5 +64,10 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             InsertionRepository a = new InsertionRepository();
             a.UpdateRenovations();
         }
+
+        private void dgwRenovations_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
