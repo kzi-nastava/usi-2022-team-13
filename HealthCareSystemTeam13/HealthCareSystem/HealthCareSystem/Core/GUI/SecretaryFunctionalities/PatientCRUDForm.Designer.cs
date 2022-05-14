@@ -34,6 +34,7 @@ namespace HealthCareSystem.Core.GUI
             this.editButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
             this.blockButton = new System.Windows.Forms.Button();
+            this.urgentButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.patientsDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,7 +53,7 @@ namespace HealthCareSystem.Core.GUI
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(188, 397);
+            this.addButton.Location = new System.Drawing.Point(160, 398);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(82, 23);
             this.addButton.TabIndex = 1;
@@ -62,7 +63,7 @@ namespace HealthCareSystem.Core.GUI
             // 
             // editButton
             // 
-            this.editButton.Location = new System.Drawing.Point(305, 397);
+            this.editButton.Location = new System.Drawing.Point(261, 398);
             this.editButton.Name = "editButton";
             this.editButton.Size = new System.Drawing.Size(74, 23);
             this.editButton.TabIndex = 2;
@@ -72,7 +73,7 @@ namespace HealthCareSystem.Core.GUI
             // 
             // deleteButton
             // 
-            this.deleteButton.Location = new System.Drawing.Point(410, 397);
+            this.deleteButton.Location = new System.Drawing.Point(356, 398);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(90, 23);
             this.deleteButton.TabIndex = 3;
@@ -82,7 +83,7 @@ namespace HealthCareSystem.Core.GUI
             // 
             // blockButton
             // 
-            this.blockButton.Location = new System.Drawing.Point(524, 397);
+            this.blockButton.Location = new System.Drawing.Point(465, 398);
             this.blockButton.Name = "blockButton";
             this.blockButton.Size = new System.Drawing.Size(82, 23);
             this.blockButton.TabIndex = 4;
@@ -90,11 +91,22 @@ namespace HealthCareSystem.Core.GUI
             this.blockButton.UseVisualStyleBackColor = true;
             this.blockButton.Click += new System.EventHandler(this.blockButton_Click);
             // 
+            // urgentButton
+            // 
+            this.urgentButton.Location = new System.Drawing.Point(563, 398);
+            this.urgentButton.Name = "urgentButton";
+            this.urgentButton.Size = new System.Drawing.Size(82, 23);
+            this.urgentButton.TabIndex = 5;
+            this.urgentButton.Text = "URGENT";
+            this.urgentButton.UseVisualStyleBackColor = true;
+            this.urgentButton.Click += new System.EventHandler(this.urgentButton_Click);
+            // 
             // PatientCRUDForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.urgentButton);
             this.Controls.Add(this.blockButton);
             this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.editButton);
@@ -115,5 +127,6 @@ namespace HealthCareSystem.Core.GUI
         private System.Windows.Forms.Button editButton;
         private System.Windows.Forms.Button deleteButton;
         private System.Windows.Forms.Button blockButton;
+        private System.Windows.Forms.Button urgentButton;
     }
 }
