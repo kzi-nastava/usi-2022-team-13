@@ -61,5 +61,11 @@ namespace HealthCareSystem.Core.GUI
             BlockPatient blockPatient = new BlockPatient(Username);
             blockPatient.ShowDialog();
         }
+
+        private void urgentButton_Click(object sender, EventArgs e)
+        {
+            ChooseSpeciality chooseSpeciality = new ChooseSpeciality((int)patientsDataGrid.SelectedRows[0].Cells[0].Value);
+            chooseSpeciality.ShowDialog();
+        }
     }
 }

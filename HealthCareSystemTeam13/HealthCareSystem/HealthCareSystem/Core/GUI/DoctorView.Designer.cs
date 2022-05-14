@@ -39,13 +39,14 @@ namespace HealthCareSystem
             this.btnShowNextThreeDays = new System.Windows.Forms.Button();
             this.dtDate = new System.Windows.Forms.DateTimePicker();
             this.btnMedicalRecord = new System.Windows.Forms.Button();
+            this.btnStartExamination = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgwExaminations)).BeginInit();
             this.SuspendLayout();
             // 
             // btnRefresh
             // 
             this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefresh.Location = new System.Drawing.Point(227, 17);
+            this.btnRefresh.Location = new System.Drawing.Point(270, 17);
             this.btnRefresh.Margin = new System.Windows.Forms.Padding(4);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(177, 59);
@@ -102,7 +103,7 @@ namespace HealthCareSystem
             // btnExit
             // 
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExit.Location = new System.Drawing.Point(13, 508);
+            this.btnExit.Location = new System.Drawing.Point(12, 599);
             this.btnExit.Margin = new System.Windows.Forms.Padding(4);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(184, 47);
@@ -114,7 +115,7 @@ namespace HealthCareSystem
             // btnShowDay
             // 
             this.btnShowDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShowDay.Location = new System.Drawing.Point(12, 168);
+            this.btnShowDay.Location = new System.Drawing.Point(12, 289);
             this.btnShowDay.Margin = new System.Windows.Forms.Padding(4);
             this.btnShowDay.Name = "btnShowDay";
             this.btnShowDay.Size = new System.Drawing.Size(184, 84);
@@ -126,7 +127,7 @@ namespace HealthCareSystem
             // btnShowNextThreeDays
             // 
             this.btnShowNextThreeDays.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShowNextThreeDays.Location = new System.Drawing.Point(13, 274);
+            this.btnShowNextThreeDays.Location = new System.Drawing.Point(13, 395);
             this.btnShowNextThreeDays.Margin = new System.Windows.Forms.Padding(4);
             this.btnShowNextThreeDays.Name = "btnShowNextThreeDays";
             this.btnShowNextThreeDays.Size = new System.Drawing.Size(184, 82);
@@ -137,7 +138,7 @@ namespace HealthCareSystem
             // 
             // dtDate
             // 
-            this.dtDate.Location = new System.Drawing.Point(12, 17);
+            this.dtDate.Location = new System.Drawing.Point(10, 134);
             this.dtDate.Name = "dtDate";
             this.dtDate.Size = new System.Drawing.Size(200, 20);
             this.dtDate.TabIndex = 14;
@@ -145,7 +146,7 @@ namespace HealthCareSystem
             // btnMedicalRecord
             // 
             this.btnMedicalRecord.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMedicalRecord.Location = new System.Drawing.Point(13, 382);
+            this.btnMedicalRecord.Location = new System.Drawing.Point(13, 503);
             this.btnMedicalRecord.Margin = new System.Windows.Forms.Padding(4);
             this.btnMedicalRecord.Name = "btnMedicalRecord";
             this.btnMedicalRecord.Size = new System.Drawing.Size(184, 82);
@@ -154,11 +155,24 @@ namespace HealthCareSystem
             this.btnMedicalRecord.UseVisualStyleBackColor = true;
             this.btnMedicalRecord.Click += new System.EventHandler(this.btnMedicalRecord_Click);
             // 
+            // btnStartExamination
+            // 
+            this.btnStartExamination.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStartExamination.Location = new System.Drawing.Point(20, 17);
+            this.btnStartExamination.Margin = new System.Windows.Forms.Padding(4);
+            this.btnStartExamination.Name = "btnStartExamination";
+            this.btnStartExamination.Size = new System.Drawing.Size(177, 59);
+            this.btnStartExamination.TabIndex = 16;
+            this.btnStartExamination.Text = "Start selected examination";
+            this.btnStartExamination.UseVisualStyleBackColor = true;
+            this.btnStartExamination.Click += new System.EventHandler(this.btnStartExamination_Click);
+            // 
             // DoctorView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1014, 632);
+            this.ClientSize = new System.Drawing.Size(1027, 658);
+            this.Controls.Add(this.btnStartExamination);
             this.Controls.Add(this.btnMedicalRecord);
             this.Controls.Add(this.dtDate);
             this.Controls.Add(this.btnShowNextThreeDays);
@@ -190,5 +204,6 @@ namespace HealthCareSystem
         private System.Windows.Forms.Button btnShowNextThreeDays;
         private System.Windows.Forms.DateTimePicker dtDate;
         private System.Windows.Forms.Button btnMedicalRecord;
+        private System.Windows.Forms.Button btnStartExamination;
     }
 }

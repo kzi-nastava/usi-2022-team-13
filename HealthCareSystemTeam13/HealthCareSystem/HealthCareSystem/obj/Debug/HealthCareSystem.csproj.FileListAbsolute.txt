@@ -26,7 +26,6 @@ C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\Heal
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.csproj.AssemblyReference.cache
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.DoctorView.resources
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.LoginForm.resources
-C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.HospitalManagerView.resources
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Properties.Resources.resources
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.csproj.GenerateResource.cache
 C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.csproj.CoreCompileInputs.cache
@@ -189,3 +188,17 @@ C:\Users\dusan\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\Healt
 C:\Users\dusan\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.ReferralLettersForm.resources
 C:\Users\dusan\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.Renovations.resources
 C:\Users\dusan\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.AddRenovations.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.DoctorsFunctionalities.StartedExamination.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.EquipmentMover.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.MoveEquipmentDialog.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.AnamnesisView.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.HomeView.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.MedicalRecordView.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.PatientFunctionalities.PatientRecommendation.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.AddExamination.resources
+C:\Users\idegas\Documents\GitHub\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.ReferralLettersForm.resources
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.DoctorsFunctionalities.StartedExamination.resources
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.EquipmentMover.resources
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.HospitalManagerFunctionalities.MoveEquipmentDialog.resources
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.ChooseSpeciality.resources
+C:\Users\Korisnik\Desktop\FTN\GIT\course-project-t-13\HealthCareSystemTeam13\HealthCareSystem\HealthCareSystem\obj\Debug\HealthCareSystem.Core.GUI.SecretaryFunctionalities.UrgentExaminations.resources

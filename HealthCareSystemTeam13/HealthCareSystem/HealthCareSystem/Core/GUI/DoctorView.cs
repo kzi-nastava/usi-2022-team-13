@@ -192,5 +192,24 @@ namespace HealthCareSystem
                 patientMedicalRecordForm.ShowDialog();
             }
         }
+
+        private void btnStartExamination_Click(object sender, EventArgs e)
+        {
+            if (CanChangeExamination())
+            {
+                int validDate = IsValidDate();
+                if (validDate != 0)
+                {
+                    int examinationId = (int)dgwExaminations.SelectedRows[0].Cells[0].Value;
+                    string patientFullName = dgwExaminations.SelectedRows[0].Cells[1].Value.ToString();
+                    StartedExamination startedExaminationForm = new 
+                        StartedExamination(examinationId, patientFullName, Username);
+
+
+                    startedExaminationForm.ShowDialog();
+
+                }
+            }
+        }
     }
 }

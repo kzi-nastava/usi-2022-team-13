@@ -19,6 +19,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
         public string Username { get; set; }
         public DataTable examinations { get; set; }
+        public DataTable medicine { get; set; }
 
         public DoctorRepository(string username="", bool calledFromDoctor=false)
         {
@@ -56,6 +57,17 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
             FillTable(examinations, examinationsQuery);
         }
+
+        public void PullMedicine()
+        {
+            medicine = new DataTable();
+
+            string medicineQuery = "select id, nameOfMedication as Name" +
+                " from Medications where status = 'Approved'";
+
+            FillTable(medicine, medicineQuery);
+        }
+
         private void FillTable(DataTable table, string query)
         {
 
@@ -142,9 +154,12 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public BindingList<Doctor> GetDoctors()
         {
             BindingList<Doctor> doctors = new BindingList<Doctor>();
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
             try
             {
-                Connection.Open();
+
+               
 
                 OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from doctors", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -160,7 +175,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
             return doctors;
         }
@@ -178,6 +193,144 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 patient = SetPatientValues(reader);
             }
             return patient;
+        }
+
+        public List<int> getAlergicMedicationsIds(int patientId)
+        {
+
+            List<int> alergicMedicationIds = new List<int>();
+
+            string query = "" +
+                "select MedicationContainsIngredient.id_medication" +
+                " from MedicationContainsIngredient inner join PatientAlergicTo " +
+                "on MedicationContainsIngredient.id_ingredient = PatientAlergicTo.id_ingredient " +
+                " where PatientAlergicTo.id_patient = " + patientId;
+            
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while(reader.Read())
+            {
+                alergicMedicationIds.Add(Convert.ToInt32
+                    (reader["id_medication"]));
+            }
+
+
+
+            return alergicMedicationIds;
+        }
+
+        public void InsertInstruction(string description)
+        {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            DateTime startTime = DateTime.Now;
+            int timesPerDay = 2;
+
+            string query = "insert into Instructions (startTime, timesPerDay, description) " +
+                "values (@startTime, @timesPerDay, @description )";
+
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@startTime", startTime.ToString());
+                cmd.Parameters.AddWithValue("@timesPerDay", timesPerDay);
+                cmd.Parameters.AddWithValue("@description", description);
+                cmd.ExecuteNonQuery();
+            }
+
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+        }
+
+        public void InsertReceipt(int doctorId, int patientId, DateTime dateOf)
+        {
+            int instructionId = getLastCreatedInstructionId();
+
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            string query = "insert into Receipt (id_instructions, id_doctor, id_patient, dateOf)" +
+                " values (@id_instructions, @id_doctor, @id_patient, @dateOf )";
+
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_instructions", instructionId);
+                cmd.Parameters.AddWithValue("@id_doctor", doctorId);
+                cmd.Parameters.AddWithValue("@id_patient", patientId);
+                cmd.Parameters.AddWithValue("@dateOf", dateOf.ToString());
+
+                cmd.ExecuteNonQuery();
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+        }
+
+        public void InsertConnectionOfReceiptAndMedication(int receiptId, int medicationId)
+        {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            string query = "insert into ReceiptMedications (id_receipt, id_medication)" +
+                " values (@id_receipt, @id_medication)";
+
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_receipt", receiptId);
+                cmd.Parameters.AddWithValue("@id_medication", medicationId);
+
+                cmd.ExecuteNonQuery();
+
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+        }
+
+        public int getLastReceiptId()
+        {
+            int lastCreatedReceiptnId = 0;
+            string query = "select top 1 ID from Receipt order by id desc";
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                lastCreatedReceiptnId = Convert.ToInt32(reader["ID"]);
+            }
+
+            return lastCreatedReceiptnId;
+        }
+
+        public int getLastCreatedInstructionId()
+        {
+            int lastCreatedInstructionId = 0;
+            string query = "select top 1 ID from Instructions order by id desc";
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                lastCreatedInstructionId = Convert.ToInt32(reader["ID"]);
+            }
+
+            return lastCreatedInstructionId;
+        }
+
+        public String getMedicationNameById(int medicationId)
+        {
+            string medicationName = "";
+            string query = "select nameOfMedication from Medications where ID = " + medicationId;
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                medicationName = reader["nameOfMedication"].ToString();
+            }
+
+            return medicationName;
         }
 
         private static Patient SetPatientValues(OleDbDataReader reader)
@@ -221,6 +374,36 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             "where id_doctor = " + GetDoctorId() + " and (" +
             "Day(dateOf) = Day('" + firstDay + "') or Day(dateOf) = Day('" + secondDay + "') or Day(dateOf) = Day('" + thirdDay + "'))";
             FillTable(examinations, examinationsQuery);
+        }
+
+        public void InsertReferral(ReferralLetter referralLetter, int option)
+        {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            string query = "INSERT INTO ReferralLetter" +
+                "(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) " +
+                "VALUES (@id_doctor, @id_patient," +
+                " @id_forwarded_doctor, @typeOfExamination, @speciality)";
+
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_doctor", referralLetter.CurrentDoctorID);
+                cmd.Parameters.AddWithValue("@id_patient", referralLetter.CurrentPatientID);
+                if(option == 1)
+                    cmd.Parameters.AddWithValue("@id_forwarded_doctor", referralLetter.ForwardedDoctorID);
+                else if (option == 2)
+                    cmd.Parameters.AddWithValue("@id_forwarded_doctor", DBNull.Value);
+                Console.WriteLine(referralLetter.ExaminationType);
+                cmd.Parameters.AddWithValue("@typeOfExamination", referralLetter.ExaminationType);
+                if(option == 2)
+                    cmd.Parameters.AddWithValue("@speciality", referralLetter.Speciality);
+                else if (option == 1)
+                    cmd.Parameters.AddWithValue("@id_forwarded_doctor", DBNull.Value);
+                cmd.ExecuteNonQuery();
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
         }
 
     }

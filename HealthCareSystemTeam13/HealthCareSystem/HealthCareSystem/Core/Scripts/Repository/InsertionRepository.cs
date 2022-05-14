@@ -11,27 +11,26 @@ using HealthCareSystem.Core.Users.Secretaries.Model;
 using HealthCareSystem.Core.Medications.Model;
 using HealthCareSystem.Core.Users.HospitalManagers;
 using HealthCareSystem.Core.Rooms.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
 using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
 using HealthCareSystem.Core.Ingredients.Model;
 using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Medications.Receipts.Model;
 using HealthCareSystem.Core.Rooms.Renovations.Model;
-using HealthCareSystem.Core.Rooms.DynamicEqipmentRequests.Model;
-using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
 using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
-using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
 using HealthCareSystem.Core.Rooms.Repository;
 using static HealthCareSystem.Core.Rooms.Renovations.Model.Renovation;
+using HealthCareSystem.Core.Rooms.DynamicEqipmentRequests.Model;
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
     class InsertionRepository
     {
         private static OleDbConnection Connection;
-        private RoomRepository RoomRepository;
+
         public InsertionRepository()
         {
-            RoomRepository = new RoomRepository();
             try
             {
                 Connection = new OleDbConnection();
@@ -95,6 +94,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             InsertRenovations();
             InsertTransferHistoryOfEquipment();
+
           
             InsertPatientEditRequests();
 
@@ -232,64 +232,11 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<TransferHistoryOfEquipment> unrealizedTransfers;
             unrealizedTransfers = RoomRepository.GetTransferHistory(unrealizedTransfersQuery);
 
-
-            foreach (TransferHistoryOfEquipment transfer in unrealizedTransfers)
-            {
-                if (transfer.TransferDate < DateTime.Now)
-                {
-                    string originRoomHasEquipmentQuery = "select * from RoomHasEquipment where " + transfer.FirstRoomId + " = id_room and " + transfer.EquipmentId + " = id_equipment";
-                    RoomHasEquipment originRoomHasEquipment = RoomRepository.GetEquipmentInRoom(originRoomHasEquipmentQuery)[0];
-
-
-                    string destinationRoomHasEquipmentQuery = "select * from RoomHasEquipment where " + transfer.SecondRoomId + " = id_room and " + transfer.EquipmentId + " = id_equipment";
-                    List<RoomHasEquipment> DestinationRoomHasEquipmentHelper = RoomRepository.GetEquipmentInRoom(destinationRoomHasEquipmentQuery);
-
-                    RoomHasEquipment destinationRoomHasEquipment;
-                    if (DestinationRoomHasEquipmentHelper.Count != 1)
-                    {
-                        destinationRoomHasEquipment = new RoomHasEquipment(transfer.EquipmentId, transfer.SecondRoomId, 0);
-
-                        string insertQueryDestination = "insert into RoomHasEquipment (id_room, id_equipment, amount) values (" + transfer.SecondRoomId + ", " + transfer.EquipmentId + ", 0)";
-                        RoomRepository.UpdateContent(insertQueryDestination);
-                    }
-                    else
-                    {
-                        destinationRoomHasEquipment = DestinationRoomHasEquipmentHelper[0];
-                    }
-
-
-
-                    originRoomHasEquipment.Quantity -= transfer.Amount;
-                    destinationRoomHasEquipment.Quantity += transfer.Amount;
-
-
-
-                    if (originRoomHasEquipment.Quantity == 0)
-                    {
-                        string deleteQueryOrigin = "delete from RoomHasEquipment where id_room = " + originRoomHasEquipment.RoomId + " and id_equipment = " + originRoomHasEquipment.EquipmentId;
-                        RoomRepository.UpdateContent(deleteQueryOrigin);
-                    }
-                    else
-                    {
-                        string updateQueryOrigin = "update RoomHasEquipment set amount = " + originRoomHasEquipment.Quantity + " where id_equipment = " + originRoomHasEquipment.EquipmentId +
-                            " and id_room = " + originRoomHasEquipment.RoomId;
-                        RoomRepository.UpdateContent(updateQueryOrigin);
-                    }
-
-
-                    string updateQueryDestination = "update RoomHasEquipment set amount = " + destinationRoomHasEquipment.Quantity + " where id_equipment = " + destinationRoomHasEquipment.EquipmentId +
-                            " and id_room = " + destinationRoomHasEquipment.RoomId;
-                    RoomRepository.UpdateContent(updateQueryDestination);
-
-
-
-                    string updateTransfer = "update EquipmentTransferHistory set isExecuted = true where isExecuted = false and id_original_room = " + transfer.FirstRoomId + " and id_new_room = " + transfer.SecondRoomId +
-                        " and amount = " + transfer.Amount + " and id_equipment = " + transfer.EquipmentId;
-                    RoomRepository.UpdateContent(updateTransfer);
-                }
-
-            }
+            Connection.Close();
         }
+
+
+
 
 
         private static void InsertDiseaseHistories()
@@ -432,7 +379,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 InsertSingleEquipment(singleEquipment);
             }
 
-        } 
+        }
 
         private static void InsertSingleEquipment(Equipment equipment)
         {
@@ -923,7 +870,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             medications.Add(new Medication("Brufen", MedicationStatus.Approved));
             medications.Add(new Medication("Analgin", MedicationStatus.Denied));
             medications.Add(new Medication("Panklav", MedicationStatus.Approved));
-            
+            medications.Add(new Medication("Aspirin", MedicationStatus.Approved));
+
             return medications;
         }
 
@@ -1066,8 +1014,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> ingredientsIDs = DatabaseHelpers.ExecuteReaderQueries("select id from Ingredients", Connection);
 
             medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[0]), Convert.ToInt32(ingredientsIDs[0])));
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[1]), Convert.ToInt32(ingredientsIDs[0])));
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[2]), Convert.ToInt32(ingredientsIDs[0])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[1]), Convert.ToInt32(ingredientsIDs[1])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[2]), Convert.ToInt32(ingredientsIDs[2])));
 
             return medicationsIngredients;
         }
@@ -1102,7 +1050,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[0]), 85, 185));
             medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[1]), 92, 192));
             medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[2]), 75, 183));
-            medicalRecords.Add(new MedicalRecord(Convert.ToInt32(patientIDs[3]), 64, 170));
 
             return medicalRecords;
         }
@@ -1223,20 +1170,27 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<Instruction> instructions = new List<Instruction>();
             DateTime tomorrow = DateTime.Now.AddHours(20);
 
-            instructions.Add(new Instruction(tomorrow, 3));
-            instructions.Add(new Instruction(tomorrow, 4));
-            instructions.Add(new Instruction(tomorrow, 2));
+            instructions.Add(new Instruction(tomorrow, 3,
+                "Morbi tincidunt augue interdum velit euismod in pellentesque massa placerat. Pharetra convallis posuere " +
+                "morbi leo urna molestie. Mattis ania at quis risus sed vulputate. Et netus et malesuada falis nibh praesent ."));
+            instructions.Add(new Instruction(tomorrow, 4,
+                "Morbi tincidunt augue interdum velit euismod in pellentesque massa placerat. Pharetra convallis posuere"
+                ));
+            instructions.Add(new Instruction(tomorrow, 2,
+                "Morbi tincidunt augue interdum velit euismod in pellentesque massa placerat. Pharetra convallis posuere"
+                ));
 
             return instructions;
         }
 
         private static void InsertSingleInstruction(Instruction instruction)
         {
-            var query = "INSERT INTO Instructions(startTime, timesPerDay) VALUES(@startTime, @timesPerDay)";
+            var query = "INSERT INTO Instructions(startTime, timesPerDay, description) VALUES(@startTime, @timesPerDay, @description)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@startTime", instruction.StartTime.ToString());
                 cmd.Parameters.AddWithValue("@timesPerDay", instruction.TimesPerDay);
+                cmd.Parameters.AddWithValue("@description", instruction.Description);
                 cmd.ExecuteNonQuery();
             }
         }
@@ -1284,9 +1238,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_instructions", receipt.InstructionId);
-                cmd.Parameters.AddWithValue("@id_doctor", receipt.DoctorId);
-                cmd.Parameters.AddWithValue("@id_patient", receipt.PatientId);
-                cmd.Parameters.AddWithValue("@dateOf", receipt.DateOfHandout.ToString());
+                cmd.Parameters.AddWithValue("@id_instructions", receipt.DoctorId);
+                cmd.Parameters.AddWithValue("@id_instructions", receipt.PatientId);
+                cmd.Parameters.AddWithValue("@id_instructions", receipt.DateOfHandout.ToString());
                 cmd.ExecuteNonQuery();
             }
         }
