@@ -62,26 +62,42 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         private void FillSecondRoomComboBox()
         {
-            Room selectedFirst = (Room)cmbFirstRoom.SelectedItem;
-            string secondQuery = "select * from Rooms where type <> 'Warehouse' and Id <> " + selectedFirst.ID + 
+            Room selectedFirst = null;
+            if (cmbFirstRoom.Text != "") {
+                selectedFirst = (Room)cmbFirstRoom.SelectedValue;
+                string secondQuery = "select * from Rooms where type <> 'Warehouse' and Id <> " + selectedFirst.ID +
                 " and ID not in (select id_room from Examination where isFinished = false) and " +
                 "ID not in (select id_room from Renovations where dateOfFinish > #" + DateTime.Now.ToString() + "#) and " +
-                "ID not in (select isnull(id_other_room) from Renovations where dateOfFinish > #" + DateTime.Now.ToString() + "#)"; 
-            List<Room> secondRooms = RoomRepository.GetRooms(secondQuery);
+                "ID not in (select isnull(id_other_room) from Renovations where dateOfFinish > #" + DateTime.Now.ToString() + "#)";
+                List<Room> secondRooms = RoomRepository.GetRooms(secondQuery);
 
-            cmbSecondRoom.ValueMember = null;
-            cmbSecondRoom.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbSecondRoom.DataSource = secondRooms;
-            cmbSecondRoom.SelectedIndex = -1;
+                cmbSecondRoom.ValueMember = null;
+                cmbSecondRoom.DropDownStyle = ComboBoxStyle.DropDownList;
+                cmbSecondRoom.DataSource = secondRooms;
+                cmbSecondRoom.SelectedIndex = -1;
+            }
+
+            
         }
 
         private void cmbType_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-            TypeOfRenovation selectedType;
+            TypeOfRenovation selectedType = TypeOfRenovation.Regular;
             try
             {
-                selectedType = (TypeOfRenovation)cmbType.SelectedItem;
+                
+
+                if (cmbType.Text != "")
+                {
+                    selectedType = (TypeOfRenovation)cmbType.SelectedValue;
+
+                }
+                else
+                {
+                    cmbSecondRoom.Enabled = false;
+                    cmbSecondRoom.SelectedIndex = -1;
+                }
+
                 if (selectedType == TypeOfRenovation.Merging)
                 {
                     cmbSecondRoom.Enabled = true;
@@ -92,11 +108,11 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                     cmbSecondRoom.Enabled = false;
                     cmbSecondRoom.SelectedIndex = -1;
                 }
+
             }
             catch (Exception)
             {
-                    cmbSecondRoom.Enabled = false;
-                    cmbSecondRoom.SelectedIndex = -1;
+
             }
 
 
@@ -106,7 +122,12 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         {
             try
             {
-                Room selectedFirst = (Room)cmbFirstRoom.SelectedItem;
+                Room selectedFirst = null;
+                if(cmbFirstRoom.Text != "")
+                {
+                    selectedFirst = (Room)cmbFirstRoom.SelectedValue;
+                }
+               
                 FillSecondRoomComboBox();
             }
             catch (Exception)
@@ -130,7 +151,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                 MessageBox.Show("Both start and end renovation dates must be in the future");
                 return false;
             }
-            else if (cmbFirstRoom.SelectedIndex == -1 || cmbType.SelectedIndex == -1 || (cmbSecondRoom.SelectedIndex == -1 && (TypeOfRenovation)cmbType.SelectedItem == TypeOfRenovation.Merging))
+            else if (cmbFirstRoom.SelectedIndex == -1 || cmbType.SelectedIndex == -1 || (cmbSecondRoom.SelectedIndex == -1 && (TypeOfRenovation)cmbType.SelectedValue == TypeOfRenovation.Merging))
             {
                 MessageBox.Show("You must select items from every field that is not disabled");
                 return false;
@@ -145,18 +166,23 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             if (IsFormValid())
             {
                
-                int roomId = ((Room)cmbFirstRoom.SelectedItem).ID;
+                int roomId = ((Room)cmbFirstRoom.SelectedValue).ID;
                 DateTime startingDate = dtpDateStart.Value;
                 DateTime endingDate = dtpDateEnd.Value;
-                int secondRoomId;
+                int secondRoomId = -1;
                 try {
-                    secondRoomId = ((Room)cmbSecondRoom.SelectedItem).ID;
-                }catch(Exception)
+                    if(cmbSecondRoom.Text != "")
+                    {
+                        secondRoomId = ((Room)cmbSecondRoom.SelectedValue).ID;
+                    }
+
+                }
+                catch(Exception)
                 {
-                    secondRoomId = -1;
+                    
                 }
                 
-                TypeOfRenovation type = (TypeOfRenovation)cmbType.SelectedItem;
+                TypeOfRenovation type = (TypeOfRenovation)cmbType.SelectedValue;
 
                 Renovation newRenovation = new Renovation(roomId, startingDate, endingDate, secondRoomId, type);
               
