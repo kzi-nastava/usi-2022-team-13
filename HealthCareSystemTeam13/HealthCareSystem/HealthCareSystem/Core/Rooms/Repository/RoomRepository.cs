@@ -69,7 +69,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
                                 "from Equipment e, Rooms r, RoomHasEquipment rhe " +
                                 "where rhe.id_room = r.ID and rhe.id_equipment = e.ID and (e.nameOf like '%" + search + "%' or e.type like '%" + search + "%')";
 
-            if (amount != "Any");
+            if (amount != "Any")
             {
                 if(amount == "10+")
                 {
@@ -528,6 +528,17 @@ namespace HealthCareSystem.Core.Rooms.Repository
                     }
                 }
             }
+        }
+        public List<string> GetOperationRooms()
+        {
+            var query = "SELECT ID FROM Rooms WHERE type = operation";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+
+        public List<string> GetExaminationRooms()
+        {
+            var query = "SELECT ID FROM Rooms WHERE type = examination";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
     }
 }

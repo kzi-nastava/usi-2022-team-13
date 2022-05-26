@@ -271,6 +271,7 @@
     <Compile Include="Core\Users\Doctors\Model\Doctor.cs" />
     <Compile Include="Core\Users\Doctors\Model\ReferralLetter.cs" />
     <Compile Include="Core\Users\Doctors\Repository\DoctorRepository.cs" />
+    <Compile Include="Core\Users\Doctors\Service\DoctorService.cs" />
     <Compile Include="Core\Users\HospitalManagers\Model\HospitalManager.cs" />
     <Compile Include="Core\Users\Model\User.cs" />
     <Compile Include="Core\Users\Patients\Model\BlockedPatient.cs" />

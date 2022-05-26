@@ -32,7 +32,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 
         private void FillDataGridView()
         {
-            examinationsDataGrid.DataSource = secretaryRepository.closestExaminations;
+            examinationsDataGrid.DataSource = secretaryRepository.ClosestExaminations;
             DataGridViewSettings();
         }
 

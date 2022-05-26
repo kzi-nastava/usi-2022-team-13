@@ -34,7 +34,7 @@ namespace HealthCareSystem
         private void FillDataGridView()
         {
 
-            dgwExaminations.DataSource = DoctorRep.examinations;
+            dgwExaminations.DataSource = DoctorRep.Examinations;
             DataGridViewSettings();
         }
 
@@ -95,7 +95,7 @@ namespace HealthCareSystem
         public void RefreshDataGridView()
         {
             DoctorRep.PullExaminations();
-            dgwExaminations.DataSource = DoctorRep.examinations;
+            dgwExaminations.DataSource = DoctorRep.Examinations;
             dgwExaminations.Refresh();
         }
 
@@ -172,14 +172,14 @@ namespace HealthCareSystem
         {
             DateTime date = dtDate.Value;
             DoctorRep.PullExaminationsByDate(date);
-            dgwExaminations.DataSource = DoctorRep.examinations;
+            dgwExaminations.DataSource = DoctorRep.Examinations;
             dgwExaminations.Refresh();
         }
 
         private void btnShowNextThreeDays_Click(object sender, EventArgs e)
         {
             DoctorRep.PullExaminationsThreeDays();
-            dgwExaminations.DataSource = DoctorRep.examinations;
+            dgwExaminations.DataSource = DoctorRep.Examinations;
             dgwExaminations.Refresh();
         }
 

@@ -9,6 +9,7 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HealthCareSystem.Core.Users.Doctors.Service;
 
 namespace HealthCareSystem.Core.Users.Doctors.Repository
 {
@@ -16,10 +17,9 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
     {
         public OleDbConnection Connection { get; set; }
   
-
         public string Username { get; set; }
-        public DataTable examinations { get; set; }
-        public DataTable medicine { get; set; }
+        public DataTable Examinations { get; set; }
+        public DataTable Medicine { get; set; }
 
         public DoctorRepository(string username="", bool calledFromDoctor=false)
         {
@@ -42,30 +42,29 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 Console.WriteLine(exception.ToString());
             }
 
-
         }
 
 
         public void PullExaminations()
         {
-            examinations = new DataTable();
+            Examinations = new DataTable();
 
             string examinationsQuery = "select Examination.id, Patients.FirstName + ' ' + Patients.LastName as Patient," +
                 " dateOf as [Date and Time], id_room as RoomID, duration as Duration, typeOfExamination as Type from Examination" +
                 " left outer join Patients  on Examination.id_patient = Patients.id " +
                 "where id_doctor = " + GetDoctorId() + "";
 
-            FillTable(examinations, examinationsQuery);
+            FillTable(Examinations, examinationsQuery);
         }
 
         public void PullMedicine()
         {
-            medicine = new DataTable();
+            Medicine = new DataTable();
 
             string medicineQuery = "select id, nameOfMedication as Name" +
                 " from Medications where status = 'Approved'";
 
-            FillTable(medicine, medicineQuery);
+            FillTable(Medicine, medicineQuery);
         }
 
         private void FillTable(DataTable table, string query)
@@ -75,7 +74,6 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             {
                 OleDbDataReader reader = cmd.ExecuteReader();
                 table.Load(reader);
-
             }
         }
 
@@ -99,54 +97,30 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
             while (reader.Read())
             {
-                DoctorSpeciality speciality;
-                Enum.TryParse<DoctorSpeciality>(reader["speciality"].ToString(), out speciality);
-
-                doctor = new Doctor(Convert.ToInt32(reader["id"]), reader["firstName"].ToString(), reader["lastName"].ToString(),
-                    Convert.ToInt32(reader["user_id"]), speciality);
+                doctor = GetDoctorFromReader(reader);
             }
             return doctor;
 
         }
 
-
-        public bool IsDoctorAvailable(Doctor doctor, DateTime ExaminationDateTime, List<Examination> examinations)
+        private static Doctor GetDoctorFromReader(OleDbDataReader reader)
         {
-            for (int i = 0; i < examinations.Count(); i++)
-            {
-                TimeSpan difference = ExaminationDateTime.Subtract(examinations[i].DateOf);
-                Console.WriteLine(ExaminationDateTime.ToString());
+            Doctor doctor;
+            DoctorSpeciality speciality;
+            Enum.TryParse<DoctorSpeciality>(reader["speciality"].ToString(), out speciality);
 
-                if (Math.Abs(difference.TotalMinutes) < 15 && doctor.ID == examinations[i].IdDoctor)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            doctor = new Doctor(Convert.ToInt32(reader["id"]), reader["firstName"].ToString(), reader["lastName"].ToString(),
+                Convert.ToInt32(reader["user_id"]), speciality);
+            return doctor;
         }
 
-        public bool IsDoctorAvailable(int doctorID, DateTime ExaminationDateTime, List<Examination> examinations)
-        {
-            for (int i = 0; i < examinations.Count(); i++)
-            {
-                TimeSpan difference = ExaminationDateTime.Subtract(examinations[i].DateOf);
-                Console.WriteLine(ExaminationDateTime.ToString());
-
-                if (Math.Abs(difference.TotalMinutes) < 15 && doctorID == examinations[i].IdDoctor)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
+       
         public Doctor GetAvailableDoctor(DateTime examinationDateTime, List<Examination> examinations)
         {
             BindingList<Doctor> doctors = GetDoctors();
             foreach(Doctor doctor in doctors)
             {
-                if (IsDoctorAvailable(doctor, examinationDateTime, examinations)) return doctor;
+                if (DoctorService.IsDoctorAvailable(doctor.ID, examinationDateTime, examinations)) return doctor;
             }
             return null;
 
@@ -159,17 +133,12 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             try
             {
 
-               
-
                 OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from doctors", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    DoctorSpeciality speciality;
-                    Enum.TryParse<DoctorSpeciality>(reader["speciality"].ToString(), out speciality);
-
-                    doctors.Add(new Doctor(Convert.ToInt32(reader["ID"]), reader["firstName"].ToString(), reader["lastName"].ToString(), Convert.ToInt32(reader["user_id"]), speciality));
+                    doctors.Add(GetDoctorFromReader(reader));
                 }
             }catch(Exception exception)
             {
@@ -195,7 +164,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             return patient;
         }
 
-        public List<int> getAlergicMedicationsIds(int patientId)
+        public List<int> GetAlergicMedicationsIds(int patientId)
         {
 
             List<int> alergicMedicationIds = new List<int>();
@@ -239,14 +208,12 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 cmd.ExecuteNonQuery();
             }
 
-
             if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
-
         }
 
         public void InsertReceipt(int doctorId, int patientId, DateTime dateOf)
         {
-            int instructionId = getLastCreatedInstructionId();
+            int instructionId = GetLastCreatedInstructionId();
 
             int checkState = 0;
             if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
@@ -288,7 +255,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
         }
 
-        public int getLastReceiptId()
+        public int GetLastReceiptId()
         {
             int lastCreatedReceiptnId = 0;
             string query = "select top 1 ID from Receipt order by id desc";
@@ -303,7 +270,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             return lastCreatedReceiptnId;
         }
 
-        public int getLastCreatedInstructionId()
+        public int GetLastCreatedInstructionId()
         {
             int lastCreatedInstructionId = 0;
             string query = "select top 1 ID from Instructions order by id desc";
@@ -318,7 +285,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             return lastCreatedInstructionId;
         }
 
-        public String getMedicationNameById(int medicationId)
+        public String GetMedicationNameById(int medicationId)
         {
             string medicationName = "";
             string query = "select nameOfMedication from Medications where ID = " + medicationId;
@@ -350,19 +317,19 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
         public void PullExaminationsByDate(DateTime date)
         {
-            examinations = new DataTable();
+            Examinations = new DataTable();
 
 
             string examinationsQuery = "select Examination.id, Patients.FirstName + ' ' + Patients.LastName as Patient," +
             " dateOf, id_room as RoomID, duration as Duration, typeOfExamination as Type from Examination" +
             " left outer join Patients  on Examination.id_patient = Patients.id " +
             "where id_doctor = " + GetDoctorId() + " and Day(dateOf) = Day('" + date + "')";
-            FillTable(examinations, examinationsQuery);
+            FillTable(Examinations, examinationsQuery);
         }
 
         public void PullExaminationsThreeDays()
         {
-            examinations = new DataTable();
+            Examinations = new DataTable();
             DateTime firstDay = DateTime.Today.AddDays(1);
             DateTime secondDay = DateTime.Today.AddDays(2);
             DateTime thirdDay = DateTime.Today.AddDays(3);
@@ -373,7 +340,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             " left outer join Patients  on Examination.id_patient = Patients.id " +
             "where id_doctor = " + GetDoctorId() + " and (" +
             "Day(dateOf) = Day('" + firstDay + "') or Day(dateOf) = Day('" + secondDay + "') or Day(dateOf) = Day('" + thirdDay + "'))";
-            FillTable(examinations, examinationsQuery);
+            FillTable(Examinations, examinationsQuery);
         }
 
         public void InsertReferral(ReferralLetter referralLetter, int option)
@@ -390,6 +357,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             {
                 cmd.Parameters.AddWithValue("@id_doctor", referralLetter.CurrentDoctorID);
                 cmd.Parameters.AddWithValue("@id_patient", referralLetter.CurrentPatientID);
+
                 if(option == 1)
                     cmd.Parameters.AddWithValue("@id_forwarded_doctor", referralLetter.ForwardedDoctorID);
                 else if (option == 2)
@@ -400,6 +368,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                     cmd.Parameters.AddWithValue("@speciality", referralLetter.Speciality);
                 else if (option == 1)
                     cmd.Parameters.AddWithValue("@id_forwarded_doctor", DBNull.Value);
+
                 cmd.ExecuteNonQuery();
             }
 

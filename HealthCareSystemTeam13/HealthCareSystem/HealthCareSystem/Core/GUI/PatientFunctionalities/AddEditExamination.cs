@@ -14,6 +14,7 @@ using HealthCareSystem.Core.Examinations.Repository;
 using HealthCareSystem.Core.Rooms.Repository;
 using HealthCareSystem.Core.Users.Doctors.Model;
 using HealthCareSystem.Core.Users.Doctors.Repository;
+using HealthCareSystem.Core.Users.Doctors.Service;
 using HealthCareSystem.Core.Users.Patients.Model;
 using HealthCareSystem.Core.Users.Patients.Repository;
 
@@ -167,7 +168,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 return false;
 
             }
-            else if (!DoctorRep.IsDoctorAvailable(SelectedDoctor, mergedExaminationTime, otherExaminations))
+            else if (!DoctorService.IsDoctorAvailable(SelectedDoctor.ID, mergedExaminationTime, otherExaminations))
             {
 
                 MessageBox.Show("Doctor is not available at that time.");

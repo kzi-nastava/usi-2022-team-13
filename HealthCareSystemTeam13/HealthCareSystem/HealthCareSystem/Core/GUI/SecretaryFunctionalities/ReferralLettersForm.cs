@@ -25,7 +25,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         }
         private void FillDataGridView()
         {
-            lettersDataGrid.DataSource = secretaryRepository.referralLetters;
+            lettersDataGrid.DataSource = secretaryRepository.ReferralLetters;
             DataGridViewSettings();
         }
 

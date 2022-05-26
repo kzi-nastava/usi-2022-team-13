@@ -30,7 +30,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void FillDataGridView()
         {
 
-            dgwExaminations.DataSource = patientRepository.examinations;
+            dgwExaminations.DataSource = patientRepository.Examinations;
             Helpers.DataGridViewSettings(dgwExaminations);
 
 
@@ -157,7 +157,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         public void RefreshDataGridView()
         {
             patientRepository.PullExaminationForPatient();
-            dgwExaminations.DataSource = patientRepository.examinations;
+            dgwExaminations.DataSource = patientRepository.Examinations;
             dgwExaminations.Refresh();
         }
 

@@ -19,7 +19,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
     class PatientRepository
     {
         public string Username { get; set; }
-        public DataTable examinations { get; set; }
+        public DataTable Examinations { get; set; }
         public OleDbConnection Connection { get; set; }
         private ExaminationRepository ExaminationRep;
 
@@ -113,22 +113,22 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         public void PullExaminationForPatient()
         {
 
-            examinations = new DataTable();
+            Examinations = new DataTable();
     
             string examinationsQuery = "select Examination.id, Doctors.FirstName + ' ' +Doctors.LastName as Doctor, dateOf as [Date and Time], id_room as RoomID, duration, typeOfExamination as Type from Examination left outer join Doctors  on Examination.id_doctor = Doctors.id " +
                 "where id_patient = " + GetPatientId() +"";
 
-            FillTable(examinations, examinationsQuery);
+            FillTable(Examinations, examinationsQuery);
 
         }
-        public void PullPastExaminations()
+        public void PullFinishedExaminations()
         {
-            examinations = new DataTable();
+            Examinations = new DataTable();
 
             string examinationsQuery = "select Examination.id, Doctors.FirstName + ' ' +Doctors.LastName as Doctor, Examination.dateOf as [Date and Time], Examination.id_room as RoomID, Examination.duration, typeOfExamination as Type from Examination left outer join Doctors on Examination.id_doctor = Doctors.id " +
                 "where id_patient = " + GetPatientId() + " and Examination.dateOf < #"+DateTime.Now.ToString()+"#";
 
-            FillTable(examinations, examinationsQuery);
+            FillTable(Examinations, examinationsQuery);
         }
 
         public void UpdateContent(string query, int patiendId = 0)
@@ -229,6 +229,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
                 cmd.ExecuteNonQuery();
             }
+
             Username = patientUsername;
             InsertExaminationChanges(TypeOfChange.Add);
             if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
@@ -240,7 +241,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         private int GetPatientId(string patientUsername)
         {
             string patientIdQuery = "select Patients.id from Patients inner join Users on Patients.user_id = Users.id where Users.usrnm = '" + patientUsername + "'";
-            Console.WriteLine(patientIdQuery);
             int patientId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(patientIdQuery, Connection)[0]);
             return patientId;
         }
@@ -254,10 +254,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
 
             Dictionary<string, string> row = new Dictionary<string, string>();
-            OleDbCommand cmd = new OleDbCommand();
-            cmd.Connection = Connection;
-            cmd.CommandType = System.Data.CommandType.Text;
-            cmd.CommandText = query;
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
 
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -355,7 +352,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             return patients;
         }
 
-        public string GetUsernameFromEntity(Patient patient)
+        public string GetUsernameFromPatient(Patient patient)
         {
             if (Connection.State == ConnectionState.Closed) Connection.Open();
 
@@ -375,16 +372,12 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
             OleDbDataReader reader = cmd.ExecuteReader();
 
-            Console.WriteLine(query);
-
             string[] data = new string[2];
 
             while (reader.Read())
             {
-                string a = reader["weight"].ToString();
-                string b = reader["height"].ToString();
-                data[0] = a;
-                data[1] = b;
+                data[0] = reader["weight"].ToString();
+                data[1] = reader["height"].ToString();
             }
 
             if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();

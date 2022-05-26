@@ -25,7 +25,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 
         private void FillDataGridView()
         {
-            requestsDataGrid.DataSource = secretaryRepository.requestsPatients;
+            requestsDataGrid.DataSource = secretaryRepository.RequestsPatients;
             DataGridViewSettings();
         }
         private void DataGridViewSettings()
@@ -38,7 +38,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         private void acceptButton_Click(object sender, EventArgs e)
         {
             string requestID = requestIdBox.Text;
-            if (secretaryRepository.CheckTypeOfChange(requestID))
+            if (secretaryRepository.IsRequestChanged(requestID))
             {
                 secretaryRepository.UpdateExamination(requestID);
                 secretaryRepository.DeleteSinglePatientRequest(requestID);

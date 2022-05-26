@@ -13,9 +13,9 @@ namespace HealthCareSystem.Core.Examinations.Repository
 {
     class ExaminationRepository
     {
-        OleDbConnection Connection;
-        RoomRepository RoomRep;
-        DoctorRepository DoctorRep;
+        public OleDbConnection Connection { get; set; }
+        public RoomRepository RoomRep { get; set; }
+        public DoctorRepository DoctorRep { get; set; }
         public ExaminationRepository()
         {
             try
@@ -373,7 +373,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
             while (reader.Read())
             {
-                Examination examination = SetExaminationValues(reader);
+                Examination examination = GetExaminationValues(reader);
                 examinations.Add(examination);
             }
             if(Connection.State == System.Data.ConnectionState.Open) Connection.Close();
@@ -381,7 +381,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
             return examinations;
         }
 
-        private static Examination SetExaminationValues(OleDbDataReader reader)
+        private static Examination GetExaminationValues(OleDbDataReader reader)
         {
             TypeOfExamination typeOfExamination;
             Enum.TryParse<TypeOfExamination>(reader["typeOfExamination"].ToString(), out typeOfExamination);

@@ -38,7 +38,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private void FillDataGridView()
         {
 
-            dgwMedications.DataSource = DoctorRep.medicine;
+            dgwMedications.DataSource = DoctorRep.Medicine;
             DataGridViewSettings();
         }
 
@@ -216,7 +216,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             DateTime currentTime = DateTime.Now;
 
             DoctorRep.InsertReceipt(ExaminingDoctor.ID, PatientId, currentTime);
-            int lastReceiptId = DoctorRep.getLastReceiptId();
+            int lastReceiptId = DoctorRep.GetLastReceiptId();
 
             foreach (int medicationId in medicationIds)
             {
@@ -227,7 +227,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
         private bool RejectIfPatientIsAlergic(List<int> medicationIds)
         {
-            List<int> alergicMedicationIds = DoctorRep.getAlergicMedicationsIds(PatientId);
+            List<int> alergicMedicationIds = DoctorRep.GetAlergicMedicationsIds(PatientId);
 
             foreach (int medicationId in medicationIds)
             {
@@ -236,7 +236,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                     if (medicationId == alergicMedicationId)
                     {
                         MessageBox.Show(PatientFullName + " is alergic to " +
-                            DoctorRep.getMedicationNameById(alergicMedicationId) +
+                            DoctorRep.GetMedicationNameById(alergicMedicationId) +
                             "! Try again.");
                         return false;
                     }
