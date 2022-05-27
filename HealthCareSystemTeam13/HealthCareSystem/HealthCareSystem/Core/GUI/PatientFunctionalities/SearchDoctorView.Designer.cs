@@ -65,6 +65,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.btnSortByAverageRating.TabIndex = 28;
             this.btnSortByAverageRating.Text = "Rating";
             this.btnSortByAverageRating.UseVisualStyleBackColor = true;
+            this.btnSortByAverageRating.Click += new System.EventHandler(this.btnSortByAverageRating_Click);
             // 
             // btnSortByLastName
             // 
@@ -77,6 +78,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.btnSortByLastName.TabIndex = 27;
             this.btnSortByLastName.Text = "Last Name";
             this.btnSortByLastName.UseVisualStyleBackColor = true;
+            this.btnSortByLastName.Click += new System.EventHandler(this.btnSortByLastName_Click);
             // 
             // btnSortByName
             // 
@@ -89,6 +91,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.btnSortByName.TabIndex = 26;
             this.btnSortByName.Text = "First Name";
             this.btnSortByName.UseVisualStyleBackColor = true;
+            this.btnSortByName.Click += new System.EventHandler(this.btnSortByName_Click);
             // 
             // label3
             // 
@@ -138,6 +141,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.btnSortBySpeciality.TabIndex = 30;
             this.btnSortBySpeciality.Text = "Speciality";
             this.btnSortBySpeciality.UseVisualStyleBackColor = true;
+            this.btnSortBySpeciality.Click += new System.EventHandler(this.btnSortBySpeciality_Click);
             // 
             // SearchDoctorView
             // 

@@ -54,5 +54,33 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             else
                 dgwDoctors.DataSource = _doctors;
         }
+
+        private void btnSortByAverageRating_Click(object sender, EventArgs e)
+        {
+            _doctors = DoctorService.SortDoctors(_doctors, 1);
+            dgwDoctors.DataSource = _doctors;
+            dgwDoctors.Refresh();
+        }
+
+        private void btnSortByName_Click(object sender, EventArgs e)
+        {
+            _doctors = DoctorService.SortDoctors(_doctors, 2);
+            dgwDoctors.DataSource = _doctors;
+            dgwDoctors.Refresh();
+        }
+
+        private void btnSortByLastName_Click(object sender, EventArgs e)
+        {
+            _doctors = DoctorService.SortDoctors(_doctors, 3);
+            dgwDoctors.DataSource = _doctors;
+            dgwDoctors.Refresh();
+        }
+
+        private void btnSortBySpeciality_Click(object sender, EventArgs e)
+        {
+            _doctors = DoctorService.SortDoctors(_doctors, 4);
+            dgwDoctors.DataSource = _doctors;
+            dgwDoctors.Refresh();
+        }
     }
 }
