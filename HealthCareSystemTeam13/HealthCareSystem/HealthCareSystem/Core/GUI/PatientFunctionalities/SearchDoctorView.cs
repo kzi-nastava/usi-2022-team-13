@@ -82,5 +82,23 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             dgwDoctors.DataSource = _doctors;
             dgwDoctors.Refresh();
         }
+
+        private void btnAppoint_Click(object sender, EventArgs e)
+        {
+
+            if (Helpers.IsDgwRowSelected(dgwDoctors)) {
+                int selectedId = (int)dgwDoctors.SelectedRows[0].Cells[0].Value;
+                foreach(Doctor dr in _doctors)
+                {
+                    if(dr.ID == selectedId)
+                    {
+                        AddEditExamination addEditView = new AddEditExamination(0, true, Username, 1, dr.ID);
+                        addEditView.ShowDialog();
+                        break;
+                    }
+
+                }
+            }
+        }
     }
 }

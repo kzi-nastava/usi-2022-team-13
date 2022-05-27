@@ -53,6 +53,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.btnAppoint.TabIndex = 10;
             this.btnAppoint.Text = "Add Appointment";
             this.btnAppoint.UseVisualStyleBackColor = true;
+            this.btnAppoint.Click += new System.EventHandler(this.btnAppoint_Click);
             // 
             // btnSortByAverageRating
             // 
