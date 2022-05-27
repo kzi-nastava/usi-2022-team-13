@@ -36,6 +36,7 @@
             this.btnMedicalRecord = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnHome = new System.Windows.Forms.Button();
+            this.btnSearchDoctor = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,7 +49,7 @@
             this.btnExaminations.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExaminations.Font = new System.Drawing.Font("Lucida Console", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExaminations.ForeColor = System.Drawing.Color.White;
-            this.btnExaminations.Location = new System.Drawing.Point(2, 235);
+            this.btnExaminations.Location = new System.Drawing.Point(2, 215);
             this.btnExaminations.Name = "btnExaminations";
             this.btnExaminations.Size = new System.Drawing.Size(137, 66);
             this.btnExaminations.TabIndex = 0;
@@ -95,7 +96,7 @@
             this.btnAptRecc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAptRecc.Font = new System.Drawing.Font("Lucida Console", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAptRecc.ForeColor = System.Drawing.Color.White;
-            this.btnAptRecc.Location = new System.Drawing.Point(2, 307);
+            this.btnAptRecc.Location = new System.Drawing.Point(2, 287);
             this.btnAptRecc.Name = "btnAptRecc";
             this.btnAptRecc.Size = new System.Drawing.Size(137, 64);
             this.btnAptRecc.TabIndex = 4;
@@ -114,7 +115,7 @@
             this.btnMedicalRecord.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMedicalRecord.Font = new System.Drawing.Font("Lucida Console", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMedicalRecord.ForeColor = System.Drawing.Color.White;
-            this.btnMedicalRecord.Location = new System.Drawing.Point(2, 377);
+            this.btnMedicalRecord.Location = new System.Drawing.Point(2, 357);
             this.btnMedicalRecord.Name = "btnMedicalRecord";
             this.btnMedicalRecord.Size = new System.Drawing.Size(137, 62);
             this.btnMedicalRecord.TabIndex = 5;
@@ -128,7 +129,7 @@
             // 
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(12, 37);
+            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(116, 96);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -145,7 +146,7 @@
             this.btnHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHome.Font = new System.Drawing.Font("Lucida Console", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHome.ForeColor = System.Drawing.Color.White;
-            this.btnHome.Location = new System.Drawing.Point(2, 163);
+            this.btnHome.Location = new System.Drawing.Point(2, 143);
             this.btnHome.Name = "btnHome";
             this.btnHome.Size = new System.Drawing.Size(137, 66);
             this.btnHome.TabIndex = 7;
@@ -155,12 +156,32 @@
             this.btnHome.MouseEnter += new System.EventHandler(this.btnHome_MouseEnter);
             this.btnHome.MouseLeave += new System.EventHandler(this.btnHome_MouseLeave);
             // 
+            // btnSearchDoctor
+            // 
+            this.btnSearchDoctor.BackColor = System.Drawing.Color.Transparent;
+            this.btnSearchDoctor.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSearchDoctor.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnSearchDoctor.FlatAppearance.BorderSize = 3;
+            this.btnSearchDoctor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSearchDoctor.Font = new System.Drawing.Font("Lucida Console", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSearchDoctor.ForeColor = System.Drawing.Color.White;
+            this.btnSearchDoctor.Location = new System.Drawing.Point(2, 425);
+            this.btnSearchDoctor.Name = "btnSearchDoctor";
+            this.btnSearchDoctor.Size = new System.Drawing.Size(137, 62);
+            this.btnSearchDoctor.TabIndex = 8;
+            this.btnSearchDoctor.Text = "Search Doctor";
+            this.btnSearchDoctor.UseVisualStyleBackColor = false;
+            this.btnSearchDoctor.Click += new System.EventHandler(this.btnSearchDoctor_Click);
+            this.btnSearchDoctor.MouseEnter += new System.EventHandler(this.btnSearchDoctor_MouseEnter);
+            this.btnSearchDoctor.MouseLeave += new System.EventHandler(this.btnSearchDoctor_MouseLeave);
+            // 
             // PatientView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SteelBlue;
             this.ClientSize = new System.Drawing.Size(897, 577);
+            this.Controls.Add(this.btnSearchDoctor);
             this.Controls.Add(this.btnHome);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnMedicalRecord);
@@ -186,5 +207,6 @@
         private System.Windows.Forms.Button btnMedicalRecord;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button btnHome;
+        private System.Windows.Forms.Button btnSearchDoctor;
     }
 }

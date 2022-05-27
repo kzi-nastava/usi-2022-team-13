@@ -168,6 +168,12 @@
     <Compile Include="Core\GUI\PatientFunctionalities\PatientRecommendation.Designer.cs">
       <DependentUpon>PatientRecommendation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\SearchDoctorView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\SearchDoctorView.Designer.cs">
+      <DependentUpon>SearchDoctorView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\SecretaryFunctionalities\AddExamination.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -349,6 +355,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\PatientRecommendation.resx">
       <DependentUpon>PatientRecommendation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\SearchDoctorView.resx">
+      <DependentUpon>SearchDoctorView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\AddExamination.resx">
       <DependentUpon>AddExamination.cs</DependentUpon>

@@ -374,6 +374,38 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
             if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
         }
+        public List<Doctor> GetDoctorsWithAverageRating()
+        {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            string query = "select dr.id as DoctorID, dr.firstName as FirstName, dr.lastName as LastName, dr.user_id as UserId, dr.speciality as Speciality, avg(ds.doctorGrade) as Rating  from Doctors as dr left outer join DoctorSurveys ds on dr.id = ds.id_doctor group by dr.id, dr.firstName, dr.lastName, dr.user_id, dr.speciality";
+
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+            List<Doctor> doctors = new List<Doctor>();
+            while (reader.Read())
+            {
+                SetDoctorValuesWithRating(doctors, reader);
+            }
+
+            if (Connection.State == ConnectionState.Open) Connection.Close();
+            return doctors;
+        }
+        private static void SetDoctorValuesWithRating(List<Doctor> doctors, OleDbDataReader reader)
+        {
+            DoctorSpeciality speciality;
+            Enum.TryParse<DoctorSpeciality>(reader["Speciality"].ToString(), out speciality);
+
+            doctors.Add(new Doctor(
+                Convert.ToInt32(reader["DoctorID"]),
+                reader["FirstName"].ToString(),
+                reader["LastName"].ToString(),
+                Convert.ToInt32(reader["UserId"]),
+                speciality,
+                Convert.ToDouble(reader["Rating"])
+                ));
+
+        }
+       
 
     }
 }

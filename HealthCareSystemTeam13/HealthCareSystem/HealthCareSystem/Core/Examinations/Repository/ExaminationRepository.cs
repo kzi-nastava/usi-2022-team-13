@@ -127,13 +127,13 @@ namespace HealthCareSystem.Core.Examinations.Repository
         private static DoctorAnamnesis SetDoctorAnamnesisValues(OleDbDataReader reader)
         {
             return new DoctorAnamnesis(Convert.ToInt32(
-                                                        reader["ExaminationId"]),
-                                                        reader["Notice"].ToString(),
-                                                        reader["Conclusions"].ToString(),
-                                                        (DateTime)reader["DateOfExamination"],
-                                                        reader["Doctor"].ToString(),
-                                                        reader["Speciality"].ToString()
-                                                        );
+                                        reader["ExaminationId"]),
+                                        reader["Notice"].ToString(),
+                                        reader["Conclusions"].ToString(),
+                                        (DateTime)reader["DateOfExamination"],
+                                        reader["Doctor"].ToString(),
+                                        reader["Speciality"].ToString()
+                                        );
         }
 
         public Anamnesis GetAnamnesis(int examinationId)
@@ -156,9 +156,9 @@ namespace HealthCareSystem.Core.Examinations.Repository
         private static Anamnesis SetAnamnesisValues(OleDbDataReader reader)
         {
             return new Anamnesis(Convert.ToInt32(reader["id_examination"]),
-                                                        reader["notice"].ToString(),
-                                                        reader["conclusions"].ToString(),
-                                                        (DateTime)reader["dateOf"]);
+                                            reader["notice"].ToString(),
+                                            reader["conclusions"].ToString(),
+                                            (DateTime)reader["dateOf"]);
         }
 
         
