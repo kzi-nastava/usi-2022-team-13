@@ -26,6 +26,19 @@ namespace HealthCareSystem.Core.Users.Doctors.Service
 
             return true;
         }
-       
+        public static List<Doctor> GetDoctorsByKeyword(List<Doctor> doctors, string keyword)
+        {
+            List<Doctor> selectedDoctors = new List<Doctor>();
+            foreach (Doctor doctor in doctors)
+            {
+                Console.WriteLine(keyword);
+                if (doctor.FirstName.ToLower().Contains(keyword) || doctor.LastName.ToLower().Contains(keyword) || doctor.Speciality.ToString().ToLower().Contains(keyword))
+                {
+                    selectedDoctors.Add(doctor);
+                }
+            }
+
+            return selectedDoctors;
+        }
     }
 }

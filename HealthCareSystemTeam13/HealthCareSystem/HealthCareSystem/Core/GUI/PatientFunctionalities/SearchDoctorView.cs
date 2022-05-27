@@ -1,0 +1,58 @@
+﻿using HealthCareSystem.Core.Users.Doctors.Model;
+using HealthCareSystem.Core.Users.Doctors.Repository;
+using HealthCareSystem.Core.Users.Doctors.Service;
+using HealthCareSystem.Core.Users.Patients.Repository;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace HealthCareSystem.Core.GUI.PatientFunctionalities
+{
+    public partial class SearchDoctorView : Form
+    {
+        public string Username { get; set; }
+        private List<Doctor> _doctors;
+        private DoctorRepository _doctorRepository;
+
+        public SearchDoctorView(string username)
+        {
+            this.Username = username;
+            InitializeComponent();
+            _doctorRepository = new DoctorRepository();
+            SetDgwDoctors();
+        }
+
+        private void SearchDoctorView_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SetDgwDoctors()
+        {
+            _doctors = _doctorRepository.GetDoctorsWithAverageRating();
+
+            dgwDoctors.DataSource = _doctors;
+            Helpers.DataGridViewSettings(dgwDoctors);
+            dgwDoctors.Font = new Font("Lucida Bright", 10);
+        }
+
+        private void tbSearchDoctor_TextChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine("da");
+            string keyword = tbSearchDoctor.Text.Trim();
+            if (keyword != "")
+            {
+                dgwDoctors.DataSource = DoctorService.GetDoctorsByKeyword(_doctors, keyword.ToLower());
+                
+            }
+            else
+                dgwDoctors.DataSource = _doctors;
+        }
+    }
+}

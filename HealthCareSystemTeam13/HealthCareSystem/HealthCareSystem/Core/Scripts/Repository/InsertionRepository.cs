@@ -78,6 +78,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             InsertPatientExaminationChanges();
             UpdateTransfers();
             UpdateRenovations();
+            InsertDoctorSurveys();
 
             Connection.Close();
         }
@@ -244,7 +245,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             finally
             {
                 List<String> tableNames = new List<string>() {
-                    "BlockedPatients", "PatientExaminationChanges", "ReceiptMedications", "Receipt", "HospitalSurveys", "PatientAlergicTo", "MedicalRecord", "Examination", "Instructions", "DiseaseHistory", "RequestForDinamicEquipment", "users", "rooms", "medications", "Ingredients", "ReferralLetter", "MedicationContainsIngredient", "RejectedMedications", "Equipment", "Anamnesises", "RoomHasEquipment", "EquipmentTransferHistory"
+                    "DoctorSurveys", "BlockedPatients", "PatientExaminationChanges", "ReceiptMedications", "Receipt", "HospitalSurveys", "PatientAlergicTo", "MedicalRecord", "Examination", "Instructions", "DiseaseHistory", "RequestForDinamicEquipment", "users", "rooms", "medications", "Ingredients", "ReferralLetter", "MedicationContainsIngredient", "RejectedMedications", "Equipment", "Anamnesises", "RoomHasEquipment", "EquipmentTransferHistory"
                 };
 
 
@@ -999,6 +1000,52 @@ namespace HealthCareSystem.Core.Scripts.Repository
                 InsertSingle(query);
             }
         }
-    
+        private static void InsertDoctorSurveys()
+        {
+            Dictionary<int, List<int>> combinedIds = GetCombinedIdsFromDoctorsAndPatients();
+
+            foreach (KeyValuePair<int, List<int>> entry in combinedIds)
+            {
+                Random rand = new Random();
+                int grade = rand.Next(1, 6);
+                int quality = rand.Next(1, 6);
+                bool wouldReccomend = grade > 3 && quality > 3;
+                string comment = GetCommentBasedOnGrade(grade);
+                var query = "INSERT INTO DoctorSurveys(id_doctor, id_patient, doctorGrade, quality, wouldRecommend, comment) VALUES(" + entry.Value[1] + ", " + entry.Value[0] + ", " + grade + ", " + quality + ", " + wouldReccomend + ", '"+comment+"')";
+                InsertSingle(query);
+            }
+        }
+
+        private static Dictionary<int, List<int>> GetCombinedIdsFromDoctorsAndPatients()
+        {
+            List<String> doctorIds = GetDoctorIds();
+            List<String> patientIds = GetPatientIds();
+            Dictionary<int, List<int>> combinedIds = new Dictionary<int, List<int>>();
+            for (int i = 0; i < doctorIds.Count(); i++)
+            {
+                for (int j = 0; j < patientIds.Count(); j++)
+                {
+                    int patientId = Convert.ToInt32(patientIds[j]);
+                    int doctorId = Convert.ToInt32(doctorIds[i]);
+
+                    combinedIds[i * doctorIds.Count + j] = new List<int>() { patientId, doctorId};
+                }
+            }
+
+            return combinedIds;
+        }
+        private static string GetCommentBasedOnGrade(int grade)
+        {
+            List<String> comments = new List<string>()
+            {
+                "The doctor was very inapropriate. Awful experience.",
+                "Bad management and appointment accuracy",
+                "It was ok.",
+                "Went very fast and proffesional, but a bit expensive.",
+                "Im very satisfied"
+            };
+            return comments[grade - 1];
+        }
+
     }
 }

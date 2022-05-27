@@ -19,7 +19,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Model
 
         public int UserId { get; set; }
         public DoctorSpeciality Speciality { get; set; }
-
+        public double AverageRating { get; set; }
         public Doctor()
         {
 
@@ -32,6 +32,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Model
             this.Speciality = speciality;
             this.FullName = FirstName + " " + LastName;
             this.ID = 0;
+            this.AverageRating = 0;
         }
         public Doctor(int id, string firstName, string lastName, int userId, DoctorSpeciality speciality)
         {
@@ -41,6 +42,17 @@ namespace HealthCareSystem.Core.Users.Doctors.Model
             this.UserId = userId;
             this.Speciality = speciality;
             this.FullName = FirstName + " " + LastName;
+            this.AverageRating = 0;
+        }
+        public Doctor(int id, string firstName, string lastName, int userId, DoctorSpeciality speciality, double averageRating)
+        {
+            this.ID = id;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.UserId = userId;
+            this.Speciality = speciality;
+            this.FullName = FirstName + " " + LastName;
+            this.AverageRating = averageRating;
         }
 
     }

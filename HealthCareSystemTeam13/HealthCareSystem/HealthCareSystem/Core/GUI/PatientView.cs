@@ -163,5 +163,25 @@ namespace HealthCareSystem.Core.GUI
         {
             LoadForm(new HomeView(Username));
         }
+
+        private void btnSearchDoctor_Click(object sender, EventArgs e)
+        {
+            if (!PatientRep.IsPatientBlocked(Username)) LoadForm(new SearchDoctorView(Username));
+            else
+            {
+                MessageBox.Show("You are blocked!");
+                SuperForm.Show(); this.Close();
+            }
+        }
+
+        private void btnSearchDoctor_MouseEnter(object sender, EventArgs e)
+        {
+            Helpers.ButtonEnter(btnSearchDoctor);
+        }
+
+        private void btnSearchDoctor_MouseLeave(object sender, EventArgs e)
+        {
+            Helpers.ButtonLeave(btnSearchDoctor);
+        }
     }
 }
