@@ -32,7 +32,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Service
             foreach (Doctor doctor in doctors)
             {
                 Console.WriteLine(keyword);
-                if (doctor.FirstName.ToLower().Contains(keyword) || doctor.LastName.ToLower().Contains(keyword) || doctor.Speciality.ToString().ToLower().Contains(keyword))
+                if (IsKeywordInDoctor(keyword, doctor))
                 {
                     selectedDoctors.Add(doctor);
                 }
@@ -40,6 +40,12 @@ namespace HealthCareSystem.Core.Users.Doctors.Service
 
             return selectedDoctors;
         }
+
+        private static bool IsKeywordInDoctor(string keyword, Doctor doctor)
+        {
+            return doctor.FirstName.ToLower().Contains(keyword) || doctor.LastName.ToLower().Contains(keyword) || doctor.Speciality.ToString().ToLower().Contains(keyword);
+        }
+
         public static List<Doctor> SortDoctors(List<Doctor> doctors, int indicator)
         {
             // indicator = 0 -> sort by rating, = 1 -> sort by firstName,
@@ -59,10 +65,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Service
                 for (int j = 0; j < doctors.Count() - i - 1; j++)
                 {
                     if (doctors[j].Speciality.ToString().CompareTo(doctors[j + 1].Speciality.ToString()) > 0)
-                    {
                         Swap(doctors, j);
-
-                    }
                 }
             }
             return doctors;
@@ -75,10 +78,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Service
                 for (int j = 0; j < doctors.Count() - i - 1; j++)
                 {
                     if (doctors[j].FirstName.CompareTo(doctors[j + 1].FirstName) > 0)
-                    {
                         Swap(doctors, j);
-
-                    }
                 }
             }
             return doctors;
@@ -91,10 +91,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Service
                 for (int j = 0; j < doctors.Count() - i - 1; j++)
                 {
                     if (doctors[j].LastName.CompareTo(doctors[j + 1].LastName) > 0)
-                    {
                         Swap(doctors, j);
-
-                    }
                 }
             }
             return doctors;
@@ -107,10 +104,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Service
                 for (int j = 0; j < doctors.Count() - i - 1; j++)
                 {
                     if (doctors[j].AverageRating > doctors[j + 1].AverageRating)
-                    {
                         Swap(doctors, j);
-
-                    }
                 }
             }
             return doctors;

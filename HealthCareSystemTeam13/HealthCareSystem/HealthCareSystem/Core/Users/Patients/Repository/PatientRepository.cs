@@ -91,9 +91,15 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             List<DoctorAnamnesis> filteredAnamnesises = new List<DoctorAnamnesis>();
             foreach(DoctorAnamnesis anamnesis in anamnesises)
             {
-                if (anamnesis.Notice.ToLower().Contains(keyword.ToLower()) || anamnesis.Conclusions.ToLower().Contains(keyword.ToLower())) filteredAnamnesises.Add(anamnesis);
+                if (IsKeywordInAnamnesis(keyword, anamnesis)) 
+                    filteredAnamnesises.Add(anamnesis);
             }
             return filteredAnamnesises;
+        }
+
+        private static bool IsKeywordInAnamnesis(string keyword, DoctorAnamnesis anamnesis)
+        {
+            return anamnesis.Notice.ToLower().Contains(keyword.ToLower()) || anamnesis.Conclusions.ToLower().Contains(keyword.ToLower());
         }
 
         public int GetPatientIdByFirstName(string firstName)

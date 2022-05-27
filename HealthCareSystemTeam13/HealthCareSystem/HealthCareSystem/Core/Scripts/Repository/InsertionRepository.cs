@@ -1007,11 +1007,14 @@ namespace HealthCareSystem.Core.Scripts.Repository
             foreach (KeyValuePair<int, List<int>> entry in combinedIds)
             {
                 Random rand = new Random();
+
                 int grade = rand.Next(1, 6);
                 int quality = rand.Next(1, 6);
                 bool wouldReccomend = grade > 3 && quality > 3;
                 string comment = GetCommentBasedOnGrade(grade);
+
                 var query = "INSERT INTO DoctorSurveys(id_doctor, id_patient, doctorGrade, quality, wouldRecommend, comment) VALUES(" + entry.Value[1] + ", " + entry.Value[0] + ", " + grade + ", " + quality + ", " + wouldReccomend + ", '"+comment+"')";
+
                 InsertSingle(query);
             }
         }

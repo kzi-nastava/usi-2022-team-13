@@ -211,7 +211,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             }
 
 
-
             return true;
         }
 
