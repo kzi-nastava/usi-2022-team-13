@@ -458,6 +458,23 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             }
             return changes;
         }
+        public Dictionary<int, DateTime> GetMedicationInstructions()
+        {
+            Dictionary<int, DateTime> instructions = new Dictionary<int, DateTime>();
+            int patientId = GetPatientId();
+            string query = "select ins.startTime as startTime, ins.timesPerDay as perDay from Receipt as r inner join Instructions as ins on r.id_instructions = ins.id where r.id_patient = " + patientId + "";
+
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                instructions.Add(Convert.ToInt32(reader["perDay"]), (DateTime)reader["startTime"]);
+            }
+
+
+            return instructions;
+        }
        
     }
 }

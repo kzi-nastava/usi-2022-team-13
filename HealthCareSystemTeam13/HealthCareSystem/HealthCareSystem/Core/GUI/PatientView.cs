@@ -75,6 +75,9 @@ namespace HealthCareSystem.Core.GUI
             this.MinimizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             LoadForm(new HomeView(Username));
+            Dictionary<int, DateTime> instructions =  PatientRep.GetMedicationInstructions();
+            
+
         }
 
         private void btnAptRecc_Click(object sender, EventArgs e)
