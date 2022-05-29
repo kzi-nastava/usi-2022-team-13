@@ -887,7 +887,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             instructions.Add(new Instruction(tomorrow, 4,
                 "Morbi tincidunt augue interdum velit euismod in pellentesque massa placerat. Pharetra convallis posuere"
                 ));
-            instructions.Add(new Instruction(tomorrow, 2,
+            instructions.Add(new Instruction(DateTime.Now.AddHours(-1), 2,
                 "Morbi tincidunt augue interdum velit euismod in pellentesque massa placerat. Pharetra convallis posuere"
                 ));
 

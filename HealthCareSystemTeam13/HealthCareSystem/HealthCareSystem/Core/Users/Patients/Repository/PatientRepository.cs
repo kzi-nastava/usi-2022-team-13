@@ -472,9 +472,23 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
                 instructions.Add(Convert.ToInt32(reader["perDay"]), (DateTime)reader["startTime"]);
             }
 
-
             return instructions;
         }
-       
+        public int GetMedicationNotificationTime()
+        {
+            int patientId = GetPatientId();
+            string query = "select notificationTime from Patients where id = " + patientId + "";
+            int hoursBefore = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0]);
+
+            return hoursBefore;
+        }
+       public void SetMedicationNotificationTime(int newTime)
+        {
+            int patientId = GetPatientId();
+            string query = "Update Patients set notificationTime = " + newTime + " where id = " + patientId + "";
+            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+        }
+
+
     }
 }

@@ -31,7 +31,6 @@ namespace HealthCareSystem.Core.Users.Doctors.Service
             List<Doctor> selectedDoctors = new List<Doctor>();
             foreach (Doctor doctor in doctors)
             {
-                Console.WriteLine(keyword);
                 if (IsKeywordInDoctor(keyword, doctor))
                 {
                     selectedDoctors.Add(doctor);
