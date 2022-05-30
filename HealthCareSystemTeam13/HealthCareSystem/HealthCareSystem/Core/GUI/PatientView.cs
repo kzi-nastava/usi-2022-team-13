@@ -79,10 +79,7 @@ namespace HealthCareSystem.Core.GUI
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            LoadForm(new HomeView(Username));
-            Dictionary<int, DateTime> instructions =  _patientRepository.GetMedicationInstructions();
-            
-            
+            LoadForm(new HomeView(Username)); 
         }
         private void LoadNotifications()
         { 
