@@ -489,6 +489,5 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             DatabaseHelpers.ExecuteNonQueries(query, Connection);
         }
 
-
     }
 }

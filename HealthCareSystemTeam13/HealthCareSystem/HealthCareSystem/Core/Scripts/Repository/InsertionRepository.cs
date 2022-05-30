@@ -551,7 +551,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (Patient patient in patients)
             {
-                var query = "INSERT INTO Patients(firstName, lastName, user_id, isBlocked) VALUES('"+patient.FirstName+"', '"+patient.LastName+"', "+patient.UserId+", "+patient.IsBlocked+")";
+                var query = "INSERT INTO Patients(firstName, lastName, user_id, isBlocked, notificationTime) VALUES('"+patient.FirstName+"', '"+patient.LastName+"', "+patient.UserId+", "+patient.IsBlocked+", "+2+")";
                 InsertSingle(query);
             }
         }

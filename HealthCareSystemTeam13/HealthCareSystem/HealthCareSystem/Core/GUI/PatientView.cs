@@ -18,7 +18,7 @@ namespace HealthCareSystem.Core.GUI
         public string Username { get; set; }
         public LoginForm SuperForm;
         private PatientRepository _patientRepository;
-        private System.Threading.Timer _timer;
+        private List<System.Threading.Timer> _timers;
         private int _notificationAlertTime;
 
         public PatientView(string username, LoginForm superForm)
@@ -84,55 +84,57 @@ namespace HealthCareSystem.Core.GUI
             
         }
         private void LoadNotifications()
-        {
-            Console.WriteLine("Da");
+        { 
             Dictionary<int, DateTime> instructions = _patientRepository.GetMedicationInstructions();
-
             if (instructions.Count() == 0)
                 return;
 
-            int timesPerDay = instructions.Keys.First();
-           
+            List<int> atHours = GetHoursForNotifications(instructions);
+
+            DateTime startDate = instructions.Values.First();
+
+            if (DateTime.Now >= startDate)
+            {
+                this._timers = new List<System.Threading.Timer>();
+                DateTime current = DateTime.Now;
+                foreach (int atHour in atHours)
+                {
+                    int hour = atHour - current.Hour;
+
+                    if (hour > 0)
+                    {
+                        this._timers.Add(new System.Threading.Timer(x =>
+                        {
+                            this.ShowNotification(_notificationAlertTime);
+                        }, null, TimeSpan.FromHours(atHour), Timeout.InfiniteTimeSpan));
+                    }
+                }
+
+            }
+
+        }
+
+        private List<int> GetHoursForNotifications(Dictionary<int, DateTime> instructions)
+        {
             List<int> atHours = new List<int>();
+            int timesPerDay = instructions.Keys.First();
             int startHour = 8;
             int incremental = 23 / timesPerDay;
 
-            while(startHour < 24 && timesPerDay > 0)
+            while (startHour < 24 && timesPerDay > 0)
             {
                 atHours.Add(startHour - _notificationAlertTime);
                 startHour += incremental;
                 timesPerDay -= 1;
             }
 
-            DateTime startDate = instructions.Values.First();
-            
-            if(DateTime.Now >= startDate)
-            {
-
-                DateTime current = DateTime.Now;
-                foreach (int atHour in atHours)
-                {
-                    int hour = atHour - current.Hour;
-
-                    Console.WriteLine(hour);
-                    Console.WriteLine(atHour);
-                    Console.WriteLine(current.Hour);
-                    if (hour > 0)
-                    {
-                        this._timer = new System.Threading.Timer(x =>
-                        {
-                            this.ShowNotification(atHour);
-                        }, null, new TimeSpan(hour, 0, 0), Timeout.InfiniteTimeSpan);
-                    }
-                }
-
-            }
-            
-
+            return atHours;
         }
+
         private void ShowNotification(int atHour)
         {
-            MessageBox.Show("Alerting you that you need to drink your medicine in " + atHour + " hours!");
+            string message = atHour == 0 ? "Alerting you that you need to drink your medicine now!" : "Alerting you that you need to drink your medicine in " + atHour + " hours!";
+            MessageBox.Show(message);
         }
         private void btnAptRecc_Click(object sender, EventArgs e)
         {
