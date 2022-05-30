@@ -5,10 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HealthCareSystem.Core.GUI.PatientFunctionalities;
 using HealthCareSystem.Core.Users.Patients.Repository;
+using HealthCareSystem.Core.Users.Patients.Service;
 
 namespace HealthCareSystem.Core.GUI
 {
@@ -16,14 +18,20 @@ namespace HealthCareSystem.Core.GUI
     {
         public string Username { get; set; }
         public LoginForm SuperForm;
-        private PatientRepository PatientRep;
+        private PatientRepository _patientRepository;
+        private List<System.Threading.Timer> _timers;
+        private int _notificationAlertTime;
+
         public PatientView(string username, LoginForm superForm)
         {
             Username = username;
             SuperForm = superForm;
-            PatientRep = new PatientRepository(username);
+            _patientRepository = new PatientRepository(username);
+            _notificationAlertTime = _patientRepository.GetMedicationNotificationTime();
+
             InitializeComponent();
 
+            LoadNotifications();
         }
 
         private void LoadForm(object Form)
@@ -41,9 +49,6 @@ namespace HealthCareSystem.Core.GUI
             selectedButton.Show();
 
         }
-
-
-
         private void PatientView_FormClosing(object sender, FormClosingEventArgs e)
         {
             SuperForm.Show();
@@ -58,7 +63,7 @@ namespace HealthCareSystem.Core.GUI
 
         private void btnExaminations_Click(object sender, EventArgs e)
         {
-            if (!PatientRep.IsPatientBlocked(Username))
+            if (!_patientRepository.IsPatientBlocked(Username))
             {
                 LoadForm(new PatientExaminations(Username));
             }
@@ -75,11 +80,54 @@ namespace HealthCareSystem.Core.GUI
             this.MinimizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             LoadForm(new HomeView(Username));
+            Dictionary<int, DateTime> instructions =  _patientRepository.GetMedicationInstructions();
+            
+            
+        }
+        private void LoadNotifications()
+        { 
+            Dictionary<int, DateTime> instructions = _patientRepository.GetMedicationInstructions();
+            if (instructions.Count() == 0)
+                return;
+
+            List<int> atHours = PatientService.GetHoursForNotifications(instructions, _notificationAlertTime);
+
+            DateTime startDate = instructions.Values.First();
+
+            if (DateTime.Now >= startDate)
+            {
+                SetNotificationThreads(atHours);
+            }
+
+        }
+
+        private void SetNotificationThreads(List<int> atHours)
+        {
+            this._timers = new List<System.Threading.Timer>();
+            DateTime current = DateTime.Now;
+            foreach (int atHour in atHours)
+            {
+                int hour = atHour - current.Hour;
+
+                if (hour > 0)
+                {
+                    this._timers.Add(new System.Threading.Timer(x =>
+                    {
+                        this.ShowNotification(_notificationAlertTime);
+                    }, null, TimeSpan.FromHours(atHour), Timeout.InfiniteTimeSpan));
+                }
+            }
+        }
+
+        private void ShowNotification(int atHour)
+        {
+            string message = atHour == 0 ? "Alerting you that you need to drink your medicine now!" : "Alerting you that you need to drink your medicine in " + atHour + " hours!";
+            MessageBox.Show(message);
         }
 
         private void btnAptRecc_Click(object sender, EventArgs e)
         {
-            if (!PatientRep.IsPatientBlocked(Username)) LoadForm(new PatientRecommendation(Username));
+            if (!_patientRepository.IsPatientBlocked(Username)) LoadForm(new PatientRecommendation(Username));
             else
             {
                 MessageBox.Show("You are blocked!");
@@ -89,7 +137,7 @@ namespace HealthCareSystem.Core.GUI
 
         private void btnMedicalRecord_Click(object sender, EventArgs e)
         {
-            if (!PatientRep.IsPatientBlocked(Username)) LoadForm(new MedicalRecordView(Username));
+            if (!_patientRepository.IsPatientBlocked(Username)) LoadForm(new MedicalRecordView(Username));
             else
             {
                 MessageBox.Show("You are blocked!");
@@ -99,7 +147,7 @@ namespace HealthCareSystem.Core.GUI
 
         private void btnHome_Click(object sender, EventArgs e)
         {
-            if (!PatientRep.IsPatientBlocked(Username)) LoadForm(new HomeView(Username));
+            if (!_patientRepository.IsPatientBlocked(Username)) LoadForm(new HomeView(Username));
             else
             {
                 MessageBox.Show("You are blocked!");
@@ -166,7 +214,7 @@ namespace HealthCareSystem.Core.GUI
 
         private void btnSearchDoctor_Click(object sender, EventArgs e)
         {
-            if (!PatientRep.IsPatientBlocked(Username)) LoadForm(new SearchDoctorView(Username));
+            if (!_patientRepository.IsPatientBlocked(Username)) LoadForm(new SearchDoctorView(Username));
             else
             {
                 MessageBox.Show("You are blocked!");
@@ -182,6 +230,16 @@ namespace HealthCareSystem.Core.GUI
         private void btnSearchDoctor_MouseLeave(object sender, EventArgs e)
         {
             Helpers.ButtonLeave(btnSearchDoctor);
+        }
+
+        private void btnNotifications_Click(object sender, EventArgs e)
+        {
+            if (!_patientRepository.IsPatientBlocked(Username)) LoadForm(new NotificationsView(Username));
+            else
+            {
+                MessageBox.Show("You are blocked!");
+                SuperForm.Show(); this.Close();
+            }
         }
     }
 }

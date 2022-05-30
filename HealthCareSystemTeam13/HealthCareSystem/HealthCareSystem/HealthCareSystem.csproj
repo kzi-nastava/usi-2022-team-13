@@ -156,6 +156,12 @@
     <Compile Include="Core\GUI\PatientFunctionalities\MedicalRecordView.Designer.cs">
       <DependentUpon>MedicalRecordView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\NotificationsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\NotificationsView.Designer.cs">
+      <DependentUpon>NotificationsView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\PatientExaminations.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -349,6 +355,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\MedicalRecordView.resx">
       <DependentUpon>MedicalRecordView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\NotificationsView.resx">
+      <DependentUpon>NotificationsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\PatientExaminations.resx">
       <DependentUpon>PatientExaminations.cs</DependentUpon>
