@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using HealthCareSystem.Core.GUI.PatientFunctionalities;
 using HealthCareSystem.Core.Users.Patients.Repository;
+using HealthCareSystem.Core.Users.Patients.Service;
 
 namespace HealthCareSystem.Core.GUI
 {
@@ -89,46 +90,33 @@ namespace HealthCareSystem.Core.GUI
             if (instructions.Count() == 0)
                 return;
 
-            List<int> atHours = GetHoursForNotifications(instructions);
+            List<int> atHours = PatientService.GetHoursForNotifications(instructions, _notificationAlertTime);
 
             DateTime startDate = instructions.Values.First();
 
             if (DateTime.Now >= startDate)
             {
-                this._timers = new List<System.Threading.Timer>();
-                DateTime current = DateTime.Now;
-                foreach (int atHour in atHours)
-                {
-                    int hour = atHour - current.Hour;
-
-                    if (hour > 0)
-                    {
-                        this._timers.Add(new System.Threading.Timer(x =>
-                        {
-                            this.ShowNotification(_notificationAlertTime);
-                        }, null, TimeSpan.FromHours(atHour), Timeout.InfiniteTimeSpan));
-                    }
-                }
-
+                SetNotificationThreads(atHours);
             }
 
         }
 
-        private List<int> GetHoursForNotifications(Dictionary<int, DateTime> instructions)
+        private void SetNotificationThreads(List<int> atHours)
         {
-            List<int> atHours = new List<int>();
-            int timesPerDay = instructions.Keys.First();
-            int startHour = 8;
-            int incremental = 23 / timesPerDay;
-
-            while (startHour < 24 && timesPerDay > 0)
+            this._timers = new List<System.Threading.Timer>();
+            DateTime current = DateTime.Now;
+            foreach (int atHour in atHours)
             {
-                atHours.Add(startHour - _notificationAlertTime);
-                startHour += incremental;
-                timesPerDay -= 1;
-            }
+                int hour = atHour - current.Hour;
 
-            return atHours;
+                if (hour > 0)
+                {
+                    this._timers.Add(new System.Threading.Timer(x =>
+                    {
+                        this.ShowNotification(_notificationAlertTime);
+                    }, null, TimeSpan.FromHours(atHour), Timeout.InfiniteTimeSpan));
+                }
+            }
         }
 
         private void ShowNotification(int atHour)
@@ -136,6 +124,7 @@ namespace HealthCareSystem.Core.GUI
             string message = atHour == 0 ? "Alerting you that you need to drink your medicine now!" : "Alerting you that you need to drink your medicine in " + atHour + " hours!";
             MessageBox.Show(message);
         }
+
         private void btnAptRecc_Click(object sender, EventArgs e)
         {
             if (!_patientRepository.IsPatientBlocked(Username)) LoadForm(new PatientRecommendation(Username));
