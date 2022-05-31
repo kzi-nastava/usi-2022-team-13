@@ -144,6 +144,12 @@
     <Compile Include="Core\GUI\PatientFunctionalities\AnamnesisView.Designer.cs">
       <DependentUpon>AnamnesisView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\DoctorSurveyView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\DoctorSurveyView.Designer.cs">
+      <DependentUpon>DoctorSurveyView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\HomeView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -356,6 +362,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\AnamnesisView.resx">
       <DependentUpon>AnamnesisView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\DoctorSurveyView.resx">
+      <DependentUpon>DoctorSurveyView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\HomeView.resx">
       <DependentUpon>HomeView.cs</DependentUpon>

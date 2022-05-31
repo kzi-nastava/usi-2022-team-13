@@ -33,6 +33,7 @@
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
+            this.btnRateDoctor = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgwExaminations)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,10 +57,10 @@
             this.btnAdd.FlatAppearance.BorderSize = 3;
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAdd.Font = new System.Drawing.Font("Lucida Console", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAdd.Location = new System.Drawing.Point(284, 451);
+            this.btnAdd.Location = new System.Drawing.Point(344, 463);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(4);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(170, 59);
+            this.btnAdd.Size = new System.Drawing.Size(139, 46);
             this.btnAdd.TabIndex = 1;
             this.btnAdd.Text = "ADD";
             this.btnAdd.UseVisualStyleBackColor = false;
@@ -73,10 +74,10 @@
             this.btnEdit.FlatAppearance.BorderSize = 3;
             this.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEdit.Font = new System.Drawing.Font("Lucida Console", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEdit.Location = new System.Drawing.Point(462, 451);
+            this.btnEdit.Location = new System.Drawing.Point(491, 462);
             this.btnEdit.Margin = new System.Windows.Forms.Padding(4);
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(143, 59);
+            this.btnEdit.Size = new System.Drawing.Size(125, 47);
             this.btnEdit.TabIndex = 2;
             this.btnEdit.Text = "EDIT";
             this.btnEdit.UseVisualStyleBackColor = false;
@@ -90,10 +91,10 @@
             this.btnCancel.FlatAppearance.BorderSize = 3;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.Font = new System.Drawing.Font("Lucida Console", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(613, 451);
+            this.btnCancel.Location = new System.Drawing.Point(624, 462);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(127, 59);
+            this.btnCancel.Size = new System.Drawing.Size(116, 47);
             this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "CANCEL";
             this.btnCancel.UseVisualStyleBackColor = false;
@@ -116,12 +117,30 @@
             this.btnRefresh.UseVisualStyleBackColor = false;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
+            // btnRateDoctor
+            // 
+            this.btnRateDoctor.BackColor = System.Drawing.Color.Transparent;
+            this.btnRateDoctor.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRateDoctor.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnRateDoctor.FlatAppearance.BorderSize = 3;
+            this.btnRateDoctor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRateDoctor.Font = new System.Drawing.Font("Lucida Console", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRateDoctor.Location = new System.Drawing.Point(180, 462);
+            this.btnRateDoctor.Margin = new System.Windows.Forms.Padding(4);
+            this.btnRateDoctor.Name = "btnRateDoctor";
+            this.btnRateDoctor.Size = new System.Drawing.Size(156, 47);
+            this.btnRateDoctor.TabIndex = 5;
+            this.btnRateDoctor.Text = "Rate Doctor";
+            this.btnRateDoctor.UseVisualStyleBackColor = false;
+            this.btnRateDoctor.Click += new System.EventHandler(this.btnRateDoctor_Click);
+            // 
             // PatientExaminations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSkyBlue;
             this.ClientSize = new System.Drawing.Size(773, 535);
+            this.Controls.Add(this.btnRateDoctor);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnEdit);
@@ -145,5 +164,6 @@
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.Button btnRateDoctor;
     }
 }

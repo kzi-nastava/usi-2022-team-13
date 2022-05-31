@@ -53,6 +53,12 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             return patientId;
         }
 
+        internal void AddDoctorSurvey(int doctorId, int patientId, int rating, int quality, bool wouldReccomend, string comment)
+        {
+            string query = "insert into DoctorSurveys(id_doctor, id_patient, doctorGrade, quality, wouldRecommend, comment) values("+doctorId+", "+patientId+", "+rating+", "+quality+", "+ wouldReccomend + ", '"+comment+"')";
+
+            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+        }
 
         public Dictionary<string, string> GetPatientNameAndMedicalStats(int patientId)
         {
