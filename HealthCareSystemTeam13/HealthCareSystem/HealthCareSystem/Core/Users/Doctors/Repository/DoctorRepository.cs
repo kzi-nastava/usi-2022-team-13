@@ -405,7 +405,12 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 ));
 
         }
-       
+        public int GetDoctorIdByFullName(string firstName, string lastName)
+        {
+            string query = "select id from Doctors where firstName = '" + firstName + "' and lastName = '" + lastName + "'";
+            int doctorId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0]);
+            return doctorId;
+        }
 
     }
 }

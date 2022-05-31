@@ -13,6 +13,7 @@ using HealthCareSystem.Core.Scripts.Repository;
 using HealthCareSystem.Core.Users.Patients.Model;
 using System.ComponentModel;
 using HealthCareSystem.Core.Examinations.Repository;
+using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
 
 namespace HealthCareSystem.Core.Users.Patients.Repository
 {
@@ -52,6 +53,12 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             return patientId;
         }
 
+        internal void AddDoctorSurvey(int doctorId, int patientId, int rating, int quality, bool wouldReccomend, string comment)
+        {
+            string query = "insert into DoctorSurveys(id_doctor, id_patient, doctorGrade, quality, wouldRecommend, comment) values("+doctorId+", "+patientId+", "+rating+", "+quality+", "+ wouldReccomend + ", '"+comment+"')";
+
+            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+        }
 
         public Dictionary<string, string> GetPatientNameAndMedicalStats(int patientId)
         {
@@ -489,5 +496,13 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             DatabaseHelpers.ExecuteNonQueries(query, Connection);
         }
 
+        public void AddHospitalSurvey(HospitalSurvey survey)
+        {
+            int patientId = GetPatientId();
+            bool isSatisfied = survey.Happiness == 1 ? true : false;
+            bool wouldReccomend = survey.WouldRecommend == 1 ? true : false;
+            string query = "insert into HospitalSurveys(quality, higyene, isSatisfied, wouldRecomend, comment, id_patient) values(" + survey.QualityOfService + ", " + survey.Cleanliness + ", " + isSatisfied + ", " + wouldReccomend + ", '" + survey.Comment + "', "+patientId+")";
+            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+        }
     }
 }
