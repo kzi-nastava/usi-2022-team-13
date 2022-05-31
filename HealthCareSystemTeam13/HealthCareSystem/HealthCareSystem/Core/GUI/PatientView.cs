@@ -238,5 +238,20 @@ namespace HealthCareSystem.Core.GUI
                 SuperForm.Show(); this.Close();
             }
         }
+
+        private void btnHospitalSurveys_Click(object sender, EventArgs e)
+        {
+            if (!_patientRepository.IsPatientBlocked(Username))
+            {
+                HospitalSurveysView surveyView = new HospitalSurveysView(Username);
+
+                surveyView.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("You are blocked!");
+                SuperForm.Show(); this.Close();
+            }
+        }
     }
 }

@@ -150,6 +150,12 @@
     <Compile Include="Core\GUI\PatientFunctionalities\HomeView.Designer.cs">
       <DependentUpon>HomeView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\HospitalSurveysView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\HospitalSurveysView.Designer.cs">
+      <DependentUpon>HospitalSurveysView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\MedicalRecordView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -292,6 +298,7 @@
     <Compile Include="Core\Users\Patients\Model\MedicalRecord.cs" />
     <Compile Include="Core\Users\Patients\Model\Patient.cs" />
     <Compile Include="Core\Users\Patients\Repository\PatientRepository.cs" />
+    <Compile Include="Core\Users\Patients\Service\PatientService.cs" />
     <Compile Include="Core\Users\Secretaries\Model\Secretary.cs" />
     <Compile Include="Core\Users\Secretaries\Repository\SecretaryRepository.cs" />
     <Compile Include="Core\GUI\DoctorView.cs">
@@ -352,6 +359,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\HomeView.resx">
       <DependentUpon>HomeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\HospitalSurveysView.resx">
+      <DependentUpon>HospitalSurveysView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\MedicalRecordView.resx">
       <DependentUpon>MedicalRecordView.cs</DependentUpon>
