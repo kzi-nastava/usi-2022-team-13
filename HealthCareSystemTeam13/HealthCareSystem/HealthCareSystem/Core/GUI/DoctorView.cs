@@ -34,7 +34,7 @@ namespace HealthCareSystem
         private void FillDataGridView()
         {
 
-            dgwExaminations.DataSource = DoctorRep.examinations;
+            dgwExaminations.DataSource = DoctorRep.Examinations;
             DataGridViewSettings();
         }
 
@@ -95,7 +95,7 @@ namespace HealthCareSystem
         public void RefreshDataGridView()
         {
             DoctorRep.PullExaminations();
-            dgwExaminations.DataSource = DoctorRep.examinations;
+            dgwExaminations.DataSource = DoctorRep.Examinations;
             dgwExaminations.Refresh();
         }
 
@@ -172,14 +172,14 @@ namespace HealthCareSystem
         {
             DateTime date = dtDate.Value;
             DoctorRep.PullExaminationsByDate(date);
-            dgwExaminations.DataSource = DoctorRep.examinations;
+            dgwExaminations.DataSource = DoctorRep.Examinations;
             dgwExaminations.Refresh();
         }
 
         private void btnShowNextThreeDays_Click(object sender, EventArgs e)
         {
             DoctorRep.PullExaminationsThreeDays();
-            dgwExaminations.DataSource = DoctorRep.examinations;
+            dgwExaminations.DataSource = DoctorRep.Examinations;
             dgwExaminations.Refresh();
         }
 
@@ -190,6 +190,25 @@ namespace HealthCareSystem
                 string patientFullName = dgwExaminations.SelectedRows[0].Cells[1].Value.ToString();
                 PatientMedicalRecord patientMedicalRecordForm = new PatientMedicalRecord(patientFullName);
                 patientMedicalRecordForm.ShowDialog();
+            }
+        }
+
+        private void btnStartExamination_Click(object sender, EventArgs e)
+        {
+            if (CanChangeExamination())
+            {
+                int validDate = IsValidDate();
+                if (validDate != 0)
+                {
+                    int examinationId = (int)dgwExaminations.SelectedRows[0].Cells[0].Value;
+                    string patientFullName = dgwExaminations.SelectedRows[0].Cells[1].Value.ToString();
+                    StartedExamination startedExaminationForm = new 
+                        StartedExamination(examinationId, patientFullName, Username);
+
+
+                    startedExaminationForm.ShowDialog();
+
+                }
             }
         }
     }

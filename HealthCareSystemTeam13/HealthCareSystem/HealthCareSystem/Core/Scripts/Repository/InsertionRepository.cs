@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.OleDb;
 using HealthCareSystem.Core.Users.Model;
 using HealthCareSystem.Core.Users.Doctors.Model;
@@ -11,21 +9,24 @@ using HealthCareSystem.Core.Users.Secretaries.Model;
 using HealthCareSystem.Core.Medications.Model;
 using HealthCareSystem.Core.Users.HospitalManagers;
 using HealthCareSystem.Core.Rooms.Model;
-using HealthCareSystem.Core.Rooms.Equipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
 using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
 using HealthCareSystem.Core.Ingredients.Model;
 using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Medications.Receipts.Model;
 using HealthCareSystem.Core.Rooms.Renovations.Model;
-using HealthCareSystem.Core.Rooms.Equipment.TransferHistoryOfEquipment.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
+using HealthCareSystem.Core.Rooms.Repository;
 using HealthCareSystem.Core.Rooms.DynamicEqipmentRequests.Model;
-using HealthCareSystem.Core.Rooms.Equipment.RoomHasEquipment.Model;
+using static HealthCareSystem.Core.Rooms.Renovations.Model.Renovation;
 
 namespace HealthCareSystem.Core.Scripts.Repository
 {
     class InsertionRepository
     {
         private static OleDbConnection Connection;
+        RoomRepository RoomRep;
 
         public InsertionRepository()
         {
@@ -43,6 +44,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
+            RoomRep = new RoomRepository();
         }
 
         public void ExecuteQueries()
@@ -51,62 +53,155 @@ namespace HealthCareSystem.Core.Scripts.Repository
             {
                 Connection.Open();
             }
-            //Users Insertion
+            InsetUsersToDatabase();
+            InsertRooms();
+            InsertMedications();
+            InsertIngredients();
+            InsertReferralLetters();
+            InsertMedicationsIngredients();
+            InsertRejectedMedications();
+            InsertEquipment();
+            InsertHospitalSurveys();
+            InsertPatientAlergies();
+            InsertMedicalRecords();
+            InsertExaminations();
+            InsertAnamnesises();
+            InsertInstructions();
+            InsertDiseaseHistories();
+            InsertRoomHasEquipment();
+            InsertDynamicEquipmentRequests();
+            InsertRenovations();
+            InsertTransferHistoryOfEquipment();
+            InsertPatientEditRequests();
+            InsertReceipts();
+            InsertReceiptMedication();
+            InsertPatientExaminationChanges();
+            UpdateTransfers();
+            UpdateRenovations();
+            InsertDoctorSurveys();
+
+            Connection.Close();
+        }
+        private void InsetUsersToDatabase()
+        {
             InsertUsers();
             InsertDoctors();
             InsertManagers();
             InsertPatients();
             InsertSecretaries();
             InsertBlockedPatients();
-
-            //Room Insertion
-            InsertRooms();
-
-            //Medication Insertion
-            InsertMedications();
-            InsertIngredients();
-
-            InsertReferralLetters();
-
-            InsertMedicationsIngredients();
-            InsertRejectedMedications();
-
-            //Equipment
-            InsertEquipment();
-
-            //Surveys
-            InsertHospitalSurveys();
-
-            //PatientAlergies
-            InsertPatientAlergies();
-
-            InsertMedicalRecords();
-            InsertExaminations();
-            InsertAnamnesises();
-            InsertInstructions();
-            InsertDiseaseHistories();
-
-
-            InsertRoomHasEquipment();
-            InsertDynamicEquipmentRequests();
-
-            //InsertRenovations();
-            //InsertTransferHistoryOfEquipment();
-          
-            InsertPatientEditRequests();
-
-            InsertReceipts();
-            InsertReceiptMedication();
-
-            InsertPatientExaminationChanges();
-
-
-            Connection.Close();
         }
 
 
+        public void UpdateRenovations()
+        {
+            string unrealizedRenovationsQuery = "select * from Renovations where dateOfFinish < #" + DateTime.Now.ToString() + "#";   
+       
+            List<Renovation> unrealizedRenovations;
+            unrealizedRenovations = RoomRep.GetRenovations(unrealizedRenovationsQuery);
+
+            foreach(Renovation renovation in unrealizedRenovations)
+            {
+               
+                if(renovation.Type == TypeOfRenovation.Regular)
+                {
+                    ExecuteRegularRenovations(renovation);
+                }
+                else if(renovation.Type == TypeOfRenovation.Merging)
+                {
+                    //In merging we just remove the room that has id_other_room and we transfer equipment to the room that has id_room
+
+                    ExecuteMergingRenovations(renovation);
+
+                }
+                else
+                {
+                    //In spliting we just look at the type of id_room and we create new room with new id( basically one room remains and new is formed with the same type attribute and 0 equipment),
+                    //and all equipment is returned to warehouse leaving to hospital manager to manually allocate equipment in already existing equipment moving manager
+                    ExecuteSplitingRenovations(renovation);
+                }
+            }
+        }
+
+        private void ExecuteRegularRenovations(Renovation renovation)
+        {
+            string deleteRegularRenovationQuery = "delete from Renovations where id_room = " + renovation.RoomId;
+            RoomRep.UpdateContent(deleteRegularRenovationQuery);
+        }
+
+        private void ExecuteMergingRenovations(Renovation renovation)
+        {
+            string getEquipmentInRoomQuery = "select * from RoomHasEquipment where id_room = " + renovation.SecondRoomId;
+            List<RoomHasEquipment> equipmentToBeMoved = RoomRep.GetEquipmentInRoom(getEquipmentInRoomQuery);
+
+            foreach (RoomHasEquipment equipment in equipmentToBeMoved)
+            {
+                //checking to see if there is an instance of RoomhasEquipment for room that we are putting equipment in
+                string checkQuery = "select * from RoomHasEquipment where id_room = " + renovation.RoomId + " and id_equipment = " + equipment.EquipmentId + "";
+                List<RoomHasEquipment> checkNumber = RoomRep.GetEquipmentInRoom(checkQuery);
 
 
+                if (checkNumber.Count == 0)
+                {
+                    //if there is not that particular instance we create new one with amount of 0
+                    string insertQueryDestination = "insert into RoomHasEquipment (id_room, id_equipment, amount) values (" + renovation.RoomId + ", " + equipment.EquipmentId + ", 0)";
+                    RoomRep.UpdateContent(insertQueryDestination);
+                }
+
+                string updateFirstRoomEquipment = "update RoomHasEquipment set amount = amount + " + equipment.Quantity + " where id_room = " + renovation.RoomId + " and id_equipment = " + equipment.EquipmentId;
+                RoomRep.UpdateContent(updateFirstRoomEquipment);
+
+            }
+
+            string deleteMergingRenovationQuery = "delete from Renovations where id_room = " + renovation.RoomId + " and id_other_room = " + renovation.SecondRoomId;
+            RoomRep.UpdateContent(deleteMergingRenovationQuery);
+
+
+            string deleteOtherRoomQuery = "delete from Rooms where ID = " + renovation.SecondRoomId;
+            RoomRep.UpdateContent(deleteOtherRoomQuery);
+        }
+
+        private void ExecuteSplitingRenovations(Renovation renovation)
+        {
+            string getEquipmentInFirstRoomQuery = "select * from RoomHasEquipment where id_room = " + renovation.RoomId;
+            List<RoomHasEquipment> equipmentToBeMovedToWarehouse = RoomRep.GetEquipmentInRoom(getEquipmentInFirstRoomQuery);
+
+            Room warehouse = RoomRep.GetRooms("select * from Rooms where Type = 'Warehouse'")[0];
+            Room firstRoom = RoomRep.GetRooms("select * from Rooms where ID = " + renovation.RoomId)[0];
+
+            foreach (RoomHasEquipment equipment in equipmentToBeMovedToWarehouse)
+            {
+                string checkQuery = "select * from RoomHasEquipment where id_equipment = " + equipment.EquipmentId + " and id_room in (select ID from Rooms where Type = 'Warehouse'";
+                List<RoomHasEquipment> checkNumber = RoomRep.GetEquipmentInRoom(checkQuery);
+
+
+                if (checkNumber.Count == 0)
+                {
+                    string insertQueryDestination = "insert into RoomHasEquipment (id_room, id_equipment, amount) values (" + warehouse.ID + ", " + equipment.EquipmentId + ", 0)";
+                    RoomRep.UpdateContent(insertQueryDestination);
+                }
+
+                string updateWarehouseEquipment = "update RoomHasEquipment set amount = amount + " + equipment.Quantity + " where id_room = " + warehouse.ID + " and id_equipment = " + equipment.EquipmentId;
+                RoomRep.UpdateContent(updateWarehouseEquipment);
+
+            }
+
+            string deleteSplittingRenovationQuery = "delete from Renovations where id_room = " + renovation.RoomId;
+            RoomRep.UpdateContent(deleteSplittingRenovationQuery);
+
+            var query = "INSERT INTO rooms(type) VALUES('"+firstRoom.Type.ToString()+"')";
+            InsertSingle(query);
+        }
+
+        public void UpdateTransfers()
+        {
+            string unrealizedTransfersQuery = "select * from EquipmentTransferHistory where isExecuted = false";
+
+            List<TransferHistoryOfEquipment> unrealizedTransfers;
+            unrealizedTransfers = RoomRep.GetTransferHistory(unrealizedTransfersQuery);
+
+            Connection.Close();
+        }
 
         private static void InsertDiseaseHistories()
         {
@@ -114,10 +209,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (DiseaseHistory diseaseHistory in diseaseHistories)
             {
-                InsertSingleDiseaseHistory(diseaseHistory);
+                var query = "INSERT INTO DiseaseHistory(id_medicalRecord, nameOfDisease) VALUES("+diseaseHistory.MedicalRecordId+", '"+diseaseHistory.Name+"')";
+                InsertSingle(query);
             }
         }
-
         private static List<DiseaseHistory> GetDiseaseHistories()
         {
             List<DiseaseHistory> diseaseHistory = new List<DiseaseHistory>();
@@ -130,21 +225,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[1]), "Diabetes"));
             diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[2]), "Diabetes"));
             diseaseHistory.Add(new DiseaseHistory(Convert.ToInt32(medicalRecordIds[2]), "Alzheimer"));
-
-
-
             return diseaseHistory;
-        }
-
-        private static void InsertSingleDiseaseHistory(DiseaseHistory diseaseHistory)
-        {
-            var query = "INSERT INTO DiseaseHistory(id_medicalRecord, nameOfDisease) VALUES(@id_medicalRecord, @nameOfDisease)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_medicalRecord", diseaseHistory.MedicalRecordId);
-                cmd.Parameters.AddWithValue("@nameOfDisease", diseaseHistory.Name);
-                cmd.ExecuteNonQuery();
-            }
         }
 
         public void DeleteRecords()
@@ -163,33 +244,21 @@ namespace HealthCareSystem.Core.Scripts.Repository
             }
             finally
             {
+                List<String> tableNames = new List<string>() {
+                    "DoctorSurveys", "BlockedPatients", "PatientExaminationChanges", "ReceiptMedications", "Receipt", "HospitalSurveys", "PatientAlergicTo", "MedicalRecord", "Examination", "Instructions", "DiseaseHistory", "RequestForDinamicEquipment", "users", "rooms", "medications", "Ingredients", "ReferralLetter", "MedicationContainsIngredient", "RejectedMedications", "Equipment", "Anamnesises", "RoomHasEquipment", "EquipmentTransferHistory"
+                };
+
+
                 // Deleting all records from database
-                DatabaseHelpers.ExecuteNonQueries("Delete from BlockedPatients", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from PatientExaminationChanges", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from ReceiptMedications", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from Receipt", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from HospitalSurveys", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from PatientAlergicTo", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from MedicalRecord", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from Examination", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from Instructions", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from DiseaseHistory", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from RequestForDinamicEquipment", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from users", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from rooms", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from medications", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from Ingredients", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from ReferralLetter", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from MedicationContainsIngredient", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from RejectedMedications", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from Equipment", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from Anamnesises", Connection);
-                DatabaseHelpers.ExecuteNonQueries("Delete from RoomHasEquipment", Connection);
-        
-                DatabaseHelpers.ExecuteNonQueries("Delete from EquipmentTransferHistory", Connection);
-              
+                foreach (string tableName in tableNames)
+                    DeleteTableData(tableName);
+
                 Connection.Close();
             }
+        }
+        private void DeleteTableData(string tableName)
+        {
+            DatabaseHelpers.ExecuteNonQueries("Delete from " + tableName, Connection);
         }
 
         private static List<String> GetUserIDs(UserRole role)
@@ -245,20 +314,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (Equipment singleEquipment in equipment)
             {
-                InsertSingleEquipment(singleEquipment);
+                var query = "INSERT INTO equipment(nameOf, type) VALUES('"+singleEquipment.Name+"', '"+singleEquipment.Type.ToString()+"')";
+                InsertSingle(query);
             }
 
-        }
-
-        private static void InsertSingleEquipment(Equipment equipment)
-        {
-            var query = "INSERT INTO equipment(nameOf, type) VALUES(@name, @type)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@name", equipment.Name);
-                cmd.Parameters.AddWithValue("@type", equipment.Type.ToString());
-                cmd.ExecuteNonQuery();
-            }
         }
 
         private static List<HospitalSurvey> GetHospitalSurveys()
@@ -278,28 +337,14 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> patientIDs = GetPatientIds();
             foreach (HospitalSurvey hospitalSurvey in hospitalSurveys)
             {
-                InsertSingleHospitalSurvey(hospitalSurvey, patientIDs);
+                var query = "INSERT INTO hospitalSurveys(quality," +
+               "higyene," +
+               "isSatisfied," +
+               "wouldRecomend," +
+               "comment, id_patient) VALUES("+hospitalSurvey.QualityOfService+", "+ hospitalSurvey.Cleanliness + ", "+ hospitalSurvey .Happiness+ ", "+hospitalSurvey.WouldRecommend+", '"+ hospitalSurvey .Comment+ "', "+Convert.ToInt32(patientIDs[0])+")";
+                InsertSingle(query);
             }
 
-        }
-
-        private static void InsertSingleHospitalSurvey(HospitalSurvey hospitalSurvey, List<String> patientIDs)
-        {
-            var query = "INSERT INTO hospitalSurveys(quality," +
-                "higyene," +
-                "isSatisfied," +
-                "wouldRecomend," +
-                "comment, id_patient) VALUES(@qualityOfService, @cleanliness, @happiness, @wouldRecommend, @comment, @idPatient)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@qualityOfService", hospitalSurvey.QualityOfService);
-                cmd.Parameters.AddWithValue("@cleanliness", hospitalSurvey.Cleanliness);
-                cmd.Parameters.AddWithValue("@happiness", hospitalSurvey.Happiness);
-                cmd.Parameters.AddWithValue("@wouldRecommend", hospitalSurvey.WouldRecommend);
-                cmd.Parameters.AddWithValue("@comment", hospitalSurvey.Comment);
-                cmd.Parameters.AddWithValue("@idPatient", Convert.ToInt32(patientIDs[0]));
-                cmd.ExecuteNonQuery();
-            }
         }
 
         private static List<User> GetUsers()
@@ -321,7 +366,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             users.Add(new User("tinabalerina", "tina123", UserRole.Secretaries));
             users.Add(new User("tomadiploma", "toma123", UserRole.Secretaries));
             users.Add(new User("codabilo", "danilo123", UserRole.Secretaries));
-            users.Add(new User("1", "1", UserRole.Secretaries));
 
             return users;
         }
@@ -332,22 +376,16 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach(User user in users)
             {
-                InsertSingleUser(user);
+                var query = "INSERT INTO users(usrnm, pass, role) VALUES('" + user.Username + "', '" + user.Password + "', '" + user.Role.ToString() + "')";
+                InsertSingle(query);
             }
   
         }
-
-        private static void InsertSingleUser(User user)
+        private static void InsertSingle(string query)
         {
-            var query = "INSERT INTO users(usrnm, pass, role) VALUES(@usrnm, @pass, @role)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@usrnm", user.Username);
-                cmd.Parameters.AddWithValue("@pass", user.Password);
-                cmd.Parameters.AddWithValue("@role", user.Role.ToString());
-                cmd.ExecuteNonQuery();
-            }
+            DatabaseHelpers.ExecuteNonQueries(query, Connection);
         }
+
 
         private static void InsertDoctors()
         {
@@ -355,7 +393,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (Doctor doctor in doctors)
             {
-                InsertSingleDoctor(doctor);
+                var query = "INSERT INTO Doctors(firstName, lastName, user_id, speciality) VALUES('" + doctor.FirstName + "', '" + doctor.LastName + "', "+doctor.UserId+", '" + doctor.Speciality.ToString() + "')";
+                InsertSingle(query);
             }
         }
 
@@ -364,21 +403,18 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<Renovation> renovations = new List<Renovation>();
             List<String> roomIDs = GetRoomIDs();
 
-            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[0]), DateTime.Now, DateTime.Now.AddMonths(2)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[1]), DateTime.Now, DateTime.Now.AddMonths(1)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[0]), DateTime.Now, DateTime.Now.AddMonths(1)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[1]), DateTime.Now, DateTime.Now.AddMonths(2)));
             renovations.Add(new Renovation(Convert.ToInt32(roomIDs[2]), DateTime.Now, DateTime.Now.AddMonths(3)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[3]), DateTime.Now, DateTime.Now.AddMonths(4)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[4]), DateTime.Now, DateTime.Now.AddMonths(5)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[5]), DateTime.Now, DateTime.Now.AddMonths(1)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[6]), DateTime.Now, DateTime.Now.AddDays(15)));
-            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[7]), DateTime.Now, DateTime.Now.AddDays(25)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[5]), DateTime.Now, DateTime.Now.AddMonths(4)));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[4]), DateTime.Now, DateTime.Now.AddMonths(5), Convert.ToInt32(roomIDs[3]), TypeOfRenovation.Merging));
+            renovations.Add(new Renovation(Convert.ToInt32(roomIDs[6]), DateTime.Now, DateTime.Now.AddMonths(6), -1, TypeOfRenovation.Splitting));
+
 
             return renovations;
         }
 
-        // FOR LATER PURPOSES
-
-        /*private static void InsertRenovations()
+        private static void InsertRenovations()
         {
             List<Renovation> renovations = GetRenovations();
 
@@ -386,27 +422,39 @@ namespace HealthCareSystem.Core.Scripts.Repository
             {
                 InsertSingleRenovation(renovation);
             }
-        }*/
+        }
 
-       /* private static void InsertSingleRenovation(Renovation renovation)
+        private static void InsertSingleRenovation(Renovation renovation)
         {
-            var query = "INSERT INTO Renovations(id_room, dateOfStart, dateOfFinish) VALUES(@id_room, @startingDate, @ending_date)";
+            var query = "INSERT INTO Renovations(id_room, dateOfStart, dateOfFinish, id_other_room, renovationType) VALUES(@id_room, @startingDate, @ending_date, @id_other_room, @renovationType)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_room", renovation.RoomId);
                 cmd.Parameters.AddWithValue("@startingDate", renovation.StartingDate.ToString());
                 cmd.Parameters.AddWithValue("@ending_date", renovation.EndingDate.ToString());
+                if(renovation.SecondRoomId == -1)
+                {
+                    cmd.Parameters.Add("@id_other_room", OleDbType.Integer).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@id_other_room", renovation.SecondRoomId);
+                }
+                
+                cmd.Parameters.AddWithValue("@renovationType", renovation.Type.ToString());
                 cmd.ExecuteNonQuery();
             }
-        }*/
+        }
 
-        /*private static List<TransferHistoryOfEquipment> GetTransferHistoryOfEquipment()
+        private static List<TransferHistoryOfEquipment> GetTransferHistoryOfEquipment()
         {
             List<TransferHistoryOfEquipment> transferHistoryOfEquipment = new List<TransferHistoryOfEquipment>();
             List<String> roomIDs = GetRoomIDs();
-
-            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[0]), Convert.ToInt32(roomIDs[5]), DateTime.Now));
-            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[1]), Convert.ToInt32(roomIDs[6]), DateTime.Now));
+            List<String> equipmentIDs = GetEquipmentIDs();
+                                                          
+            
+            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[0]), Convert.ToInt32(roomIDs[4]), DateTime.Now, true, 5, Convert.ToInt32(equipmentIDs[0])));
+            transferHistoryOfEquipment.Add(new TransferHistoryOfEquipment(Convert.ToInt32(roomIDs[1]), Convert.ToInt32(roomIDs[3]), DateTime.Now, true, 4, Convert.ToInt32(equipmentIDs[1]))); 
 
             return transferHistoryOfEquipment;
         }
@@ -417,21 +465,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (TransferHistoryOfEquipment singleTransferHistoryOfEquipment in transferHistoryOfEquipment)
             {
-                InsertSingleTransferHistoryOfEquipment(singleTransferHistoryOfEquipment);
+                var query = "INSERT INTO EquipmentTransferHistory(id_original_room, id_new_room, dateOfChange, isExecuted, amount, id_equipment) " +
+                "VALUES(" + singleTransferHistoryOfEquipment.FirstRoomId + ", " + singleTransferHistoryOfEquipment.SecondRoomId + ", '" + singleTransferHistoryOfEquipment.TransferDate.ToString() + "', " + singleTransferHistoryOfEquipment.IsExecuted + ", " + singleTransferHistoryOfEquipment.Amount + ", " + singleTransferHistoryOfEquipment.EquipmentId + ")";
+                InsertSingle(query);
             }
         }
 
-        private static void InsertSingleTransferHistoryOfEquipment(TransferHistoryOfEquipment transferHistoryOfEquipment)
-        {
-            var query = "INSERT INTO EquipmentTransferHistory(id_original_room, id_new_room, dateOfChange) VALUES(@first_room_id, @second_room_id, @transferDate)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@first_room_id", transferHistoryOfEquipment.FirstRoomId);
-                cmd.Parameters.AddWithValue("@second_room_id", transferHistoryOfEquipment.SecondRoomId);
-                cmd.Parameters.AddWithValue("@transferDate", transferHistoryOfEquipment.TransferDate.ToString());
-                cmd.ExecuteNonQuery();
-            }
-        }*/
 
         private static List<RoomHasEquipment> GetRoomHasEquipment()
         {
@@ -451,22 +490,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (RoomHasEquipment singleRoomHasEquipment in roomHasEquipment)
             {
-                InsertSingleRoomHasEquipment(singleRoomHasEquipment);
+                var query = "INSERT INTO RoomHasEquipment(id_room, id_equipment, amount) " +
+                "VALUES(" + singleRoomHasEquipment.RoomId + ", " + singleRoomHasEquipment.EquipmentId + ", " + singleRoomHasEquipment.Quantity+ ")";
+                InsertSingle(query);
             }
         }
 
-        private static void InsertSingleRoomHasEquipment(RoomHasEquipment roomHasEquipment)
-        {
-            var query = "INSERT INTO RoomHasEquipment(id_room, id_equipment, amount) " +
-                "VALUES(@room_id, @equipment_id, @quantity)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@room_id", roomHasEquipment.RoomId);
-                cmd.Parameters.AddWithValue("@equipment_id", roomHasEquipment.EquipmentId);
-                cmd.Parameters.AddWithValue("@quantity", roomHasEquipment.Quantity);
-                cmd.ExecuteNonQuery();
-            }
-        }
 
         private static List<DynamicEquipmentRequest> GetDynamicEquipmentRequests()
         {
@@ -475,7 +504,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIDs[0]), 10));
             dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIDs[1]), 15));
-            // dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIDs[2]), 20));
 
             return dynamicEquipmentRequests;
         }
@@ -486,19 +514,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> secreatyIDs = GetSecretaryIDs();
             foreach (DynamicEquipmentRequest dynamicEquipmentRequest in dynamicEquipmentRequests)
             {
-                InsertSingleDynamicEquipmentRequest(dynamicEquipmentRequest, secreatyIDs[0]);
-            }
-        }
-
-        private static void InsertSingleDynamicEquipmentRequest(DynamicEquipmentRequest dynamicEquipmentRequest, string secretaryId)
-        {
-            var query = "INSERT INTO RequestForDinamicEquipment(id_equipment, amount, id_secretary) VALUES(@id_equipment, @quantity, @id_secretary)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_equipment", dynamicEquipmentRequest.EquipmentId);
-                cmd.Parameters.AddWithValue("@quantity", dynamicEquipmentRequest.Quantity);
-                cmd.Parameters.AddWithValue("@secretary_id", Convert.ToInt32(secretaryId));
-                cmd.ExecuteNonQuery();
+                var query = "INSERT INTO RequestForDinamicEquipment(id_equipment, amount, id_secretary) VALUES(" + dynamicEquipmentRequest.EquipmentId + ", " + dynamicEquipmentRequest.Quantity + ", " + Convert.ToInt32(secreatyIDs[0]) + ")";
+                InsertSingle(query);
             }
         }
 
@@ -514,18 +531,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return doctors;
         }
 
-        private static void InsertSingleDoctor(Doctor doctor)
-        {
-            var query = "INSERT INTO Doctors(firstName, lastName, user_id, speciality) VALUES(@firstName, @LastName, @user_id, @speciality)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@firstName", doctor.FirstName);
-                cmd.Parameters.AddWithValue("@LastName", doctor.LastName);
-                cmd.Parameters.AddWithValue("@user_id", doctor.UserId);
-                cmd.Parameters.AddWithValue("@speciality", doctor.Speciality.ToString());
-                cmd.ExecuteNonQuery();
-            }
-        }
+     
         private static List<Patient> GetPatients()
         {
             List<Patient> patients = new List<Patient>();
@@ -545,20 +551,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (Patient patient in patients)
             {
-                InsertSinglePatient(patient);
-            }
-        }
-
-        private static void InsertSinglePatient(Patient patient)
-        {
-            var query = "INSERT INTO Patients(firstName, lastName, user_id, isBlocked) VALUES(@firstName, @LastName, @user_id, @isBlocked)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@firstName", patient.FirstName);
-                cmd.Parameters.AddWithValue("@LastName", patient.LastName);
-                cmd.Parameters.AddWithValue("@user_id", patient.UserId);
-                cmd.Parameters.AddWithValue("@isBlocked", patient.IsBlocked);
-                cmd.ExecuteNonQuery();
+                var query = "INSERT INTO Patients(firstName, lastName, user_id, isBlocked, notificationTime) VALUES('"+patient.FirstName+"', '"+patient.LastName+"', "+patient.UserId+", "+patient.IsBlocked+", "+2+")";
+                InsertSingle(query);
             }
         }
 
@@ -568,7 +562,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (BlockedPatient blockedPatient in blockedPatients)
             {
-                InsertSingleBlockedPatient(blockedPatient);
+                var query = "INSERT INTO BlockedPatients(id_patient, id_secretary, dateOf) VALUES("+blockedPatient.PatientID+", "+blockedPatient.SecretaryID+", '"+blockedPatient.DateOf.ToString()+"')";
+                InsertSingle(query);
             }
 
         }
@@ -584,17 +579,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return blockedPatients;
         }
 
-        private static void InsertSingleBlockedPatient(BlockedPatient blockedPatient)
-        {
-            var query = "INSERT INTO BlockedPatients(id_patient, id_secretary, dateOf) VALUES(@id_patient, @id_secretary, @dateOf)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_patient", blockedPatient.PatientID);
-                cmd.Parameters.AddWithValue("@id_secretary", blockedPatient.SecretaryID);
-                cmd.Parameters.AddWithValue("@dateOf", blockedPatient.DateOf);
-                cmd.ExecuteNonQuery();
-            }
-        }
 
         private static void InsertSecretaries()
         {
@@ -602,7 +586,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (Secretary secretary in secretaries)
             {
-                InsertSingleSecretary(secretary);
+                var query = "INSERT INTO Secretaries(firstName, lastName, user_id) VALUES('"+secretary.FirstName+"', '"+secretary.LastName+"', "+secretary.UserId+")";
+                InsertSingle(query);
             }
 
         }
@@ -619,25 +604,14 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return secretaries;
         }
 
-        private static void InsertSingleSecretary(Secretary secretary)
-        {
-            var query = "INSERT INTO Secretaries(firstName, lastName, user_id) VALUES(@firstName, @LastName, @user_id)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@firstName", secretary.FirstName);
-                cmd.Parameters.AddWithValue("@LastName", secretary.LastName);
-                cmd.Parameters.AddWithValue("@user_id", secretary.UserId);
-                cmd.ExecuteNonQuery();
-            }
-        }
-
         private static void InsertManagers()
         {
             List<HospitalManager> managers = GetHospitalManagers();
 
             foreach (HospitalManager manager in managers)
             {
-                InsertSingleHospitalManager(manager);
+                var query = "INSERT INTO HospitalManagers(firstName, lastName, user_id) VALUES('" + manager.FirstName + "', '" + manager.LastName + "', " + manager.UserId + ")";
+                InsertSingle(query);
             }
 
         }
@@ -651,31 +625,13 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             return hospitalManager;
         }
-
-        private static void InsertSingleHospitalManager(HospitalManager hospitalManager)
-        {
-            var query = "INSERT INTO HospitalManagers(firstName, lastName, user_id) VALUES(@firstName, @LastName, @user_id)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@firstName", hospitalManager.FirstName);
-                cmd.Parameters.AddWithValue("@LastName", hospitalManager.LastName);
-                cmd.Parameters.AddWithValue("@user_id", hospitalManager.UserId);
-                cmd.ExecuteNonQuery();
-
-            }
-        }
-
-        private static void InsertSurveys()
-        {
-
-        }
-
         private static void InsertRooms()
         {
             List<Room> rooms = GetRooms();
             foreach(Room room in rooms)
             {
-                InsertSingleRoom(room);
+                var query = "INSERT INTO rooms(type) VALUES('" + room.Type.ToString() + "')";
+                InsertSingle(query);
             }
         }
 
@@ -700,23 +656,13 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return rooms;
         }
 
-        private static void InsertSingleRoom(Room room)
-        {
-            var query = "INSERT INTO rooms(type) VALUES(@type)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@type", room.Type.ToString());
-                cmd.ExecuteNonQuery();
-
-            }
-        }
-
         private static void InsertMedications()
         {
             List<Medication> medications = GetMedications();
             foreach (Medication medication in medications)
             {
-                InsertSingleMedication(medication);
+                var query = "INSERT INTO medications(nameOfMedication, status) VALUES('" + medication.Name + "', '" + medication.Status.ToString() + "')";
+                InsertSingle(query);
             }
         }
         private static List<Medication> GetMedications()
@@ -726,20 +672,11 @@ namespace HealthCareSystem.Core.Scripts.Repository
             medications.Add(new Medication("Brufen", MedicationStatus.Approved));
             medications.Add(new Medication("Analgin", MedicationStatus.Denied));
             medications.Add(new Medication("Panklav", MedicationStatus.Approved));
-            
+            medications.Add(new Medication("Aspirin", MedicationStatus.Approved));
+
             return medications;
         }
 
-        private static void InsertSingleMedication(Medication medication)
-        {
-            var query = "INSERT INTO medications(nameOfMedication, status) VALUES(@nameOfMedication, @status)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@nameOfMedication", medication.Name);
-                cmd.Parameters.AddWithValue("@status", medication.Status.ToString());
-                cmd.ExecuteNonQuery();
-            }
-        }
 
         private static List<String> GetMedicationIds()
         {
@@ -753,7 +690,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (RejectedMedication rejectedMedication in rejectedMedications)
             {
-                InsertSingleRejectedMedication(rejectedMedication);
+                var query = "INSERT INTO RejectedMedications(id_medication, id_doctor, description) VALUES(" + rejectedMedication.MedicationID + ", " + rejectedMedication.DoctorID + ", '" + rejectedMedication.Description + "')";
+                InsertSingle(query);
             }
 
         }
@@ -769,24 +707,13 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return rejectedMedications;
         }
 
-        private static void InsertSingleRejectedMedication(RejectedMedication rejectedMedication)
-        {
-            var query = "INSERT INTO RejectedMedications(id_medication, id_doctor, description) VALUES(@id_medication, @id_doctor, @description)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_medication", rejectedMedication.MedicationID);
-                cmd.Parameters.AddWithValue("@id_doctor", rejectedMedication.DoctorID);
-                cmd.Parameters.AddWithValue("@description", rejectedMedication.Description);
-                cmd.ExecuteNonQuery();
-            }
-        }
-
         private static void InsertIngredients()
         {
             List<Ingredient> ingredients = GetIngredients();
             foreach (Ingredient ingredient in ingredients)
             {
-                InsertSingleIngredient(ingredient);
+                var query = "INSERT INTO Ingredients(nameOfIngredient) VALUES('"+ingredient.Name+"')";
+                InsertSingle(query);
             }
         }
 
@@ -800,16 +727,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             ingredients.Add(new Ingredient("Tikva"));
 
             return ingredients;
-        }
-
-        private static void InsertSingleIngredient(Ingredient ingredient)
-        {
-            var query = "INSERT INTO Ingredients(nameOfIngredient) VALUES(@nameOfIngredient)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@nameOfIngredient", ingredient.Name);
-                cmd.ExecuteNonQuery();
-            }
         }
 
         private static List<String> GetIngredientIDs()
@@ -826,17 +743,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         }
 
-        private static void InsertSinglePatientAlergies(string patientId, string ingredientId)
-        {
-            var query = "INSERT INTO PatientAlergicTo(id_patient, id_ingredient) VALUES(@id_patient, @id_ingredient)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_patient", Convert.ToInt32(patientId));
-                cmd.Parameters.AddWithValue("@id_ingredient", Convert.ToInt32(ingredientId));
-                cmd.ExecuteNonQuery();
-            }
-
-        }
         private static void InsertPatientAlergies()
         {
             List<string> patientIDs = GetPatientIds();
@@ -844,11 +750,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             for(int i =0;i < patientIDs.Count();i++)
             {
-                
-                InsertSinglePatientAlergies(patientIDs[i], ingredientIDs[i]);
+                var query = "INSERT INTO PatientAlergicTo(id_patient, id_ingredient) VALUES("+Convert.ToInt32(patientIDs[i])+", "+Convert.ToInt32(ingredientIDs[i])+")";
+                InsertSingle(query);
 
             }
-
         }
 
         private static void InsertMedicationsIngredients()
@@ -857,7 +762,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (MedicationsIngredient medicationsIngredient in medicationsIngredients)
             {
-                InsertSingleMedicationsIngredient(medicationsIngredient);
+                var query = "INSERT INTO MedicationContainsIngredient(id_medication, id_ingredient) VALUES(" + medicationsIngredient.MedicationID + ", " + medicationsIngredient.IngredientID + ")";
+                InsertSingle(query);
             }
 
         }
@@ -869,22 +775,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> ingredientsIDs = DatabaseHelpers.ExecuteReaderQueries("select id from Ingredients", Connection);
 
             medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[0]), Convert.ToInt32(ingredientsIDs[0])));
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[1]), Convert.ToInt32(ingredientsIDs[0])));
-            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[2]), Convert.ToInt32(ingredientsIDs[0])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[1]), Convert.ToInt32(ingredientsIDs[1])));
+            medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[2]), Convert.ToInt32(ingredientsIDs[2])));
 
             return medicationsIngredients;
-        }
-
-        private static void InsertSingleMedicationsIngredient(MedicationsIngredient medicationsIngredient)
-        {
-            var query = "INSERT INTO MedicationContainsIngredient(id_medication, id_ingredient) VALUES(@id_medication, @id_ingredient)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_medication", medicationsIngredient.MedicationID);
-                cmd.Parameters.AddWithValue("@id_ingredient", medicationsIngredient.IngredientID);
-                cmd.ExecuteNonQuery();
-
-            }
         }
 
         private static void InsertMedicalRecords()
@@ -893,7 +787,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (MedicalRecord medicalRecord in medicalRecords)
             {
-                InsertSingleMedicalRecord(medicalRecord);
+                var query = "INSERT INTO MedicalRecord(id_patient, height, weight) VALUES(" + medicalRecord.IdPatient + ", " + medicalRecord.Height + ", " + medicalRecord.Weight + ")";
+
+                InsertSingle(query);
             }
         }
 
@@ -909,25 +805,15 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return medicalRecords;
         }
 
-        private static void InsertSingleMedicalRecord(MedicalRecord medicalRecord)
-        {
-            var query = "INSERT INTO MedicalRecord(id_patient, height, weight) VALUES(@id_patient, @height, @weight)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_patient", medicalRecord.IdPatient);
-                cmd.Parameters.AddWithValue("@height", medicalRecord.Height);
-                cmd.Parameters.AddWithValue("@weight", medicalRecord.Weight);
-                cmd.ExecuteNonQuery();
-            }
-        }
-
         private static void InsertExaminations()
         {
             List<Examination> examinations = GetExaminations();
 
             foreach (Examination examination in examinations)
             {
-                InsertSingleExamination(examination);
+                var query = "INSERT INTO Examination(id_doctor, id_patient, isEdited, isCancelled, isFinished, dateOf, typeOfExamination, isUrgent, id_room, duration) " +
+                "VALUES(" + examination.IdDoctor + ", " + examination.IdPatient + ", " + examination.IsEdited + ", " + examination.IsCancelled + ", " + examination.IsFinished + ", '" + examination.DateOf.ToString() + "', '" + examination.TypeOfExamination.ToString() + "', " + examination.IsUrgent + ", " + examination.IdRoom + ", " + examination.Duration + ")";
+                InsertSingle(query);
             }
         }
 
@@ -949,25 +835,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return examinations;
         }
 
-        private static void InsertSingleExamination(Examination examination)
-        {
-            var query = "INSERT INTO Examination(id_doctor, id_patient, isEdited, isCancelled, isFinished, dateOf, typeOfExamination, isUrgent, id_room, duration) " +
-                "VALUES(@id_doctor, @id_patient, @isEdited, @isCancelled, @isFinished, @dateOf, @typeOfExamination, @isUrgent, @id_room, @duration)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_doctor", examination.IdDoctor);
-                cmd.Parameters.AddWithValue("@id_patient", examination.IdPatient);
-                cmd.Parameters.AddWithValue("@isEdited", examination.IsEdited);
-                cmd.Parameters.AddWithValue("@isCancelled", examination.IsCancelled);
-                cmd.Parameters.AddWithValue("@isFinished", examination.IsFinished);
-                cmd.Parameters.AddWithValue("@dateOf", examination.DateOf.ToString());
-                cmd.Parameters.AddWithValue("@typeOfExamination", examination.TypeOfExamination.ToString());
-                cmd.Parameters.AddWithValue("@isUrgent", examination.IsUrgent);
-                cmd.Parameters.AddWithValue("@id_room", examination.IdRoom);
-                cmd.Parameters.AddWithValue("@duration", examination.Duration);
-                cmd.ExecuteNonQuery();
-            }
-        }
 
         private static List<String> GetExaminationIDs()
         {
@@ -981,7 +848,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (Anamnesis anamnesis in anamnesises)
             {
-                InsertSingleAnamnesis(anamnesis);
+                var query = "INSERT INTO Anamnesises(id_examination, notice, conclusions, dateOf) VALUES("+anamnesis.ExaminationID+", '"+anamnesis.Notice+"', '"+anamnesis.Conclusions+"', '"+anamnesis.DateOf.ToString()+"')";
+                InsertSingle(query);
             }
         }
 
@@ -997,26 +865,14 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return anamnesises;
         }
 
-        private static void InsertSingleAnamnesis(Anamnesis anamnesis)
-        {
-            var query = "INSERT INTO Anamnesises(id_examination, notice, conclusions, dateOf) VALUES(@id_examination, @notice, @conclusions, @dateOf)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_examination", anamnesis.ExaminationID);
-                cmd.Parameters.AddWithValue("@notice", anamnesis.Notice);
-                cmd.Parameters.AddWithValue("@conclusions", anamnesis.Conclusions);
-                cmd.Parameters.AddWithValue("@dateOf", anamnesis.DateOf.ToString());
-                cmd.ExecuteNonQuery();
-            }
-        }
-
         private static void InsertInstructions()
         {
             List<Instruction> instructions = GetInstructions();
 
             foreach (Instruction instruction in instructions)
             {
-                InsertSingleInstruction(instruction);
+                var query = "INSERT INTO Instructions(startTime, timesPerDay, description) VALUES('"+instruction.StartTime.ToString()+"', "+instruction.TimesPerDay+", '"+instruction.Description+"')";
+                InsertSingle(query);
             }
         }
 
@@ -1025,22 +881,17 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<Instruction> instructions = new List<Instruction>();
             DateTime tomorrow = DateTime.Now.AddHours(20);
 
-            instructions.Add(new Instruction(tomorrow, 3));
-            instructions.Add(new Instruction(tomorrow, 4));
-            instructions.Add(new Instruction(tomorrow, 2));
+            instructions.Add(new Instruction(tomorrow, 3,
+                "Morbi tincidunt augue interdum velit euismod in pellentesque massa placerat. Pharetra convallis posuere " +
+                "morbi leo urna molestie. Mattis ania at quis risus sed vulputate. Et netus et malesuada falis nibh praesent ."));
+            instructions.Add(new Instruction(tomorrow, 4,
+                "Morbi tincidunt augue interdum velit euismod in pellentesque massa placerat. Pharetra convallis posuere"
+                ));
+            instructions.Add(new Instruction(DateTime.Now.AddHours(-1), 2,
+                "Morbi tincidunt augue interdum velit euismod in pellentesque massa placerat. Pharetra convallis posuere"
+                ));
 
             return instructions;
-        }
-
-        private static void InsertSingleInstruction(Instruction instruction)
-        {
-            var query = "INSERT INTO Instructions(startTime, timesPerDay) VALUES(@startTime, @timesPerDay)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@startTime", instruction.StartTime.ToString());
-                cmd.Parameters.AddWithValue("@timesPerDay", instruction.TimesPerDay);
-                cmd.ExecuteNonQuery();
-            }
         }
 
         private static void InsertPatientEditRequests()
@@ -1077,19 +928,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (Receipt receipt in receipts)
             {
-                InsertSingleReceipt(receipt);
-            }
-        }
-        private static void InsertSingleReceipt(Receipt receipt)
-        {
-            var query = "INSERT INTO Receipt(id_instructions, id_doctor, id_patient, dateOf) VALUES(@id_instructions, @id_doctor, @id_patient, @dateOf)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_instructions", receipt.InstructionId);
-                cmd.Parameters.AddWithValue("@id_instructions", receipt.DoctorId);
-                cmd.Parameters.AddWithValue("@id_instructions", receipt.PatientId);
-                cmd.Parameters.AddWithValue("@id_instructions", receipt.DateOfHandout.ToString());
-                cmd.ExecuteNonQuery();
+                var query = "INSERT INTO Receipt(id_instructions, id_doctor, id_patient, dateOf) VALUES(" + receipt.InstructionId + ", " + receipt.DoctorId + ", " + receipt.PatientId + ", '" + receipt.DateOfHandout.ToString() + "')";
+                InsertSingle(query);
             }
         }
 
@@ -1134,22 +974,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
             int desiredPatientId = Convert.ToInt32(patientIds[3]);
             for(int i = 0;i < 8; i++)
             {
-                InsertSingleExaminationChange(new ExaminationChange(desiredPatientId, TypeOfChange.Edit, DateTime.Now.AddDays(-2 - i)));
+                var query = "INSERT INTO PatientExaminationChanges(id_patient, typeOfChange, dateOf) VALUES("+desiredPatientId+", '"+TypeOfChange.Edit.ToString()+"', '"+DateTime.Now.AddDays(- 2 - i).ToString()+"')";
+                InsertSingle(query);
             }
             
-
         }
-        private static void InsertSingleExaminationChange(ExaminationChange change) {
-            var query = "INSERT INTO PatientExaminationChanges(id_patient, typeOfChange, dateOf) VALUES(@id_patient, @typeOfChange, @dateOf)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_patient", change.PatientId);
-                cmd.Parameters.AddWithValue("@typeOfChange", change.Change.ToString());
-                cmd.Parameters.AddWithValue("@dateOf", change.DateOfChange.ToString());
 
-                cmd.ExecuteNonQuery();
-            }
-        }
         private static List<ReferralLetter> GetInsertReferralLetters()
         {
             List<ReferralLetter> letters = new List<ReferralLetter>();
@@ -1166,21 +996,59 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             foreach (ReferralLetter referralLetter in referralLetters)
             {
-                InsertSingleReferralLetter(referralLetter);
+                var query = "INSERT INTO ReferralLetter(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) VALUES(" + referralLetter.CurrentDoctorID + ", " + referralLetter.CurrentPatientID + ", " + referralLetter.ForwardedDoctorID + ", '" + referralLetter.ExaminationType.ToString() + "', '" + referralLetter.Speciality.ToString() + "')";
+                InsertSingle(query);
             }
         }
-        private static void InsertSingleReferralLetter(ReferralLetter referralLetter)
+        private static void InsertDoctorSurveys()
         {
-            var query = "INSERT INTO ReferralLetter(id_doctor, id_patient, dateOf, id_forwarded_doctor, typeOfExamination, speciality) VALUES(@id_doctor, @id_patient, @dateOf, @id_forwarded_doctor, @typeOfExamination, @speciality)";
-            using (var cmd = new OleDbCommand(query, Connection))
+            Dictionary<int, List<int>> combinedIds = GetCombinedIdsFromDoctorsAndPatients();
+
+            foreach (KeyValuePair<int, List<int>> entry in combinedIds)
             {
-                cmd.Parameters.AddWithValue("@id_doctor", referralLetter.CurrentDoctorID);
-                cmd.Parameters.AddWithValue("@id_patient", referralLetter.CurrentPatientID);
-                cmd.Parameters.AddWithValue("@id_forwarded_doctor", referralLetter.ForwardedDoctorID);
-                cmd.Parameters.AddWithValue("@typeOfExamination", referralLetter.ExaminationType);
-                cmd.Parameters.AddWithValue("@speciality", referralLetter.Speciality);
-                cmd.ExecuteNonQuery();
+                Random rand = new Random();
+
+                int grade = rand.Next(1, 6);
+                int quality = rand.Next(1, 6);
+                bool wouldReccomend = grade > 3 && quality > 3;
+                string comment = GetCommentBasedOnGrade(grade);
+
+                var query = "INSERT INTO DoctorSurveys(id_doctor, id_patient, doctorGrade, quality, wouldRecommend, comment) VALUES(" + entry.Value[1] + ", " + entry.Value[0] + ", " + grade + ", " + quality + ", " + wouldReccomend + ", '"+comment+"')";
+
+                InsertSingle(query);
             }
         }
+
+        private static Dictionary<int, List<int>> GetCombinedIdsFromDoctorsAndPatients()
+        {
+            List<String> doctorIds = GetDoctorIds();
+            List<String> patientIds = GetPatientIds();
+            Dictionary<int, List<int>> combinedIds = new Dictionary<int, List<int>>();
+            for (int i = 0; i < doctorIds.Count(); i++)
+            {
+                for (int j = 0; j < patientIds.Count(); j++)
+                {
+                    int patientId = Convert.ToInt32(patientIds[j]);
+                    int doctorId = Convert.ToInt32(doctorIds[i]);
+
+                    combinedIds[i * doctorIds.Count + j] = new List<int>() { patientId, doctorId};
+                }
+            }
+
+            return combinedIds;
+        }
+        private static string GetCommentBasedOnGrade(int grade)
+        {
+            List<String> comments = new List<string>()
+            {
+                "The doctor was very inapropriate. Awful experience.",
+                "Bad management and appointment accuracy",
+                "It was ok.",
+                "Went very fast and proffesional, but a bit expensive.",
+                "Im very satisfied"
+            };
+            return comments[grade - 1];
+        }
+
     }
 }

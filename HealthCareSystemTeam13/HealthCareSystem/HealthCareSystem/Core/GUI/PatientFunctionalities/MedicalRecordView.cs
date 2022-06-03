@@ -51,8 +51,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         }
         private void SetDgwExaminations()
         {
-            PatientRep.PullPastExaminations();
-            dgwExaminations.DataSource = PatientRep.examinations;
+            PatientRep.PullFinishedExaminations();
+            dgwExaminations.DataSource = PatientRep.Examinations;
             Helpers.DataGridViewSettings(dgwExaminations);
             dgwExaminations.Font = new Font("Lucida Bright", 10);
 

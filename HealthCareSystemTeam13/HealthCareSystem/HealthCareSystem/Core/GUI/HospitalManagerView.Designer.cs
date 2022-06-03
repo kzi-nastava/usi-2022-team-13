@@ -32,6 +32,8 @@ namespace HealthCareSystem.Core.GUI
             this.pnlHospitalManager = new System.Windows.Forms.Panel();
             this.btnExit = new System.Windows.Forms.Button();
             this.btnRooms = new System.Windows.Forms.Button();
+            this.btnEquipment = new System.Windows.Forms.Button();
+            this.btnRenovations = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // pnlHospitalManager
@@ -64,11 +66,35 @@ namespace HealthCareSystem.Core.GUI
             this.btnRooms.UseVisualStyleBackColor = true;
             this.btnRooms.Click += new System.EventHandler(this.btnRooms_Click);
             // 
+            // btnEquipment
+            // 
+            this.btnEquipment.Location = new System.Drawing.Point(4, 149);
+            this.btnEquipment.Margin = new System.Windows.Forms.Padding(4);
+            this.btnEquipment.Name = "btnEquipment";
+            this.btnEquipment.Size = new System.Drawing.Size(183, 108);
+            this.btnEquipment.TabIndex = 7;
+            this.btnEquipment.Text = "Equipment manager";
+            this.btnEquipment.UseVisualStyleBackColor = true;
+            this.btnEquipment.Click += new System.EventHandler(this.btnEquipment_Click);
+            // 
+            // btnRenovations
+            // 
+            this.btnRenovations.Location = new System.Drawing.Point(4, 264);
+            this.btnRenovations.Margin = new System.Windows.Forms.Padding(4);
+            this.btnRenovations.Name = "btnRenovations";
+            this.btnRenovations.Size = new System.Drawing.Size(183, 108);
+            this.btnRenovations.TabIndex = 0;
+            this.btnRenovations.Text = "Renovations";
+            this.btnRenovations.UseVisualStyleBackColor = true;
+            this.btnRenovations.Click += new System.EventHandler(this.btnRenovations_Click);
+            // 
             // HospitalManagerView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1196, 710);
+            this.Controls.Add(this.btnRenovations);
+            this.Controls.Add(this.btnEquipment);
             this.Controls.Add(this.pnlHospitalManager);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnRooms);
@@ -83,5 +109,7 @@ namespace HealthCareSystem.Core.GUI
         private System.Windows.Forms.Panel pnlHospitalManager;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnRooms;
+        private System.Windows.Forms.Button btnEquipment;
+        private System.Windows.Forms.Button btnRenovations;
     }
 }

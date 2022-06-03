@@ -27,7 +27,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 
         private void FillDataGridView()
         {
-            blockedPatientsDataGrid.DataSource = secretaryRepository.blockedPatients;
+            blockedPatientsDataGrid.DataSource = secretaryRepository.BlockedPatients;
             DataGridViewSettings();
         }
 

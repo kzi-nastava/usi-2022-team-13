@@ -12,6 +12,8 @@ namespace HealthCareSystem.Core.Medications.Receipts.Model
         public DateTime StartTime { get; set; }
 
         public int TimesPerDay { get; set; }
+
+        public string Description { get; set; }
         
         public Instruction()
         {
@@ -19,8 +21,16 @@ namespace HealthCareSystem.Core.Medications.Receipts.Model
         }
         public Instruction(DateTime startTime, int timesPerDay)
         {
-            this.StartTime = startTime;
-            this.TimesPerDay = timesPerDay;
+            StartTime = startTime;
+            TimesPerDay = timesPerDay;
+        }
+
+        public Instruction(DateTime startTime, int timesPerDay, string description)
+        {
+            StartTime = startTime;
+            TimesPerDay = timesPerDay;
+            Description = description;
+
         }
 
     }

@@ -72,17 +72,47 @@
     <Compile Include="Core\Examinations\Model\DoctorAnamnesis.cs" />
     <Compile Include="Core\Examinations\Model\Examination.cs" />
     <Compile Include="Core\Examinations\Repository\ExaminationRepository.cs" />
+    <Compile Include="Core\GUI\DoctorsFunctionalities\StartedExamination.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\DoctorsFunctionalities\StartedExamination.Designer.cs">
+      <DependentUpon>StartedExamination.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.Designer.cs">
       <DependentUpon>AddEditRooms.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddRenovations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddRenovations.Designer.cs">
+      <DependentUpon>AddRenovations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.Designer.cs">
+      <DependentUpon>EquipmentMover.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.Designer.cs">
       <DependentUpon>HospitalRooms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.Designer.cs">
+      <DependentUpon>MoveEquipmentDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\Renovations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\Renovations.Designer.cs">
+      <DependentUpon>Renovations.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\GUI\HospitalManagerView.cs">
       <SubType>Form</SubType>
@@ -114,17 +144,35 @@
     <Compile Include="Core\GUI\PatientFunctionalities\AnamnesisView.Designer.cs">
       <DependentUpon>AnamnesisView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\DoctorSurveyView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\DoctorSurveyView.Designer.cs">
+      <DependentUpon>DoctorSurveyView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\HomeView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\HomeView.Designer.cs">
       <DependentUpon>HomeView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\HospitalSurveysView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\HospitalSurveysView.Designer.cs">
+      <DependentUpon>HospitalSurveysView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\MedicalRecordView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\MedicalRecordView.Designer.cs">
       <DependentUpon>MedicalRecordView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\NotificationsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\NotificationsView.Designer.cs">
+      <DependentUpon>NotificationsView.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\PatientExaminations.cs">
       <SubType>Form</SubType>
@@ -137,6 +185,12 @@
     </Compile>
     <Compile Include="Core\GUI\PatientFunctionalities\PatientRecommendation.Designer.cs">
       <DependentUpon>PatientRecommendation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\SearchDoctorView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\PatientFunctionalities\SearchDoctorView.Designer.cs">
+      <DependentUpon>SearchDoctorView.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\GUI\SecretaryFunctionalities\AddExamination.cs">
       <SubType>Form</SubType>
@@ -230,9 +284,9 @@
     <Compile Include="Core\Medications\Model\RejectedMedication.cs" />
     <Compile Include="Core\Medications\Receipts\Model\Instruction.cs" />
     <Compile Include="Core\Rooms\DynamicEquipmentRequests\Model\DynamicEquipmentRequest.cs" />
-    <Compile Include="Core\Rooms\Equipment\Model\Equipment.cs" />
-    <Compile Include="Core\Rooms\Equipment\RoomHasEquipment\Model\RoomHasEquipment.cs" />
-    <Compile Include="Core\Rooms\Equipment\TransferHistoryOfEquipment\Model\TransferHistoryOfEquipment.cs" />
+    <Compile Include="Core\Rooms\HospitalEquipment\Model\Equipment.cs" />
+    <Compile Include="Core\Rooms\HospitalEquipment\RoomHasEquipment\Model\RoomHasEquipment.cs" />
+    <Compile Include="Core\Rooms\HospitalEquipment\TransferHistoryOfEquipment\Model\TransferHistoryOfEquipment.cs" />
     <Compile Include="Core\Rooms\Model\Room.cs" />
     <Compile Include="Core\Rooms\Renovations\Model\Renovation.cs" />
     <Compile Include="Core\Rooms\Repository\RoomRepository.cs" />
@@ -241,6 +295,7 @@
     <Compile Include="Core\Users\Doctors\Model\Doctor.cs" />
     <Compile Include="Core\Users\Doctors\Model\ReferralLetter.cs" />
     <Compile Include="Core\Users\Doctors\Repository\DoctorRepository.cs" />
+    <Compile Include="Core\Users\Doctors\Service\DoctorService.cs" />
     <Compile Include="Core\Users\HospitalManagers\Model\HospitalManager.cs" />
     <Compile Include="Core\Users\Model\User.cs" />
     <Compile Include="Core\Users\Patients\Model\BlockedPatient.cs" />
@@ -249,6 +304,7 @@
     <Compile Include="Core\Users\Patients\Model\MedicalRecord.cs" />
     <Compile Include="Core\Users\Patients\Model\Patient.cs" />
     <Compile Include="Core\Users\Patients\Repository\PatientRepository.cs" />
+    <Compile Include="Core\Users\Patients\Service\PatientService.cs" />
     <Compile Include="Core\Users\Secretaries\Model\Secretary.cs" />
     <Compile Include="Core\Users\Secretaries\Repository\SecretaryRepository.cs" />
     <Compile Include="Core\GUI\DoctorView.cs">
@@ -271,14 +327,29 @@
     <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\PatientMedicalRecord.resx">
       <DependentUpon>PatientMedicalRecord.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\StartedExamination.resx">
+      <DependentUpon>StartedExamination.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\DoctorView.resx">
       <DependentUpon>DoctorView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.resx">
       <DependentUpon>AddEditRooms.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddRenovations.resx">
+      <DependentUpon>AddRenovations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.resx">
+      <DependentUpon>EquipmentMover.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.resx">
       <DependentUpon>HospitalRooms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.resx">
+      <DependentUpon>MoveEquipmentDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\Renovations.resx">
+      <DependentUpon>Renovations.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerView.resx">
       <DependentUpon>HospitalManagerView.cs</DependentUpon>
@@ -292,17 +363,29 @@
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\AnamnesisView.resx">
       <DependentUpon>AnamnesisView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\DoctorSurveyView.resx">
+      <DependentUpon>DoctorSurveyView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\HomeView.resx">
       <DependentUpon>HomeView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\HospitalSurveysView.resx">
+      <DependentUpon>HospitalSurveysView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\MedicalRecordView.resx">
       <DependentUpon>MedicalRecordView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\NotificationsView.resx">
+      <DependentUpon>NotificationsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\PatientExaminations.resx">
       <DependentUpon>PatientExaminations.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\PatientFunctionalities\PatientRecommendation.resx">
       <DependentUpon>PatientRecommendation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\SearchDoctorView.resx">
+      <DependentUpon>SearchDoctorView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\AddExamination.resx">
       <DependentUpon>AddExamination.cs</DependentUpon>

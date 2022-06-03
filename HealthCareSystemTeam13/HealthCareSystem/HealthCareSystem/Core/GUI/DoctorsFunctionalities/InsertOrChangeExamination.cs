@@ -2,6 +2,7 @@
 using HealthCareSystem.Core.Rooms.Repository;
 using HealthCareSystem.Core.Users.Doctors.Model;
 using HealthCareSystem.Core.Users.Doctors.Repository;
+using HealthCareSystem.Core.Users.Doctors.Service;
 using HealthCareSystem.Core.Users.Patients.Model;
 using HealthCareSystem.Core.Users.Patients.Repository;
 using System;
@@ -137,7 +138,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         {
             // napraviti metodu u patient repositorijumu da se preko patient entiteta nadje username iz user tabele i onda malo edit doradis i tjt
             SelectedPatient = (Patient)cbPatients.SelectedValue;
-            PatientUsername = PatientRep.GetUsernameFromEntity(SelectedPatient);
+            PatientUsername = PatientRep.GetUsernameFromPatient(SelectedPatient);
             if (tbRoomId.Text != "") { RoomId = Convert.ToInt32(tbRoomId.Text); }
             else { RoomId = 0; }
             Duration = Convert.ToInt32(tbDuration.Text);
@@ -157,7 +158,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 return false;
 
             }
-            else if (!DoctorRep.IsDoctorAvailable(DoctorEntity, GetMergedDateTime(ExaminationDate, time), ExaminationRep.GetAllOtherExaminations(ExaminationId)))
+            else if (!DoctorService.IsDoctorAvailable(DoctorEntity.ID, GetMergedDateTime(ExaminationDate, time), ExaminationRep.GetAllOtherExaminations(ExaminationId)))
             {
 
                 MessageBox.Show("Doctor is not available at that time.");

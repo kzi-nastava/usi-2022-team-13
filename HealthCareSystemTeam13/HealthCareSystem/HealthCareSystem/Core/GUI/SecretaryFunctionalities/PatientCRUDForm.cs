@@ -27,7 +27,7 @@ namespace HealthCareSystem.Core.GUI
 
         private void FillDataGridView()
         {
-            patientsDataGrid.DataSource = secretaryRepository.patients;
+            patientsDataGrid.DataSource = secretaryRepository.Patients;
             DataGridViewSettings();
         }
 

@@ -13,9 +13,9 @@ namespace HealthCareSystem.Core.Examinations.Repository
 {
     class ExaminationRepository
     {
-        OleDbConnection Connection;
-        RoomRepository RoomRep;
-        DoctorRepository DoctorRep;
+        public OleDbConnection Connection { get; set; }
+        public RoomRepository RoomRep { get; set; }
+        public DoctorRepository DoctorRep { get; set; }
         public ExaminationRepository()
         {
             try
@@ -127,13 +127,13 @@ namespace HealthCareSystem.Core.Examinations.Repository
         private static DoctorAnamnesis SetDoctorAnamnesisValues(OleDbDataReader reader)
         {
             return new DoctorAnamnesis(Convert.ToInt32(
-                                                        reader["ExaminationId"]),
-                                                        reader["Notice"].ToString(),
-                                                        reader["Conclusions"].ToString(),
-                                                        (DateTime)reader["DateOfExamination"],
-                                                        reader["Doctor"].ToString(),
-                                                        reader["Speciality"].ToString()
-                                                        );
+                                        reader["ExaminationId"]),
+                                        reader["Notice"].ToString(),
+                                        reader["Conclusions"].ToString(),
+                                        (DateTime)reader["DateOfExamination"],
+                                        reader["Doctor"].ToString(),
+                                        reader["Speciality"].ToString()
+                                        );
         }
 
         public Anamnesis GetAnamnesis(int examinationId)
@@ -156,9 +156,9 @@ namespace HealthCareSystem.Core.Examinations.Repository
         private static Anamnesis SetAnamnesisValues(OleDbDataReader reader)
         {
             return new Anamnesis(Convert.ToInt32(reader["id_examination"]),
-                                                        reader["notice"].ToString(),
-                                                        reader["conclusions"].ToString(),
-                                                        (DateTime)reader["dateOf"]);
+                                            reader["notice"].ToString(),
+                                            reader["conclusions"].ToString(),
+                                            (DateTime)reader["dateOf"]);
         }
 
 
@@ -310,7 +310,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
             while (reader.Read())
             {
-                Examination examination = SetExaminationValues(reader);
+                Examination examination = GetExaminationValues(reader);
                 examinations.Add(examination);
             }
             if(Connection.State == System.Data.ConnectionState.Open) Connection.Close();
@@ -318,7 +318,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
             return examinations;
         }
 
-        private static Examination SetExaminationValues(OleDbDataReader reader)
+        private static Examination GetExaminationValues(OleDbDataReader reader)
         {
             TypeOfExamination typeOfExamination;
             Enum.TryParse<TypeOfExamination>(reader["typeOfExamination"].ToString(), out typeOfExamination);

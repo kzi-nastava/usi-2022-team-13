@@ -23,6 +23,25 @@ namespace HealthCareSystem.Core.Users.Doctors.Model
             ExaminationType = examinationType;
             Speciality = speciality;
         }
+        public ReferralLetter(int currentDoctorID,
+            int currentPatientID, int forwardedDoctorID, TypeOfExamination examinationType)
+        {
+            CurrentDoctorID = currentDoctorID;
+            CurrentPatientID = currentPatientID;
+            ForwardedDoctorID = forwardedDoctorID;
+            ExaminationType = examinationType;
+        }
+
+        public ReferralLetter(int currentDoctorID,
+            int currentPatientID, TypeOfExamination examinationType, DoctorSpeciality speciality)
+        {
+            CurrentDoctorID = currentDoctorID;
+            CurrentPatientID = currentPatientID;
+            ExaminationType = examinationType;
+            Speciality = speciality;
+        }
+
+
 
     }
 }

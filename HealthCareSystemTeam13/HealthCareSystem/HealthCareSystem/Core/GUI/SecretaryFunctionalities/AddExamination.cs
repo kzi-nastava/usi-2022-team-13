@@ -3,6 +3,7 @@ using HealthCareSystem.Core.Examinations.Repository;
 using HealthCareSystem.Core.Rooms.Repository;
 using HealthCareSystem.Core.Users.Doctors.Model;
 using HealthCareSystem.Core.Users.Doctors.Repository;
+using HealthCareSystem.Core.Users.Doctors.Service;
 using HealthCareSystem.Core.Users.Secretaries.Repository;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
                 return false;
 
             }
-            else if (!doctorRepository.IsDoctorAvailable(referralLetter.ForwardedDoctorID, mergedExaminationTime, otherExaminations))
+            else if (!DoctorService.IsDoctorAvailable(referralLetter.ForwardedDoctorID, mergedExaminationTime, otherExaminations))
             {
 
                 MessageBox.Show("Doctor is not available at that time.");
