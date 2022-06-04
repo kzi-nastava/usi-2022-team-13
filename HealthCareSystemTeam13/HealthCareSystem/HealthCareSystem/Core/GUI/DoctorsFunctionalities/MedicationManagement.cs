@@ -40,5 +40,59 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
         }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void rbAllowDrug_CheckedChanged(object sender, EventArgs e)
+        {
+            if(!rbAllowDrug.Checked)
+            {
+                rtbDrug.Enabled = true;
+            }
+            else
+            {
+                rtbDrug.Enabled = false;
+            }
+        }
+
+        private void rbReturnDrug_CheckedChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void btnDrugUsage_Click(object sender, EventArgs e)
+        {
+
+            Medication selectedMedication = (Medication)cbDrug.SelectedValue;
+            if(rbAllowDrug.Checked)
+            {
+                string updateQuery = "update medications set status = 'Approved' where id = " + selectedMedication.Id ;
+                DoctorRep.UpdateMedication(updateQuery);
+
+                MessageBox.Show("Successfully allowed the medication!");
+
+            } else if (rbReturnDrug.Checked)
+            {
+                string reasonForDenying = rtbDrug.Text;
+                string updateQuery = "update medications set status = 'Denied' where id = " + selectedMedication.Id;
+                DoctorRep.UpdateMedication(updateQuery);
+
+
+                int doctorId = DoctorRep.GetDoctorId();
+                string insertQuery = "insert into RejectedMedications (id_medication, id_doctor, description)" +
+                    " values (" + selectedMedication.Id + ", " + doctorId + ", '" + reasonForDenying + "')";
+
+                DoctorRep.InsertRejectedMedication(reasonForDenying, selectedMedication.Id, doctorId);
+                
+                MessageBox.Show("Successfully rejected the medication!");
+            }
+            else
+            {
+                MessageBox.Show("You need to select one option!");
+                return;
+            }
+            this.Close();
+        }
     }
 }

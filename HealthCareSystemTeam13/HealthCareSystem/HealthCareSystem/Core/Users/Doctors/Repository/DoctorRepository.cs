@@ -431,7 +431,11 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                     Enum.TryParse<MedicationStatus>(reader["status"].ToString(), out status);
 
                     Medication medication = new Medication(Convert.ToInt32(reader["id"]), reader["nameOfMedication"].ToString(), status);
-                    medications.Add(medication);
+                    if (reader["status"].ToString() == "InProgress")
+                    {
+                        medications.Add(medication);
+
+                    }
                 }
             }
             catch (Exception exception)
@@ -441,6 +445,31 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
             return medications;
+
+        }
+        public void UpdateMedication(string query)
+        {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+        }
+
+        public void InsertRejectedMedication(string reasonForDenying, int medicationId, int doctorId)
+        {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            string insertQuery = "insert into RejectedMedications (id_medication, id_doctor, description)" +
+            " values (@id_medication, @id_doctor, @description)";
+
+            using (var cmd = new OleDbCommand(insertQuery, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_medication", medicationId);
+                cmd.Parameters.AddWithValue("@id_doctor", doctorId);
+                cmd.Parameters.AddWithValue("@description", reasonForDenying.ToString());
+                cmd.ExecuteNonQuery();
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
         }
     }

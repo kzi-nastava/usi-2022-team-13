@@ -36,12 +36,13 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             this.btnDrugUsage = new System.Windows.Forms.Button();
             this.rtbDrug = new System.Windows.Forms.RichTextBox();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // cbDrug
             // 
             this.cbDrug.FormattingEnabled = true;
-            this.cbDrug.Location = new System.Drawing.Point(154, 90);
+            this.cbDrug.Location = new System.Drawing.Point(154, 95);
             this.cbDrug.Name = "cbDrug";
             this.cbDrug.Size = new System.Drawing.Size(121, 21);
             this.cbDrug.TabIndex = 48;
@@ -56,6 +57,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             this.rbAllowDrug.TabStop = true;
             this.rbAllowDrug.Text = "Allow";
             this.rbAllowDrug.UseVisualStyleBackColor = true;
+            this.rbAllowDrug.CheckedChanged += new System.EventHandler(this.rbAllowDrug_CheckedChanged);
             // 
             // lbDrug
             // 
@@ -77,6 +79,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             this.rbReturnDrug.TabStop = true;
             this.rbReturnDrug.Text = "Return";
             this.rbReturnDrug.UseVisualStyleBackColor = true;
+            this.rbReturnDrug.CheckedChanged += new System.EventHandler(this.rbReturnDrug_CheckedChanged);
             // 
             // btnDrugUsage
             // 
@@ -88,6 +91,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             this.btnDrugUsage.TabIndex = 49;
             this.btnDrugUsage.Text = "Allow/Return the drug";
             this.btnDrugUsage.UseVisualStyleBackColor = true;
+            this.btnDrugUsage.Click += new System.EventHandler(this.btnDrugUsage_Click);
             // 
             // rtbDrug
             // 
@@ -107,12 +111,23 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             this.btnCancel.TabIndex = 51;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // DrugManagment
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(116, 63);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(207, 13);
+            this.label1.TabIndex = 52;
+            this.label1.Text = "Select one of the \'In Progress\' medications";
+            // 
+            // MedicationManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(436, 447);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.cbDrug);
             this.Controls.Add(this.rbAllowDrug);
@@ -120,7 +135,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             this.Controls.Add(this.rbReturnDrug);
             this.Controls.Add(this.btnDrugUsage);
             this.Controls.Add(this.rtbDrug);
-            this.Name = "DrugManagment";
+            this.Name = "MedicationManagement";
             this.Text = "DrugManagment";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -136,5 +151,6 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private System.Windows.Forms.Button btnDrugUsage;
         private System.Windows.Forms.RichTextBox rtbDrug;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Label label1;
     }
 }
