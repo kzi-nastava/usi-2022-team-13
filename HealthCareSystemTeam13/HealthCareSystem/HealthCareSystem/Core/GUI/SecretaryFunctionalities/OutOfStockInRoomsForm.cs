@@ -54,7 +54,8 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             int equipmentID = (int)dynamicEquipmentGrid.SelectedRows[0].Cells[2].Value;
             int amount = (int)dynamicEquipmentGrid.SelectedRows[0].Cells[3].Value;
             RoomHasEquipment roomHasEquipment = new RoomHasEquipment(roomsEquipmentId, equipmentID, roomId, amount);
-            new TransferForm(roomHasEquipment);
+            TransferForm tf = new TransferForm(roomHasEquipment);
+            tf.ShowDialog();
         }
     }
 }

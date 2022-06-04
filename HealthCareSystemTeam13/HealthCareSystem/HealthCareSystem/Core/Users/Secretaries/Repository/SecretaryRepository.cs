@@ -108,8 +108,8 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public void PullEquipmentInWarehouse()
         {
             EquipmentInWarehouse = new DataTable();
-            string warehouseId = GetWarehouseId();
-            var query = "select * from Equipment where type = Dynamic and id not in (select id_equipment from RoomHasEquipment where id_room = " + warehouseId + ")";
+            var warehouseId = GetWarehouseId();
+            var query = "select * from Equipment where type = 'Dynamic' and id not in (select id_equipment from RoomHasEquipment where id_room = " + warehouseId + ")";
             FillTable(EquipmentInWarehouse, query);
         }
 
@@ -151,10 +151,10 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
 
-        public string GetWarehouseId()
+        public int GetWarehouseId()
         {
-            var query = "SELECT id FROM Rooms WHERE type = Warehouse";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
+            var query = "SELECT id FROM Rooms WHERE type = 'Warehouse'";
+            return Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0]);
         }
 
         public void InsertSinglePatient(Patient patient)
@@ -229,7 +229,18 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
 
         public void UpdateSigleDynamicEquipment(DynamicEquipmentRequest request)
         {
-            var query = "Udate BlockedPatients SET amount = amount + " + request.Quantity + " WHERE id_room = " + GetWarehouseId() + " and id_equipment = " + request.EquipmentId.ToString();
+            int warehouseId = GetWarehouseId();
+            var amounts = DatabaseHelpers.ExecuteReaderQueries("select amount from RoomHasEquipment " +
+               "where id_room = " + warehouseId + " and id_equipment = " + request.EquipmentId, Connection);
+           string query;
+            if (amounts.Count != 0)
+            {
+                query = "Update RoomHasEquipment SET amount = " + (Convert.ToInt32(amounts[0]) + request.Quantity) + " WHERE id_room =" + warehouseId + " and id_equipment = " + request.EquipmentId;
+            }
+            else
+            {
+                query = "Insert into RoomHasEquipment(id_room, id_equipment, amount) values(" + GetWarehouseId() + ", " + request.EquipmentId + ", " + request.Quantity + ")";
+            }
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.ExecuteNonQuery();
@@ -317,7 +328,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
 
         public void DeleteSingleDynamicEquipmentRequest(int requestID)
         {
-            var query = "DELETE from RequestForDynamicEquipment WHERE id = " + requestID + "";
+            var query = "DELETE from RequestForDinamicEquipment WHERE id = " + requestID + "";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.ExecuteNonQuery();
@@ -484,7 +495,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public List<DynamicEquipmentRequest> GetDeliveredDynamicEquipmentRequest()
         {
             List<DynamicEquipmentRequest> requests = new List<DynamicEquipmentRequest>();
-            var query = "SELECT id, id_equipment, amount, dateOf, id_seceretary FROM RequestsForDynamicEquipment where dateOf before " + (DateTime.Now.AddDays(-1)).ToString();
+            var query = "SELECT id, id_equipment, amount, dateOf, id_secretary FROM RequestForDinamicEquipment where dateOf < #" + (DateTime.Now.AddDays(-1)).ToString() + "#";
             OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
 
             OleDbDataReader reader = cmd.ExecuteReader();
@@ -492,6 +503,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             {
                 requests.Add(GetDynamicEquipmentRequestsFromReader(reader));
             }
+            
             return requests;
         }
 
@@ -637,6 +649,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             {
                 UpdateSigleDynamicEquipment(request);
                 DeleteSingleDynamicEquipmentRequest(request.ID);
+
             }
         }
     }

@@ -19,8 +19,10 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         public OutOfStockForm(string username)
         {
             secretaryRepository = new SecretaryRepository();
+ 
             secretaryRepository.CheckDynamicEquipmentRequests();
             secretaryRepository.PullEquipmentInWarehouse();
+
             InitializeComponent();
             amountBox.Increment = 1;
             amountBox.DecimalPlaces = 0;
@@ -49,5 +51,9 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             secretaryRepository.InsertSingleDynamicEquipmentRequest(request);
         }
 
+        private void OutOfStockForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

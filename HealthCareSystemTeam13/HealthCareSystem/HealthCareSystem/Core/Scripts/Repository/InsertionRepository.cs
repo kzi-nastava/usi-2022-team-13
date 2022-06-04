@@ -484,7 +484,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             {
                 foreach (string equipmentID in equipmentIDs)
                 {
-                    roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentID), Convert.ToInt32(roomIDs), random.Next(0, 20)));
+                    roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentID), Convert.ToInt32(roomID), random.Next(0, 20)));
                 }
             }
 
@@ -521,7 +521,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> secreatyIDs = GetSecretaryIDs();
             foreach (DynamicEquipmentRequest dynamicEquipmentRequest in dynamicEquipmentRequests)
             {
-                var query = "INSERT INTO RequestForDinamicEquipment(id_equipment, amount, id_secretary, dateOf) VALUES(" + dynamicEquipmentRequest.EquipmentId + ", " + dynamicEquipmentRequest.Quantity + ", " + Convert.ToInt32(secreatyIDs[0]) + ", " + dynamicEquipmentRequest.Date.ToString() + ")";
+                var query = "INSERT INTO RequestForDinamicEquipment(id_equipment, amount, id_secretary, dateOf) VALUES(" + dynamicEquipmentRequest.EquipmentId + ", " + dynamicEquipmentRequest.Quantity + ", " + Convert.ToInt32(secreatyIDs[0]) + ", '" + dynamicEquipmentRequest.Date.ToString() + "')";
                 InsertSingle(query);
             }
         }
