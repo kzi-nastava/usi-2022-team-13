@@ -40,13 +40,14 @@ namespace HealthCareSystem
             this.dtDate = new System.Windows.Forms.DateTimePicker();
             this.btnMedicalRecord = new System.Windows.Forms.Button();
             this.btnStartExamination = new System.Windows.Forms.Button();
+            this.btnMedicine = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgwExaminations)).BeginInit();
             this.SuspendLayout();
             // 
             // btnRefresh
             // 
             this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefresh.Location = new System.Drawing.Point(270, 17);
+            this.btnRefresh.Location = new System.Drawing.Point(195, 17);
             this.btnRefresh.Margin = new System.Windows.Forms.Padding(4);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(177, 59);
@@ -158,7 +159,7 @@ namespace HealthCareSystem
             // btnStartExamination
             // 
             this.btnStartExamination.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStartExamination.Location = new System.Drawing.Point(20, 17);
+            this.btnStartExamination.Location = new System.Drawing.Point(10, 17);
             this.btnStartExamination.Margin = new System.Windows.Forms.Padding(4);
             this.btnStartExamination.Name = "btnStartExamination";
             this.btnStartExamination.Size = new System.Drawing.Size(177, 59);
@@ -167,11 +168,24 @@ namespace HealthCareSystem
             this.btnStartExamination.UseVisualStyleBackColor = true;
             this.btnStartExamination.Click += new System.EventHandler(this.btnStartExamination_Click);
             // 
+            // btnMedicine
+            // 
+            this.btnMedicine.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMedicine.Location = new System.Drawing.Point(394, 17);
+            this.btnMedicine.Margin = new System.Windows.Forms.Padding(4);
+            this.btnMedicine.Name = "btnMedicine";
+            this.btnMedicine.Size = new System.Drawing.Size(128, 59);
+            this.btnMedicine.TabIndex = 17;
+            this.btnMedicine.Text = "Medicine Managment";
+            this.btnMedicine.UseVisualStyleBackColor = true;
+            this.btnMedicine.Click += new System.EventHandler(this.btnMedicine_Click);
+            // 
             // DoctorView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1027, 658);
+            this.Controls.Add(this.btnMedicine);
             this.Controls.Add(this.btnStartExamination);
             this.Controls.Add(this.btnMedicalRecord);
             this.Controls.Add(this.dtDate);
@@ -205,5 +219,6 @@ namespace HealthCareSystem
         private System.Windows.Forms.DateTimePicker dtDate;
         private System.Windows.Forms.Button btnMedicalRecord;
         private System.Windows.Forms.Button btnStartExamination;
+        private System.Windows.Forms.Button btnMedicine;
     }
 }

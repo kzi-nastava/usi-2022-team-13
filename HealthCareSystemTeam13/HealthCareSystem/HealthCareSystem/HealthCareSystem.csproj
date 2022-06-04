@@ -72,6 +72,12 @@
     <Compile Include="Core\Examinations\Model\DoctorAnamnesis.cs" />
     <Compile Include="Core\Examinations\Model\Examination.cs" />
     <Compile Include="Core\Examinations\Repository\ExaminationRepository.cs" />
+    <Compile Include="Core\GUI\DoctorsFunctionalities\MedicationManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\DoctorsFunctionalities\MedicationManagement.Designer.cs">
+      <DependentUpon>MedicationManagement.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\DoctorsFunctionalities\StartedExamination.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -321,6 +327,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\MedicationManagement.resx">
+      <DependentUpon>MedicationManagement.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\InsertOrChangeExamination.resx">
       <DependentUpon>InsertOrChangeExamination.cs</DependentUpon>
     </EmbeddedResource>

@@ -13,11 +13,22 @@ namespace HealthCareSystem.Core.Medications.Model
     class Medication
     {
         public string Name { get; set; }
-        
+        public int Id { get; private set; }
+
+        public MedicationStatus SpecificMedicationStatus { get; private set; }
+
         public MedicationStatus Status { get; set; }
        
         public Medication()
         {
+
+        }
+
+        public Medication(int id, string name, MedicationStatus medicationStatus)
+        {
+            Id = id;
+            Name = name;
+            SpecificMedicationStatus = medicationStatus;
 
         }
         public Medication(string name, MedicationStatus status)
