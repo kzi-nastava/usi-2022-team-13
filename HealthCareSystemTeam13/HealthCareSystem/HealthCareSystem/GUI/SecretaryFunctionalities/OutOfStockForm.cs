@@ -46,7 +46,8 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         {
             int equipmentID = (int)requestsDataGrid.SelectedRows[0].Cells[0].Value;
             int amount = (int)amountBox.Value;
-            int secretaryId = Convert.ToInt32(secretaryRepository.GetUserId(Username));
+            string userId = secretaryRepository.GetUserId(Username)[0];
+            int secretaryId = Convert.ToInt32(secretaryRepository.GetSecretaryId(userId)[0]);
             DynamicEquipmentRequest request = new DynamicEquipmentRequest(equipmentID, amount, DateTime.Now, secretaryId);
             secretaryRepository.InsertSingleDynamicEquipmentRequest(request);
         }

@@ -493,6 +493,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                     roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentID), Convert.ToInt32(roomID), random.Next(0, 20)));
                 }
             }
+            roomHasEquipment[roomHasEquipment.Count - 1] = (new RoomHasEquipment(roomHasEquipment[roomHasEquipment.Count - 1].EquipmentId, roomHasEquipment[roomHasEquipment.Count - 1].RoomId, 0));
 
             return roomHasEquipment;
         }
