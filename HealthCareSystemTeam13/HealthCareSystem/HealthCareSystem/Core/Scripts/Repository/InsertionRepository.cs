@@ -297,6 +297,12 @@ namespace HealthCareSystem.Core.Scripts.Repository
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
 
+        private static List<String> GetIngredientIDs()
+        {
+            var query = "select ID from Ingredients";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+        }
+
         private static List<Equipment> GetEquipment()
         {
             List<Equipment> equipment = new List<Equipment>();
@@ -719,6 +725,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static void InsertIngredients()
         {
             List<Ingredient> ingredients = GetIngredients();
+
             foreach (Ingredient ingredient in ingredients)
             {
                 var query = "INSERT INTO Ingredients(nameOfIngredient) VALUES('"+ingredient.Name+"')";
@@ -736,13 +743,6 @@ namespace HealthCareSystem.Core.Scripts.Repository
             ingredients.Add(new Ingredient("Tikva"));
 
             return ingredients;
-        }
-
-        private static List<String> GetIngredientIDs()
-        {
-            var query = "select ID from Ingredients";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
-
         }
 
         private static List<String> GetMedicalRecordIds()

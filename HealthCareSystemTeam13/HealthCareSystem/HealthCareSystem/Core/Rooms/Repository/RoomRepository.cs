@@ -15,6 +15,9 @@ using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
 using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
 using HealthCareSystem.Core.Rooms.Renovations.Model;
 using static HealthCareSystem.Core.Rooms.Renovations.Model.Renovation;
+using HealthCareSystem.Core.Ingredients.Model;
+using HealthCareSystem.Core.Medications.Model;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace HealthCareSystem.Core.Rooms.Repository
 {
@@ -24,6 +27,9 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public DataTable Rooms { get; set; }
         public DataTable Equipment { get; set; }
         public DataTable Renovations { get; set; }
+        public DataTable Ingredients { get; set; }
+
+        public DataTable Medications { get; set; }
 
  
         public RoomRepository()
@@ -43,6 +49,21 @@ namespace HealthCareSystem.Core.Rooms.Repository
                 Console.WriteLine(exception.ToString());
             }
 
+        }
+
+        public void PullMedications()
+        {
+            Medications = new DataTable();
+            string medicationsQuery = "select m.ID, m.nameOfMedication, m.status, r.id_doctor, r.description" +
+                " from medications m left join RejectedMedications r on m.Id = r.id_medication";
+            FillTable(Medications, medicationsQuery);
+        }
+
+        public void PullIngredients()
+        {
+            Ingredients = new DataTable();
+            string ingredientsQuery = "select * from ingredients";
+            FillTable(Ingredients, ingredientsQuery);
         }
 
         public void PullRenovations()
@@ -128,6 +149,13 @@ namespace HealthCareSystem.Core.Rooms.Repository
             DatabaseHelpers.ExecuteNonQueries(query, Connection);
         }
 
+        public void RemoveIngredient(int ingredientId)
+        {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            string query = "delete from ingredients where id = " + ingredientId + "";
+            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+        }
+
         public void InsertRoom(TypeOfRoom roomType)
         {
             var insertQuery = "INSERT INTO rooms(type) VALUES(@type)";
@@ -138,6 +166,43 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
             }
         }
+
+
+        public void InsertMedicationContainsIngredient(int medicationId, int ingredientId)
+        {
+            var insertQuery = "INSERT INTO medicationContainsIngredient(id_medication, id_ingredient) VALUES(@id_medication, @id_ingredient)";
+            using (var cmd = new OleDbCommand(insertQuery, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_medication", medicationId);
+                cmd.Parameters.AddWithValue("@id_ingredient", ingredientId);
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+
+        public void InsertIngredient(string ingredientName)
+        {
+            var insertQuery = "INSERT INTO ingredients(nameOfIngredient) VALUES(@nameOfIngredient)";
+            using (var cmd = new OleDbCommand(insertQuery, Connection))
+            {
+                cmd.Parameters.AddWithValue("@nameOfIngredient", ingredientName);
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+
+        public void InsertMedication(string ingredientName)
+        {
+            var insertQuery = "INSERT INTO medications(nameOfMedication, status) VALUES(@nameOfMedication, @status)";
+            using (var cmd = new OleDbCommand(insertQuery, Connection))
+            {
+                cmd.Parameters.AddWithValue("@nameOfMedication", ingredientName);
+                cmd.Parameters.AddWithValue("@status", MedicationStatus.InProgress.ToString());
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+
         public void InsertRenovation(Renovation renovation)
         {
             if (Connection.State == ConnectionState.Closed) Connection.Open();
@@ -204,6 +269,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
         }
 
         
+
+
 
         public void UpdateContent(string query)
         {
@@ -406,13 +473,102 @@ namespace HealthCareSystem.Core.Rooms.Repository
             return rooms;
         }
 
+        public List<Ingredient> GetIngredients(string query)
+        {
+            List<Ingredient> ingredients = new List<Ingredient>();
+
+
+            try
+            {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                { 
+                    ingredients.Add(new Ingredient(Convert.ToInt32(reader["id"]), reader["nameOfIngredient"].ToString()));
+                    
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return ingredients;
+        }
+
         public Room GetRoom(int id)
         {
             string query = "select * from Rooms where id=" + id;
             Room room = GetSelectedRoom(query);
             return room;
         }
-        
+
+        public Ingredient GetIngredient(int id)
+        {
+            string query = "select * from ingredients where id=" + id;
+            Ingredient ingredient = GetSelectedIngredient(query);
+            return ingredient;
+        }
+
+        public bool DoesIngredientExists(string name)
+        {
+            string query = "select * from Ingredients where nameOfIngredient='" + name + "'";
+            Ingredient ingredient = GetSelectedIngredient(query);
+            
+            if (ingredient.Name == name) return false;
+            return true;
+        }
+
+        public bool DoesMedicationExists(string name)
+        {
+            string query = "select * from Medications where nameOfMedication='" + name + "'";
+            Medication medication = GetSelectedMedication(query);
+            
+            if (medication.Name == name) return false;
+            return true;
+        }
+
+        public Medication GetSelectedMedication(string query)
+        {
+
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+
+            Medication medication = new Medication();
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+
+                MedicationStatus medicationState;
+                Enum.TryParse<MedicationStatus>(reader["status"].ToString(), out medicationState);
+                medication = new Medication(Convert.ToInt32(reader["id"]), reader["nameOfMedication"].ToString(), medicationState);
+            }
+
+            return medication;
+        }
+
+        public Ingredient GetSelectedIngredient(string query)
+        {
+
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+
+            Ingredient ingredient = new Ingredient();
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                ingredient = new Ingredient(Convert.ToInt32(reader["id"]), reader["nameOfIngredient"].ToString());
+            }
+            return ingredient;
+        }
+
+
         public bool DoesRoomHaveFutureExaminations(Room room)
         {
             

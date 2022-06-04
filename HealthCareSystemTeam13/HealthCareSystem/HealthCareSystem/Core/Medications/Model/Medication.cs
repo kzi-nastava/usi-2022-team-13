@@ -13,6 +13,7 @@ namespace HealthCareSystem.Core.Medications.Model
     class Medication
     {
         public string Name { get; set; }
+
         public int Id { get; private set; }
 
         public MedicationStatus SpecificMedicationStatus { get; private set; }
@@ -29,7 +30,6 @@ namespace HealthCareSystem.Core.Medications.Model
             Id = id;
             Name = name;
             SpecificMedicationStatus = medicationStatus;
-
         }
         public Medication(string name, MedicationStatus status)
         {
