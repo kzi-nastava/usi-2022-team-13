@@ -65,15 +65,5 @@ namespace HealthCareSystem.Core.GUI
         {
             LoadForm(new ReferralLettersForm());
         }
-
-        private void requestsDynamicButton_Click(object sender, EventArgs e)
-        {
-            LoadForm(new OutOfStockForm(Username));
-        }
-
-        private void outOfStockButton_Click(object sender, EventArgs e)
-        {
-            LoadForm(new OutOfStockInRoomsForm(Username));
-        }
     }
 }

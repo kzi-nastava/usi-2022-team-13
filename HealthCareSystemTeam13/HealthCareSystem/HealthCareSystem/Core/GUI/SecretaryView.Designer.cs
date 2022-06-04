@@ -31,15 +31,14 @@ namespace HealthCareSystem.Core.GUI
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SecretaryView));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.requestsDynamicButton = new System.Windows.Forms.Button();
             this.LogOutButton = new System.Windows.Forms.Button();
+            this.urgentExaminationsButton = new System.Windows.Forms.Button();
             this.lettersButton = new System.Windows.Forms.Button();
             this.patientsButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.requestsButton = new System.Windows.Forms.Button();
             this.blockedPatientsButton = new System.Windows.Forms.Button();
             this.mainPanel = new System.Windows.Forms.Panel();
-            this.outOfStockButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -47,9 +46,8 @@ namespace HealthCareSystem.Core.GUI
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.panel1.Controls.Add(this.outOfStockButton);
-            this.panel1.Controls.Add(this.requestsDynamicButton);
             this.panel1.Controls.Add(this.LogOutButton);
+            this.panel1.Controls.Add(this.urgentExaminationsButton);
             this.panel1.Controls.Add(this.lettersButton);
             this.panel1.Controls.Add(this.patientsButton);
             this.panel1.Controls.Add(this.pictureBox1);
@@ -60,20 +58,6 @@ namespace HealthCareSystem.Core.GUI
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(266, 554);
             this.panel1.TabIndex = 0;
-            // 
-            // requestsDynamicButton
-            // 
-            this.requestsDynamicButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.requestsDynamicButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.requestsDynamicButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.requestsDynamicButton.ForeColor = System.Drawing.Color.White;
-            this.requestsDynamicButton.Location = new System.Drawing.Point(26, 346);
-            this.requestsDynamicButton.Name = "requestsDynamicButton";
-            this.requestsDynamicButton.Size = new System.Drawing.Size(209, 44);
-            this.requestsDynamicButton.TabIndex = 8;
-            this.requestsDynamicButton.Text = "Requests For Dynamic Equipment";
-            this.requestsDynamicButton.UseVisualStyleBackColor = false;
-            this.requestsDynamicButton.Click += new System.EventHandler(this.requestsDynamicButton_Click);
             // 
             // LogOutButton
             // 
@@ -89,13 +73,26 @@ namespace HealthCareSystem.Core.GUI
             this.LogOutButton.UseVisualStyleBackColor = false;
             this.LogOutButton.Click += new System.EventHandler(this.LogOutButton_Click);
             // 
+            // urgentExaminationsButton
+            // 
+            this.urgentExaminationsButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.urgentExaminationsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.urgentExaminationsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.urgentExaminationsButton.ForeColor = System.Drawing.Color.White;
+            this.urgentExaminationsButton.Location = new System.Drawing.Point(26, 361);
+            this.urgentExaminationsButton.Name = "urgentExaminationsButton";
+            this.urgentExaminationsButton.Size = new System.Drawing.Size(209, 38);
+            this.urgentExaminationsButton.TabIndex = 6;
+            this.urgentExaminationsButton.Text = "Requests";
+            this.urgentExaminationsButton.UseVisualStyleBackColor = false;
+            // 
             // lettersButton
             // 
             this.lettersButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.lettersButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.lettersButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lettersButton.ForeColor = System.Drawing.Color.White;
-            this.lettersButton.Location = new System.Drawing.Point(26, 302);
+            this.lettersButton.Location = new System.Drawing.Point(26, 317);
             this.lettersButton.Name = "lettersButton";
             this.lettersButton.Size = new System.Drawing.Size(209, 38);
             this.lettersButton.TabIndex = 5;
@@ -109,7 +106,7 @@ namespace HealthCareSystem.Core.GUI
             this.patientsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.patientsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.patientsButton.ForeColor = System.Drawing.Color.White;
-            this.patientsButton.Location = new System.Drawing.Point(26, 164);
+            this.patientsButton.Location = new System.Drawing.Point(26, 179);
             this.patientsButton.Name = "patientsButton";
             this.patientsButton.Size = new System.Drawing.Size(209, 38);
             this.patientsButton.TabIndex = 4;
@@ -133,7 +130,7 @@ namespace HealthCareSystem.Core.GUI
             this.requestsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.requestsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.requestsButton.ForeColor = System.Drawing.Color.White;
-            this.requestsButton.Location = new System.Drawing.Point(26, 252);
+            this.requestsButton.Location = new System.Drawing.Point(26, 267);
             this.requestsButton.Name = "requestsButton";
             this.requestsButton.Size = new System.Drawing.Size(209, 44);
             this.requestsButton.TabIndex = 2;
@@ -147,7 +144,7 @@ namespace HealthCareSystem.Core.GUI
             this.blockedPatientsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.blockedPatientsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.blockedPatientsButton.ForeColor = System.Drawing.Color.White;
-            this.blockedPatientsButton.Location = new System.Drawing.Point(26, 208);
+            this.blockedPatientsButton.Location = new System.Drawing.Point(26, 223);
             this.blockedPatientsButton.Name = "blockedPatientsButton";
             this.blockedPatientsButton.Size = new System.Drawing.Size(209, 38);
             this.blockedPatientsButton.TabIndex = 1;
@@ -162,20 +159,6 @@ namespace HealthCareSystem.Core.GUI
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Size = new System.Drawing.Size(801, 554);
             this.mainPanel.TabIndex = 1;
-            // 
-            // outOfStockButton
-            // 
-            this.outOfStockButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.outOfStockButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.outOfStockButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.outOfStockButton.ForeColor = System.Drawing.Color.White;
-            this.outOfStockButton.Location = new System.Drawing.Point(26, 396);
-            this.outOfStockButton.Name = "outOfStockButton";
-            this.outOfStockButton.Size = new System.Drawing.Size(209, 44);
-            this.outOfStockButton.TabIndex = 9;
-            this.outOfStockButton.Text = "Out Of Stock Dynamic Equipment";
-            this.outOfStockButton.UseVisualStyleBackColor = false;
-            this.outOfStockButton.Click += new System.EventHandler(this.outOfStockButton_Click);
             // 
             // SecretaryView
             // 
@@ -204,8 +187,7 @@ namespace HealthCareSystem.Core.GUI
         private System.Windows.Forms.Button blockedPatientsButton;
         private System.Windows.Forms.Button patientsButton;
         private System.Windows.Forms.Button LogOutButton;
+        private System.Windows.Forms.Button urgentExaminationsButton;
         private System.Windows.Forms.Button lettersButton;
-        private System.Windows.Forms.Button requestsDynamicButton;
-        private System.Windows.Forms.Button outOfStockButton;
     }
 }
