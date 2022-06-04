@@ -1,4 +1,5 @@
-﻿using HealthCareSystem.Core.Medications.Model;
+﻿using HealthCareSystem.Core.Ingredients.Model;
+using HealthCareSystem.Core.Medications.Model;
 using HealthCareSystem.Core.Rooms.Repository;
 using System;
 using System.Collections.Generic;
@@ -26,10 +27,21 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             IsAddChosen = isAddChosen;
             RoomRep = new RoomRepository();
             InitializeComponent();
+            FillCheckBoxList();
 
             if (!isAddChosen)
             {
                 LoadEditData();
+            }
+        }
+
+        private void FillCheckBoxList()
+        {
+            List<Ingredient> ingredients = RoomRep.GetIngredients("select * from ingredients");
+            Console.WriteLine(ingredients.Count);
+            foreach(Ingredient ingredient in ingredients)
+            {
+                clbIngredients.Items.Add(ingredient);
             }
         }
 
@@ -57,7 +69,14 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
 
                 RoomRep.InsertMedication(MedicationName);
-                //insert new medicationhasingredients
+
+                string medicationQuery = "select * from medications where nameOfMedication ='" + MedicationName + "'";
+                Medication newMedication = RoomRep.GetSelectedMedication(medicationQuery);
+
+                foreach(Ingredient ingredient in clbIngredients.CheckedItems)
+                {
+                    RoomRep.InsertMedicationContainsIngredient(newMedication.ID, ingredient.Id);
+                }
                 MessageBox.Show("Successfully added a medication!");
 
             }
@@ -71,10 +90,12 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                     return;
                 }
 
-                string updateQuery = "Update medications set nameOfIngredient = '" + MedicationName + "' where id = " + MedicationId;
+                string updateNameAndStatusQuery = "Update medications set nameOfMedication = '" + MedicationName + "'" +
+                    " and set status = '" + MedicationStatus.InProgress.ToString() + "' where id = " + MedicationId;
+                RoomRep.UpdateContent(updateNameAndStatusQuery);
+
                 //updatovanje rejeted medications
                 //updatovanje medicationcontains ingredient
-                RoomRep.UpdateContent(updateQuery);
                 MessageBox.Show("Successfully edited a medication!");
             }
             this.Close();

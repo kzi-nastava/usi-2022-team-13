@@ -89,7 +89,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             this.clbIngredients.FormattingEnabled = true;
             this.clbIngredients.Location = new System.Drawing.Point(307, 113);
             this.clbIngredients.Name = "clbIngredients";
-            this.clbIngredients.Size = new System.Drawing.Size(120, 72);
+            this.clbIngredients.Size = new System.Drawing.Size(241, 72);
             this.clbIngredients.TabIndex = 19;
             // 
             // AddEditMedication

@@ -54,7 +54,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public void PullMedications()
         {
             Medications = new DataTable();
-            string medicationsQuery = "select * from medications";
+            string medicationsQuery = "select m.ID, m.nameOfMedication, m.status, r.id_doctor, r.description" +
+                " from medications m left join RejectedMedications r on m.Id = r.id_medication";
             FillTable(Medications, medicationsQuery);
         }
 
@@ -161,6 +162,19 @@ namespace HealthCareSystem.Core.Rooms.Repository
             using (var cmd = new OleDbCommand(insertQuery, Connection))
             {
                 cmd.Parameters.AddWithValue("@type", roomType.ToString());
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+
+
+        public void InsertMedicationContainsIngredient(int medicationId, int ingredientId)
+        {
+            var insertQuery = "INSERT INTO medicationContainsIngredient(id_medication, id_ingredient) VALUES(@id_medication, @id_ingredient)";
+            using (var cmd = new OleDbCommand(insertQuery, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_medication", medicationId);
+                cmd.Parameters.AddWithValue("@id_ingredient", ingredientId);
                 cmd.ExecuteNonQuery();
 
             }
@@ -457,6 +471,33 @@ namespace HealthCareSystem.Core.Rooms.Repository
             Connection.Close();
 
             return rooms;
+        }
+
+        public List<Ingredient> GetIngredients(string query)
+        {
+            List<Ingredient> ingredients = new List<Ingredient>();
+
+
+            try
+            {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                { 
+                    ingredients.Add(new Ingredient(Convert.ToInt32(reader["id"]), reader["nameOfIngredient"].ToString()));
+                    
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return ingredients;
         }
 
         public Room GetRoom(int id)

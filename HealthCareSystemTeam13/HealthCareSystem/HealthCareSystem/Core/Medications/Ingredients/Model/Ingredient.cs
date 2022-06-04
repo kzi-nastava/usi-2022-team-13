@@ -26,5 +26,10 @@ namespace HealthCareSystem.Core.Ingredients.Model
             this.Id = id;
             this.Name = name;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
