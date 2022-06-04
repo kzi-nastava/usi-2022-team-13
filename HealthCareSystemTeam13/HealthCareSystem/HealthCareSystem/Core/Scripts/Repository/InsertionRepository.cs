@@ -673,6 +673,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             medications.Add(new Medication("Analgin", MedicationStatus.Denied));
             medications.Add(new Medication("Panklav", MedicationStatus.Approved));
             medications.Add(new Medication("Aspirin", MedicationStatus.Approved));
+            medications.Add(new Medication("Altal", MedicationStatus.InProgress));
+            medications.Add(new Medication("Penicilin", MedicationStatus.InProgress));
 
             return medications;
         }

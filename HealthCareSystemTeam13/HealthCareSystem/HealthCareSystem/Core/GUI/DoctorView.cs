@@ -211,5 +211,11 @@ namespace HealthCareSystem
                 }
             }
         }
+
+        private void btnMedicine_Click(object sender, EventArgs e)
+        {
+            MedicationManagement medicationManagement = new MedicationManagement(Username);
+            medicationManagement.ShowDialog();
+        }
     }
 }

@@ -10,20 +10,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HealthCareSystem.Core.Users.Doctors.Service;
+using HealthCareSystem.Core.Medications.Model;
 
 namespace HealthCareSystem.Core.Users.Doctors.Repository
 {
     class DoctorRepository
     {
         public OleDbConnection Connection { get; set; }
-  
+
         public string Username { get; set; }
         public DataTable Examinations { get; set; }
         public DataTable Medicine { get; set; }
 
-        public DoctorRepository(string username="", bool calledFromDoctor=false)
+        public DoctorRepository(string username = "", bool calledFromDoctor = false)
         {
-            if(username.Length > 0) Username = username;
+            if (username.Length > 0) Username = username;
             try
             {
                 Connection = new OleDbConnection();
@@ -31,7 +32,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=HCDb.mdb;
                 Persist Security Info=False;";
 
-                if(calledFromDoctor)
+                if (calledFromDoctor)
                 {
                     Connection.Open();
                 }
@@ -114,11 +115,11 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             return doctor;
         }
 
-       
+
         public Doctor GetAvailableDoctor(DateTime examinationDateTime, List<Examination> examinations)
         {
             BindingList<Doctor> doctors = GetDoctors();
-            foreach(Doctor doctor in doctors)
+            foreach (Doctor doctor in doctors)
             {
                 if (DoctorService.IsDoctorAvailable(doctor.ID, examinationDateTime, examinations)) return doctor;
             }
@@ -140,7 +141,8 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 {
                     doctors.Add(GetDoctorFromReader(reader));
                 }
-            }catch(Exception exception)
+            }
+            catch (Exception exception)
             {
                 Console.WriteLine(exception.ToString());
             }
@@ -174,11 +176,11 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 " from MedicationContainsIngredient inner join PatientAlergicTo " +
                 "on MedicationContainsIngredient.id_ingredient = PatientAlergicTo.id_ingredient " +
                 " where PatientAlergicTo.id_patient = " + patientId;
-            
+
             OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
             OleDbDataReader reader = cmd.ExecuteReader();
 
-            while(reader.Read())
+            while (reader.Read())
             {
                 alergicMedicationIds.Add(Convert.ToInt32
                     (reader["id_medication"]));
@@ -358,13 +360,13 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 cmd.Parameters.AddWithValue("@id_doctor", referralLetter.CurrentDoctorID);
                 cmd.Parameters.AddWithValue("@id_patient", referralLetter.CurrentPatientID);
 
-                if(option == 1)
+                if (option == 1)
                     cmd.Parameters.AddWithValue("@id_forwarded_doctor", referralLetter.ForwardedDoctorID);
                 else if (option == 2)
                     cmd.Parameters.AddWithValue("@id_forwarded_doctor", DBNull.Value);
                 Console.WriteLine(referralLetter.ExaminationType);
                 cmd.Parameters.AddWithValue("@typeOfExamination", referralLetter.ExaminationType);
-                if(option == 2)
+                if (option == 2)
                     cmd.Parameters.AddWithValue("@speciality", referralLetter.Speciality);
                 else if (option == 1)
                     cmd.Parameters.AddWithValue("@id_forwarded_doctor", DBNull.Value);
@@ -412,5 +414,34 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             return doctorId;
         }
 
+        public BindingList<Medication> GetMedications()
+        {
+            BindingList<Medication> medications = new BindingList<Medication>();
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+            try
+            {
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from Medications", Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    MedicationStatus status;
+                    Enum.TryParse<MedicationStatus>(reader["status"].ToString(), out status);
+
+                    Medication medication = new Medication(Convert.ToInt32(reader["id"]), reader["nameOfMedication"].ToString(), status);
+                    medications.Add(medication);
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+            return medications;
+
+        }
     }
 }
