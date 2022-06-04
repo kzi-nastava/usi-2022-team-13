@@ -38,7 +38,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void FillCheckBoxList()
         {
             List<Ingredient> ingredients = RoomRep.GetIngredients("select * from ingredients");
-            Console.WriteLine(ingredients.Count);
+          
             foreach(Ingredient ingredient in ingredients)
             {
                 clbIngredients.Items.Add(ingredient);
@@ -49,7 +49,29 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         {
             string query = "select * from medications where id=" + MedicationId;
             Medication medication = RoomRep.GetSelectedMedication(query);
-            //get ingredients from medication
+
+
+            List<Ingredient> allIngredients = RoomRep.GetIngredients("select * from ingredients");
+            List<Ingredient> ingredientsInMedication = RoomRep.GetIngredients("select * from ingredients" +
+                " where id in (select id_ingredient from MedicationContainsIngredient where id_medication=" + MedicationId + ")");
+            
+
+            foreach (Ingredient ingredient in allIngredients)
+            {
+                foreach(Ingredient containedIngredient in ingredientsInMedication)
+                {
+                    if(containedIngredient.Name == ingredient.Name)
+                    {
+                        clbIngredients.Items.Add(ingredient, true);
+                    }
+                    else
+                    {
+                        clbIngredients.Items.Add(ingredient, false);
+                    }
+                }
+                
+            }
+
             tbMedication.Text = medication.Name;
         }
 
@@ -83,19 +105,21 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             else
             {
                 MedicationName = tbMedication.Text;
-                if (!RoomRep.DoesMedicationExists(MedicationName))
-                {
-                    MessageBox.Show("There already exists medication with this name!");
-                    this.Close();
-                    return;
-                }
 
                 string updateNameAndStatusQuery = "Update medications set nameOfMedication = '" + MedicationName + "'" +
-                    " and set status = '" + MedicationStatus.InProgress.ToString() + "' where id = " + MedicationId;
+                    " ,status = '" + MedicationStatus.InProgress.ToString() + "' where id = " + MedicationId;
                 RoomRep.UpdateContent(updateNameAndStatusQuery);
 
-                //updatovanje rejeted medications
-                //updatovanje medicationcontains ingredient
+                string deleteRejectedQuery = "Delete from rejectedmedications where id_medication=" + MedicationId;
+                RoomRep.UpdateContent(deleteRejectedQuery);
+
+                string deleteMedicationIngredientsQuery = "Delete from MedicationContainsIngredient where id_medication=" + MedicationId;
+                RoomRep.UpdateContent(deleteMedicationIngredientsQuery);
+
+                foreach (Ingredient ingredient in clbIngredients.CheckedItems)
+                {
+                    RoomRep.InsertMedicationContainsIngredient(MedicationId, ingredient.Id);
+                }
                 MessageBox.Show("Successfully edited a medication!");
             }
             this.Close();

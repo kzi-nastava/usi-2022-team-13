@@ -69,12 +69,10 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            //int ingredientId = (int)dgwIngredients.SelectedRows[0].Cells[0].Value;
-            //Ingredient ingredient = RoomRepository.GetIngredient(ingredientId);
+            int medicationId = (int)dgwMedications.SelectedRows[0].Cells[0].Value;
 
-
-            //AddEditIngredients addEditView = new AddEditIngredients(ingredientId, false);
-            //addEditView.ShowDialog();
+            AddEditMedication addEditView = new AddEditMedication(medicationId, false);
+            addEditView.ShowDialog();
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
