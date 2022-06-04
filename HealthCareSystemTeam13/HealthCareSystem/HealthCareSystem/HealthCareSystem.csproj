@@ -72,262 +72,262 @@
     <Compile Include="Core\Examinations\Model\DoctorAnamnesis.cs" />
     <Compile Include="Core\Examinations\Model\Examination.cs" />
     <Compile Include="Core\Examinations\Repository\ExaminationRepository.cs" />
-    <Compile Include="Core\GUI\DoctorsFunctionalities\MedicationManagement.cs">
+    <Compile Include="GUI\DoctorsFunctionalities\MedicationManagement.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\DoctorsFunctionalities\MedicationManagement.Designer.cs">
+    <Compile Include="GUI\DoctorsFunctionalities\MedicationManagement.Designer.cs">
       <DependentUpon>MedicationManagement.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\DoctorsFunctionalities\SetUsedDynamicEquipment.cs">
+    <Compile Include="GUI\DoctorsFunctionalities\SetUsedDynamicEquipment.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\DoctorsFunctionalities\SetUsedDynamicEquipment.Designer.cs">
+    <Compile Include="GUI\DoctorsFunctionalities\SetUsedDynamicEquipment.Designer.cs">
       <DependentUpon>SetUsedDynamicEquipment.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\DoctorsFunctionalities\StartedExamination.cs">
+    <Compile Include="GUI\DoctorsFunctionalities\StartedExamination.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\DoctorsFunctionalities\StartedExamination.Designer.cs">
+    <Compile Include="GUI\DoctorsFunctionalities\StartedExamination.Designer.cs">
       <DependentUpon>StartedExamination.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditIngredients.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\AddEditIngredients.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditIngredients.Designer.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\AddEditIngredients.Designer.cs">
       <DependentUpon>AddEditIngredients.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditMedication.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\AddEditMedication.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditMedication.Designer.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\AddEditMedication.Designer.cs">
       <DependentUpon>AddEditMedication.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\AddEditRooms.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.Designer.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\AddEditRooms.Designer.cs">
       <DependentUpon>AddEditRooms.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddRenovations.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\AddRenovations.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddRenovations.Designer.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\AddRenovations.Designer.cs">
       <DependentUpon>AddRenovations.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\EquipmentMover.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.Designer.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\EquipmentMover.Designer.cs">
       <DependentUpon>EquipmentMover.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\HospitalRooms.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.Designer.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\HospitalRooms.Designer.cs">
       <DependentUpon>HospitalRooms.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\IngredientsView.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\IngredientsView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\IngredientsView.Designer.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\IngredientsView.Designer.cs">
       <DependentUpon>IngredientsView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\MedicationsView.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\MedicationsView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\MedicationsView.Designer.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\MedicationsView.Designer.cs">
       <DependentUpon>MedicationsView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.Designer.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.Designer.cs">
       <DependentUpon>MoveEquipmentDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\Renovations.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\Renovations.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerFunctionalities\Renovations.Designer.cs">
+    <Compile Include="GUI\HospitalManagerFunctionalities\Renovations.Designer.cs">
       <DependentUpon>Renovations.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerView.cs">
+    <Compile Include="GUI\HospitalManagerView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\HospitalManagerView.Designer.cs">
+    <Compile Include="GUI\HospitalManagerView.Designer.cs">
       <DependentUpon>HospitalManagerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\DoctorsFunctionalities\InsertOrChangeExamination.cs">
+    <Compile Include="GUI\DoctorsFunctionalities\InsertOrChangeExamination.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\DoctorsFunctionalities\InsertOrChangeExamination.Designer.cs">
+    <Compile Include="GUI\DoctorsFunctionalities\InsertOrChangeExamination.Designer.cs">
       <DependentUpon>InsertOrChangeExamination.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\DoctorsFunctionalities\PatientMedicalRecord.cs">
+    <Compile Include="GUI\DoctorsFunctionalities\PatientMedicalRecord.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\DoctorsFunctionalities\PatientMedicalRecord.Designer.cs">
+    <Compile Include="GUI\DoctorsFunctionalities\PatientMedicalRecord.Designer.cs">
       <DependentUpon>PatientMedicalRecord.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\AddEditExamination.cs">
+    <Compile Include="GUI\PatientFunctionalities\AddEditExamination.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\AddEditExamination.Designer.cs">
+    <Compile Include="GUI\PatientFunctionalities\AddEditExamination.Designer.cs">
       <DependentUpon>AddEditExamination.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\AnamnesisView.cs">
+    <Compile Include="GUI\PatientFunctionalities\AnamnesisView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\AnamnesisView.Designer.cs">
+    <Compile Include="GUI\PatientFunctionalities\AnamnesisView.Designer.cs">
       <DependentUpon>AnamnesisView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\DoctorSurveyView.cs">
+    <Compile Include="GUI\PatientFunctionalities\DoctorSurveyView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\DoctorSurveyView.Designer.cs">
+    <Compile Include="GUI\PatientFunctionalities\DoctorSurveyView.Designer.cs">
       <DependentUpon>DoctorSurveyView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\HomeView.cs">
+    <Compile Include="GUI\PatientFunctionalities\HomeView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\HomeView.Designer.cs">
+    <Compile Include="GUI\PatientFunctionalities\HomeView.Designer.cs">
       <DependentUpon>HomeView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\HospitalSurveysView.cs">
+    <Compile Include="GUI\PatientFunctionalities\HospitalSurveysView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\HospitalSurveysView.Designer.cs">
+    <Compile Include="GUI\PatientFunctionalities\HospitalSurveysView.Designer.cs">
       <DependentUpon>HospitalSurveysView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\MedicalRecordView.cs">
+    <Compile Include="GUI\PatientFunctionalities\MedicalRecordView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\MedicalRecordView.Designer.cs">
+    <Compile Include="GUI\PatientFunctionalities\MedicalRecordView.Designer.cs">
       <DependentUpon>MedicalRecordView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\NotificationsView.cs">
+    <Compile Include="GUI\PatientFunctionalities\NotificationsView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\NotificationsView.Designer.cs">
+    <Compile Include="GUI\PatientFunctionalities\NotificationsView.Designer.cs">
       <DependentUpon>NotificationsView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\PatientExaminations.cs">
+    <Compile Include="GUI\PatientFunctionalities\PatientExaminations.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\PatientExaminations.Designer.cs">
+    <Compile Include="GUI\PatientFunctionalities\PatientExaminations.Designer.cs">
       <DependentUpon>PatientExaminations.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\PatientRecommendation.cs">
+    <Compile Include="GUI\PatientFunctionalities\PatientRecommendation.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\PatientRecommendation.Designer.cs">
+    <Compile Include="GUI\PatientFunctionalities\PatientRecommendation.Designer.cs">
       <DependentUpon>PatientRecommendation.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\SearchDoctorView.cs">
+    <Compile Include="GUI\PatientFunctionalities\SearchDoctorView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\PatientFunctionalities\SearchDoctorView.Designer.cs">
+    <Compile Include="GUI\PatientFunctionalities\SearchDoctorView.Designer.cs">
       <DependentUpon>SearchDoctorView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\AddExamination.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\AddExamination.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\AddExamination.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\AddExamination.Designer.cs">
       <DependentUpon>AddExamination.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\AddPatient.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\AddPatient.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\AddPatient.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\AddPatient.Designer.cs">
       <DependentUpon>AddPatient.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\BlockedPatientsForm.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\BlockedPatientsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\BlockedPatientsForm.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\BlockedPatientsForm.Designer.cs">
       <DependentUpon>BlockedPatientsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\BlockPatient.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\BlockPatient.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\BlockPatient.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\BlockPatient.Designer.cs">
       <DependentUpon>BlockPatient.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\ChooseSpeciality.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\ChooseSpeciality.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\ChooseSpeciality.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\ChooseSpeciality.Designer.cs">
       <DependentUpon>ChooseSpeciality.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\DeletePatient.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\DeletePatient.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\DeletePatient.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\DeletePatient.Designer.cs">
       <DependentUpon>DeletePatient.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\EditPatient.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\EditPatient.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\EditPatient.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\EditPatient.Designer.cs">
       <DependentUpon>EditPatient.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\ExaminationRequests.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\ExaminationRequests.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\ExaminationRequests.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\ExaminationRequests.Designer.cs">
       <DependentUpon>ExaminationRequests.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\OutOfStockForm.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\OutOfStockForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\OutOfStockForm.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\OutOfStockForm.Designer.cs">
       <DependentUpon>OutOfStockForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\OutOfStockInRoomsForm.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\OutOfStockInRoomsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\OutOfStockInRoomsForm.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\OutOfStockInRoomsForm.Designer.cs">
       <DependentUpon>OutOfStockInRoomsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\PatientCRUDForm.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\PatientCRUDForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\PatientCRUDForm.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\PatientCRUDForm.Designer.cs">
       <DependentUpon>PatientCRUDForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\PatientView.cs">
+    <Compile Include="GUI\PatientView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\PatientView.Designer.cs">
+    <Compile Include="GUI\PatientView.Designer.cs">
       <DependentUpon>PatientView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\ReferralLettersForm.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\ReferralLettersForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\ReferralLettersForm.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\ReferralLettersForm.Designer.cs">
       <DependentUpon>ReferralLettersForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\TransferForm.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\TransferForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\TransferForm.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\TransferForm.Designer.cs">
       <DependentUpon>TransferForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\UnblockPatient.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\UnblockPatient.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\UnblockPatient.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\UnblockPatient.Designer.cs">
       <DependentUpon>UnblockPatient.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\UrgentExaminations.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\UrgentExaminations.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\UrgentExaminations.Designer.cs">
+    <Compile Include="GUI\SecretaryFunctionalities\UrgentExaminations.Designer.cs">
       <DependentUpon>UrgentExaminations.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryView.cs">
+    <Compile Include="GUI\SecretaryView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryView.Designer.cs">
+    <Compile Include="GUI\SecretaryView.Designer.cs">
       <DependentUpon>SecretaryView.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\Helpers.cs" />
@@ -361,153 +361,153 @@
     <Compile Include="Core\Users\Patients\Service\PatientService.cs" />
     <Compile Include="Core\Users\Secretaries\Model\Secretary.cs" />
     <Compile Include="Core\Users\Secretaries\Repository\SecretaryRepository.cs" />
-    <Compile Include="Core\GUI\DoctorView.cs">
+    <Compile Include="GUI\DoctorView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\DoctorView.Designer.cs">
+    <Compile Include="GUI\DoctorView.Designer.cs">
       <DependentUpon>DoctorView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\LoginView.cs">
+    <Compile Include="GUI\LoginView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GUI\LoginView.Designer.cs">
+    <Compile Include="GUI\LoginView.Designer.cs">
       <DependentUpon>LoginView.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\MedicationManagement.resx">
+    <EmbeddedResource Include="GUI\DoctorsFunctionalities\MedicationManagement.resx">
       <DependentUpon>MedicationManagement.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\InsertOrChangeExamination.resx">
+    <EmbeddedResource Include="GUI\DoctorsFunctionalities\InsertOrChangeExamination.resx">
       <DependentUpon>InsertOrChangeExamination.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\PatientMedicalRecord.resx">
+    <EmbeddedResource Include="GUI\DoctorsFunctionalities\PatientMedicalRecord.resx">
       <DependentUpon>PatientMedicalRecord.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\SetUsedDynamicEquipment.resx">
+    <EmbeddedResource Include="GUI\DoctorsFunctionalities\SetUsedDynamicEquipment.resx">
       <DependentUpon>SetUsedDynamicEquipment.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\StartedExamination.resx">
+    <EmbeddedResource Include="GUI\DoctorsFunctionalities\StartedExamination.resx">
       <DependentUpon>StartedExamination.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\DoctorView.resx">
+    <EmbeddedResource Include="GUI\DoctorView.resx">
       <DependentUpon>DoctorView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditIngredients.resx">
+    <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\AddEditIngredients.resx">
       <DependentUpon>AddEditIngredients.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditMedication.resx">
+    <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\AddEditMedication.resx">
       <DependentUpon>AddEditMedication.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.resx">
+    <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\AddEditRooms.resx">
       <DependentUpon>AddEditRooms.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddRenovations.resx">
+    <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\AddRenovations.resx">
       <DependentUpon>AddRenovations.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\EquipmentMover.resx">
+    <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\EquipmentMover.resx">
       <DependentUpon>EquipmentMover.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.resx">
+    <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\HospitalRooms.resx">
       <DependentUpon>HospitalRooms.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\IngredientsView.resx">
+    <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\IngredientsView.resx">
       <DependentUpon>IngredientsView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\MedicationsView.resx">
+    <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\MedicationsView.resx">
       <DependentUpon>MedicationsView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.resx">
+    <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.resx">
       <DependentUpon>MoveEquipmentDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\Renovations.resx">
+    <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\Renovations.resx">
       <DependentUpon>Renovations.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\HospitalManagerView.resx">
+    <EmbeddedResource Include="GUI\HospitalManagerView.resx">
       <DependentUpon>HospitalManagerView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\LoginView.resx">
+    <EmbeddedResource Include="GUI\LoginView.resx">
       <DependentUpon>LoginView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\AddEditExamination.resx">
+    <EmbeddedResource Include="GUI\PatientFunctionalities\AddEditExamination.resx">
       <DependentUpon>AddEditExamination.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\AnamnesisView.resx">
+    <EmbeddedResource Include="GUI\PatientFunctionalities\AnamnesisView.resx">
       <DependentUpon>AnamnesisView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\DoctorSurveyView.resx">
+    <EmbeddedResource Include="GUI\PatientFunctionalities\DoctorSurveyView.resx">
       <DependentUpon>DoctorSurveyView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\HomeView.resx">
+    <EmbeddedResource Include="GUI\PatientFunctionalities\HomeView.resx">
       <DependentUpon>HomeView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\HospitalSurveysView.resx">
+    <EmbeddedResource Include="GUI\PatientFunctionalities\HospitalSurveysView.resx">
       <DependentUpon>HospitalSurveysView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\MedicalRecordView.resx">
+    <EmbeddedResource Include="GUI\PatientFunctionalities\MedicalRecordView.resx">
       <DependentUpon>MedicalRecordView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\NotificationsView.resx">
+    <EmbeddedResource Include="GUI\PatientFunctionalities\NotificationsView.resx">
       <DependentUpon>NotificationsView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\PatientExaminations.resx">
+    <EmbeddedResource Include="GUI\PatientFunctionalities\PatientExaminations.resx">
       <DependentUpon>PatientExaminations.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\PatientRecommendation.resx">
+    <EmbeddedResource Include="GUI\PatientFunctionalities\PatientRecommendation.resx">
       <DependentUpon>PatientRecommendation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\PatientFunctionalities\SearchDoctorView.resx">
+    <EmbeddedResource Include="GUI\PatientFunctionalities\SearchDoctorView.resx">
       <DependentUpon>SearchDoctorView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\AddExamination.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\AddExamination.resx">
       <DependentUpon>AddExamination.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\AddPatient.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\AddPatient.resx">
       <DependentUpon>AddPatient.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\BlockedPatientsForm.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\BlockedPatientsForm.resx">
       <DependentUpon>BlockedPatientsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\BlockPatient.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\BlockPatient.resx">
       <DependentUpon>BlockPatient.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\ChooseSpeciality.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\ChooseSpeciality.resx">
       <DependentUpon>ChooseSpeciality.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\DeletePatient.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\DeletePatient.resx">
       <DependentUpon>DeletePatient.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\EditPatient.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\EditPatient.resx">
       <DependentUpon>EditPatient.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\ExaminationRequests.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\ExaminationRequests.resx">
       <DependentUpon>ExaminationRequests.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\OutOfStockForm.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\OutOfStockForm.resx">
       <DependentUpon>OutOfStockForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\OutOfStockInRoomsForm.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\OutOfStockInRoomsForm.resx">
       <DependentUpon>OutOfStockInRoomsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\PatientCRUDForm.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\PatientCRUDForm.resx">
       <DependentUpon>PatientCRUDForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\PatientView.resx">
+    <EmbeddedResource Include="GUI\PatientView.resx">
       <DependentUpon>PatientView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\ReferralLettersForm.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\ReferralLettersForm.resx">
       <DependentUpon>ReferralLettersForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\TransferForm.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\TransferForm.resx">
       <DependentUpon>TransferForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\UnblockPatient.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\UnblockPatient.resx">
       <DependentUpon>UnblockPatient.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\UrgentExaminations.resx">
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\UrgentExaminations.resx">
       <DependentUpon>UrgentExaminations.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryView.resx">
+    <EmbeddedResource Include="GUI\SecretaryView.resx">
       <DependentUpon>SecretaryView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

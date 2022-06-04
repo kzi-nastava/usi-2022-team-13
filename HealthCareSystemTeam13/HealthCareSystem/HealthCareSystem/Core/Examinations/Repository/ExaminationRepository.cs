@@ -22,7 +22,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
             {
                 Connection = new OleDbConnection();
 
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=HCDb.mdb;
+                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
                 Persist Security Info=False;";
 
                 
