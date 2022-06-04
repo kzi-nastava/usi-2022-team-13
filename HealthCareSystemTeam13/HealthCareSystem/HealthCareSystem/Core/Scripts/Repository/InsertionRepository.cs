@@ -305,6 +305,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             equipment.Add(new Equipment("Chair", Equipment.EquipmentType.Dynamic));
             equipment.Add(new Equipment("Computer", Equipment.EquipmentType.Dynamic));
 
+            equipment.Add(new Equipment("Injection", Equipment.EquipmentType.Dynamic));
+
             return equipment;
         }
 
@@ -479,7 +481,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> equipmentIDs = GetEquipmentIDs();
             
             roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[0]), Convert.ToInt32(roomIDs[4]), 5));
-            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[1]), Convert.ToInt32(roomIDs[3]), 4))
+            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[1]), Convert.ToInt32(roomIDs[3]), 4));
+
+            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[2]), Convert.ToInt32(roomIDs[4]), 12));
 
             return roomHasEquipment;
         }

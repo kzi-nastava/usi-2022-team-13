@@ -48,12 +48,24 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 return;
             }
 
+            int amountToReduceBy = Convert.ToInt32(tbNumber.Text);
+            if(amountToReduceBy <= 0)
+            {
+                MessageBox.Show("Number has to be greater then zero!");
+                return;
+            }
             Equipment selectedEquipment = (Equipment)lbDynamicEquipment.SelectedValue;
-            int amount = selectedEquipment.Amount - Convert.ToInt32(tbNumber.Text);
-            DoctorRep.UpdateAmountOfEquipmentInTheRoom(amount, RoomId, selectedEquipment.ID);
-            MessageBox.Show("Successfully thrown out equipment that was used in the examination.");
-            PullEquipment();
+            int amount = selectedEquipment.Amount - amountToReduceBy;
 
+            if(amount < 0)
+            {
+                MessageBox.Show("You can't throw out more equipment then what the room already has!");
+                return;
+            }
+
+            DoctorRep.UpdateAmountOfEquipmentInTheRoom(amount, RoomId, selectedEquipment.ID);
+            PullEquipment();
+            MessageBox.Show("Successfully thrown out equipment that was used in the examination.");
         }
     }
 }
