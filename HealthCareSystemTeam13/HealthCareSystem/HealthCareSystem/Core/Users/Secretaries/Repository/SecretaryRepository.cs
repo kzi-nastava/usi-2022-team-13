@@ -13,8 +13,6 @@ using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Users.Doctors.Model;
 using HealthCareSystem.Core.Rooms.Model;
 using HealthCareSystem.Core.Rooms.Repository;
-using HealthCareSystem.Core.Rooms.DynamicEqipmentRequests.Model;
-using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
 
 namespace HealthCareSystem.Core.Users.Secretaries.Repository
 {
@@ -25,9 +23,6 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public DataTable RequestsPatients { get; set; }
         public DataTable ReferralLetters { get; set; }
         public DataTable ClosestExaminations { get; set; }
-        public DataTable EquipmentInWarehouse { get; set; }
-        public DataTable DynamicEquipment { get; set; }
-        public DataTable TransferDynamicEquipment { get; set; }
         public OleDbConnection Connection { get; set; }
         public RoomRepository RoomRep { get; set; }
 
@@ -105,28 +100,6 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             FillTable(ClosestExaminations, query);
         }
 
-        public void PullEquipmentInWarehouse()
-        {
-            EquipmentInWarehouse = new DataTable();
-            string warehouseId = GetWarehouseId();
-            var query = "select * from Equipment where type = Dynamic and id not in (select id_equipment from RoomHasEquipment where id_room = " + warehouseId + ")";
-            FillTable(EquipmentInWarehouse, query);
-        }
-
-        public void PullDynamicEquipment()
-        {
-            DynamicEquipment = new DataTable();
-            var query = "select * from RoomHasEquipment where amount < 6";
-            FillTable(DynamicEquipment, query);
-        }
-        
-        public void PullTransferDynamicEquipment(int equipmentId)
-        {
-            TransferDynamicEquipment = new DataTable();
-            var query = "select * from RoomHasEquipment where id_equipment = " + equipmentId.ToString();
-            FillTable(TransferDynamicEquipment, query);
-        }
-
         public void InsertSingleUser(User user)
         {
             var query = "INSERT INTO users(usrnm, pass, role) VALUES(@usrnm, @pass, @role)";
@@ -149,12 +122,6 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         {
             var query = "SELECT id FROM Patients WHERE user_id = " + userID + "";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
-        }
-
-        public string GetWarehouseId()
-        {
-            var query = "SELECT id FROM Rooms WHERE type = Warehouse";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
         }
 
         public void InsertSinglePatient(Patient patient)
@@ -198,58 +165,6 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
                 cmd.Parameters.AddWithValue("@isUrgent", examination.IsUrgent);
                 cmd.Parameters.AddWithValue("@id_room", examination.IdRoom);
                 cmd.Parameters.AddWithValue("@duration", examination.Duration);
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        public void InsertSingleDynamicEquipmentRequest(DynamicEquipmentRequest request)
-        {
-            var query = "INSERT INTO RequestForDynamicEquipment(id_equipment, amount, dateOf, id_secretary) VALUES(@id_equipment, @amount, @dateOf, @id_secretary)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_equipment", request.EquipmentId);
-                cmd.Parameters.AddWithValue("@amount", request.Quantity);
-                cmd.Parameters.AddWithValue("@dateOf", request.Date);
-                cmd.Parameters.AddWithValue("@id_secretary", request.SecretaryId);
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        public void InsertSingleBlockedPatient(BlockedPatient blockedPatient)
-        {
-            var query = "INSERT INTO BlockedPatients(id_patient, id_secretary, dateOf) VALUES(@id_patient, @id_secretary, @dateOf)";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_patient", blockedPatient.PatientID);
-                cmd.Parameters.AddWithValue("@id_secretary", blockedPatient.SecretaryID);
-                cmd.Parameters.AddWithValue("@dateOf", blockedPatient.DateOf);
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        public void UpdateSigleDynamicEquipment(DynamicEquipmentRequest request)
-        {
-            var query = "Udate BlockedPatients SET amount = amount + " + request.Quantity + " WHERE id_room = " + GetWarehouseId() + " and id_equipment = " + request.EquipmentId.ToString();
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        public void UpdateSigleDynamicEquipment(int amount, int roomHasEquipmentID)
-        {
-            var query = "Udate BlockedPatients SET amount = amount - " + amount + " WHERE id = " + roomHasEquipmentID.ToString();
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        public void UpdateSigleDynamicEquipment(int amount, RoomHasEquipment roomHasEquipment)
-        {
-            var query = "Udate BlockedPatients SET amount = amount + " + amount + " WHERE id = " + roomHasEquipment.Id.ToString();
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
                 cmd.ExecuteNonQuery();
             }
         }
@@ -309,15 +224,6 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public void DeleteSingleReferralLetter(string letterID)
         {
             var query = "DELETE from ReferralLetter WHERE id = " + Convert.ToInt32(letterID) + "";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        public void DeleteSingleDynamicEquipmentRequest(int requestID)
-        {
-            var query = "DELETE from RequestForDynamicEquipment WHERE id = " + requestID + "";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.ExecuteNonQuery();
@@ -399,10 +305,29 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             InsertSingleBlockedPatient(blockedPatient);
         }
 
+        public void InsertSingleBlockedPatient(BlockedPatient blockedPatient)
+        {
+            var query = "INSERT INTO BlockedPatients(id_patient, id_secretary, dateOf) VALUES(@id_patient, @id_secretary, @dateOf)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_patient", blockedPatient.PatientID);
+                cmd.Parameters.AddWithValue("@id_secretary", blockedPatient.SecretaryID);
+                cmd.Parameters.AddWithValue("@dateOf", blockedPatient.DateOf);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
         public bool IsRequestChanged(string requestID)
         {
             var query = "SELECT isChanged FROM PatientEditRequest WHERE id = " + requestID + "";
             return Convert.ToBoolean(DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0]);
+        }
+
+        public bool ValidateID(string userID, string table)
+        {
+            var query = "SELECT ID FROM '" + table + "'" +
+                " WHERE user_id = '" + userID + "'";
+            return DatabaseHelpers.ExecuteReaderQueries(query, Connection).Any();
         }
 
         public Dictionary<string, string> GetPatientRequest(string requestID)
@@ -431,6 +356,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
 
+
         public List<Examination> GetDoctorsEximanitonsInNextTwoHours(string doctorId)
         {
             List<Examination> examinations = new List<Examination>();
@@ -442,7 +368,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             Dictionary<string, string> row = new Dictionary<string, string>();
 
             OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
-
+         
             OleDbDataReader reader = cmd.ExecuteReader();
 
             while (reader.Read())
@@ -474,25 +400,6 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         {
             return new Examination((int)reader["id"], (int)reader["id_doctor"], (int)reader["id_patient"], (bool)reader["isEdited"], (bool)reader["isCancelled"], (bool)reader["isFinished"], (DateTime)reader["dateOf"],
                                                              (TypeOfExamination)reader["typeOfExamination"], (bool)reader["isUrgent"], (int)reader["id_room"], (int)reader["duration"]);
-        }
-
-        private static DynamicEquipmentRequest GetDynamicEquipmentRequestsFromReader(OleDbDataReader reader)
-        {
-            return new DynamicEquipmentRequest((int)reader["id_equipment"], (int)reader["amount"], (DateTime)reader["dateOf"], (int)reader["id_secretary"], (int)reader["id"]);
-        }
-
-        public List<DynamicEquipmentRequest> GetDeliveredDynamicEquipmentRequest()
-        {
-            List<DynamicEquipmentRequest> requests = new List<DynamicEquipmentRequest>();
-            var query = "SELECT id, id_equipment, amount, dateOf, id_seceretary FROM RequestsForDynamicEquipment where dateOf before " + (DateTime.Now.AddDays(-1)).ToString();
-            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
-
-            OleDbDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                requests.Add(GetDynamicEquipmentRequestsFromReader(reader));
-            }
-            return requests;
         }
 
         public List<Examination> GetDoctorsExamiantions(DateTime from, DateTime to, string doctorId)
@@ -627,16 +534,6 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
                 {
                     MoveExamination(examinations[examinations.Count() - 1].Id, examinations[examinations.Count() - 1].DateOf.AddMinutes(examinations[examinations.Count() - 1].Duration));
                 }
-            }
-        }
-    
-        public void CheckDynamicEquipmentRequests()
-        {
-            List<DynamicEquipmentRequest> requests = GetDeliveredDynamicEquipmentRequest();
-            foreach (DynamicEquipmentRequest request in requests)
-            {
-                UpdateSigleDynamicEquipment(request);
-                DeleteSingleDynamicEquipmentRequest(request.ID);
             }
         }
     }

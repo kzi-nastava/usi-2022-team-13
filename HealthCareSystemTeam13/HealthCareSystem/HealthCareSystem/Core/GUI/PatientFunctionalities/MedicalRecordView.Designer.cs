@@ -47,7 +47,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.btnSortBySpeciality = new System.Windows.Forms.Button();
             this.btnSortByDoctor = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnSearchAnamnesis = new System.Windows.Forms.Button();
             this.dgwAnamnesis = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dgwExaminations)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -165,8 +164,9 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             // 
             this.tbAnamnesis.Location = new System.Drawing.Point(206, 49);
             this.tbAnamnesis.Name = "tbAnamnesis";
-            this.tbAnamnesis.Size = new System.Drawing.Size(180, 30);
+            this.tbAnamnesis.Size = new System.Drawing.Size(274, 30);
             this.tbAnamnesis.TabIndex = 16;
+            this.tbAnamnesis.TextChanged += new System.EventHandler(this.tbAnamnesis_TextChanged);
             // 
             // label2
             // 
@@ -185,7 +185,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.groupBox3.Controls.Add(this.btnSortBySpeciality);
             this.groupBox3.Controls.Add(this.btnSortByDoctor);
             this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Controls.Add(this.btnSearchAnamnesis);
             this.groupBox3.Controls.Add(this.dgwAnamnesis);
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.tbAnamnesis);
@@ -260,19 +259,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.label3.TabIndex = 19;
             this.label3.Text = "Sort By";
             // 
-            // btnSearchAnamnesis
-            // 
-            this.btnSearchAnamnesis.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSearchAnamnesis.FlatAppearance.BorderSize = 3;
-            this.btnSearchAnamnesis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSearchAnamnesis.Location = new System.Drawing.Point(434, 46);
-            this.btnSearchAnamnesis.Name = "btnSearchAnamnesis";
-            this.btnSearchAnamnesis.Size = new System.Drawing.Size(149, 35);
-            this.btnSearchAnamnesis.TabIndex = 10;
-            this.btnSearchAnamnesis.Text = "Search";
-            this.btnSearchAnamnesis.UseVisualStyleBackColor = true;
-            this.btnSearchAnamnesis.Click += new System.EventHandler(this.btnSearchAnamnesis_Click);
-            // 
             // dgwAnamnesis
             // 
             this.dgwAnamnesis.BackgroundColor = System.Drawing.SystemColors.GradientInactiveCaption;
@@ -331,7 +317,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.DataGridView dgwAnamnesis;
         private System.Windows.Forms.Button btnShowAnamnesis;
-        private System.Windows.Forms.Button btnSearchAnamnesis;
         private System.Windows.Forms.Button btnSortBySpeciality;
         private System.Windows.Forms.Button btnSortByDoctor;
         private System.Windows.Forms.Label label3;

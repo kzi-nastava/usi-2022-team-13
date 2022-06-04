@@ -246,18 +246,6 @@
     <Compile Include="Core\GUI\SecretaryFunctionalities\ExaminationRequests.Designer.cs">
       <DependentUpon>ExaminationRequests.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\OutOfStockForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\OutOfStockForm.Designer.cs">
-      <DependentUpon>OutOfStockForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\OutOfStockInRoomsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\OutOfStockInRoomsForm.Designer.cs">
-      <DependentUpon>OutOfStockInRoomsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Core\GUI\SecretaryFunctionalities\PatientCRUDForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -275,12 +263,6 @@
     </Compile>
     <Compile Include="Core\GUI\SecretaryFunctionalities\ReferralLettersForm.Designer.cs">
       <DependentUpon>ReferralLettersForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\TransferForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Core\GUI\SecretaryFunctionalities\TransferForm.Designer.cs">
-      <DependentUpon>TransferForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\GUI\SecretaryFunctionalities\UnblockPatient.cs">
       <SubType>Form</SubType>
@@ -438,12 +420,6 @@
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\ExaminationRequests.resx">
       <DependentUpon>ExaminationRequests.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\OutOfStockForm.resx">
-      <DependentUpon>OutOfStockForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\OutOfStockInRoomsForm.resx">
-      <DependentUpon>OutOfStockInRoomsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\PatientCRUDForm.resx">
       <DependentUpon>PatientCRUDForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -452,9 +428,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\ReferralLettersForm.resx">
       <DependentUpon>ReferralLettersForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\TransferForm.resx">
-      <DependentUpon>TransferForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\SecretaryFunctionalities\UnblockPatient.resx">
       <DependentUpon>UnblockPatient.cs</DependentUpon>
