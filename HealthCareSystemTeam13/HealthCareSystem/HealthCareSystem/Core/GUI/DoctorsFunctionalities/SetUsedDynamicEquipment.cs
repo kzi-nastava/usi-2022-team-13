@@ -67,5 +67,10 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             PullEquipment();
             MessageBox.Show("Successfully thrown out equipment that was used in the examination.");
         }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
