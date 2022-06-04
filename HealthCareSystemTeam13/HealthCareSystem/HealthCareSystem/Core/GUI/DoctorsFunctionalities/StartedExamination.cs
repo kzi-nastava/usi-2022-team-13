@@ -244,5 +244,12 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             }
             return true;
         }
+
+        private void btnFinish_Click(object sender, EventArgs e)
+        {
+            SetUsedDynamicEquipment setUsedDynamicEquipmentForm = new SetUsedDynamicEquipment(ExaminationId, DoctorRep.Username);
+            setUsedDynamicEquipmentForm.ShowDialog();
+            this.Close();
+        }
     }
 }

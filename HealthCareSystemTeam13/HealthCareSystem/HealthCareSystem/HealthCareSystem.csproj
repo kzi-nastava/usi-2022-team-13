@@ -78,6 +78,12 @@
     <Compile Include="Core\GUI\DoctorsFunctionalities\MedicationManagement.Designer.cs">
       <DependentUpon>MedicationManagement.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\DoctorsFunctionalities\SetUsedDynamicEquipment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\DoctorsFunctionalities\SetUsedDynamicEquipment.Designer.cs">
+      <DependentUpon>SetUsedDynamicEquipment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\DoctorsFunctionalities\StartedExamination.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -335,6 +341,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\PatientMedicalRecord.resx">
       <DependentUpon>PatientMedicalRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\SetUsedDynamicEquipment.resx">
+      <DependentUpon>SetUsedDynamicEquipment.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\DoctorsFunctionalities\StartedExamination.resx">
       <DependentUpon>StartedExamination.cs</DependentUpon>

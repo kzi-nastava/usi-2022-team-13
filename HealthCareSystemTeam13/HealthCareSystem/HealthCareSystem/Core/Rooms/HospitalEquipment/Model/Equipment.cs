@@ -15,6 +15,15 @@ namespace HealthCareSystem.Core.Rooms.HospitalEquipment.Model
 
         public String Name { get; set; }
 
+        public int Amount { get; set; }
+        public string NameAndAmount
+        {
+            get
+            {
+                return Name + " | " + Amount + " left in the room";
+            }
+        }
+
         public int ID { get; set; }
         public EquipmentType Type { get; set; }
 
@@ -29,6 +38,13 @@ namespace HealthCareSystem.Core.Rooms.HospitalEquipment.Model
             this.ID = id;
             this.Name = name;
             this.Type = type;
+        }
+
+        public Equipment(string name, int id, int amount)
+        {
+            Name = name;
+            ID = id;
+            Amount = amount;
         }
 
         public override string ToString()

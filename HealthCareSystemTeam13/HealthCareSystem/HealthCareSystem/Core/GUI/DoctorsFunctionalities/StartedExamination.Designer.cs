@@ -44,6 +44,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.btnFinish = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgwMedications)).BeginInit();
             this.SuspendLayout();
             // 
@@ -61,7 +62,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             // 
             this.lbWeight.AutoSize = true;
             this.lbWeight.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbWeight.Location = new System.Drawing.Point(36, 197);
+            this.lbWeight.Location = new System.Drawing.Point(65, 156);
             this.lbWeight.Name = "lbWeight";
             this.lbWeight.Size = new System.Drawing.Size(96, 25);
             this.lbWeight.TabIndex = 5;
@@ -72,7 +73,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             // 
             this.lbHeight.AutoSize = true;
             this.lbHeight.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbHeight.Location = new System.Drawing.Point(36, 153);
+            this.lbHeight.Location = new System.Drawing.Point(65, 112);
             this.lbHeight.Name = "lbHeight";
             this.lbHeight.Size = new System.Drawing.Size(91, 25);
             this.lbHeight.TabIndex = 4;
@@ -82,7 +83,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             // rbSpeciality
             // 
             this.rbSpeciality.AutoSize = true;
-            this.rbSpeciality.Location = new System.Drawing.Point(27, 381);
+            this.rbSpeciality.Location = new System.Drawing.Point(26, 277);
             this.rbSpeciality.Name = "rbSpeciality";
             this.rbSpeciality.Size = new System.Drawing.Size(85, 17);
             this.rbSpeciality.TabIndex = 6;
@@ -94,7 +95,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             // rbDoctor
             // 
             this.rbDoctor.AutoSize = true;
-            this.rbDoctor.Location = new System.Drawing.Point(150, 381);
+            this.rbDoctor.Location = new System.Drawing.Point(149, 277);
             this.rbDoctor.Name = "rbDoctor";
             this.rbDoctor.Size = new System.Drawing.Size(109, 17);
             this.rbDoctor.TabIndex = 7;
@@ -107,7 +108,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(36, 323);
+            this.label1.Location = new System.Drawing.Point(35, 219);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(233, 25);
             this.label1.TabIndex = 8;
@@ -117,7 +118,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             // cbSpeciality
             // 
             this.cbSpeciality.FormattingEnabled = true;
-            this.cbSpeciality.Location = new System.Drawing.Point(12, 426);
+            this.cbSpeciality.Location = new System.Drawing.Point(11, 322);
             this.cbSpeciality.Name = "cbSpeciality";
             this.cbSpeciality.Size = new System.Drawing.Size(121, 21);
             this.cbSpeciality.TabIndex = 30;
@@ -126,7 +127,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             // cbDoctor
             // 
             this.cbDoctor.FormattingEnabled = true;
-            this.cbDoctor.Location = new System.Drawing.Point(150, 426);
+            this.cbDoctor.Location = new System.Drawing.Point(149, 322);
             this.cbDoctor.Name = "cbDoctor";
             this.cbDoctor.Size = new System.Drawing.Size(121, 21);
             this.cbDoctor.TabIndex = 31;
@@ -135,7 +136,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             // btnRefer
             // 
             this.btnRefer.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefer.Location = new System.Drawing.Point(58, 479);
+            this.btnRefer.Location = new System.Drawing.Point(57, 375);
             this.btnRefer.Margin = new System.Windows.Forms.Padding(4);
             this.btnRefer.Name = "btnRefer";
             this.btnRefer.Size = new System.Drawing.Size(158, 31);
@@ -203,11 +204,24 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             this.label4.TabIndex = 38;
             this.label4.Text = "Active medication";
             // 
+            // btnFinish
+            // 
+            this.btnFinish.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFinish.Location = new System.Drawing.Point(57, 495);
+            this.btnFinish.Margin = new System.Windows.Forms.Padding(4);
+            this.btnFinish.Name = "btnFinish";
+            this.btnFinish.Size = new System.Drawing.Size(201, 56);
+            this.btnFinish.TabIndex = 39;
+            this.btnFinish.Text = "Finish";
+            this.btnFinish.UseVisualStyleBackColor = true;
+            this.btnFinish.Click += new System.EventHandler(this.btnFinish_Click);
+            // 
             // StartedExamination
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(795, 585);
+            this.Controls.Add(this.btnFinish);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -248,5 +262,6 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnFinish;
     }
 }
