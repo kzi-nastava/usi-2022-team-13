@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HealthCareSystem.Core.Users.Doctors.Service;
 using HealthCareSystem.Core.Medications.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
 
 namespace HealthCareSystem.Core.Users.Doctors.Repository
 {
@@ -472,5 +473,72 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
         }
+
+        public int GetRoomIdFromExaminationId(int examinationId)
+        {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            string query = "select id_room from Examination where id = " + examinationId + "";
+
+            int roomNumber = -1;
+
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                roomNumber = Convert.ToInt32(reader["id_room"]);
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+            return roomNumber;
+        }
+
+        public List<Equipment> GetEquipmentFromRoomId(int roomId)
+        {
+
+            List<Equipment> equipment = new List<Equipment>();
+
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+            try
+            {
+                string query = "select id_equipment, amount, Equipment.nameOf from RoomHasEquipment, Equipment" +
+                    " where Equipment.id = id_equipment and RoomHasEquipment.id_room = " + roomId;
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Equipment equipmentEntity = new Equipment(reader["nameOf"].ToString(),
+                        Convert.ToInt32(reader["id_equipment"]), Convert.ToInt32(reader["amount"]));
+                    equipment.Add(equipmentEntity);
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+            return equipment;
+        }
+
+        public void UpdateAmountOfEquipmentInTheRoom(int amount, int roomId, int equipmentId)
+        {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+            string updateQuery = "update RoomHasEquipment set amount = " + amount +
+                " where id_room = " + roomId + " and id_equipment = " + equipmentId;
+
+            DatabaseHelpers.ExecuteNonQueries(updateQuery, Connection);
+        }
+
+
+
+
     }
 }
