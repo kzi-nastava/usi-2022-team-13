@@ -72,8 +72,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             {
                 SelectedRoomType = (TypeOfRoom)cbRoomTypes.SelectedValue;
 
-                Console.WriteLine(RoomId);
-                Console.WriteLine(SelectedRoomType);
+                
                 string updateQuery = "Update Rooms set type = '" + SelectedRoomType.ToString() + "' where id = " + RoomId;
 
                 RoomRep.UpdateContent(updateQuery);

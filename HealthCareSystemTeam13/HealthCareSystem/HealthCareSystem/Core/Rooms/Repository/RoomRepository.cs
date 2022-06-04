@@ -15,6 +15,7 @@ using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
 using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
 using HealthCareSystem.Core.Rooms.Renovations.Model;
 using static HealthCareSystem.Core.Rooms.Renovations.Model.Renovation;
+using HealthCareSystem.Core.Ingredients.Model;
 
 namespace HealthCareSystem.Core.Rooms.Repository
 {
@@ -24,6 +25,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public DataTable Rooms { get; set; }
         public DataTable Equipment { get; set; }
         public DataTable Renovations { get; set; }
+        public DataTable Ingredients { get; set; }
 
  
         public RoomRepository()
@@ -43,6 +45,14 @@ namespace HealthCareSystem.Core.Rooms.Repository
                 Console.WriteLine(exception.ToString());
             }
 
+        }
+
+
+        public void PullIngredients()
+        {
+            Ingredients = new DataTable();
+            string ingredientsQuery = "select * from ingredients";
+            FillTable(Ingredients, ingredientsQuery);
         }
 
         public void PullRenovations()
@@ -128,6 +138,13 @@ namespace HealthCareSystem.Core.Rooms.Repository
             DatabaseHelpers.ExecuteNonQueries(query, Connection);
         }
 
+        public void RemoveIngredient(int ingredientId)
+        {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            string query = "delete from ingredients where id = " + ingredientId + "";
+            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+        }
+
         public void InsertRoom(TypeOfRoom roomType)
         {
             var insertQuery = "INSERT INTO rooms(type) VALUES(@type)";
@@ -138,6 +155,18 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
             }
         }
+
+        public void InsertIngredient(string ingredientName)
+        {
+            var insertQuery = "INSERT INTO ingredients(nameOfIngredient) VALUES(@nameOfIngredient)";
+            using (var cmd = new OleDbCommand(insertQuery, Connection))
+            {
+                cmd.Parameters.AddWithValue("@nameOfIngredient", ingredientName);
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+
         public void InsertRenovation(Renovation renovation)
         {
             if (Connection.State == ConnectionState.Closed) Connection.Open();
@@ -203,7 +232,23 @@ namespace HealthCareSystem.Core.Rooms.Repository
             return room;
         }
 
-        
+        public Ingredient GetSelectedIngredient(string query)
+        {
+            
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+
+            Ingredient ingredient = new Ingredient();
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                ingredient = new Ingredient(Convert.ToInt32(reader["id"]), reader["nameOfIngredient"].ToString());
+            }
+            return ingredient;
+        }
+
+
 
         public void UpdateContent(string query)
         {
@@ -412,7 +457,23 @@ namespace HealthCareSystem.Core.Rooms.Repository
             Room room = GetSelectedRoom(query);
             return room;
         }
-        
+
+        public Ingredient GetIngredient(int id)
+        {
+            string query = "select * from ingredients where id=" + id;
+            Ingredient ingredient = GetSelectedIngredient(query);
+            return ingredient;
+        }
+
+        public bool DoesIngredientExists(string name)
+        {
+            string query = "select * from Ingredients where nameOfIngredient='" + name + "'";
+            Ingredient ingredient = GetSelectedIngredient(query);
+
+            if (ingredient == null) return false;
+            return true;
+        }
+
         public bool DoesRoomHaveFutureExaminations(Room room)
         {
             

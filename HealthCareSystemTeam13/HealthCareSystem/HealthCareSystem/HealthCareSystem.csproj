@@ -78,6 +78,12 @@
     <Compile Include="Core\GUI\DoctorsFunctionalities\StartedExamination.Designer.cs">
       <DependentUpon>StartedExamination.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditIngredients.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditIngredients.Designer.cs">
+      <DependentUpon>AddEditIngredients.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +107,18 @@
     </Compile>
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.Designer.cs">
       <DependentUpon>HospitalRooms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\IngredientsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\IngredientsView.Designer.cs">
+      <DependentUpon>IngredientsView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\MedicationsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\MedicationsView.Designer.cs">
+      <DependentUpon>MedicationsView.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.cs">
       <SubType>Form</SubType>
@@ -333,6 +351,9 @@
     <EmbeddedResource Include="Core\GUI\DoctorView.resx">
       <DependentUpon>DoctorView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditIngredients.resx">
+      <DependentUpon>AddEditIngredients.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.resx">
       <DependentUpon>AddEditRooms.cs</DependentUpon>
     </EmbeddedResource>
@@ -344,6 +365,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\HospitalRooms.resx">
       <DependentUpon>HospitalRooms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\IngredientsView.resx">
+      <DependentUpon>IngredientsView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\MedicationsView.resx">
+      <DependentUpon>MedicationsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\MoveEquipmentDialog.resx">
       <DependentUpon>MoveEquipmentDialog.cs</DependentUpon>

@@ -70,5 +70,17 @@ namespace HealthCareSystem.Core.GUI
             if (SelectedButton != null) SelectedButton.Hide();
             LoadForm(new Renovations());
         }
+
+        private void btnMedications_Click(object sender, EventArgs e)
+        {
+            if (SelectedButton != null) SelectedButton.Hide();
+            LoadForm(new MedicationsView());
+        }
+
+        private void btnIngredients_Click(object sender, EventArgs e)
+        {
+            if (SelectedButton != null) SelectedButton.Hide();
+            LoadForm(new IngredientsView());
+        }
     }
 }
