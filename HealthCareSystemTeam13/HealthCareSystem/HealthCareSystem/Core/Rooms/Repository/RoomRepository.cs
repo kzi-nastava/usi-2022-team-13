@@ -16,6 +16,8 @@ using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.M
 using HealthCareSystem.Core.Rooms.Renovations.Model;
 using static HealthCareSystem.Core.Rooms.Renovations.Model.Renovation;
 using HealthCareSystem.Core.Ingredients.Model;
+using HealthCareSystem.Core.Medications.Model;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace HealthCareSystem.Core.Rooms.Repository
 {
@@ -26,6 +28,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public DataTable Equipment { get; set; }
         public DataTable Renovations { get; set; }
         public DataTable Ingredients { get; set; }
+
+        public DataTable Medications { get; set; }
 
  
         public RoomRepository()
@@ -47,6 +51,12 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         }
 
+        public void PullMedications()
+        {
+            Medications = new DataTable();
+            string medicationsQuery = "select * from medications";
+            FillTable(Medications, medicationsQuery);
+        }
 
         public void PullIngredients()
         {
@@ -167,6 +177,18 @@ namespace HealthCareSystem.Core.Rooms.Repository
             }
         }
 
+        public void InsertMedication(string ingredientName)
+        {
+            var insertQuery = "INSERT INTO medications(nameOfMedication, status) VALUES(@nameOfMedication, @status)";
+            using (var cmd = new OleDbCommand(insertQuery, Connection))
+            {
+                cmd.Parameters.AddWithValue("@nameOfMedication", ingredientName);
+                cmd.Parameters.AddWithValue("@status", MedicationStatus.InProgress.ToString());
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+
         public void InsertRenovation(Renovation renovation)
         {
             if (Connection.State == ConnectionState.Closed) Connection.Open();
@@ -232,21 +254,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
             return room;
         }
 
-        public Ingredient GetSelectedIngredient(string query)
-        {
-            
-            if (Connection.State == ConnectionState.Closed) Connection.Open();
-            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
-
-            Ingredient ingredient = new Ingredient();
-
-            OleDbDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                ingredient = new Ingredient(Convert.ToInt32(reader["id"]), reader["nameOfIngredient"].ToString());
-            }
-            return ingredient;
-        }
+        
 
 
 
@@ -469,10 +477,56 @@ namespace HealthCareSystem.Core.Rooms.Repository
         {
             string query = "select * from Ingredients where nameOfIngredient='" + name + "'";
             Ingredient ingredient = GetSelectedIngredient(query);
-
-            if (ingredient == null) return false;
+            
+            if (ingredient.Name == name) return false;
             return true;
         }
+
+        public bool DoesMedicationExists(string name)
+        {
+            string query = "select * from Medications where nameOfMedication='" + name + "'";
+            Medication medication = GetSelectedMedication(query);
+            
+            if (medication.Name == name) return false;
+            return true;
+        }
+
+        public Medication GetSelectedMedication(string query)
+        {
+
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+
+            Medication medication = new Medication();
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+
+                MedicationStatus medicationState;
+                Enum.TryParse<MedicationStatus>(reader["status"].ToString(), out medicationState);
+                medication = new Medication(Convert.ToInt32(reader["id"]), reader["nameOfMedication"].ToString(), medicationState);
+            }
+
+            return medication;
+        }
+
+        public Ingredient GetSelectedIngredient(string query)
+        {
+
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+
+            Ingredient ingredient = new Ingredient();
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                ingredient = new Ingredient(Convert.ToInt32(reader["id"]), reader["nameOfIngredient"].ToString());
+            }
+            return ingredient;
+        }
+
 
         public bool DoesRoomHaveFutureExaminations(Room room)
         {

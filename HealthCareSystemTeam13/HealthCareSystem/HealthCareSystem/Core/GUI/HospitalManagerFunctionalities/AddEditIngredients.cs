@@ -17,7 +17,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         public int IngredientId { get; set; }
         public bool IsAddChosen { get; set; }
         private RoomRepository RoomRep;
-        private String IngredientName;
+        private string IngredientName;
 
         public AddEditIngredients(int ingredientId, bool isAddChoosen)
         {
@@ -45,7 +45,6 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             if (IsAddChosen)
             {
                 IngredientName = tbIngredient.Text;
-                Console.WriteLine(IngredientName);
                 if (!RoomRep.DoesIngredientExists(IngredientName))
                 {
                     MessageBox.Show("There already exists ingredient with this name!");

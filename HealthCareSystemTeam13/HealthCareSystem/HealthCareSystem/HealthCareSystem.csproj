@@ -84,6 +84,12 @@
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditIngredients.Designer.cs">
       <DependentUpon>AddEditIngredients.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditMedication.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditMedication.Designer.cs">
+      <DependentUpon>AddEditMedication.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -353,6 +359,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditIngredients.resx">
       <DependentUpon>AddEditIngredients.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditMedication.resx">
+      <DependentUpon>AddEditMedication.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\GUI\HospitalManagerFunctionalities\AddEditRooms.resx">
       <DependentUpon>AddEditRooms.cs</DependentUpon>

@@ -46,6 +46,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             this.btnRefresh.TabIndex = 0;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // dgwMedications
             // 
@@ -57,6 +58,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             this.dgwMedications.RowTemplate.Height = 24;
             this.dgwMedications.Size = new System.Drawing.Size(737, 419);
             this.dgwMedications.TabIndex = 1;
+            this.dgwMedications.SelectionChanged += new System.EventHandler(this.dgwMedications_SelectionChanged);
             // 
             // btnAdd
             // 
@@ -68,6 +70,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             this.btnAdd.TabIndex = 6;
             this.btnAdd.Text = "ADD";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnEdit
             // 
@@ -79,6 +82,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             this.btnEdit.TabIndex = 5;
             this.btnEdit.Text = "EDIT DENIED MEDICATION";
             this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // MedicationsView
             // 
