@@ -35,16 +35,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             dynamicEquipmentGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dynamicEquipmentGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dynamicEquipmentGrid.MultiSelect = false;
-        }
-        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            foreach (DataGridViewRow row in dynamicEquipmentGrid.Rows)
-            {           
-                if (Convert.ToInt32(row.Cells[3].Value) == 0) 
-                {
-                    row.DefaultCellStyle.BackColor = Color.LightBlue;
-                }
-            }
+            dynamicEquipmentGrid.Sort(dynamicEquipmentGrid.Columns["amount"], ListSortDirection.Ascending);
         }
 
         private void transferButton_Click(object sender, EventArgs e)
