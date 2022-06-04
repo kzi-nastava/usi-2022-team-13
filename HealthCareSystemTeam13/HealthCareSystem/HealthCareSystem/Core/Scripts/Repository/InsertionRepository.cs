@@ -308,8 +308,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<Equipment> equipment = new List<Equipment>();
 
             equipment.Add(new Equipment("Bed", Equipment.EquipmentType.Static ));
-            equipment.Add(new Equipment("Chair", Equipment.EquipmentType.Dynamic));
-            equipment.Add(new Equipment("Computer", Equipment.EquipmentType.Dynamic));
+            equipment.Add(new Equipment("Bandage", Equipment.EquipmentType.Dynamic));
+            equipment.Add(new Equipment("Gauze", Equipment.EquipmentType.Dynamic));
+            equipment.Add(new Equipment("Injection", Equipment.EquipmentType.Dynamic));
 
             return equipment;
         }
@@ -483,9 +484,15 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<RoomHasEquipment> roomHasEquipment = new List<RoomHasEquipment>();
             List<String> roomIDs = GetRoomIDs();
             List<String> equipmentIDs = GetEquipmentIDs();
-            
-            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[0]), Convert.ToInt32(roomIDs[4]), 5));
-            roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentIDs[1]), Convert.ToInt32(roomIDs[3]), 4));
+            Random random = new Random();
+
+            foreach (string roomID in roomIDs)
+            {
+                foreach (string equipmentID in equipmentIDs)
+                {
+                    roomHasEquipment.Add(new RoomHasEquipment(Convert.ToInt32(equipmentID), Convert.ToInt32(roomID), random.Next(0, 20)));
+                }
+            }
 
             return roomHasEquipment;
         }
@@ -497,7 +504,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             foreach (RoomHasEquipment singleRoomHasEquipment in roomHasEquipment)
             {
                 var query = "INSERT INTO RoomHasEquipment(id_room, id_equipment, amount) " +
-                "VALUES(" + singleRoomHasEquipment.RoomId + ", " + singleRoomHasEquipment.EquipmentId + ", " + singleRoomHasEquipment.Quantity+ ")";
+                "VALUES(" + singleRoomHasEquipment.RoomId + ", " + singleRoomHasEquipment.EquipmentId + ", " + singleRoomHasEquipment.Quantity + ")";
                 InsertSingle(query);
             }
         }
@@ -507,9 +514,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
         {
             List<DynamicEquipmentRequest> dynamicEquipmentRequests = new List<DynamicEquipmentRequest>();
             List<String> equipmentIDs = GetEquipmentIDs();
-
-            dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIDs[0]), 10));
-            dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIDs[1]), 15));
+            List<String> secreatyIDs = GetSecretaryIDs();
+            dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIDs[0]), 10, DateTime.Now, Convert.ToInt32(secreatyIDs[0])));
+            dynamicEquipmentRequests.Add(new DynamicEquipmentRequest(Convert.ToInt32(equipmentIDs[1]), 15, DateTime.Now.AddDays(-1).AddMinutes(-5), Convert.ToInt32(secreatyIDs[0])));
 
             return dynamicEquipmentRequests;
         }
@@ -520,7 +527,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<String> secreatyIDs = GetSecretaryIDs();
             foreach (DynamicEquipmentRequest dynamicEquipmentRequest in dynamicEquipmentRequests)
             {
-                var query = "INSERT INTO RequestForDinamicEquipment(id_equipment, amount, id_secretary) VALUES(" + dynamicEquipmentRequest.EquipmentId + ", " + dynamicEquipmentRequest.Quantity + ", " + Convert.ToInt32(secreatyIDs[0]) + ")";
+                var query = "INSERT INTO RequestForDinamicEquipment(id_equipment, amount, id_secretary, dateOf) VALUES(" + dynamicEquipmentRequest.EquipmentId + ", " + dynamicEquipmentRequest.Quantity + ", " + Convert.ToInt32(secreatyIDs[0]) + ", '" + dynamicEquipmentRequest.Date.ToString() + "')";
                 InsertSingle(query);
             }
         }
@@ -679,6 +686,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
             medications.Add(new Medication("Analgin", MedicationStatus.Denied));
             medications.Add(new Medication("Panklav", MedicationStatus.Approved));
             medications.Add(new Medication("Aspirin", MedicationStatus.Approved));
+            medications.Add(new Medication("Altal", MedicationStatus.InProgress));
+            medications.Add(new Medication("Penicilin", MedicationStatus.InProgress));
 
             return medications;
         }

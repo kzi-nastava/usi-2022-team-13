@@ -10,20 +10,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HealthCareSystem.Core.Users.Doctors.Service;
+using HealthCareSystem.Core.Medications.Model;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
 
 namespace HealthCareSystem.Core.Users.Doctors.Repository
 {
     class DoctorRepository
     {
         public OleDbConnection Connection { get; set; }
-  
+
         public string Username { get; set; }
         public DataTable Examinations { get; set; }
         public DataTable Medicine { get; set; }
 
-        public DoctorRepository(string username="", bool calledFromDoctor=false)
+        public DoctorRepository(string username = "", bool calledFromDoctor = false)
         {
-            if(username.Length > 0) Username = username;
+            if (username.Length > 0) Username = username;
             try
             {
                 Connection = new OleDbConnection();
@@ -31,7 +33,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=HCDb.mdb;
                 Persist Security Info=False;";
 
-                if(calledFromDoctor)
+                if (calledFromDoctor)
                 {
                     Connection.Open();
                 }
@@ -114,11 +116,11 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             return doctor;
         }
 
-       
+
         public Doctor GetAvailableDoctor(DateTime examinationDateTime, List<Examination> examinations)
         {
             BindingList<Doctor> doctors = GetDoctors();
-            foreach(Doctor doctor in doctors)
+            foreach (Doctor doctor in doctors)
             {
                 if (DoctorService.IsDoctorAvailable(doctor.ID, examinationDateTime, examinations)) return doctor;
             }
@@ -140,7 +142,8 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 {
                     doctors.Add(GetDoctorFromReader(reader));
                 }
-            }catch(Exception exception)
+            }
+            catch (Exception exception)
             {
                 Console.WriteLine(exception.ToString());
             }
@@ -174,11 +177,11 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 " from MedicationContainsIngredient inner join PatientAlergicTo " +
                 "on MedicationContainsIngredient.id_ingredient = PatientAlergicTo.id_ingredient " +
                 " where PatientAlergicTo.id_patient = " + patientId;
-            
+
             OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
             OleDbDataReader reader = cmd.ExecuteReader();
 
-            while(reader.Read())
+            while (reader.Read())
             {
                 alergicMedicationIds.Add(Convert.ToInt32
                     (reader["id_medication"]));
@@ -358,13 +361,13 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 cmd.Parameters.AddWithValue("@id_doctor", referralLetter.CurrentDoctorID);
                 cmd.Parameters.AddWithValue("@id_patient", referralLetter.CurrentPatientID);
 
-                if(option == 1)
+                if (option == 1)
                     cmd.Parameters.AddWithValue("@id_forwarded_doctor", referralLetter.ForwardedDoctorID);
                 else if (option == 2)
                     cmd.Parameters.AddWithValue("@id_forwarded_doctor", DBNull.Value);
                 Console.WriteLine(referralLetter.ExaminationType);
                 cmd.Parameters.AddWithValue("@typeOfExamination", referralLetter.ExaminationType);
-                if(option == 2)
+                if (option == 2)
                     cmd.Parameters.AddWithValue("@speciality", referralLetter.Speciality);
                 else if (option == 1)
                     cmd.Parameters.AddWithValue("@id_forwarded_doctor", DBNull.Value);
@@ -411,6 +414,131 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             int doctorId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0]);
             return doctorId;
         }
+
+        public BindingList<Medication> GetMedications()
+        {
+            BindingList<Medication> medications = new BindingList<Medication>();
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+            try
+            {
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from Medications", Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    MedicationStatus status;
+                    Enum.TryParse<MedicationStatus>(reader["status"].ToString(), out status);
+
+                    Medication medication = new Medication(Convert.ToInt32(reader["id"]), reader["nameOfMedication"].ToString(), status);
+                    if (reader["status"].ToString() == "InProgress")
+                    {
+                        medications.Add(medication);
+
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+            return medications;
+
+        }
+        public void UpdateMedication(string query)
+        {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+        }
+
+        public void InsertRejectedMedication(string reasonForDenying, int medicationId, int doctorId)
+        {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            string insertQuery = "insert into RejectedMedications (id_medication, id_doctor, description)" +
+            " values (@id_medication, @id_doctor, @description)";
+
+            using (var cmd = new OleDbCommand(insertQuery, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_medication", medicationId);
+                cmd.Parameters.AddWithValue("@id_doctor", doctorId);
+                cmd.Parameters.AddWithValue("@description", reasonForDenying.ToString());
+                cmd.ExecuteNonQuery();
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+        }
+
+        public int GetRoomIdFromExaminationId(int examinationId)
+        {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            string query = "select id_room from Examination where id = " + examinationId + "";
+
+            int roomNumber = -1;
+
+            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                roomNumber = Convert.ToInt32(reader["id_room"]);
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+            return roomNumber;
+        }
+
+        public List<Equipment> GetEquipmentFromRoomId(int roomId)
+        {
+
+            List<Equipment> equipment = new List<Equipment>();
+
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+            try
+            {
+                string query = "select id_equipment, amount, Equipment.nameOf from RoomHasEquipment, Equipment" +
+                    " where Equipment.id = id_equipment and RoomHasEquipment.id_room = " + roomId;
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Equipment equipmentEntity = new Equipment(reader["nameOf"].ToString(),
+                        Convert.ToInt32(reader["id_equipment"]), Convert.ToInt32(reader["amount"]));
+                    equipment.Add(equipmentEntity);
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+            return equipment;
+        }
+
+        public void UpdateAmountOfEquipmentInTheRoom(int amount, int roomId, int equipmentId)
+        {
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+            string updateQuery = "update RoomHasEquipment set amount = " + amount +
+                " where id_room = " + roomId + " and id_equipment = " + equipmentId;
+
+            DatabaseHelpers.ExecuteNonQueries(updateQuery, Connection);
+        }
+
+
+
 
     }
 }
