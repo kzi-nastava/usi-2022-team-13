@@ -331,9 +331,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
         {
             List<HospitalSurvey> hospitalSurveys = new List<HospitalSurvey>();
 
-            hospitalSurveys.Add(new HospitalSurvey(5, 5, 5, 5, "Great service!" ));
-            hospitalSurveys.Add(new HospitalSurvey(2, 5, 3, 2, "So-so!"));
-            hospitalSurveys.Add(new HospitalSurvey(2, 2, 2, 2, "I really hated the hospital!"));
+            hospitalSurveys.Add(new HospitalSurvey(5, 5, 1, 1, "Great service!" ));
+            hospitalSurveys.Add(new HospitalSurvey(2, 5, 1, 0, "So-so!"));
+            hospitalSurveys.Add(new HospitalSurvey(2, 2, 0, 0, "I really hated the hospital!"));
 
             return hospitalSurveys;
         }
@@ -348,7 +348,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
                "higyene," +
                "isSatisfied," +
                "wouldRecomend," +
-               "comment, id_patient) VALUES("+hospitalSurvey.QualityOfService+", "+ hospitalSurvey.Cleanliness + ", "+ hospitalSurvey .Happiness+ ", "+hospitalSurvey.WouldRecommend+", '"+ hospitalSurvey .Comment+ "', "+Convert.ToInt32(patientIDs[0])+")";
+               "comment, id_patient) VALUES("+hospitalSurvey.QualityOfService+", "+ hospitalSurvey.Cleanliness + ", "+ hospitalSurvey.Happiness+ ", "+ hospitalSurvey.WouldRecommend+", '"+ hospitalSurvey.Comment+ "', "+Convert.ToInt32(patientIDs[0])+")";
                 InsertSingle(query);
             }
 
@@ -1017,7 +1017,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             foreach (KeyValuePair<int, List<int>> entry in combinedIds)
             {
                 Random rand = new Random();
-
+                
                 int grade = rand.Next(1, 6);
                 int quality = rand.Next(1, 6);
                 bool wouldReccomend = grade > 3 && quality > 3;

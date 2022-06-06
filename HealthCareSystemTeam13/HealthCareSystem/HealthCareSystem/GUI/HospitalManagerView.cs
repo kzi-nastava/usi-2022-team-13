@@ -1,5 +1,6 @@
 ﻿using HealthCareSystem.Core.GUI.HospitalManagerFunctionalities;
 using HealthCareSystem.Core.Rooms.Repository;
+using HealthCareSystem.GUI.HospitalManagerFunctionalities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -81,6 +82,18 @@ namespace HealthCareSystem.Core.GUI
         {
             if (SelectedButton != null) SelectedButton.Hide();
             LoadForm(new IngredientsView());
+        }
+
+        private void btnHospitalSurveys_Click(object sender, EventArgs e)
+        {
+            if (SelectedButton != null) SelectedButton.Hide();
+            LoadForm(new HospitalSurveys());
+        }
+
+        private void btnDoctorSurveys_Click(object sender, EventArgs e)
+        {
+            if (SelectedButton != null) SelectedButton.Hide();
+            LoadForm(new DoctorSurveys());
         }
     }
 }

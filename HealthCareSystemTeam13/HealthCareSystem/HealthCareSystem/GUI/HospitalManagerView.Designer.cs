@@ -36,6 +36,8 @@ namespace HealthCareSystem.Core.GUI
             this.btnRenovations = new System.Windows.Forms.Button();
             this.btnMedications = new System.Windows.Forms.Button();
             this.btnIngredients = new System.Windows.Forms.Button();
+            this.btnHospitalSurveys = new System.Windows.Forms.Button();
+            this.btnDoctorSurveys = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // pnlHospitalManager
@@ -62,7 +64,7 @@ namespace HealthCareSystem.Core.GUI
             this.btnRooms.Location = new System.Drawing.Point(4, 34);
             this.btnRooms.Margin = new System.Windows.Forms.Padding(4);
             this.btnRooms.Name = "btnRooms";
-            this.btnRooms.Size = new System.Drawing.Size(183, 80);
+            this.btnRooms.Size = new System.Drawing.Size(183, 58);
             this.btnRooms.TabIndex = 4;
             this.btnRooms.Text = "Room manager";
             this.btnRooms.UseVisualStyleBackColor = true;
@@ -70,10 +72,10 @@ namespace HealthCareSystem.Core.GUI
             // 
             // btnEquipment
             // 
-            this.btnEquipment.Location = new System.Drawing.Point(4, 122);
+            this.btnEquipment.Location = new System.Drawing.Point(4, 100);
             this.btnEquipment.Margin = new System.Windows.Forms.Padding(4);
             this.btnEquipment.Name = "btnEquipment";
-            this.btnEquipment.Size = new System.Drawing.Size(183, 80);
+            this.btnEquipment.Size = new System.Drawing.Size(183, 58);
             this.btnEquipment.TabIndex = 7;
             this.btnEquipment.Text = "Equipment manager";
             this.btnEquipment.UseVisualStyleBackColor = true;
@@ -81,10 +83,10 @@ namespace HealthCareSystem.Core.GUI
             // 
             // btnRenovations
             // 
-            this.btnRenovations.Location = new System.Drawing.Point(4, 210);
+            this.btnRenovations.Location = new System.Drawing.Point(3, 166);
             this.btnRenovations.Margin = new System.Windows.Forms.Padding(4);
             this.btnRenovations.Name = "btnRenovations";
-            this.btnRenovations.Size = new System.Drawing.Size(183, 80);
+            this.btnRenovations.Size = new System.Drawing.Size(183, 58);
             this.btnRenovations.TabIndex = 0;
             this.btnRenovations.Text = "Renovations";
             this.btnRenovations.UseVisualStyleBackColor = true;
@@ -92,10 +94,10 @@ namespace HealthCareSystem.Core.GUI
             // 
             // btnMedications
             // 
-            this.btnMedications.Location = new System.Drawing.Point(4, 298);
+            this.btnMedications.Location = new System.Drawing.Point(4, 232);
             this.btnMedications.Margin = new System.Windows.Forms.Padding(4);
             this.btnMedications.Name = "btnMedications";
-            this.btnMedications.Size = new System.Drawing.Size(183, 80);
+            this.btnMedications.Size = new System.Drawing.Size(183, 58);
             this.btnMedications.TabIndex = 8;
             this.btnMedications.Text = "Medications";
             this.btnMedications.UseVisualStyleBackColor = true;
@@ -103,20 +105,44 @@ namespace HealthCareSystem.Core.GUI
             // 
             // btnIngredients
             // 
-            this.btnIngredients.Location = new System.Drawing.Point(4, 386);
+            this.btnIngredients.Location = new System.Drawing.Point(4, 298);
             this.btnIngredients.Margin = new System.Windows.Forms.Padding(4);
             this.btnIngredients.Name = "btnIngredients";
-            this.btnIngredients.Size = new System.Drawing.Size(183, 80);
+            this.btnIngredients.Size = new System.Drawing.Size(183, 58);
             this.btnIngredients.TabIndex = 0;
             this.btnIngredients.Text = "Ingredients";
             this.btnIngredients.UseVisualStyleBackColor = true;
             this.btnIngredients.Click += new System.EventHandler(this.btnIngredients_Click);
+            // 
+            // btnHospitalSurveys
+            // 
+            this.btnHospitalSurveys.Location = new System.Drawing.Point(4, 364);
+            this.btnHospitalSurveys.Margin = new System.Windows.Forms.Padding(4);
+            this.btnHospitalSurveys.Name = "btnHospitalSurveys";
+            this.btnHospitalSurveys.Size = new System.Drawing.Size(183, 58);
+            this.btnHospitalSurveys.TabIndex = 0;
+            this.btnHospitalSurveys.Text = "Hospital Surveys";
+            this.btnHospitalSurveys.UseVisualStyleBackColor = true;
+            this.btnHospitalSurveys.Click += new System.EventHandler(this.btnHospitalSurveys_Click);
+            // 
+            // btnDoctorSurveys
+            // 
+            this.btnDoctorSurveys.Location = new System.Drawing.Point(3, 430);
+            this.btnDoctorSurveys.Margin = new System.Windows.Forms.Padding(4);
+            this.btnDoctorSurveys.Name = "btnDoctorSurveys";
+            this.btnDoctorSurveys.Size = new System.Drawing.Size(183, 58);
+            this.btnDoctorSurveys.TabIndex = 9;
+            this.btnDoctorSurveys.Text = "Doctor Surveys";
+            this.btnDoctorSurveys.UseVisualStyleBackColor = true;
+            this.btnDoctorSurveys.Click += new System.EventHandler(this.btnDoctorSurveys_Click);
             // 
             // HospitalManagerView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1196, 710);
+            this.Controls.Add(this.btnDoctorSurveys);
+            this.Controls.Add(this.btnHospitalSurveys);
             this.Controls.Add(this.btnIngredients);
             this.Controls.Add(this.btnMedications);
             this.Controls.Add(this.btnRenovations);
@@ -139,5 +165,7 @@ namespace HealthCareSystem.Core.GUI
         private System.Windows.Forms.Button btnRenovations;
         private System.Windows.Forms.Button btnMedications;
         private System.Windows.Forms.Button btnIngredients;
+        private System.Windows.Forms.Button btnHospitalSurveys;
+        private System.Windows.Forms.Button btnDoctorSurveys;
     }
 }
