@@ -27,6 +27,7 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
             dgwDoctorSurveys.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgwDoctorSurveys.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgwDoctorSurveys.MultiSelect = false;
+            dgwDoctorSurveys.ReadOnly = true;
         }
 
         public void RefreshDataGridView()

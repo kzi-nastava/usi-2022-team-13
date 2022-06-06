@@ -34,6 +34,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             dgwIngredients.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgwIngredients.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgwIngredients.MultiSelect = false;
+            dgwIngredients.ReadOnly = true;
         }
 
         public void RefreshDataGridView()

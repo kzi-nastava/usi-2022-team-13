@@ -37,6 +37,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         
             dgwHospitalRooms.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgwHospitalRooms.MultiSelect = false;
+            dgwHospitalRooms.ReadOnly = true;
 
 
         }

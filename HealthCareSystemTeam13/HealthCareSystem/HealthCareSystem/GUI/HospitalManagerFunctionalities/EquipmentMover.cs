@@ -80,6 +80,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             dgwEquipment.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgwEquipment.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgwEquipment.MultiSelect = false;
+            dgwEquipment.ReadOnly = true;
 
         }
 
