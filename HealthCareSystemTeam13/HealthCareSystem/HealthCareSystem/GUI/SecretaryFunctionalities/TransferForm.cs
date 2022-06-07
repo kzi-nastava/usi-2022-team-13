@@ -14,23 +14,23 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     partial class TransferForm : Form
     {
-        SecretaryRepository secretaryRepository;
-        RoomHasEquipment outOfStock;
+        SecretaryRepository _secretaryRepository;
+        RoomHasEquipment OutOfStock;
         public TransferForm(RoomHasEquipment roomHasEquipment)
         {
-            secretaryRepository = new SecretaryRepository();
-            secretaryRepository.CheckDynamicEquipmentRequests();
-            secretaryRepository.PullTransferDynamicEquipment(roomHasEquipment.Id);
+            _secretaryRepository = new SecretaryRepository();
+            _secretaryRepository.CheckDynamicEquipmentRequests();
+            _secretaryRepository.PullTransferDynamicEquipment(roomHasEquipment.Id);
             InitializeComponent();
             amountBox.Increment = 1;
             amountBox.DecimalPlaces = 0;
             amountBox.Minimum = 0;
             FillDataGridView();
-            this.outOfStock = roomHasEquipment;
+            this.OutOfStock = roomHasEquipment;
         }
         private void FillDataGridView()
         {
-            equipmentDataGrid.DataSource = secretaryRepository.EquipmentInWarehouse;
+            equipmentDataGrid.DataSource = _secretaryRepository.EquipmentInWarehouse;
             DataGridViewSettings();
         }
         private void DataGridViewSettings()
@@ -50,8 +50,8 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             else
             {
                 int roomHasEquipmentID = (int)equipmentDataGrid.SelectedRows[0].Cells[0].Value;
-                secretaryRepository.UpdateSigleDynamicEquipment(amount, roomHasEquipmentID);
-                secretaryRepository.UpdateSigleDynamicEquipment(amount, outOfStock);
+                _secretaryRepository.UpdateSigleDynamicEquipment(amount, roomHasEquipmentID);
+                _secretaryRepository.UpdateSigleDynamicEquipment(amount, OutOfStock);
                 Close();
             }
         }

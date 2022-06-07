@@ -14,17 +14,17 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class DeletePatient : Form
     {
-        SecretaryRepository secretaryRepository;
+        SecretaryRepository _secretaryRepository;
         public DeletePatient()
         {
             InitializeComponent();
-            secretaryRepository = new SecretaryRepository();
+            _secretaryRepository = new SecretaryRepository();
         }
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
             string patientId = patientIdBox.Text;
-            secretaryRepository.DeleteSinglePatient(patientId);
+            _secretaryRepository.DeleteSinglePatient(patientId);
             this.Close();
         }
     }

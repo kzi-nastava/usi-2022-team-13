@@ -16,11 +16,13 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
     public partial class ChooseSpeciality : Form
     {
         private int PatientID;
+        SecretaryRepository _secretaryRepository;
         public ChooseSpeciality(int patientID)
         {
             InitializeComponent();
             FillSpecialityComboBox();
             PatientID = patientID;
+            SecretaryRepository secretaryRepository = new SecretaryRepository();
         }
 
         public void FillSpecialityComboBox()
@@ -34,26 +36,26 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
-            SecretaryRepository secretaryRepository = new SecretaryRepository();
-            Tuple<string, DateTime> availableTimeAndDoctor =  secretaryRepository.AvailableExamination((DoctorSpeciality)specialityComboBox.SelectedValue, Convert.ToInt32(durationBox.Text)) ;
+            Tuple<string, DateTime> availableTimeAndDoctor =  _secretaryRepository.AvailableExamination((DoctorSpeciality)specialityComboBox.SelectedValue, Convert.ToInt32(durationBox.Text)) ;
             if(availableTimeAndDoctor.Item1 == "none")
             {
                 UrgentExaminations urgentExaminations = new UrgentExaminations(PatientID, (DoctorSpeciality)specialityComboBox.SelectedValue, Convert.ToInt32(durationBox.Text));
                 urgentExaminations.ShowDialog();
-            } else
+            } 
+            else
             {
                 TypeOfExamination typeOfExamiantion = TypeOfExamination.BasicExamination;
                 if(Convert.ToInt32(durationBox.Text) > 15)
                 {
                     typeOfExamiantion = TypeOfExamination.Operation;
                 }
-                int roomId = secretaryRepository.GetAvailableRoom(availableTimeAndDoctor.Item2, Convert.ToInt32(durationBox.Text));
+                int roomId = _secretaryRepository.GetAvailableRoom(availableTimeAndDoctor.Item2, Convert.ToInt32(durationBox.Text));
                 if(roomId == 0)
                 {
                     UrgentExaminations urgentExaminations = new UrgentExaminations(PatientID, (DoctorSpeciality)specialityComboBox.SelectedValue, Convert.ToInt32(durationBox.Text));
                     urgentExaminations.ShowDialog();
                 }    
-                secretaryRepository.InsertSingleExamination(new Examination(Convert.ToInt32(availableTimeAndDoctor.Item1), PatientID, false, false, false, availableTimeAndDoctor.Item2, typeOfExamiantion, true, roomId, Convert.ToInt32(durationBox.Text)));
+                _secretaryRepository.InsertSingleExamination(new Examination(Convert.ToInt32(availableTimeAndDoctor.Item1), PatientID, false, false, false, availableTimeAndDoctor.Item2, typeOfExamiantion, true, roomId, Convert.ToInt32(durationBox.Text)));
             }
         }
     }
