@@ -105,7 +105,7 @@ namespace HealthCareSystem.Core.Authentication
             if (isInvalid) return null;
 
             string query = "select role from users where usrnm = '" + username + "' and pass = '" + password + "'";
-            List<string> roles = DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            List<string> roles = DatabaseCommander.ExecuteReaderQueries(query, Connection);
 
             if (roles.Count() == 0) return null;
             else

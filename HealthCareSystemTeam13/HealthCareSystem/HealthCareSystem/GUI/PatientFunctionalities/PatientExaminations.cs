@@ -35,7 +35,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         {
 
             dgwExaminations.DataSource = _patientRepository.Examinations;
-            Helpers.DataGridViewSettings(dgwExaminations);
+            GUIHelpers.DataGridViewSettings(dgwExaminations);
         }
         
         private void dgwExaminations_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -130,7 +130,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         }
         private bool CanRateDoctor()
         {
-            if (Helpers.IsDgwRowSelected(dgwExaminations))
+            if (GUIHelpers.IsDgwRowSelected(dgwExaminations))
             {
                 DateTime examinationDate = (DateTime)dgwExaminations.SelectedRows[0].Cells[2].Value;
 

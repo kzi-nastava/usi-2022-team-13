@@ -130,7 +130,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             {
                 // check for block
                 string time = tbTime.Text;
-                DateTime mergedTime = Helpers.GetMergedDateTime(ExaminationDate, time);
+                DateTime mergedTime = TimeDateHelpers.GetMergedDateTime(ExaminationDate, time);
                 if (IsAddChoosen)
                 {
                     
@@ -173,7 +173,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             string time = tbTime.Text;
 
             List<Examination> otherExaminations = _examinationRepository.GetAllOtherExaminations(ExaminationId);
-            DateTime mergedExaminationTime = Helpers.GetMergedDateTime(ExaminationDate, time);
+            DateTime mergedExaminationTime = TimeDateHelpers.GetMergedDateTime(ExaminationDate, time);
             var match = System.Text.RegularExpressions.Regex.Match(tbTime.Text, regex);
 
             if (ExaminationDate <= DateTime.Now)
@@ -222,26 +222,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             duration = Convert.ToInt32(tbDuration.Text);
             ExaminationDate = dtDate.Value;
         }
-
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tbRoomId_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void AddEditExamination_Load(object sender, EventArgs e)
-        {
-
-        }
        
-
-        private void AddEditExamination_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            
-        }
     }
 }

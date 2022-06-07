@@ -38,7 +38,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         {
             if (CheckSelectedValues())
             {
-                Examination examination = new Examination(ChosenReferralLetter.ForwardedDoctorID, ChosenReferralLetter.CurrentPatientID, false, false, false, Helpers.GetMergedDateTime(dateTimeBox.Value, timeBox.Text), ChosenReferralLetter.ExaminationType, false, Convert.ToInt32(roomIdBox.Text), Convert.ToInt32(durationBox.Text));
+                Examination examination = new Examination(ChosenReferralLetter.ForwardedDoctorID, ChosenReferralLetter.CurrentPatientID, false, false, false, TimeDateHelpers.GetMergedDateTime(dateTimeBox.Value, timeBox.Text), ChosenReferralLetter.ExaminationType, false, Convert.ToInt32(roomIdBox.Text), Convert.ToInt32(durationBox.Text));
                 _secretaryRepository.InsertSingleExamination(examination);
             }
         }
@@ -49,7 +49,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             string time = timeBox.Text;
 
             List<Examination> otherExaminations = _examinationRepository.GetAllExaminations();
-            DateTime mergedExaminationTime = Helpers.GetMergedDateTime(dateTimeBox.Value, time);
+            DateTime mergedExaminationTime = TimeDateHelpers.GetMergedDateTime(dateTimeBox.Value, time);
             var match = System.Text.RegularExpressions.Regex.Match(timeBox.Text, regex);
 
             if (dateTimeBox.Value <= DateTime.Now)

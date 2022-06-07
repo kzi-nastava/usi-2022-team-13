@@ -53,7 +53,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         {
             PatientRep.PullFinishedExaminations();
             dgwExaminations.DataSource = PatientRep.Examinations;
-            Helpers.DataGridViewSettings(dgwExaminations);
+            GUIHelpers.DataGridViewSettings(dgwExaminations);
             dgwExaminations.Font = new Font("Lucida Bright", 10);
 
         }
@@ -65,22 +65,22 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
             dgwAnamnesis.DataSource = anamnesises;
 
-            Helpers.DataGridViewSettings(dgwAnamnesis);
+            GUIHelpers.DataGridViewSettings(dgwAnamnesis);
             dgwAnamnesis.Font = new Font("Lucida Bright", 10);
         }
 
         private void SetListBoxDiseases()
         {
             
-            int medicalRecordId = Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries("select id from MedicalRecord where id_patient = " + PatientId + "", PatientRep.Connection)[0]);
-            List<string> diseases = DatabaseHelpers.ExecuteReaderQueries("select nameOfDisease from DiseaseHistory where id_medicalRecord = " + medicalRecordId + "", PatientRep.Connection);
+            int medicalRecordId = Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries("select id from MedicalRecord where id_patient = " + PatientId + "", PatientRep.Connection)[0]);
+            List<string> diseases = DatabaseCommander.ExecuteReaderQueries("select nameOfDisease from DiseaseHistory where id_medicalRecord = " + medicalRecordId + "", PatientRep.Connection);
             lbDiseases.DataSource = diseases;
 
         }
 
         private void btnShowAnamnesis_Click(object sender, EventArgs e)
         {
-            if (Helpers.IsDgwRowSelected(dgwExaminations))
+            if (GUIHelpers.IsDgwRowSelected(dgwExaminations))
             {
                 int examinationId = (int)dgwExaminations.SelectedRows[0].Cells[0].Value;
                 AnamnesisView anamnesisView = new AnamnesisView(examinationId);
@@ -90,7 +90,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnShowAnamnesisInSearch_Click(object sender, EventArgs e)
         {
-            if (Helpers.IsDgwRowSelected(dgwAnamnesis))
+            if (GUIHelpers.IsDgwRowSelected(dgwAnamnesis))
             {
                 int examinationId = (int)dgwAnamnesis.SelectedRows[0].Cells[0].Value;
                 AnamnesisView anamnesisView = new AnamnesisView(examinationId);
@@ -107,7 +107,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnSortByDoctor_Click(object sender, EventArgs e)
         {
-            anamnesises = ExaminationController.SortAnamnesises(anamnesises, 1);
+            anamnesises = ExaminationSorter.SortAnamnesises(anamnesises, 1);
             dgwAnamnesis.DataSource = anamnesises;
             dgwAnamnesis.Refresh();
 
@@ -115,14 +115,14 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnSortBySpeciality_Click(object sender, EventArgs e)
         {
-            anamnesises = ExaminationController.SortAnamnesises(anamnesises, 2);
+            anamnesises = ExaminationSorter.SortAnamnesises(anamnesises, 2);
             dgwAnamnesis.DataSource = anamnesises;
             dgwAnamnesis.Refresh();
         }
 
         private void btnSortByDate_Click(object sender, EventArgs e)
         {
-            anamnesises = ExaminationController.SortAnamnesises(anamnesises);
+            anamnesises = ExaminationSorter.SortAnamnesises(anamnesises);
             dgwAnamnesis.DataSource = anamnesises;
             dgwAnamnesis.Refresh();
 

@@ -150,29 +150,29 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public List<string> GetUserId(string username)
         {
             var query = "SELECT id FROM Users WHERE usrnm = '" + username + "'";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
         public List<string> GetPatientId(string userID)
         {
             var query = "SELECT id FROM Patients WHERE user_id = " + userID + "";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
         public List<string> GetSecretaryId(string userID)
         {
             var query = "SELECT id FROM Secretaries WHERE user_id = " + userID + "";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
         public int GetSecretaryIdFromUsername(string username)
         {
             var query = "SELECT sc.id FROM Secretaries as sc inner join Users as us on sc.user_id = us.id where us.usrnm =  '" + username + "'";
-            return Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0]);
+            return Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries(query, Connection)[0]);
         }
         public int GetWarehouseId()
         {
             var query = "SELECT id FROM Rooms WHERE type = 'Warehouse'";
-            return Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0]);
+            return Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries(query, Connection)[0]);
         }
 
         public void InsertSinglePatient(Patient patient)
@@ -248,7 +248,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public void UpdateSigleDynamicEquipment(DynamicEquipmentRequest request)
         {
             int warehouseId = GetWarehouseId();
-            var amounts = DatabaseHelpers.ExecuteReaderQueries("select amount from RoomHasEquipment " +
+            var amounts = DatabaseCommander.ExecuteReaderQueries("select amount from RoomHasEquipment " +
                "where id_room = " + warehouseId + " and id_equipment = " + request.EquipmentId, Connection);
            string query;
             if (amounts.Count != 0)
@@ -286,7 +286,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public void DeleteSinglePatient(string patientID)
         {
             var query = "SELECT user_id FROM Patients WHERE id = " + Convert.ToInt32(patientID) + "";
-            string userID = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
+            string userID = DatabaseCommander.ExecuteReaderQueries(query, Connection)[0];
 
             query = "DELETE from Users WHERE id = " + userID + "";
             using (var cmd = new OleDbCommand(query, Connection))
@@ -298,7 +298,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public void DeleteSingleBlockedPatient(string blockedPatientID)
         {
             var query = "SELECT id_patient FROM BlockedPatients WHERE id = " + blockedPatientID + "";
-            string patientID = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
+            string patientID = DatabaseCommander.ExecuteReaderQueries(query, Connection)[0];
             
             query = "DELETE from BlockedPatients WHERE ID = " + blockedPatientID + "";
             using (var cmd = new OleDbCommand(query, Connection))
@@ -325,7 +325,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public void DeleteSingleExamination(string requestID)
         {
             var query = "SELECT id_examination from PatientEditRequest WHERE id = " + requestID + "";
-            string examinationID = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
+            string examinationID = DatabaseCommander.ExecuteReaderQueries(query, Connection)[0];
             
             query = "UPDATE Examination SET iscancelled = 1 WHERE ID = " + examinationID + "";
             using (var cmd = new OleDbCommand(query, Connection))
@@ -357,7 +357,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             var query = "select Patients.firstName, Patients.lastName, Users.usrnm, Users.pass from Patients INNER JOIN Users ON users.id = patients.user_id WHERE patients.id = " + patientID + "";
             Dictionary<string, string> row = new Dictionary<string, string>();
 
-            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -373,7 +373,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public void UpdatePatient(string patientID, string username, string password, string name, string lastname)
         {
             var query = "SELECT user_id FROM Patients WHERE id = " + patientID + "";
-            string userID = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
+            string userID = DatabaseCommander.ExecuteReaderQueries(query, Connection)[0];
 
             query = "UPDATE Users SET usrnm = @usrnm, pass = @pass WHERE ID = @userID";
             using (var cmd = new OleDbCommand(query, Connection))
@@ -417,7 +417,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         {
             string userID = GetUserId(username)[0];
             var query = "SELECT ID FROM Secretaries WHERE user_id = " + userID + "";
-            string secretaryID = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
+            string secretaryID = DatabaseCommander.ExecuteReaderQueries(query, Connection)[0];
             
             query = "UPDATE Patients SET isBlocked = 1 WHERE ID = " + patientID + "";
             using (var cmd = new OleDbCommand(query, Connection))
@@ -432,7 +432,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public bool IsRequestChanged(string requestID)
         {
             var query = "SELECT isChanged FROM PatientEditRequest WHERE id = " + requestID + "";
-            return Convert.ToBoolean(DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0]);
+            return Convert.ToBoolean(DatabaseCommander.ExecuteReaderQueries(query, Connection)[0]);
         }
 
         public Dictionary<string, string> GetPatientRequest(string requestID)
@@ -458,7 +458,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public List<string> GetSpecialistsIds(DoctorSpeciality speciality)
         {
             var query = "SELECT ID FROM Doctors WHERE speciality = '" + speciality.ToString() + "'";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
         public List<Examination> GetDoctorsEximanitonsInNextTwoHours(string doctorId)
@@ -471,7 +471,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
 
             Dictionary<string, string> row = new Dictionary<string, string>();
 
-            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             OleDbDataReader reader = cmd.ExecuteReader();
 
@@ -489,7 +489,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             var query = "SELECT id, id_doctor, id_patient, isEdited, isCancelled, isFinished, dateOf, typeOfExamination, isUrgent, id_room, duration FROM Examination " +
                 "WHERE dateOf BETWEEN (" + fromDateTime + ", " + toDateTime + ") and id_room  = " + roomId + "";
             Dictionary<string, string> row = new Dictionary<string, string>();
-            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -515,7 +515,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         {
             List<DynamicEquipmentRequest> requests = new List<DynamicEquipmentRequest>();
             var query = "SELECT id, id_equipment, amount, dateOf, id_secretary FROM RequestForDinamicEquipment where dateOf < #" + (DateTime.Now.AddDays(-1)).ToString() + "#";
-            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())

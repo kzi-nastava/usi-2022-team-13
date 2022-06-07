@@ -25,7 +25,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void HomeView_Load(object sender, EventArgs e)
         {
             int patientId = PatientRep.GetPatientId();
-            string name = DatabaseHelpers.ExecuteReaderQueries("select firstName + ' ' + lastName from Patients where id = " + patientId + "", PatientRep.Connection)[0];
+            string name = DatabaseCommander.ExecuteReaderQueries("select firstName + ' ' + lastName from Patients where id = " + patientId + "", PatientRep.Connection)[0];
             lbName.Text = name;
         }
     }

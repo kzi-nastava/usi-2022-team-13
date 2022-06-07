@@ -73,8 +73,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private bool CheckSelectedValues()
         {
             var regex = @"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$";
-            DateTime startDateTime = Helpers.GetMergedDateTime(DateTime.Now, StartTime);
-            DateTime endDateTime = Helpers.GetMergedDateTime(ExaminationFinalDate, EndTime);
+            DateTime startDateTime = TimeDateHelpers.GetMergedDateTime(DateTime.Now, StartTime);
+            DateTime endDateTime = TimeDateHelpers.GetMergedDateTime(ExaminationFinalDate, EndTime);
 
             if (!IsTimeValid(regex)) return false;
             else if (!IsDateValid()) return false;

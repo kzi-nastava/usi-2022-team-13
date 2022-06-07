@@ -17,6 +17,7 @@ using HealthCareSystem.Core.Rooms.Renovations.Model;
 using static HealthCareSystem.Core.Rooms.Renovations.Model.Renovation;
 using HealthCareSystem.Core.Ingredients.Model;
 using HealthCareSystem.Core.Medications.Model;
+using HealthCareSystem.Core.Medications.Repository;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace HealthCareSystem.Core.Rooms.Repository
@@ -31,7 +32,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         public DataTable Medications { get; set; }
 
- 
+
         public RoomRepository()
         {
             try
@@ -72,6 +73,18 @@ namespace HealthCareSystem.Core.Rooms.Repository
             string renovationsQuery = "select * from renovations";
             FillTable(Renovations, renovationsQuery);
         }
+        public void InsertMedicationContainsIngredient(int medicationId, int ingredientId)
+        {
+            var insertQuery = "INSERT INTO medicationContainsIngredient(id_medication, id_ingredient) VALUES(@id_medication, @id_ingredient)";
+            using (var cmd = new OleDbCommand(insertQuery, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_medication", medicationId);
+                cmd.Parameters.AddWithValue("@id_ingredient", ingredientId);
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+
 
         public void PullEquipment()
         {
@@ -114,15 +127,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
             FillTable(Equipment, equipmentQuery);
         }
-
-        private string AddFilters(string equipmentQuery)
-        {
-
-
-            return equipmentQuery;
-        }
-
-
+        
         public void PullRooms()
         {
             Rooms = new DataTable();
@@ -146,14 +151,14 @@ namespace HealthCareSystem.Core.Rooms.Repository
         {
             if (Connection.State == ConnectionState.Closed) Connection.Open();
             string query = "delete from Rooms where id = " + roomId + "";
-            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+            DatabaseCommander.ExecuteNonQueries(query, Connection);
         }
 
         public void RemoveIngredient(int ingredientId)
         {
             if (Connection.State == ConnectionState.Closed) Connection.Open();
             string query = "delete from ingredients where id = " + ingredientId + "";
-            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+            DatabaseCommander.ExecuteNonQueries(query, Connection);
         }
 
         public void InsertRoom(TypeOfRoom roomType)
@@ -167,18 +172,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
             }
         }
 
-
-        public void InsertMedicationContainsIngredient(int medicationId, int ingredientId)
-        {
-            var insertQuery = "INSERT INTO medicationContainsIngredient(id_medication, id_ingredient) VALUES(@id_medication, @id_ingredient)";
-            using (var cmd = new OleDbCommand(insertQuery, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_medication", medicationId);
-                cmd.Parameters.AddWithValue("@id_ingredient", ingredientId);
-                cmd.ExecuteNonQuery();
-
-            }
-        }
 
         public void InsertIngredient(string ingredientName)
         {
@@ -253,7 +246,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public Room GetSelectedRoom(string query)
         {
             if (Connection.State == ConnectionState.Closed) Connection.Open();
-            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             Room room = new Room();
 
@@ -275,7 +268,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public void UpdateContent(string query)
         {
             if (Connection.State == ConnectionState.Closed) Connection.Open();
-            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+            DatabaseCommander.ExecuteNonQueries(query, Connection);
         }
 
         public bool IsRoomAvailable(int roomId, DateTime examinationTime, List<Examination> examinations)
@@ -302,7 +295,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 if(Connection.State == ConnectionState.Closed) Connection.Open();
 
-                OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from rooms", Connection);
+                OleDbCommand cmd = DatabaseCommander.GetCommand("select * from rooms", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -321,36 +314,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
             return rooms;
         }
-
-        public List<Equipment> GetEquipment(string query)
-        {
-            List<Equipment> equipment = new List<Equipment>();
-
-
-            try
-            {
-                if (Connection.State == ConnectionState.Closed) Connection.Open();
-
-                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
-                OleDbDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    EquipmentType typeOfEquipment;
-                    Enum.TryParse<EquipmentType>(reader["type"].ToString(), out typeOfEquipment);
-
-                    equipment.Add(new Equipment(Convert.ToInt32(reader["id"]), reader["nameOf"].ToString(), typeOfEquipment));
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.ToString());
-            }
-            Connection.Close();
-
-            return equipment;
-        }
-
+        
         public List<Renovation> GetRenovations(string query)
         {
             List<Renovation> renovations = new List<Renovation>();
@@ -360,14 +324,12 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 if (Connection.State == ConnectionState.Closed) Connection.Open();
 
-                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-
-                    TypeOfRenovation typeOfRenovation;
-                    Enum.TryParse<TypeOfRenovation>(reader["renovationType"].ToString(), out typeOfRenovation);
+                    Enum.TryParse<TypeOfRenovation>(reader["renovationType"].ToString(), out var typeOfRenovation);
 
                     try
                     {
@@ -394,12 +356,11 @@ namespace HealthCareSystem.Core.Rooms.Repository
         {
             List<RoomHasEquipment> equipmentInRoom = new List<RoomHasEquipment>();
 
-
             try
             {
                 if (Connection.State == ConnectionState.Closed) Connection.Open();
 
-                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -425,7 +386,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 if (Connection.State == ConnectionState.Closed) Connection.Open();
 
-                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -453,7 +414,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 if (Connection.State == ConnectionState.Closed) Connection.Open();
 
-                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -482,7 +443,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 if (Connection.State == ConnectionState.Closed) Connection.Open();
 
-                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -536,7 +497,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         {
 
             if (Connection.State == ConnectionState.Closed) Connection.Open();
-            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             Medication medication = new Medication();
 
@@ -556,7 +517,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         {
 
             if (Connection.State == ConnectionState.Closed) Connection.Open();
-            OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+            OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             Ingredient ingredient = new Ingredient();
 
@@ -596,7 +557,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
                     Connection.Open();
                 }
                 
-                OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from Examination where id_room = " + room.ID, Connection);
+                OleDbCommand cmd = DatabaseCommander.GetCommand("select * from Examination where id_room = " + room.ID, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
                 
                 while (reader.Read())
@@ -688,13 +649,13 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public List<string> GetOperationRooms()
         {
             var query = "SELECT ID FROM Rooms WHERE type = operation";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
         public List<string> GetExaminationRooms()
         {
             var query = "SELECT ID FROM Rooms WHERE type = examination";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
     }
 }
