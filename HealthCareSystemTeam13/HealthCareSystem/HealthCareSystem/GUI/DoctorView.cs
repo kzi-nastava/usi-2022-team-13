@@ -222,6 +222,7 @@ namespace HealthCareSystem
         private void btnRequestDaysOff_Click(object sender, EventArgs e)
         {
             RequestDaysOff requestDaysOffForm = new RequestDaysOff(Username);
+            requestDaysOffForm.ShowDialog();
         }
     }
 }

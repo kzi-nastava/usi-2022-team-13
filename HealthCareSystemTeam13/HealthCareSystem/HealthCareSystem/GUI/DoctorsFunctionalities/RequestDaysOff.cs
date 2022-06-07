@@ -29,17 +29,26 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
             DateTime startDate = dtpStart.Value;
             DateTime endDate = dtpEnd.Value;
             int dayDifference = startDate.DayOfYear - DateTime.Now.DayOfYear;
-            if(dayDifference < 2)
+            if(dayDifference <= 2)
             {
                 MessageBox.Show("You can't request days off that start less then two days from today!");
                 return;
             }
 
             List<DateTime> examinationDates = DoctorRep.GetDateOfExaminationsForDoctor();
-            
-            foreach(var examinationDate in examinationDates)
+
+            bool isUrgent = cbUrgent.Checked;
+
+            if(isUrgent && endDate.DayOfYear - startDate.DayOfYear > 5)
             {
-                if(examinationDate > startDate && examinationDate < endDate)
+                MessageBox.Show("Urgent request for days off can last 5 days at most!");
+                return;
+            }
+
+
+            foreach (var examinationDate in examinationDates)
+            {
+                if(examinationDate.DayOfYear >= startDate.DayOfYear && examinationDate.DayOfYear <= endDate.DayOfYear)
                 {
                     MessageBox.Show("You have an examination scheduled at that time period!");
                     return;
@@ -48,7 +57,7 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
 
             String reasonForDaysOff = rtbReasonForRequest.Text;
 
-            
+            DoctorRep.InsertDaysOff(startDate, endDate, reasonForDaysOff, isUrgent, DoctorRep.GetDoctorId());
 
 
 

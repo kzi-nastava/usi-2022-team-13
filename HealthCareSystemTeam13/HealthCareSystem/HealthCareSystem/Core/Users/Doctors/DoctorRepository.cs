@@ -540,7 +540,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public List<DateTime> GetDateOfExaminationsForDoctor()
         {
             List<DateTime> dates = new List<DateTime>();
-            string query = "select dateOf where id_doctor = " + GetDoctorId();
+            string query = "select dateOf from Examination where id_doctor = " + GetDoctorId();
 
 
             int checkState = 0;
@@ -566,6 +566,30 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
 
             return dates;
+        }
+
+        public void InsertDaysOff(DateTime startDate, DateTime endDate, string reasonForDaysOff, bool isUrgent, int doctorId)
+        {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            string query = "insert into DoctorRequestDaysOf (dateFrom, dateTo, reasonOf, isUrgent, id_doctor) " +
+                "values (@dateFrom, @dateTo, @reasonOf, @isUrgent, @doctor_id)";
+
+            
+            Console.WriteLine(isUrgent);
+
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@dateFrom", startDate);
+                cmd.Parameters.AddWithValue("@dateTo", endDate);
+                cmd.Parameters.AddWithValue("@reasonOf", reasonForDaysOff);
+                cmd.Parameters.AddWithValue("@isUrgent", isUrgent);
+                cmd.Parameters.AddWithValue("@id_doctor", doctorId);
+                cmd.ExecuteNonQuery();
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
         }
 
 
