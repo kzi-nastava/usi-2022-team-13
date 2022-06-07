@@ -36,27 +36,16 @@ namespace HealthCareSystem.Core.Surveys.Repository
         {
             HospitalSurveys = new DataTable();
             string hospitalSurveysQuery = "select * from hospitalSurveys";
-            FillTable(HospitalSurveys, hospitalSurveysQuery);
+            GUIHelpers.FillTable(HospitalSurveys, hospitalSurveysQuery, Connection);
         }
 
         public void PullDoctorSurveys()
         {
             DoctorSurveys = new DataTable();
             string doctorSurveysQuery = "select * from doctorSurveys";
-            FillTable(DoctorSurveys, doctorSurveysQuery);
+            GUIHelpers.FillTable(DoctorSurveys, doctorSurveysQuery, Connection);
         }
 
-        private void FillTable(DataTable table, string query)
-        {
-
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                if (Connection.State == ConnectionState.Closed) Connection.Open();
-                OleDbDataReader reader = cmd.ExecuteReader();
-                table.Load(reader);
-            }
-            Connection.Close();
-        }
         public List<HospitalSurvey> GetHospitalSurveys()
         {
             List<HospitalSurvey> hospitalSurveys = new List<HospitalSurvey>();
@@ -116,9 +105,8 @@ namespace HealthCareSystem.Core.Surveys.Repository
             DatabaseCommander.ExecuteNonQueries(query, Connection);
         }
 
-        public void AddHospitalSurvey(HospitalSurvey survey)
+        public void AddHospitalSurvey(HospitalSurvey survey, int patientId)
         {
-            int patientId = GetPatientId();
             bool isSatisfied = survey.Happiness == 1 ? true : false;
             bool wouldReccomend = survey.WouldRecommend == 1 ? true : false;
             string query = "insert into HospitalSurveys(quality, higyene, isSatisfied, wouldRecomend, comment, id_patient) values(" + survey.QualityOfService + ", " + survey.Cleanliness + ", " + isSatisfied + ", " + wouldReccomend + ", '" + survey.Comment + "', " + patientId + ")";

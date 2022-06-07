@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Examinations.Repository;
 using HealthCareSystem.Core.Users.Patients.Repository;
 using HealthCareSystem.Core.GUI.PatientFunctionalities;
 using HealthCareSystem.Core.Users.Patients.Model;
@@ -20,11 +21,12 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         public string Username { get; set; }
         private PatientRepository _patientRepository;
         private DoctorRepository _doctorRepository;
+        private ExaminationRepository _examinationRepository;
         public PatientExaminations(string username)
         {
             Username = username;
             _patientRepository = new PatientRepository(Username);
-            _patientRepository.PullExaminationForPatient();
+            _examinationRepository.PullExaminationForPatient(_patientRepository.GetPatientId());
             _doctorRepository = new DoctorRepository();
             InitializeComponent();
             FillDataGridView();
@@ -97,15 +99,15 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void CancelExaminationWithRequest()
         {
-            _patientRepository.SendExaminationEditRequest((int)dgwExaminations.SelectedRows[0].Cells[0].Value, DateTime.Now,
+            _examinationRepository.SendExaminationEditRequest((int)dgwExaminations.SelectedRows[0].Cells[0].Value, DateTime.Now,
                 false, 0, DateTime.Now, 0);
             MessageBox.Show("Wait for a secretary to aproove this request.");
         }
 
         private void CancelExamination()
         {
-            _patientRepository.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
-            _patientRepository.InsertExaminationChanges(TypeOfChange.Delete);
+            _examinationRepository.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
+            _examinationRepository.InsertExaminationChanges(TypeOfChange.Delete, _patientRepository.GetPatientId());
             _patientRepository.BlockSpamPatients(Username);
             MessageBox.Show("Succesfully canceled examination!");
             RefreshDataGridView();
@@ -181,7 +183,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         public void RefreshDataGridView()
         {
-            _patientRepository.PullExaminationForPatient();
+            _examinationRepository.PullExaminationForPatient(_patientRepository.GetPatientId());
             dgwExaminations.DataSource = _patientRepository.Examinations;
             dgwExaminations.Refresh();
         }
@@ -238,9 +240,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 }
             }
             else
-            {
                 MessageBox.Show("You are blocked!");
-            }
+
         }
     }
 

@@ -9,18 +9,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Rooms.Repository;
 
 namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     partial class TransferForm : Form
     {
-        SecretaryRepository _secretaryRepository;
+        EquipmentRepository _equipmentRepository;
         RoomHasEquipment OutOfStock;
         public TransferForm(RoomHasEquipment roomHasEquipment)
         {
-            _secretaryRepository = new SecretaryRepository();
-            _secretaryRepository.CheckDynamicEquipmentRequests();
-            _secretaryRepository.PullTransferDynamicEquipment(roomHasEquipment.Id);
+            _equipmentRepository = new EquipmentRepository();
+            _equipmentRepository.CheckDynamicEquipmentRequests();
+            _equipmentRepository.PullTransferDynamicEquipment(roomHasEquipment.Id);
             InitializeComponent();
             amountBox.Increment = 1;
             amountBox.DecimalPlaces = 0;
@@ -30,7 +31,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         }
         private void FillDataGridView()
         {
-            equipmentDataGrid.DataSource = _secretaryRepository.EquipmentInWarehouse;
+            equipmentDataGrid.DataSource = _equipmentRepository.EquipmentInWarehouse;
             DataGridViewSettings();
         }
         private void DataGridViewSettings()
@@ -50,8 +51,8 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             else
             {
                 int roomHasEquipmentID = (int)equipmentDataGrid.SelectedRows[0].Cells[0].Value;
-                _secretaryRepository.UpdateSigleDynamicEquipment(amount, roomHasEquipmentID);
-                _secretaryRepository.UpdateSigleDynamicEquipment(amount, OutOfStock);
+                _equipmentRepository.UpdateSigleDynamicEquipment(amount, roomHasEquipmentID);
+                _equipmentRepository.UpdateSigleDynamicEquipment(amount, OutOfStock);
                 Close();
             }
         }

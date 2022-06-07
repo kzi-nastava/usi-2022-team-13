@@ -67,7 +67,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         {
             ReferralLetters = new DataTable();
             var query = "select * from ReferralLetter";
-            FillTable(ReferralLetters, query);
+            GUIHelpers.FillTable(ReferralLetters, query, Connection);
         }
 
         public void DeleteSingleReferralLetter(string letterID)

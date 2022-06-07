@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Users.Patients.Repository;
 using HealthCareSystem.Core.Users.Secretaries.Repository;
 
 
@@ -14,17 +15,17 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class DeletePatient : Form
     {
-        SecretaryRepository _secretaryRepository;
+        PatientRepository _patientRepository;
         public DeletePatient()
         {
             InitializeComponent();
-            _secretaryRepository = new SecretaryRepository();
+            _patientRepository = new PatientRepository();
         }
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
             string patientId = patientIdBox.Text;
-            _secretaryRepository.DeleteSinglePatient(patientId);
+            _patientRepository.DeleteSinglePatient(patientId);
             this.Close();
         }
     }

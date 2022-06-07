@@ -9,23 +9,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Rooms.Repository;
 
 namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class OutOfStockInRoomsForm : Form
     {
-        SecretaryRepository _secretaryRepository;
+        EquipmentRepository _equipmentRepository;
         public OutOfStockInRoomsForm()
         {
-            _secretaryRepository = new SecretaryRepository();
-            _secretaryRepository.CheckDynamicEquipmentRequests();
-            _secretaryRepository.PullDynamicEquipment();
+            _equipmentRepository.CheckDynamicEquipmentRequests();
+            _equipmentRepository.PullDynamicEquipment();
             InitializeComponent();
             FillDataGridView();
         }
         private void FillDataGridView()
         {
-            dynamicEquipmentGrid.DataSource = _secretaryRepository.DynamicEquipment;
+            dynamicEquipmentGrid.DataSource = _equipmentRepository.DynamicEquipment;
             DataGridViewSettings();
         }
         private void DataGridViewSettings()

@@ -80,7 +80,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void LoadEditData()
         {
-            Dictionary<string, string> data = _patientRepository.GetExamination(ExaminationId);
+            Dictionary<string, string> data = _examinationRepository.GetExamination(ExaminationId);
             tbExaminationId.Text = data["id"];
 
             tbDuration.Text = "15";
@@ -110,7 +110,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         {
             Doctor doctor;
             string doctorQuery = "select * from Doctors inner join Examination on Doctors.id = Examination.id_doctor where Examination.id = " + ExaminationId + "";
-            doctor = _patientRepository.GetSelectedDoctor(doctorQuery);
+            doctor = _doctorRepository.GetSelectedDoctor(doctorQuery);
 
             return doctor;
         }
@@ -134,7 +134,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 if (IsAddChoosen)
                 {
                     
-                    _patientRepository.InsertExamination(_patientUsername, _selectedDoctor.ID, mergedTime, duration, roomId);
+                    _examinationRepository.InsertExamination(_patientRepository.GetPatientId(), _selectedDoctor.ID, mergedTime, duration, roomId);
                     MessageBox.Show("Successfully added examination!");
                     
                 }
@@ -147,9 +147,9 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                     }
                     else
                     {
-                        _patientRepository.SendExaminationEditRequest(ExaminationId, DateTime.Now, true, _selectedDoctor.ID, mergedTime, roomId);
+                        _examinationRepository.SendExaminationEditRequest(ExaminationId, DateTime.Now, true, _selectedDoctor.ID, mergedTime, roomId);
 
-                        _patientRepository.InsertExaminationChanges(TypeOfChange.Edit);
+                        _examinationRepository.InsertExaminationChanges(TypeOfChange.Edit, _patientRepository.GetPatientId());
 
                         MessageBox.Show("Wait for a secretary to aproove this request.");
                     }
@@ -162,7 +162,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void UpdateContent(DateTime mergedTime)
         {
             string updateQuery = "Update Examination set id_doctor = " + _selectedDoctor.ID + ", isEdited=" + true + ", dateOf = '" + mergedTime + "', id_room = " + roomId + " where id = " + ExaminationId + "";
-            _patientRepository.UpdateContent(updateQuery);
+            _patientRepository.UpdateContent(updateQuery, _patientRepository.GetPatientId());
             MessageBox.Show("Successfully edited examination!");
 
         }

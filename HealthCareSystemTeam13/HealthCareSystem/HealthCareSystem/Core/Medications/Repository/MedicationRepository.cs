@@ -32,10 +32,10 @@ namespace HealthCareSystem.Core.Medications.Repository
                 Console.WriteLine(exception.ToString());
             }
         }
-        public Dictionary<int, DateTime> GetMedicationInstructions()
+        public Dictionary<int, DateTime> GetMedicationInstructions(int patientId)
         {
             Dictionary<int, DateTime> instructions = new Dictionary<int, DateTime>();
-            int patientId = GetPatientId();
+
             string query = "select ins.startTime as startTime, ins.timesPerDay as perDay from Receipt as r inner join Instructions as ins on r.id_instructions = ins.id where r.id_patient = " + patientId + "";
 
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
@@ -48,18 +48,16 @@ namespace HealthCareSystem.Core.Medications.Repository
 
             return instructions;
         }
-        public int GetMedicationNotificationTime()
+        public int GetMedicationNotificationTime(int patientId)
         {
-            int patientId = GetPatientId();
             string query = "select notificationTime from Patients where id = " + patientId + "";
             int hoursBefore = Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries(query, Connection)[0]);
 
             return hoursBefore;
         }
 
-        public void SetMedicationNotificationTime(int newTime)
+        public void SetMedicationNotificationTime(int newTime, int patientId)
         {
-            int patientId = GetPatientId();
             string query = "Update Patients set notificationTime = " + newTime + " where id = " + patientId + "";
             DatabaseCommander.ExecuteNonQueries(query, Connection);
         }
@@ -166,7 +164,7 @@ namespace HealthCareSystem.Core.Medications.Repository
             string medicineQuery = "select id, nameOfMedication as Name" +
                 " from Medications where status = 'Approved'";
 
-            FillTable(Medicine, medicineQuery);
+            GUIHelpers.FillTable(Medicine, medicineQuery, Connection);
         }
 
 

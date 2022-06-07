@@ -24,7 +24,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         PatientRepository PatientRep;
         DoctorRepository DoctorRep;
         RoomRepository RoomRep;
-        ExaminationRepository ExaminationRep;
+        ExaminationRepository _examinationRepository;
         private DateTime ExaminationFinalDate;
         private Doctor SelectedDoctor;
         private string StartTime, EndTime;
@@ -36,7 +36,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             PatientRep = new PatientRepository(Username);
             DoctorRep = new DoctorRepository();
             RoomRep = new RoomRepository();
-            ExaminationRep = new ExaminationRepository();
+            _examinationRepository = new ExaminationRepository();
             IsDoctorPriority = true;
 
             
@@ -156,7 +156,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
                 var selectedRow = dgwRecommendations.SelectedRows[0];
 
-                PatientRep.InsertExamination(Username, (int)selectedRow.Cells[0].Value, (DateTime)selectedRow.Cells[2].Value, 15, (int)selectedRow.Cells[4].Value);
+                _examinationRepository.InsertExamination(PatientRep.GetPatientId(), (int)selectedRow.Cells[0].Value, (DateTime)selectedRow.Cells[2].Value, 15, (int)selectedRow.Cells[4].Value);
                 MessageBox.Show("Successfully added examination!");
             }
         }
@@ -169,34 +169,14 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
             if (valid)
             {
-                List<Examination> examinations = ExaminationRep.GetRecommendedExaminations(SelectedDoctor, StartTime, EndTime, ExaminationFinalDate, IsDoctorPriority);
+                List<Examination> examinations = _examinationRepository.GetRecommendedExaminations(SelectedDoctor, StartTime, EndTime, ExaminationFinalDate, IsDoctorPriority);
                 dgwRecommendations.DataSource = examinations;
             }
         }
         private bool CanAddExamination()
         {
-            if (dgwRecommendations.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Please select a row first.");
-
-            }
-            else if (dgwRecommendations.SelectedRows.Count == 1)
-            {
-                DataGridViewRow row = dgwRecommendations.SelectedRows[0];
-                if (row.Cells[0].Value == null)
-                {
-                    MessageBox.Show("You selected an empty row.");
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please select only 1 row.");
-            }
-            return false;
+            return GUIHelpers.IsDgwRowSelected(dgwRecommendations);
+            
         }
     }
 }

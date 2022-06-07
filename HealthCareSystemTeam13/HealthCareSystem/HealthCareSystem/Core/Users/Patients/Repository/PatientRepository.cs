@@ -25,7 +25,8 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         public DataTable BlockedPatients { get; private set; }
         public DataTable Patients { get; private set; }
 
-        private ExaminationRepository _examinationRep;
+        private ExaminationRepository _examinationRepository;
+        private UserRepository _userRepository;
 
 
         public PatientRepository(string username = "") { 
@@ -44,8 +45,10 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            _examinationRep = new ExaminationRepository();
-        
+            _examinationRepository = new ExaminationRepository();
+            _userRepository = new UserRepository();
+
+
         }
         public int GetPatientId()
         {
@@ -90,8 +93,8 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 
             DatabaseCommander.ExecuteNonQueries(query, Connection);
-            if (patiendId > 0) InsertExaminationChanges(TypeOfChange.Edit, patiendId);
-            else InsertExaminationChanges(TypeOfChange.Edit);
+            if (patiendId > 0) _examinationRepository.InsertExaminationChanges(TypeOfChange.Edit, patiendId);
+            else _examinationRepository.InsertExaminationChanges(TypeOfChange.Edit);
 
             if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
@@ -159,7 +162,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         public void BlockSpamPatients(string patientUsername)
         {
             int patientId = GetPatientId(patientUsername);
-            List<ExaminationChange> changes = GetExaminationChanges(patientId);
+            List<ExaminationChange> changes = _examinationRepository.GetExaminationChanges(patientId);
             int adds = 0, edits = 0;
 
             for (int i = 0; i < changes.Count(); i++)
@@ -199,14 +202,14 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         {
             Patients = new DataTable();
             var query = "select Patients.ID, Patients.firstName, Patients.lastName, Users.usrnm, Users.pass from Patients INNER JOIN Users ON Users.id = patients.user_id";
-            FillTable(Patients, query);
+            GUIHelpers.FillTable(Patients, query, Connection);
         }
 
         public void PullBlockedPatients()
         {
             BlockedPatients = new DataTable();
             string blockedPatientsQuery = "select BlockedPatients.id, Patients.FirstName as FirstName, Patients.LastName as LastName, BlockedPatients.id_secretary as BlockedBy from BlockedPatients inner join Patients on Patients.id = BlockedPatients.id_patient";
-            FillTable(BlockedPatients, blockedPatientsQuery);
+            GUIHelpers.FillTable(BlockedPatients, blockedPatientsQuery, Connection);
         }
         public void InsertSinglePatient(Patient patient)
         {
@@ -220,7 +223,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
                 cmd.ExecuteNonQuery();
             }
         }
-        public List<string> GetPatientId(string userID)
+        public List<string> GetPatientIdByUserId(string userID)
         {
             var query = "SELECT id FROM Patients WHERE user_id = " + userID + "";
             return DatabaseCommander.ExecuteReaderQueries(query, Connection);
@@ -318,7 +321,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         }
         public void BlockSinglePatient(string patientID, string username)
         {
-            string userID = GetUserId(username)[0];
+            string userID = _userRepository.GetUserId(username)[0];
             var query = "SELECT ID FROM Secretaries WHERE user_id = " + userID + "";
             string secretaryID = DatabaseCommander.ExecuteReaderQueries(query, Connection)[0];
 

@@ -22,7 +22,6 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         private RoomRepository _roomRepository;
         private ExaminationRepository _examinationRepository;
         private DoctorRepository _doctorRepository;
-        private SecretaryRepository _secretaryRepository;
         private ReferralLetter ChosenReferralLetter;
         public AddExamination(ReferralLetter referralLetter)
         {
@@ -31,7 +30,6 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             _roomRepository = new RoomRepository();
             _examinationRepository = new ExaminationRepository();
             _doctorRepository = new DoctorRepository();
-            _secretaryRepository = new SecretaryRepository();
         }
 
         private void acceptButton_Click(object sender, EventArgs e)
@@ -39,7 +37,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             if (CheckSelectedValues())
             {
                 Examination examination = new Examination(ChosenReferralLetter.ForwardedDoctorID, ChosenReferralLetter.CurrentPatientID, false, false, false, TimeDateHelpers.GetMergedDateTime(dateTimeBox.Value, timeBox.Text), ChosenReferralLetter.ExaminationType, false, Convert.ToInt32(roomIdBox.Text), Convert.ToInt32(durationBox.Text));
-                _secretaryRepository.InsertSingleExamination(examination);
+                _examinationRepository.InsertSingleExamination(examination);
             }
         }
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HealthCareSystem.Core.Users.Doctors.Model;
+using HealthCareSystem.Core.Users.Secretaries.Repository;
 
 namespace HealthCareSystem.Core.Users.Doctors.Repository
 {
@@ -14,6 +15,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public OleDbConnection Connection { get; set; }
         public DataTable DaysOffRequests { get; private set; }
         public DataTable RequestsForDaysOff { get; private set; }
+        private SecretaryRepository _secretaryRepository;
 
         public DaysOffRepository()
         {
@@ -31,6 +33,8 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
+
+            _secretaryRepository = new SecretaryRepository();
         }
 
         public void InsertDaysOff(DateTime startDate, DateTime endDate, string reasonForDaysOff, bool isUrgent, int doctorId)
@@ -66,7 +70,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         {
             DaysOffRequests = new DataTable();
             var query = "select * from DoctorRequestDaysOf df where df.id not in (select mdf.id_request from ManagementOfDaysOfRequests mdf)";
-            FillTable(DaysOffRequests, query);
+            GUIHelpers.FillTable(DaysOffRequests, query, Connection);
         }
 
         public void ManageDaysOffRequest(string username, int requestId, bool approved, string comment = "")
@@ -75,21 +79,21 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_request", requestId);
-                cmd.Parameters.AddWithValue("@id_secretary", GetSecretaryId(username)[0]);
+                cmd.Parameters.AddWithValue("@id_secretary", _secretaryRepository.GetSecretaryId(username)[0]);
                 cmd.Parameters.AddWithValue("@isapproved", approved.ToString());
                 cmd.Parameters.AddWithValue("@comment", comment);
                 cmd.ExecuteNonQuery();
             }
         }
 
-        public void PullRequestsForDaysOff()
+        public void PullRequestsForDaysOff(int doctorId)
         {
             RequestsForDaysOff = new DataTable();
 
             string requestsForDaysOffQuery = "select DateFrom, DateTo, reasonOf, stateOfRequest, isUrgent from DoctorRequestDaysOf " +
-                "where id_doctor = " + GetDoctorId() + "";
+                "where id_doctor = " + doctorId + "";
 
-            FillTable(RequestsForDaysOff, requestsForDaysOffQuery);
+            GUIHelpers.FillTable(RequestsForDaysOff, requestsForDaysOffQuery, Connection);
         }
     }
 }

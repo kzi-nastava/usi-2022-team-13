@@ -7,25 +7,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Examinations.Repository;
+using HealthCareSystem.Core.Users.Patients.Repository;
 using HealthCareSystem.Core.Users.Secretaries.Repository;
 
 namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class ExaminationRequests : Form
     {
-        SecretaryRepository _secretaryRepository;
-
+        ExaminationRepository _examinationRepository;
+        PatientRepository _patientRepository;
         public ExaminationRequests()
         {
-            _secretaryRepository = new SecretaryRepository();
-            _secretaryRepository.PullExaminationRequests();
+            _examinationRepository = new ExaminationRepository();
+            _patientRepository = new PatientRepository();
+            _examinationRepository.PullExaminationRequests();
             InitializeComponent();
             FillDataGridView();
         }
 
         private void FillDataGridView()
         {
-            requestsDataGrid.DataSource = _secretaryRepository.RequestsPatients;
+            requestsDataGrid.DataSource = _examinationRepository.RequestsPatients;
             DataGridViewSettings();
         }
         private void DataGridViewSettings()
@@ -38,14 +41,14 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         private void acceptButton_Click(object sender, EventArgs e)
         {
             string requestID = requestIdBox.Text;
-            if (_secretaryRepository.IsRequestChanged(requestID))
+            if (_patientRepository.IsRequestChanged(requestID))
             {
-                _secretaryRepository.UpdateExamination(requestID);
-                _secretaryRepository.DeleteSinglePatientRequest(requestID);
+                _examinationRepository.UpdateExamination(requestID);
+                _patientRepository.DeleteSinglePatientRequest(requestID);
             } 
             else
             {
-                _secretaryRepository.DeleteSingleExamination(requestID);
+                _examinationRepository.DeleteSingleExamination(requestID);
             }    
 
             MessageBox.Show("Succesfully accepted request!");
@@ -54,7 +57,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         private void denyButton_Click(object sender, EventArgs e)
         {
             string requestID = requestIdBox.Text;
-            _secretaryRepository.DeleteSinglePatientRequest(requestID);
+            _patientRepository.DeleteSinglePatientRequest(requestID);
             MessageBox.Show("Succesfully denied request!");
         }
     }

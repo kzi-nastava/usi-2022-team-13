@@ -17,15 +17,18 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     public partial class MedicalRecordView : Form
     {
         public string Username { get; set; }
-        private PatientRepository PatientRep;
-        private ExaminationRepository ExaminationRep;
+        private PatientRepository _patientRepository;
+        private ExaminationRepository _examinationRepository;
         private int PatientId;
         private List<DoctorAnamnesis> anamnesises;
+        private AnamnesisRepository _anamnsesisRepository;
+        
         public MedicalRecordView(string username)
         {
             Username = username;
-            PatientRep = new PatientRepository(Username);
-            ExaminationRep = new ExaminationRepository();
+            _patientRepository = new PatientRepository(Username);
+            _examinationRepository = new ExaminationRepository();
+            _anamnsesisRepository = new AnamnesisRepository();
             InitializeComponent();
         }
 
@@ -35,7 +38,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         }
         private void SetValues()
         {
-            PatientId = PatientRep.GetPatientId();
+            PatientId = _patientRepository.GetPatientId();
             
             SetTextValues();
             SetDgwExaminations();
@@ -44,24 +47,24 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         }
         private void SetTextValues()
         {
-            Dictionary<string, string> information = PatientRep.GetPatientNameAndMedicalStats(PatientId);
+            Dictionary<string, string> information = _patientRepository.GetPatientNameAndMedicalStats(PatientId);
             lbHeight.Text = information["height"] + " cm";
             lbWeight.Text = information["weight"] + " kg";
             lbName.Text = information["firstName"] + " " + information["lastName"];
         }
         private void SetDgwExaminations()
         {
-            PatientRep.PullFinishedExaminations();
-            dgwExaminations.DataSource = PatientRep.Examinations;
+            _examinationRepository.PullFinishedExaminations(_patientRepository.GetPatientId());
+            dgwExaminations.DataSource = _patientRepository.Examinations;
             GUIHelpers.DataGridViewSettings(dgwExaminations);
             dgwExaminations.Font = new Font("Lucida Bright", 10);
 
         }
         private void SetDgwAnamnesis()
         {
-            List<Examination> examinations = ExaminationRep.GetFinishedExaminations(PatientId);
+            List<Examination> examinations = _examinationRepository.GetFinishedExaminations(PatientId);
 
-            anamnesises = PatientRep.GetAnamnesises(examinations);
+            anamnesises = _anamnsesisRepository.GetAnamnesises(examinations);
 
             dgwAnamnesis.DataSource = anamnesises;
 
@@ -72,8 +75,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void SetListBoxDiseases()
         {
             
-            int medicalRecordId = Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries("select id from MedicalRecord where id_patient = " + PatientId + "", PatientRep.Connection)[0]);
-            List<string> diseases = DatabaseCommander.ExecuteReaderQueries("select nameOfDisease from DiseaseHistory where id_medicalRecord = " + medicalRecordId + "", PatientRep.Connection);
+            int medicalRecordId = Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries("select id from MedicalRecord where id_patient = " + PatientId + "", _patientRepository.Connection)[0]);
+            List<string> diseases = DatabaseCommander.ExecuteReaderQueries("select nameOfDisease from DiseaseHistory where id_medicalRecord = " + medicalRecordId + "", _patientRepository.Connection);
             lbDiseases.DataSource = diseases;
 
         }
@@ -101,7 +104,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void btnSearchAnamnesis_Click(object sender, EventArgs e)
         {
             string keyword = tbAnamnesis.Text;
-            if (keyword.Trim() != "") dgwAnamnesis.DataSource = PatientRep.GetAnamnesisesByKeyword(anamnesises, keyword);
+            if (keyword.Trim() != "") dgwAnamnesis.DataSource = _anamnsesisRepository.GetAnamnesisesByKeyword(anamnesises, keyword);
             else MessageBox.Show("No input.");
         }
 
@@ -132,7 +135,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void tbAnamnesis_TextChanged(object sender, EventArgs e)
         {
             string keyword = tbAnamnesis.Text.Trim();
-            if (keyword != "") dgwAnamnesis.DataSource = PatientRep.GetAnamnesisesByKeyword(anamnesises, keyword);
+            if (keyword != "") dgwAnamnesis.DataSource = _anamnsesisRepository.GetAnamnesisesByKeyword(anamnesises, keyword);
             else dgwAnamnesis.DataSource = anamnesises;
 
         }

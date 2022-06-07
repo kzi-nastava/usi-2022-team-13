@@ -15,18 +15,18 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     public partial class AnamnesisView : Form
     {
         public int ExaminationId { get; set; }
-        private ExaminationRepository ExaminationRep;
+        private AnamnesisRepository _anamnesisRepository;
         public AnamnesisView(int examinationId)
         {
             ExaminationId = examinationId;
-            ExaminationRep = new ExaminationRepository();
+            _anamnesisRepository = new AnamnesisRepository();
             InitializeComponent();
             SetValues();
         }
 
         private void SetValues()
         {
-            Anamnesis anamnesis = ExaminationRep.GetAnamnesis(ExaminationId);
+            Anamnesis anamnesis = _anamnesisRepository.GetAnamnesis(ExaminationId);
             lbDate.Text = anamnesis.DateOf.ToString();
             rtbNotice.Text = anamnesis.Notice;
             rtbConclusion.Text = anamnesis.Conclusions;

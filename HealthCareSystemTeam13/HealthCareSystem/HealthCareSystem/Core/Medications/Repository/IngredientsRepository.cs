@@ -35,7 +35,7 @@ namespace HealthCareSystem.Core.Medications.Repository
         {
             Ingredients = new DataTable();
             string ingredientsQuery = "select * from ingredients";
-            FillTable(Ingredients, ingredientsQuery);
+            GUIHelpers.FillTable(Ingredients, ingredientsQuery, Connection);
         }
 
 

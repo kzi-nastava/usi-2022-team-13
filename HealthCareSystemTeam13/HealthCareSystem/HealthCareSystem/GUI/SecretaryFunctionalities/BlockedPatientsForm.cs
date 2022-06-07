@@ -9,17 +9,18 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using HealthCareSystem.Core.Users.Secretaries.Repository;
 using HealthCareSystem.Core.GUI.SecretaryFunctionalities;
+using HealthCareSystem.Core.Users.Patients.Repository;
 
 namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class BlockedPatientsForm : Form
     {
-        SecretaryRepository _secretaryRepository;
+        PatientRepository _patientRepository;
         string Username;
         public BlockedPatientsForm(string username)
         {
-            _secretaryRepository = new SecretaryRepository();
-            _secretaryRepository.PullBlockedPatients();
+            _patientRepository = new PatientRepository();
+            _patientRepository.PullBlockedPatients();
             InitializeComponent();
             FillDataGridView();
             this.Username = username;
@@ -27,7 +28,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 
         private void FillDataGridView()
         {
-            blockedPatientsDataGrid.DataSource = _secretaryRepository.BlockedPatients;
+            blockedPatientsDataGrid.DataSource = _patientRepository.BlockedPatients;
             DataGridViewSettings();
         }
 

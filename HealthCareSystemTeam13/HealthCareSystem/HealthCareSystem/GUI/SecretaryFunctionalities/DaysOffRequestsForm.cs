@@ -9,24 +9,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Users.Doctors.Repository;
 
 namespace HealthCareSystem.GUI.SecretaryFunctionalities
 {
     public partial class DaysOffRequestsForm : Form
     {
-        SecretaryRepository _secretaryRepository;
+        DaysOffRepository _daysOffRepository;
         string Username;
         public DaysOffRequestsForm(string username)
         {
-            _secretaryRepository = new SecretaryRepository();
-            _secretaryRepository.PullDaysOffRequests();
+            _daysOffRepository = new DaysOffRepository();
+            _daysOffRepository.PullDaysOffRequests();
             InitializeComponent();
             FillDataGridView();
             this.Username = username;
         }
         private void FillDataGridView()
         {
-            requestsDataGrid.DataSource = _secretaryRepository.DaysOffRequests;
+            requestsDataGrid.DataSource = _daysOffRepository.DaysOffRequests;
             DataGridViewSettings();
         }
         private void DataGridViewSettings()
@@ -39,7 +40,7 @@ namespace HealthCareSystem.GUI.SecretaryFunctionalities
         private void acceptButton_Click(object sender, EventArgs e)
         {
             int requestId = (int)requestsDataGrid.SelectedRows[0].Cells[0].Value;
-            _secretaryRepository.ManageDaysOffRequest(Username, requestId, true);
+            _daysOffRepository.ManageDaysOffRequest(Username, requestId, true);
             MessageBox.Show("Succesfully accepted request!");
         }
 

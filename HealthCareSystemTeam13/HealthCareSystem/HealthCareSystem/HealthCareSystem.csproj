@@ -286,113 +286,11 @@
     <Compile Include="GUI\PatientFunctionalities\SearchDoctorView.Designer.cs">
       <DependentUpon>SearchDoctorView.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\AddComment.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\AddComment.designer.cs">
-      <DependentUpon>AddComment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\AddExamination.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\AddExamination.Designer.cs">
-      <DependentUpon>AddExamination.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\AddPatient.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\AddPatient.Designer.cs">
-      <DependentUpon>AddPatient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\BlockedPatientsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\BlockedPatientsForm.Designer.cs">
-      <DependentUpon>BlockedPatientsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\BlockPatient.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\BlockPatient.Designer.cs">
-      <DependentUpon>BlockPatient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\ChooseSpeciality.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\ChooseSpeciality.Designer.cs">
-      <DependentUpon>ChooseSpeciality.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\DaysOffRequestsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\DaysOffRequestsForm.designer.cs">
-      <DependentUpon>DaysOffRequestsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\DeletePatient.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\DeletePatient.Designer.cs">
-      <DependentUpon>DeletePatient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\EditPatient.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\EditPatient.Designer.cs">
-      <DependentUpon>EditPatient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\ExaminationRequests.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\ExaminationRequests.Designer.cs">
-      <DependentUpon>ExaminationRequests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\OutOfStockForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\OutOfStockForm.Designer.cs">
-      <DependentUpon>OutOfStockForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\OutOfStockInRoomsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\OutOfStockInRoomsForm.Designer.cs">
-      <DependentUpon>OutOfStockInRoomsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\PatientCRUDForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\PatientCRUDForm.Designer.cs">
-      <DependentUpon>PatientCRUDForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\MainViews\PatientView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\MainViews\PatientView.Designer.cs">
       <DependentUpon>PatientView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\ReferralLettersForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\ReferralLettersForm.Designer.cs">
-      <DependentUpon>ReferralLettersForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\TransferForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\TransferForm.Designer.cs">
-      <DependentUpon>TransferForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\UnblockPatient.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\UnblockPatient.Designer.cs">
-      <DependentUpon>UnblockPatient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\UrgentExaminations.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SecretaryFunctionalities\UrgentExaminations.Designer.cs">
-      <DependentUpon>UrgentExaminations.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\MainViews\SecretaryView.cs">
       <SubType>Form</SubType>
@@ -426,6 +324,108 @@
     </Compile>
     <Compile Include="GUI\MainViews\LoginView.Designer.cs">
       <DependentUpon>LoginView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\AddComment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\AddComment.designer.cs">
+      <DependentUpon>AddComment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\AddExamination.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\AddExamination.designer.cs">
+      <DependentUpon>AddExamination.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\AddPatient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\AddPatient.designer.cs">
+      <DependentUpon>AddPatient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\BlockedPatientsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\BlockedPatientsForm.designer.cs">
+      <DependentUpon>BlockedPatientsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\BlockPatient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\BlockPatient.designer.cs">
+      <DependentUpon>BlockPatient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\ChooseSpeciality.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\ChooseSpeciality.designer.cs">
+      <DependentUpon>ChooseSpeciality.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\DaysOffRequestsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\DaysOffRequestsForm.designer.cs">
+      <DependentUpon>DaysOffRequestsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\DeletePatient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\DeletePatient.designer.cs">
+      <DependentUpon>DeletePatient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\EditPatient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\EditPatient.designer.cs">
+      <DependentUpon>EditPatient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\ExaminationRequests.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\ExaminationRequests.designer.cs">
+      <DependentUpon>ExaminationRequests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\OutOfStockForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\OutOfStockForm.designer.cs">
+      <DependentUpon>OutOfStockForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\OutOfStockInRoomsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\OutOfStockInRoomsForm.designer.cs">
+      <DependentUpon>OutOfStockInRoomsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\PatientCRUDForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\PatientCRUDForm.designer.cs">
+      <DependentUpon>PatientCRUDForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\ReferralLettersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\ReferralLettersForm.designer.cs">
+      <DependentUpon>ReferralLettersForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\TransferForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\TransferForm.designer.cs">
+      <DependentUpon>TransferForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\UnblockPatient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\UnblockPatient.designer.cs">
+      <DependentUpon>UnblockPatient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\UrgentExaminations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\UrgentExaminations.designer.cs">
+      <DependentUpon>UrgentExaminations.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -525,6 +525,12 @@
     <EmbeddedResource Include="GUI\PatientFunctionalities\SearchDoctorView.resx">
       <DependentUpon>SearchDoctorView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\MainViews\PatientView.resx">
+      <DependentUpon>PatientView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\MainViews\SecretaryView.resx">
+      <DependentUpon>SecretaryView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\SecretaryFunctionalities\AddComment.resx">
       <DependentUpon>AddComment.cs</DependentUpon>
     </EmbeddedResource>
@@ -564,9 +570,6 @@
     <EmbeddedResource Include="GUI\SecretaryFunctionalities\PatientCRUDForm.resx">
       <DependentUpon>PatientCRUDForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\MainViews\PatientView.resx">
-      <DependentUpon>PatientView.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\SecretaryFunctionalities\ReferralLettersForm.resx">
       <DependentUpon>ReferralLettersForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -578,9 +581,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\SecretaryFunctionalities\UrgentExaminations.resx">
       <DependentUpon>UrgentExaminations.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\MainViews\SecretaryView.resx">
-      <DependentUpon>SecretaryView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

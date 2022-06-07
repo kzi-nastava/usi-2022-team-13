@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Medications.Repository;
 
 namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 {
@@ -15,18 +16,20 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     {
         public string Username { get; set; }
         private PatientRepository _patientRepository;
+        private MedicationRepository _medicationRepository;
         public NotificationsView(string username)
         {
             InitializeComponent();
             this.Username = username;
             _patientRepository = new PatientRepository(this.Username);
+            _medicationRepository = new MedicationRepository();
         }
 
         private void NotificationsView_Load(object sender, EventArgs e)
         {
             lbNotifications.MaximumSize = new Size(450, 0);
             lbNotifications.AutoSize = true;
-            tbNewTime.Text = Convert.ToString(_patientRepository.GetMedicationNotificationTime());
+            tbNewTime.Text = Convert.ToString(_medicationRepository.GetMedicationNotificationTime(_patientRepository.GetPatientId()));
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -37,7 +40,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             {
                 if (hours >= 0)
                 {
-                    _patientRepository.SetMedicationNotificationTime(hours);
+                    _medicationRepository.SetMedicationNotificationTime(hours, _patientRepository.GetPatientId());
                     MessageBox.Show("Succesfully set new notification time!");
                 }
                 else

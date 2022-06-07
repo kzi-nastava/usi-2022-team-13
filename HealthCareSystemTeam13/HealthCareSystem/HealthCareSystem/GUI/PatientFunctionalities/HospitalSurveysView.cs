@@ -9,19 +9,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Surveys.Repository;
 
 namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 {
     public partial class HospitalSurveysView : Form
     {
         public string Username { get; set; }
-        private PatientRepository _patientRepository;
+        private SurveyRepository _surveyRepository;
         private HospitalSurvey _hospitalSurvey;
+        private PatientRepository _patientRepository;
         public HospitalSurveysView(string username)
         {
             this.Username = username;
-            _patientRepository = new PatientRepository(this.Username);
-
+            _surveyRepository = new SurveyRepository();
+            _patientRepository = new PatientRepository(username);
             InitializeComponent();
         }
 
@@ -60,7 +62,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         }
         private void SendSurvey()
         {
-            _patientRepository.AddHospitalSurvey(this._hospitalSurvey);
+            _surveyRepository.AddHospitalSurvey(this._hospitalSurvey, _patientRepository.GetPatientId());
         }
 
         private void btnSend_MouseEnter(object sender, EventArgs e)

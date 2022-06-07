@@ -33,7 +33,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         {
             Renovations = new DataTable();
             string renovationsQuery = "select * from renovations";
-            FillTable(Renovations, renovationsQuery);
+            GUIHelpers.FillTable(Renovations, renovationsQuery, Connection);
         }
 
 

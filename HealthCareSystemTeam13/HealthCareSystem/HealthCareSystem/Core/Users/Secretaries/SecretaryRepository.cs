@@ -21,16 +21,8 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
     class SecretaryRepository
     {
         public DataTable Patients { get; set; }
-        public DataTable BlockedPatients { get; set; }
-        public DataTable RequestsPatients { get; set; }
-        public DataTable ReferralLetters { get; set; }
-        public DataTable ClosestExaminations { get; set; }
-        public DataTable EquipmentInWarehouse { get; set; }
-        public DataTable DynamicEquipment { get; set; }
-        public DataTable TransferDynamicEquipment { get; set; }
-        public DataTable DaysOffRequests { get; set; }
         public OleDbConnection Connection { get; set; }
-        public RoomRepository RoomRep { get; set; }
+        private RoomRepository _RoomRepository { get; set; }
 
         public SecretaryRepository()
         {
@@ -48,17 +40,9 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            RoomRep = new RoomRepository();
+            _RoomRepository = new RoomRepository();
         }
 
-        private void FillTable(DataTable table, string query)
-        {
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                OleDbDataReader reader = cmd.ExecuteReader();
-                table.Load(reader);
-            }
-        }
         public List<string> GetSecretaryId(string userID)
         {
             var query = "SELECT id FROM Secretaries WHERE user_id = " + userID + "";

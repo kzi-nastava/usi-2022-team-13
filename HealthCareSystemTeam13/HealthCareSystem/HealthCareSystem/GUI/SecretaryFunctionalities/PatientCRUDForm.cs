@@ -9,17 +9,18 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using HealthCareSystem.Core.Users.Secretaries.Repository;
 using HealthCareSystem.Core.GUI.SecretaryFunctionalities;
+using HealthCareSystem.Core.Users.Patients.Repository;
 
 namespace HealthCareSystem.Core.GUI
 {
     public partial class PatientCRUDForm : Form
     {
-        SecretaryRepository _secretaryRepository;
+        PatientRepository _patientRepository;
         string Username;
         public PatientCRUDForm(string username)
         {
-            _secretaryRepository = new SecretaryRepository();
-            _secretaryRepository.PullPatients();
+            _patientRepository = new PatientRepository();
+            _patientRepository.PullPatients();
             InitializeComponent();
             FillDataGridView();
             this.Username = username;
@@ -27,7 +28,7 @@ namespace HealthCareSystem.Core.GUI
 
         private void FillDataGridView()
         {
-            patientsDataGrid.DataSource = _secretaryRepository.Patients;
+            patientsDataGrid.DataSource = _patientRepository.Patients;
             DataGridViewSettings();
         }
 

@@ -15,6 +15,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public DataTable DynamicEquipment { get; private set; }
         public DataTable TransferDynamicEquipment { get; private set; }
         public DataTable Equipment { get; private set; }
+        private RoomRepository _roomRepository;
 
         public EquipmentRepository()
         {
@@ -32,6 +33,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
+
+            _roomRepository = new RoomRepository();
         }
         public List<Equipment> GetEquipmentFromRoomId(int roomId)
         {
@@ -67,23 +70,23 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public void PullEquipmentInWarehouse()
         {
             EquipmentInWarehouse = new DataTable();
-            var warehouseId = GetWarehouseId();
+            var warehouseId = _roomRepository.GetWarehouseId();
             var query = "select * from Equipment where type = 'Dynamic' and id not in (select id_equipment from RoomHasEquipment where id_room = " + warehouseId + " and amount > 0)";
-            FillTable(EquipmentInWarehouse, query);
+            GUIHelpers.FillTable(EquipmentInWarehouse, query, Connection);
         }
 
         public void PullDynamicEquipment()
         {
             DynamicEquipment = new DataTable();
             var query = "select * from RoomHasEquipment where amount < 6";
-            FillTable(DynamicEquipment, query);
+            GUIHelpers.FillTable(DynamicEquipment, query, Connection);
         }
 
         public void PullTransferDynamicEquipment(int equipmentId)
         {
             TransferDynamicEquipment = new DataTable();
             var query = "select * from RoomHasEquipment where id_equipment = " + equipmentId.ToString() + "";
-            FillTable(TransferDynamicEquipment, query);
+            GUIHelpers.FillTable(TransferDynamicEquipment, query, Connection);
         }
         public void InsertSingleDynamicEquipmentRequest(DynamicEquipmentRequest request)
         {
@@ -99,7 +102,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         }
         public void UpdateSigleDynamicEquipment(DynamicEquipmentRequest request)
         {
-            int warehouseId = GetWarehouseId();
+            int warehouseId = _roomRepository.GetWarehouseId();
             var amounts = DatabaseCommander.ExecuteReaderQueries("select amount from RoomHasEquipment " +
                "where id_room = " + warehouseId + " and id_equipment = " + request.EquipmentId, Connection);
             string query;
@@ -109,7 +112,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
             }
             else
             {
-                query = "Insert into RoomHasEquipment(id_room, id_equipment, amount) values(" + GetWarehouseId() + ", " + request.EquipmentId + ", " + request.Quantity + ")";
+                query = "Insert into RoomHasEquipment(id_room, id_equipment, amount) values(" + _roomRepository.GetWarehouseId() + ", " + request.EquipmentId + ", " + request.Quantity + ")";
             }
             using (var cmd = new OleDbCommand(query, Connection))
             {
@@ -177,7 +180,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
             string equipmentQuery = "select rhe.id_room as 'Room id', r.type as 'Room type', rhe.id_equipment as 'Equipment id', e.nameOf as 'Equipment name', e.type as 'Equipment type', rhe.amount as 'Amount' " +
                                 "from Equipment e, Rooms r, RoomHasEquipment rhe " +
                                 "where rhe.id_room = r.ID and rhe.id_equipment = e.ID";
-            FillTable(Equipment, equipmentQuery);
+            GUIHelpers.FillTable(Equipment, equipmentQuery, Connection);
 
         }
 

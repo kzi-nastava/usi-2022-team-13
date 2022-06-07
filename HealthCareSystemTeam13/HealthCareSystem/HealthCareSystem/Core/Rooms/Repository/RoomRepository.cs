@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Examinations.Repository;
 using static HealthCareSystem.Core.Rooms.HospitalEquipment.Model.Equipment;
 using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
 using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.Model;
@@ -31,6 +32,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public DataTable Ingredients { get; set; }
 
         public DataTable Medications { get; set; }
+        private ExaminationRepository _examinationRepository;
 
 
         public RoomRepository()
@@ -50,6 +52,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
                 Console.WriteLine(exception.ToString());
             }
 
+            _examinationRepository = new ExaminationRepository();
         }
         public List<Equipment> GetEquipmentFromRoomId(int roomId)
         {
@@ -124,7 +127,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         {
             DateTime fromDateTime = DateTime.Now;
             DateTime toDateTime = DateTime.Now.AddHours(2);
-            List<Examination> examinations = GetRoomEximanitonsFromTo(fromDateTime, toDateTime, roomId);
+            List<Examination> examinations = _examinationRepository.GetRoomEximanitonsFromTo(fromDateTime, toDateTime, roomId);
 
             foreach (Examination examination in examinations)
             {
@@ -144,7 +147,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
             Rooms = new DataTable();
             string roomsQuery = "select id, type as 'Room type' from Rooms";
 
-            FillTable(Rooms, roomsQuery);
+            GUIHelpers.FillTable(Rooms, roomsQuery, Connection);
         }
 
 
@@ -244,7 +247,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public bool DoesRoomHaveFutureExaminations(Room room)
         {
 
-            List<Examination> examinations = GetExaminationsInRoom(room);
+            List<Examination> examinations = _examinationRepository.GetExaminationsInRoom(room);
             Console.WriteLine(examinations.Count);
             foreach (Examination examination in examinations)
             {

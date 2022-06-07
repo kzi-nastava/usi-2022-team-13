@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HealthCareSystem.Core.GUI.PatientFunctionalities;
+using HealthCareSystem.Core.Medications.Repository;
 using HealthCareSystem.Core.Users.Patients.Repository;
 using HealthCareSystem.Core.Users.Patients.Service;
 
@@ -19,7 +20,9 @@ namespace HealthCareSystem.Core.GUI
         public string Username { get; set; }
         public LoginForm SuperForm;
         private PatientRepository _patientRepository;
+        private MedicationRepository _medicationRepository;
         private List<System.Threading.Timer> _timers;
+
         private int _notificationAlertTime;
 
         public PatientView(string username, LoginForm superForm)
@@ -27,7 +30,8 @@ namespace HealthCareSystem.Core.GUI
             Username = username;
             SuperForm = superForm;
             _patientRepository = new PatientRepository(username);
-            _notificationAlertTime = _patientRepository.GetMedicationNotificationTime();
+            _medicationRepository = new MedicationRepository();
+            _notificationAlertTime = _medicationRepository.GetMedicationNotificationTime(_patientRepository.GetPatientId());
 
             InitializeComponent();
 
@@ -83,7 +87,7 @@ namespace HealthCareSystem.Core.GUI
         }
         private void LoadNotifications()
         { 
-            Dictionary<int, DateTime> instructions = _patientRepository.GetMedicationInstructions();
+            Dictionary<int, DateTime> instructions = _medicationRepository.GetMedicationInstructions(_patientRepository.GetPatientId());
             if (instructions.Count() == 0)
                 return;
 
