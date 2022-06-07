@@ -109,6 +109,21 @@ namespace HealthCareSystem.Core.Surveys.Repository
             return doctorSurveys;
         }
 
+        internal void AddDoctorSurvey(int doctorId, int patientId, int rating, int quality, bool wouldReccomend, string comment)
+        {
+            string query = "insert into DoctorSurveys(id_doctor, id_patient, doctorGrade, quality, wouldRecommend, comment) values(" + doctorId + ", " + patientId + ", " + rating + ", " + quality + ", " + wouldReccomend + ", '" + comment + "')";
+
+            DatabaseCommander.ExecuteNonQueries(query, Connection);
+        }
+
+        public void AddHospitalSurvey(HospitalSurvey survey)
+        {
+            int patientId = GetPatientId();
+            bool isSatisfied = survey.Happiness == 1 ? true : false;
+            bool wouldReccomend = survey.WouldRecommend == 1 ? true : false;
+            string query = "insert into HospitalSurveys(quality, higyene, isSatisfied, wouldRecomend, comment, id_patient) values(" + survey.QualityOfService + ", " + survey.Cleanliness + ", " + isSatisfied + ", " + wouldReccomend + ", '" + survey.Comment + "', " + patientId + ")";
+            DatabaseCommander.ExecuteNonQueries(query, Connection);
+        }
 
     }
 

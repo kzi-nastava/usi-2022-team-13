@@ -52,14 +52,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 {
                     int validDate = IsValidDate();
                     if (validDate != 0)
-                    {
-                        int examinationId = (int)dgwExaminations.SelectedRows[0].Cells[0].Value;
-                        
-                        AddEditExamination addEditView = new AddEditExamination(examinationId, false, Username, validDate);
-
-                        addEditView.ShowDialog();
-
-                    }
+                        EditExamination(validDate);
                 }
             }
             else
@@ -67,6 +60,15 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 MessageBox.Show("You are blocked");
             }
 
+        }
+
+        private void EditExamination(int validDate)
+        {
+            int examinationId = (int)dgwExaminations.SelectedRows[0].Cells[0].Value;
+
+            AddEditExamination addEditView = new AddEditExamination(examinationId, false, Username, validDate);
+
+            addEditView.ShowDialog();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -82,27 +84,31 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                     {
                         int validDate = IsValidDate();
                         if (validDate == 1)
-                        {
-                            _patientRepository.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
-                            _patientRepository.InsertExaminationChanges(TypeOfChange.Delete);
-                            _patientRepository.BlockSpamPatients(Username);
-                            MessageBox.Show("Succesfully canceled examination!");
-                            RefreshDataGridView();
-                        }
+                            CancelExamination();
                         else if (validDate == 2)
-                        {
-                            _patientRepository.SendExaminationEditRequest((int)dgwExaminations.SelectedRows[0].Cells[0].Value, DateTime.Now, false, 0, DateTime.Now, 0);
-                            MessageBox.Show("Wait for a secretary to aproove this request.");
-
-                        }
+                            CancelExaminationWithRequest();
                     }
                 }
             }
             else
-            {
                 MessageBox.Show("You are blocked!");
-            }
 
+        }
+
+        private void CancelExaminationWithRequest()
+        {
+            _patientRepository.SendExaminationEditRequest((int)dgwExaminations.SelectedRows[0].Cells[0].Value, DateTime.Now,
+                false, 0, DateTime.Now, 0);
+            MessageBox.Show("Wait for a secretary to aproove this request.");
+        }
+
+        private void CancelExamination()
+        {
+            _patientRepository.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
+            _patientRepository.InsertExaminationChanges(TypeOfChange.Delete);
+            _patientRepository.BlockSpamPatients(Username);
+            MessageBox.Show("Succesfully canceled examination!");
+            RefreshDataGridView();
         }
 
         private int IsValidDate()

@@ -65,7 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Authentication\LoginAuthentication.cs" />
+    <Compile Include="Core\LoginAuthentication.cs" />
     <Compile Include="Core\DatabaseCommander.cs" />
     <Compile Include="Core\Examinations\ExaminationSorter.cs" />
     <Compile Include="Core\Examinations\Model\Anamnesis.cs" />
@@ -84,6 +84,7 @@
     <Compile Include="Core\Rooms\HospitalEquipment\TransferHistoryOfEquipment.cs" />
     <Compile Include="Core\Rooms\Renovation.cs" />
     <Compile Include="Core\Rooms\Repository\EquipmentRepository.cs" />
+    <Compile Include="Core\Rooms\Repository\RenovationRepository.cs" />
     <Compile Include="Core\Rooms\Repository\TransferHistoryRepository.cs" />
     <Compile Include="Core\Rooms\Room.cs" />
     <Compile Include="Core\Scripts\InsertionRepository.cs" />
