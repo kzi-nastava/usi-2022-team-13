@@ -80,7 +80,10 @@
     <Compile Include="Core\Rooms\Renovation.cs" />
     <Compile Include="Core\Rooms\Room.cs" />
     <Compile Include="Core\Scripts\InsertionRepository.cs" />
-    <Compile Include="Core\Surveys\HospitalSurvey.cs" />
+    <Compile Include="Core\Surveys\Model\DoctorSurvey.cs" />
+    <Compile Include="Core\Surveys\Model\HospitalSurvey.cs" />
+    <Compile Include="Core\Surveys\Repository\SurveyRepository.cs" />
+    <Compile Include="Core\Surveys\SurveyService.cs" />
     <Compile Include="Core\Users\Doctors\DoctorRepository.cs" />
     <Compile Include="Core\Users\Doctors\DoctorService.cs" />
     <Compile Include="Core\Users\Doctors\Model\DaysOffRequest.cs" />
@@ -137,6 +140,18 @@
     <Compile Include="GUI\HospitalManagerFunctionalities\AddRenovations.Designer.cs">
       <DependentUpon>AddRenovations.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\HospitalManagerFunctionalities\DoctorGradesView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\HospitalManagerFunctionalities\DoctorGradesView.Designer.cs">
+      <DependentUpon>DoctorGradesView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\HospitalManagerFunctionalities\DoctorSurveys.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\HospitalManagerFunctionalities\DoctorSurveys.Designer.cs">
+      <DependentUpon>DoctorSurveys.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\HospitalManagerFunctionalities\EquipmentMover.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,6 +163,12 @@
     </Compile>
     <Compile Include="GUI\HospitalManagerFunctionalities\HospitalRooms.Designer.cs">
       <DependentUpon>HospitalRooms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\HospitalManagerFunctionalities\HospitalSurveys.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\HospitalManagerFunctionalities\HospitalSurveys.Designer.cs">
+      <DependentUpon>HospitalSurveys.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\HospitalManagerFunctionalities\IngredientsView.cs">
       <SubType>Form</SubType>
@@ -427,11 +448,20 @@
     <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\AddRenovations.resx">
       <DependentUpon>AddRenovations.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\DoctorGradesView.resx">
+      <DependentUpon>DoctorGradesView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\DoctorSurveys.resx">
+      <DependentUpon>DoctorSurveys.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\EquipmentMover.resx">
       <DependentUpon>EquipmentMover.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\HospitalRooms.resx">
       <DependentUpon>HospitalRooms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\HospitalSurveys.resx">
+      <DependentUpon>HospitalSurveys.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\HospitalManagerFunctionalities\IngredientsView.resx">
       <DependentUpon>IngredientsView.cs</DependentUpon>
