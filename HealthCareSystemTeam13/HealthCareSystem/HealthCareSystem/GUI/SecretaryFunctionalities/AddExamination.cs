@@ -19,27 +19,27 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     partial class AddExamination : Form
     {
-        private RoomRepository roomRepository;
-        private ExaminationRepository examinationRepository;
-        private DoctorRepository doctorRepository;
-        private SecretaryRepository secretaryRepository;
-        private ReferralLetter referralLetter;
-        public AddExamination(ReferralLetter selectedReferralLetter)
+        private RoomRepository _roomRepository;
+        private ExaminationRepository _examinationRepository;
+        private DoctorRepository _doctorRepository;
+        private SecretaryRepository _secretaryRepository;
+        private ReferralLetter ChosenReferralLetter;
+        public AddExamination(ReferralLetter referralLetter)
         {
             InitializeComponent();
-            referralLetter = selectedReferralLetter;
-            roomRepository = new RoomRepository();
-            examinationRepository = new ExaminationRepository();
-            doctorRepository = new DoctorRepository();
-            secretaryRepository = new SecretaryRepository();
+            ChosenReferralLetter = referralLetter;
+            _roomRepository = new RoomRepository();
+            _examinationRepository = new ExaminationRepository();
+            _doctorRepository = new DoctorRepository();
+            _secretaryRepository = new SecretaryRepository();
         }
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
             if (CheckSelectedValues())
             {
-                Examination examination = new Examination(referralLetter.ForwardedDoctorID, referralLetter.CurrentPatientID, false, false, false, Helpers.GetMergedDateTime(dateTimeBox.Value, timeBox.Text), referralLetter.ExaminationType, false, Convert.ToInt32(roomIdBox.Text), Convert.ToInt32(durationBox.Text));
-                secretaryRepository.InsertSingleExamination(examination);
+                Examination examination = new Examination(ChosenReferralLetter.ForwardedDoctorID, ChosenReferralLetter.CurrentPatientID, false, false, false, Helpers.GetMergedDateTime(dateTimeBox.Value, timeBox.Text), ChosenReferralLetter.ExaminationType, false, Convert.ToInt32(roomIdBox.Text), Convert.ToInt32(durationBox.Text));
+                _secretaryRepository.InsertSingleExamination(examination);
             }
         }
 
@@ -48,7 +48,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             var regex = @"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$";
             string time = timeBox.Text;
 
-            List<Examination> otherExaminations = examinationRepository.GetAllExaminations();
+            List<Examination> otherExaminations = _examinationRepository.GetAllExaminations();
             DateTime mergedExaminationTime = Helpers.GetMergedDateTime(dateTimeBox.Value, time);
             var match = System.Text.RegularExpressions.Regex.Match(timeBox.Text, regex);
 
@@ -59,7 +59,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
                 return false;
 
             }
-            else if (!DoctorService.IsDoctorAvailable(referralLetter.ForwardedDoctorID, mergedExaminationTime, otherExaminations))
+            else if (!DoctorService.IsDoctorAvailable(ChosenReferralLetter.ForwardedDoctorID, mergedExaminationTime, otherExaminations))
             {
 
                 MessageBox.Show("Doctor is not available at that time.");
@@ -73,10 +73,10 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
                 return false;
 
             }
-            else if (!roomRepository.IsRoomAvailable(Convert.ToInt32(roomIdBox.Text), mergedExaminationTime, otherExaminations))
+            else if (!_roomRepository.IsRoomAvailable(Convert.ToInt32(roomIdBox.Text), mergedExaminationTime, otherExaminations))
             {
 
-                int availableRoomId = roomRepository.GetAvailableRoomId(mergedExaminationTime, otherExaminations);
+                int availableRoomId = _roomRepository.GetAvailableRoomId(mergedExaminationTime, otherExaminations);
                 if (availableRoomId == 0)
                 {
                     MessageBox.Show("No available rooms at this date/time.");

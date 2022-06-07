@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HealthCareSystem.Core.GUI.SecretaryFunctionalities;
+using HealthCareSystem.GUI.SecretaryFunctionalities;
 
 namespace HealthCareSystem.Core.GUI
 {
@@ -73,7 +74,12 @@ namespace HealthCareSystem.Core.GUI
 
         private void outOfStockButton_Click(object sender, EventArgs e)
         {
-            LoadForm(new OutOfStockInRoomsForm(Username));
+            LoadForm(new OutOfStockInRoomsForm());
+        }
+
+        private void daysOffButton_Click(object sender, EventArgs e)
+        {
+            LoadForm(new DaysOffRequestsForm(Username));
         }
     }
 }

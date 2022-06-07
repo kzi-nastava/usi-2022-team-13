@@ -15,23 +15,23 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class AddPatient : Form
     {
-        SecretaryRepository secretaryRepository;
+        SecretaryRepository _secretaryRepository;
         public AddPatient()
         {
             InitializeComponent();
-            secretaryRepository = new SecretaryRepository();
+            _secretaryRepository = new SecretaryRepository();
         }
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
             User user = new User(usernameBox.Text, passwordBox.Text, UserRole.Patients);
-            secretaryRepository.InsertSingleUser(user);
-            string userID = secretaryRepository.GetUserId(usernameBox.Text)[0];
+            _secretaryRepository.InsertSingleUser(user);
+            string userID = _secretaryRepository.GetUserId(usernameBox.Text)[0];
             Patient patient = new Patient(nameBox.Text, lastNameBox.Text, Convert.ToInt32(userID), false);
-            secretaryRepository.InsertSinglePatient(patient);
-            string patientID = secretaryRepository.GetPatientId(userID)[0];
+            _secretaryRepository.InsertSinglePatient(patient);
+            string patientID = _secretaryRepository.GetPatientId(userID)[0];
             MedicalRecord medicalRecord = new MedicalRecord(Convert.ToInt32(patientID), Convert.ToInt32(heightBox.Text), Convert.ToInt32(weightBox.Text));
-            secretaryRepository.InsertSingleMedicalRecord(medicalRecord);
+            _secretaryRepository.InsertSingleMedicalRecord(medicalRecord);
             this.Close();
         }
 

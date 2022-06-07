@@ -14,20 +14,18 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class OutOfStockInRoomsForm : Form
     {
-        SecretaryRepository secretaryRepository;
-        string Username;
-        public OutOfStockInRoomsForm(string username)
+        SecretaryRepository _secretaryRepository;
+        public OutOfStockInRoomsForm()
         {
-            secretaryRepository = new SecretaryRepository();
-            secretaryRepository.CheckDynamicEquipmentRequests();
-            secretaryRepository.PullDynamicEquipment();
+            _secretaryRepository = new SecretaryRepository();
+            _secretaryRepository.CheckDynamicEquipmentRequests();
+            _secretaryRepository.PullDynamicEquipment();
             InitializeComponent();
             FillDataGridView();
-            this.Username = username;
         }
         private void FillDataGridView()
         {
-            dynamicEquipmentGrid.DataSource = secretaryRepository.DynamicEquipment;
+            dynamicEquipmentGrid.DataSource = _secretaryRepository.DynamicEquipment;
             DataGridViewSettings();
         }
         private void DataGridViewSettings()

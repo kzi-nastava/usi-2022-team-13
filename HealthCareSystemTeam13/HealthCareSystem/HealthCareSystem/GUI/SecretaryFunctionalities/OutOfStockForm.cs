@@ -14,14 +14,14 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class OutOfStockForm : Form
     {
-        SecretaryRepository secretaryRepository;
+        SecretaryRepository _secretaryRepository;
         string Username;
         public OutOfStockForm(string username)
         {
-            secretaryRepository = new SecretaryRepository();
+            _secretaryRepository = new SecretaryRepository();
  
-            secretaryRepository.CheckDynamicEquipmentRequests();
-            secretaryRepository.PullEquipmentInWarehouse();
+            _secretaryRepository.CheckDynamicEquipmentRequests();
+            _secretaryRepository.PullEquipmentInWarehouse();
 
             InitializeComponent();
             amountBox.Increment = 1;
@@ -32,7 +32,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         }
         private void FillDataGridView()
         {
-            requestsDataGrid.DataSource = secretaryRepository.EquipmentInWarehouse;
+            requestsDataGrid.DataSource = _secretaryRepository.EquipmentInWarehouse;
             DataGridViewSettings();
         }
         private void DataGridViewSettings()
@@ -46,10 +46,10 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         {
             int equipmentID = (int)requestsDataGrid.SelectedRows[0].Cells[0].Value;
             int amount = (int)amountBox.Value;
-            string userId = secretaryRepository.GetUserId(Username)[0];
-            int secretaryId = Convert.ToInt32(secretaryRepository.GetSecretaryId(userId)[0]);
+            string userId = _secretaryRepository.GetUserId(Username)[0];
+            int secretaryId = Convert.ToInt32(_secretaryRepository.GetSecretaryId(userId)[0]);
             DynamicEquipmentRequest request = new DynamicEquipmentRequest(equipmentID, amount, DateTime.Now, secretaryId);
-            secretaryRepository.InsertSingleDynamicEquipmentRequest(request);
+            _secretaryRepository.InsertSingleDynamicEquipmentRequest(request);
         }
 
         private void OutOfStockForm_Load(object sender, EventArgs e)

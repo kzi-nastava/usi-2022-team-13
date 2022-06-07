@@ -13,17 +13,17 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class EditPatient : Form
     {
-        SecretaryRepository secretaryRepository;
+        SecretaryRepository _secretaryRepository;
         public EditPatient()
         {
             InitializeComponent();
-            secretaryRepository = new SecretaryRepository();
+            _secretaryRepository = new SecretaryRepository();
         }
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
             string patientID = patientIdBox.Text;
-            Dictionary<string, string> information = secretaryRepository.GetPatientInformation(patientID);
+            Dictionary<string, string> information = _secretaryRepository.GetPatientInformation(patientID);
             string name = information["firstName"];
             string lastname = information["lastName"];
             string username = information["usrnm"];
@@ -32,7 +32,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             if (lastNameBox.Text != "") { lastname = lastNameBox.Text; }
             if (usernameBox.Text != "") { username = usernameBox.Text; }
             if (passwordBox.Text != "") { password = passwordBox.Text; }
-            secretaryRepository.UpdatePatient(patientID, username, password, name, lastname);
+            _secretaryRepository.UpdatePatient(patientID, username, password, name, lastname);
             this.Close();
         }
     }

@@ -14,12 +14,12 @@ namespace HealthCareSystem.Core.GUI
 {
     public partial class PatientCRUDForm : Form
     {
-        SecretaryRepository secretaryRepository;
+        SecretaryRepository _secretaryRepository;
         string Username;
         public PatientCRUDForm(string username)
         {
-            secretaryRepository = new SecretaryRepository();
-            secretaryRepository.PullPatients();
+            _secretaryRepository = new SecretaryRepository();
+            _secretaryRepository.PullPatients();
             InitializeComponent();
             FillDataGridView();
             this.Username = username;
@@ -27,7 +27,7 @@ namespace HealthCareSystem.Core.GUI
 
         private void FillDataGridView()
         {
-            patientsDataGrid.DataSource = secretaryRepository.Patients;
+            patientsDataGrid.DataSource = _secretaryRepository.Patients;
             DataGridViewSettings();
         }
 

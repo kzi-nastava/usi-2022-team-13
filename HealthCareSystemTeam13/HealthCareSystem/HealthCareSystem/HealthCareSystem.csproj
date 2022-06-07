@@ -251,6 +251,12 @@
     <Compile Include="GUI\PatientFunctionalities\SearchDoctorView.Designer.cs">
       <DependentUpon>SearchDoctorView.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\AddComment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\AddComment.designer.cs">
+      <DependentUpon>AddComment.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\SecretaryFunctionalities\AddExamination.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -280,6 +286,12 @@
     </Compile>
     <Compile Include="GUI\SecretaryFunctionalities\ChooseSpeciality.Designer.cs">
       <DependentUpon>ChooseSpeciality.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\DaysOffRequestsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SecretaryFunctionalities\DaysOffRequestsForm.designer.cs">
+      <DependentUpon>DaysOffRequestsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\SecretaryFunctionalities\DeletePatient.cs">
       <SubType>Form</SubType>
@@ -469,6 +481,9 @@
     <EmbeddedResource Include="GUI\PatientFunctionalities\SearchDoctorView.resx">
       <DependentUpon>SearchDoctorView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\AddComment.resx">
+      <DependentUpon>AddComment.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\SecretaryFunctionalities\AddExamination.resx">
       <DependentUpon>AddExamination.cs</DependentUpon>
     </EmbeddedResource>
@@ -483,6 +498,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\SecretaryFunctionalities\ChooseSpeciality.resx">
       <DependentUpon>ChooseSpeciality.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SecretaryFunctionalities\DaysOffRequestsForm.resx">
+      <DependentUpon>DaysOffRequestsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\SecretaryFunctionalities\DeletePatient.resx">
       <DependentUpon>DeletePatient.cs</DependentUpon>

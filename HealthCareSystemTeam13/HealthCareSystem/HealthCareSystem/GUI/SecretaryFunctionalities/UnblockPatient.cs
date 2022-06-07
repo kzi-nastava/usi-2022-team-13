@@ -14,17 +14,17 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class UnblockPatient : Form
     {
-        SecretaryRepository secretaryRepository;
+        SecretaryRepository _secretaryRepository;
         public UnblockPatient()
         {
             InitializeComponent();
-            secretaryRepository = new SecretaryRepository();
+            _secretaryRepository = new SecretaryRepository();
         }
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
             string blockedPatientId = patientIdBox.Text;
-            secretaryRepository.DeleteSingleBlockedPatient(blockedPatientId);
+            _secretaryRepository.DeleteSingleBlockedPatient(blockedPatientId);
             this.Close();
         }
     }
