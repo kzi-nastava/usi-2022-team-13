@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HealthCareSystem.Core.Users.Doctors.Repository;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,46 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
 {
     public partial class RequestDaysOff : Form
     {
-        public RequestDaysOff()
+        private DoctorRepository DoctorRep;
+
+        public RequestDaysOff(string doctorUsername)
         {
             InitializeComponent();
+            DoctorRep = new DoctorRepository(doctorUsername, true);
+            DoctorRep.Username = doctorUsername;
+            
+
+        }
+
+        private void btnSubmit_Click(object sender, EventArgs e)
+        {
+            DateTime startDate = dtpStart.Value;
+            DateTime endDate = dtpEnd.Value;
+            int dayDifference = startDate.DayOfYear - DateTime.Now.DayOfYear;
+            if(dayDifference < 2)
+            {
+                MessageBox.Show("You can't request days off that start less then two days from today!");
+                return;
+            }
+
+            List<DateTime> examinationDates = DoctorRep.GetDateOfExaminationsForDoctor();
+            
+            foreach(var examinationDate in examinationDates)
+            {
+                if(examinationDate > startDate && examinationDate < endDate)
+                {
+                    MessageBox.Show("You have an examination scheduled at that time period!");
+                    return;
+                } 
+            }
+
+            String reasonForDaysOff = rtbReasonForRequest.Text;
+
+            
+
+
+
+
         }
     }
 }

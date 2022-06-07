@@ -537,6 +537,37 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             DatabaseHelpers.ExecuteNonQueries(updateQuery, Connection);
         }
 
+        public List<DateTime> GetDateOfExaminationsForDoctor()
+        {
+            List<DateTime> dates = new List<DateTime>();
+            string query = "select dateOf where id_doctor = " + GetDoctorId();
+
+
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+            try
+            {
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                    dates.Add((DateTime)reader["DateOf"]);
+            }
+
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+
+
+
+            return dates;
+        }
+
 
 
 
