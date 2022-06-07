@@ -15,17 +15,17 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class ReferralLettersForm : Form
     {
-        SecretaryRepository secretaryRepository;
+        SecretaryRepository _secretaryRepository;
         public ReferralLettersForm()
         {
-            secretaryRepository = new SecretaryRepository();
-            secretaryRepository.PullReferralLetters();
+            _secretaryRepository = new SecretaryRepository();
+            _secretaryRepository.PullReferralLetters();
             InitializeComponent();
             FillDataGridView();
         }
         private void FillDataGridView()
         {
-            lettersDataGrid.DataSource = secretaryRepository.ReferralLetters;
+            lettersDataGrid.DataSource = _secretaryRepository.ReferralLetters;
             DataGridViewSettings();
         }
 
@@ -47,7 +47,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             Enum.TryParse<TypeOfExamination>((string)lettersDataGrid.SelectedRows[0].Cells[5].Value, out examinationType);
             ReferralLetter referralLetter = new ReferralLetter(currentDoctorID, patientID, forwardedDoctorID, examinationType, speciality);
             AddExamination addExaminationForm = new AddExamination(referralLetter);
-            secretaryRepository.DeleteSingleReferralLetter(Convert.ToString(lettersDataGrid.SelectedRows[0].Cells[0].Value));
+            _secretaryRepository.DeleteSingleReferralLetter(Convert.ToString(lettersDataGrid.SelectedRows[0].Cells[0].Value));
             addExaminationForm.ShowDialog();
         }
     }

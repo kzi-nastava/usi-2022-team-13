@@ -28,6 +28,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         public DataTable EquipmentInWarehouse { get; set; }
         public DataTable DynamicEquipment { get; set; }
         public DataTable TransferDynamicEquipment { get; set; }
+        public DataTable DaysOffRequests { get; set; }
         public OleDbConnection Connection { get; set; }
         public RoomRepository RoomRep { get; set; }
 
@@ -125,6 +126,13 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             TransferDynamicEquipment = new DataTable();
             var query = "select * from RoomHasEquipment where id_equipment = " + equipmentId.ToString() + "";
             FillTable(TransferDynamicEquipment, query);
+        }
+
+        public void PullDaysOffRequests()
+        {
+            DaysOffRequests = new DataTable();
+            var query = "select * from DoctorRequestDaysOf df where df.id not in (select mdf.id_request from ManagementOfDaysOfRequests mdf)";
+            FillTable(DaysOffRequests, query);
         }
 
         public void InsertSingleUser(User user)
@@ -274,11 +282,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         {
             var query = "SELECT user_id FROM Patients WHERE id = " + Convert.ToInt32(patientID) + "";
             string userID = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
-            query = "DELETE from Patients WHERE id = " + patientID + "";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.ExecuteNonQuery();
-            }
+
             query = "DELETE from Users WHERE id = " + userID + "";
             using (var cmd = new OleDbCommand(query, Connection))
             {
@@ -290,11 +294,13 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         {
             var query = "SELECT id_patient FROM BlockedPatients WHERE id = " + blockedPatientID + "";
             string patientID = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
+            
             query = "DELETE from BlockedPatients WHERE ID = " + blockedPatientID + "";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.ExecuteNonQuery();
             }
+
             query = "UPDATE Patients SET isBlocked = 0 WHERE ID = " + patientID + "";
             using (var cmd = new OleDbCommand(query, Connection))
             {
@@ -315,6 +321,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         {
             var query = "SELECT id_examination from PatientEditRequest WHERE id = " + requestID + "";
             string examinationID = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
+            
             query = "UPDATE Examination SET iscancelled = 1 WHERE ID = " + examinationID + "";
             using (var cmd = new OleDbCommand(query, Connection))
             {
@@ -406,11 +413,13 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             string userID = GetUserId(username)[0];
             var query = "SELECT ID FROM Secretaries WHERE user_id = " + userID + "";
             string secretaryID = DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0];
+            
             query = "UPDATE Patients SET isBlocked = 1 WHERE ID = " + patientID + "";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.ExecuteNonQuery();
             }
+            
             BlockedPatient blockedPatient = new BlockedPatient(Convert.ToInt32(patientID), Convert.ToInt32(secretaryID), new DateTime(2022, 10, 12));
             InsertSingleBlockedPatient(blockedPatient);
         }
@@ -517,7 +526,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             List<Examination> examinations = new List<Examination>();
             var query = "SELECT id, id_doctor, id_patient, isEdited, isCancelled, isFinished, dateOf, typeOfExamination, isUrgent, id_room, duration FROM Examination " +
                 "WHERE dateOf > #" + from.ToString() + "# and dateOf < #" + to.ToString() + "# and id_doctor  = " + doctorId + "";
-            //Dictionary<string, string> row = new Dictionary<string, string>();
+            
             OleDbCommand cmd = new OleDbCommand();
             cmd.Connection = Connection;
             cmd.CommandType = System.Data.CommandType.Text;
@@ -536,17 +545,20 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         {
             List<string> doctorsID = GetSpecialistsIds(speciality);
             Tuple<string, DateTime> closestTimeAndDoctor = new Tuple<string, DateTime>("none", DateTime.Now.AddHours(2)); 
+            
             foreach (string doctorID in doctorsID)
             {
                 List<Examination> examinations = GetDoctorsEximanitonsInNextTwoHours(doctorID);
                 examinations = examinations.OrderBy(examination => examination.DateOf).ToList();
                 TimeSpan timeSpan = TimeSpan.FromSeconds(0);
+                
                 if(examinations.Count() > 0)
                     timeSpan = DateTime.Now - examinations[0].DateOf;
                 if (timeSpan.TotalMinutes <= duration)
                 {
                     closestTimeAndDoctor = new Tuple<string, DateTime>(doctorID, DateTime.Now);
                 }
+
                 for (int index = 0; index < examinations.Count() - 1; index++)
                 {
                     timeSpan = examinations[index + 1].DateOf - examinations[index].DateOf;
@@ -558,11 +570,11 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
                         }
                     }
                 }
+
                 if(examinations.Count() > 0)
                     timeSpan = DateTime.Now.AddHours(2) - examinations[examinations.Count - 1].DateOf;
                 if (timeSpan.TotalMinutes <= duration)
                 {
-
                     if (examinations[examinations.Count - 1].DateOf.AddMinutes(examinations[examinations.Count - 1].Duration) < closestTimeAndDoctor.Item2)
                     {
                         closestTimeAndDoctor = new Tuple<string, DateTime>(doctorID, examinations[examinations.Count - 1].DateOf.AddMinutes(examinations[examinations.Count - 1].Duration));
@@ -584,7 +596,8 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
                         return Convert.ToInt32(roomId);
                     }    
                 }
-            } else
+            } 
+            else
             {
                 List<string> roomsId = RoomRep.GetExaminationRooms();
                 foreach (string roomId in roomsId)
@@ -604,6 +617,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             DateTime fromDateTime = DateTime.Now;
             DateTime toDateTime = DateTime.Now.AddHours(2);
             List<Examination> examinations = GetRoomEximanitonsFromTo(fromDateTime, toDateTime, roomId);
+            
             foreach(Examination examination in examinations)
             {
                 if (examination.DateOf < dateTime.AddMinutes(duration) && examination.DateOf > dateTime)
@@ -654,8 +668,21 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             {
                 UpdateSigleDynamicEquipment(request);
                 DeleteSingleDynamicEquipmentRequest(request.ID);
-
             }
         }
+
+        public void ManageDaysOffRequest(string username, int requestId, bool approved, string comment = "")
+        {
+            var query = "INSERT INTO ManagementOfDaysOfRequests(id_request, id_secretary, isapproved, comment) VALUES(@id_request, @id_secretary, @isapproved, @comment)";
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_request", requestId);
+                cmd.Parameters.AddWithValue("@id_secretary", GetSecretaryId(username)[0]);
+                cmd.Parameters.AddWithValue("@isapproved", approved.ToString());
+                cmd.Parameters.AddWithValue("@comment", comment);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
     }
 }
