@@ -20,14 +20,55 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
             InitializeComponent();
             DoctorRep = new DoctorRepository(doctorUsername, true);
             DoctorRep.Username = doctorUsername;
-            
 
+            DoctorRep.PullRequestsForDaysOff();
+
+            FillDataGridView();
+
+
+        }
+
+        private void FillDataGridView()
+        {
+
+            dgwRequests.DataSource = DoctorRep.RequestsForDaysOff;
+            DataGridViewSettings();
+        }
+
+        private void DataGridViewSettings()
+        {
+            dgwRequests.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgwRequests.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgwRequests.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgwRequests.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgwRequests.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgwRequests.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgwRequests.Columns[0].Width = 90;
+            dgwRequests.Columns[1].Width = 90;
+            dgwRequests.Columns[2].Width = 90;
+            dgwRequests.Columns[3].Width = 90;
+            dgwRequests.Columns[4].Width = 90;
+            dgwRequests.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgwRequests.MultiSelect = false;
         }
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {
             DateTime startDate = dtpStart.Value;
             DateTime endDate = dtpEnd.Value;
+
+            if(rtbReasonForRequest.Text == "")
+            {
+                MessageBox.Show("You need to enter a reason for wanting to take days off!");
+                return;
+            }
+
+            if(endDate.DayOfYear < startDate.DayOfYear)
+            {
+                MessageBox.Show("Starting date can't be after ending date!");
+                return;
+            }
+
             int dayDifference = startDate.DayOfYear - DateTime.Now.DayOfYear;
             if(dayDifference <= 2)
             {
@@ -59,6 +100,10 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
 
             DoctorRep.InsertDaysOff(startDate, endDate, reasonForDaysOff, isUrgent, DoctorRep.GetDoctorId());
 
+            MessageBox.Show("Successfully created a request for taking days off!");
+
+            DoctorRep.PullRequestsForDaysOff();
+            FillDataGridView();
 
 
 

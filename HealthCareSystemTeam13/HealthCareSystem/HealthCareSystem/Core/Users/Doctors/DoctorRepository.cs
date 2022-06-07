@@ -23,6 +23,8 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public DataTable Examinations { get; set; }
         public DataTable Medicine { get; set; }
 
+        public DataTable RequestsForDaysOff { get; set; }
+
         public DoctorRepository(string username = "", bool calledFromDoctor = false)
         {
             if (username.Length > 0) Username = username;
@@ -67,6 +69,16 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 " from Medications where status = 'Approved'";
 
             FillTable(Medicine, medicineQuery);
+        }
+
+        public void PullRequestsForDaysOff()
+        {
+            RequestsForDaysOff = new DataTable();
+
+            string requestsForDaysOffQuery = "select DateFrom, DateTo, reasonOf, stateOfRequest, isUrgent from DoctorRequestDaysOf " +
+                "where id_doctor = " + GetDoctorId() + "";
+
+            FillTable(RequestsForDaysOff, requestsForDaysOffQuery);
         }
 
         private void FillTable(DataTable table, string query)
@@ -573,8 +585,8 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             int checkState = 0;
             if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 
-            string query = "insert into DoctorRequestDaysOf (dateFrom, dateTo, reasonOf, isUrgent, id_doctor) " +
-                "values (@dateFrom, @dateTo, @reasonOf, @isUrgent, @doctor_id)";
+            string query = "insert into DoctorRequestDaysOf (dateFrom, dateTo, reasonOf, isUrgent, id_doctor, stateOfRequest) " +
+                "values (@dateFrom, @dateTo, @reasonOf, @isUrgent, @doctor_id, @stateOfRequest)";
 
             
             Console.WriteLine(isUrgent);
@@ -586,6 +598,11 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 cmd.Parameters.AddWithValue("@reasonOf", reasonForDaysOff);
                 cmd.Parameters.AddWithValue("@isUrgent", isUrgent);
                 cmd.Parameters.AddWithValue("@id_doctor", doctorId);
+                if(!isUrgent)
+                    cmd.Parameters.AddWithValue("@stateOfRequest", StateOfRequest.Waiting.ToString());
+                else
+                    cmd.Parameters.AddWithValue("@stateOfRequest", StateOfRequest.Accepted.ToString());
+
                 cmd.ExecuteNonQuery();
             }
 

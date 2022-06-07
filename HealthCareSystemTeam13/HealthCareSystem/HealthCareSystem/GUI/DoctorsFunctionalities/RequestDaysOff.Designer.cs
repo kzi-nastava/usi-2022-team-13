@@ -36,9 +36,10 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
             this.btnSubmit = new System.Windows.Forms.Button();
             this.lbFirstDate = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.lvPastRequests = new System.Windows.Forms.ListView();
             this.lbTitle = new System.Windows.Forms.Label();
             this.lbPastRequests = new System.Windows.Forms.Label();
+            this.dgwRequests = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dgwRequests)).BeginInit();
             this.SuspendLayout();
             // 
             // dtpStart
@@ -103,15 +104,6 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
             this.label2.TabIndex = 6;
             this.label2.Text = "Ending time";
             // 
-            // lvPastRequests
-            // 
-            this.lvPastRequests.HideSelection = false;
-            this.lvPastRequests.Location = new System.Drawing.Point(623, 143);
-            this.lvPastRequests.Name = "lvPastRequests";
-            this.lvPastRequests.Size = new System.Drawing.Size(253, 117);
-            this.lvPastRequests.TabIndex = 8;
-            this.lvPastRequests.UseCompatibleStateImageBehavior = false;
-            // 
             // lbTitle
             // 
             this.lbTitle.AutoSize = true;
@@ -128,18 +120,27 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
             this.lbPastRequests.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbPastRequests.Location = new System.Drawing.Point(617, 88);
             this.lbPastRequests.Name = "lbPastRequests";
-            this.lbPastRequests.Size = new System.Drawing.Size(276, 31);
+            this.lbPastRequests.Size = new System.Drawing.Size(221, 31);
             this.lbPastRequests.TabIndex = 52;
-            this.lbPastRequests.Text = "See my past requests";
+            this.lbPastRequests.Text = "My past requests";
+            // 
+            // dgwRequests
+            // 
+            this.dgwRequests.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgwRequests.Location = new System.Drawing.Point(563, 139);
+            this.dgwRequests.Margin = new System.Windows.Forms.Padding(4);
+            this.dgwRequests.Name = "dgwRequests";
+            this.dgwRequests.Size = new System.Drawing.Size(473, 358);
+            this.dgwRequests.TabIndex = 53;
             // 
             // RequestDaysOff
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(934, 430);
+            this.ClientSize = new System.Drawing.Size(1071, 551);
+            this.Controls.Add(this.dgwRequests);
             this.Controls.Add(this.lbPastRequests);
             this.Controls.Add(this.lbTitle);
-            this.Controls.Add(this.lvPastRequests);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lbFirstDate);
             this.Controls.Add(this.btnSubmit);
@@ -149,6 +150,7 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
             this.Controls.Add(this.dtpStart);
             this.Name = "RequestDaysOff";
             this.Text = "RequestDaysOff";
+            ((System.ComponentModel.ISupportInitialize)(this.dgwRequests)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -163,8 +165,8 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
         private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.Label lbFirstDate;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListView lvPastRequests;
         private System.Windows.Forms.Label lbTitle;
         private System.Windows.Forms.Label lbPastRequests;
+        private System.Windows.Forms.DataGridView dgwRequests;
     }
 }

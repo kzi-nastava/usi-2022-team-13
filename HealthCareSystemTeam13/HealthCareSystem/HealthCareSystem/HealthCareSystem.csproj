@@ -83,6 +83,7 @@
     <Compile Include="Core\Surveys\HospitalSurvey.cs" />
     <Compile Include="Core\Users\Doctors\DoctorRepository.cs" />
     <Compile Include="Core\Users\Doctors\DoctorService.cs" />
+    <Compile Include="Core\Users\Doctors\Model\DaysOffRequest.cs" />
     <Compile Include="Core\Users\HospitalManagers\HospitalManager.cs" />
     <Compile Include="Core\Users\Patients\PatientRepository.cs" />
     <Compile Include="Core\Users\Patients\PatientService.cs" />
