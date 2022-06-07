@@ -41,6 +41,7 @@ namespace HealthCareSystem
             this.btnMedicalRecord = new System.Windows.Forms.Button();
             this.btnStartExamination = new System.Windows.Forms.Button();
             this.btnMedicine = new System.Windows.Forms.Button();
+            this.btnRequestDaysOff = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgwExaminations)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,7 +60,7 @@ namespace HealthCareSystem
             // btnEdit
             // 
             this.btnEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEdit.Location = new System.Drawing.Point(708, 17);
+            this.btnEdit.Location = new System.Drawing.Point(796, 17);
             this.btnEdit.Margin = new System.Windows.Forms.Padding(4);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(143, 59);
@@ -71,10 +72,10 @@ namespace HealthCareSystem
             // btnAdd
             // 
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAdd.Location = new System.Drawing.Point(530, 17);
+            this.btnAdd.Location = new System.Drawing.Point(657, 17);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(4);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(170, 59);
+            this.btnAdd.Size = new System.Drawing.Size(131, 59);
             this.btnAdd.TabIndex = 6;
             this.btnAdd.Text = "ADD";
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -92,7 +93,7 @@ namespace HealthCareSystem
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(859, 17);
+            this.btnCancel.Location = new System.Drawing.Point(952, 17);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(127, 59);
@@ -171,7 +172,7 @@ namespace HealthCareSystem
             // btnMedicine
             // 
             this.btnMedicine.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMedicine.Location = new System.Drawing.Point(394, 17);
+            this.btnMedicine.Location = new System.Drawing.Point(380, 17);
             this.btnMedicine.Margin = new System.Windows.Forms.Padding(4);
             this.btnMedicine.Name = "btnMedicine";
             this.btnMedicine.Size = new System.Drawing.Size(128, 59);
@@ -180,11 +181,24 @@ namespace HealthCareSystem
             this.btnMedicine.UseVisualStyleBackColor = true;
             this.btnMedicine.Click += new System.EventHandler(this.btnMedicine_Click);
             // 
+            // btnRequestDaysOff
+            // 
+            this.btnRequestDaysOff.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRequestDaysOff.Location = new System.Drawing.Point(534, 17);
+            this.btnRequestDaysOff.Margin = new System.Windows.Forms.Padding(4);
+            this.btnRequestDaysOff.Name = "btnRequestDaysOff";
+            this.btnRequestDaysOff.Size = new System.Drawing.Size(115, 59);
+            this.btnRequestDaysOff.TabIndex = 18;
+            this.btnRequestDaysOff.Text = "Request Days Off";
+            this.btnRequestDaysOff.UseVisualStyleBackColor = true;
+            this.btnRequestDaysOff.Click += new System.EventHandler(this.btnRequestDaysOff_Click);
+            // 
             // DoctorView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1027, 658);
+            this.ClientSize = new System.Drawing.Size(1092, 658);
+            this.Controls.Add(this.btnRequestDaysOff);
             this.Controls.Add(this.btnMedicine);
             this.Controls.Add(this.btnStartExamination);
             this.Controls.Add(this.btnMedicalRecord);
@@ -220,5 +234,6 @@ namespace HealthCareSystem
         private System.Windows.Forms.Button btnMedicalRecord;
         private System.Windows.Forms.Button btnStartExamination;
         private System.Windows.Forms.Button btnMedicine;
+        private System.Windows.Forms.Button btnRequestDaysOff;
     }
 }

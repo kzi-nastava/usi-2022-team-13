@@ -837,6 +837,8 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             examinations.Add(new Examination(Convert.ToInt32(doctorIDs[0]), Convert.ToInt32(patientIDs[2]), false, false, false, new DateTime(2022, 4, 26, 10, 10, 10), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
             examinations.Add(new Examination(Convert.ToInt32(doctorIDs[0]), Convert.ToInt32(patientIDs[0]), false, false, false, DateTime.Now.AddDays(2),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
+            examinations.Add(new Examination(Convert.ToInt32(doctorIDs[0]), Convert.ToInt32(patientIDs[1]), false, false, false, DateTime.Now.AddDays(4), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
+
             examinations.Add(new Examination(Convert.ToInt32(doctorIDs[1]), Convert.ToInt32(patientIDs[1]), false, false, false, DateTime.Now.AddDays(2),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[5]), 15));
             examinations.Add(new Examination(Convert.ToInt32(doctorIDs[2]), Convert.ToInt32(patientIDs[2]), false, false, false, DateTime.Now.AddDays(3),TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));
             examinations.Add(new Examination(Convert.ToInt32(doctorIDs[0]), Convert.ToInt32(patientIDs[2]), false, false, false, new DateTime(2022, 4, 28, 10, 10, 10), TypeOfExamination.BasicExamination, false, Convert.ToInt32(roomIDs[4]), 15));

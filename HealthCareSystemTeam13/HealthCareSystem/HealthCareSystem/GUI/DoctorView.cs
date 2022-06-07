@@ -2,6 +2,7 @@
 using HealthCareSystem.Core.GUI.DoctorsFunctionalities;
 using HealthCareSystem.Core.Users.Doctors.Repository;
 using HealthCareSystem.Core.Users.Patients.Model;
+using HealthCareSystem.GUI.DoctorsFunctionalities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -216,6 +217,12 @@ namespace HealthCareSystem
         {
             MedicationManagement medicationManagement = new MedicationManagement(Username);
             medicationManagement.ShowDialog();
+        }
+
+        private void btnRequestDaysOff_Click(object sender, EventArgs e)
+        {
+            RequestDaysOff requestDaysOffForm = new RequestDaysOff(Username);
+            requestDaysOffForm.ShowDialog();
         }
     }
 }
