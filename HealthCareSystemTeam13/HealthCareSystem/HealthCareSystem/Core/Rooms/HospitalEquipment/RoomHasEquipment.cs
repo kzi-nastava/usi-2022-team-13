@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model
 {
-    class RoomHasEquipment
+    public class RoomHasEquipment
     {
         public int Id { get; set; }
         public int EquipmentId { get; set; }

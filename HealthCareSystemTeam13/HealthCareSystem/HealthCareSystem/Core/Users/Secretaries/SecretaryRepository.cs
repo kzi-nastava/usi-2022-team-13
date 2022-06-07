@@ -22,7 +22,6 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
     {
         public DataTable Patients { get; set; }
         public OleDbConnection Connection { get; set; }
-        private RoomRepository _RoomRepository { get; set; }
 
         public SecretaryRepository()
         {
@@ -40,7 +39,6 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            _RoomRepository = new RoomRepository();
         }
 
         public List<string> GetSecretaryId(string userID)

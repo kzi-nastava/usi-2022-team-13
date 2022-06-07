@@ -28,14 +28,10 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public OleDbConnection Connection { get; set; }
         public DataTable Rooms { get; set; }
         public DataTable Equipment { get; set; }
-        public DataTable Renovations { get; set; }
-        public DataTable Ingredients { get; set; }
-
-        public DataTable Medications { get; set; }
         private ExaminationRepository _examinationRepository;
 
 
-        public RoomRepository()
+        public RoomRepository(int indicator = 1)
         {
             try
             {
@@ -51,8 +47,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-
-            _examinationRepository = new ExaminationRepository();
+            if(indicator == 0)
+                _examinationRepository = new ExaminationRepository();
         }
         public List<Equipment> GetEquipmentFromRoomId(int roomId)
         {
@@ -136,6 +132,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
             }
             return true;
         }
+
         public int GetWarehouseId()
         {
             var query = "SELECT id FROM Rooms WHERE type = 'Warehouse'";
@@ -234,7 +231,34 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
             return rooms;
         }
+        public List<Room> GetRooms(string query)
+        {
+            List<Room> rooms = new List<Room>();
 
+
+            try
+            {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    TypeOfRoom typeOfRoom;
+                    Enum.TryParse<TypeOfRoom>(reader["type"].ToString(), out typeOfRoom);
+
+                    rooms.Add(new Room(typeOfRoom, Convert.ToInt32(reader["id"])));
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return rooms;
+        }
 
         public Room GetRoom(int id)
         {
@@ -248,7 +272,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
         {
 
             List<Examination> examinations = _examinationRepository.GetExaminationsInRoom(room);
-            Console.WriteLine(examinations.Count);
             foreach (Examination examination in examinations)
             {
                 if (DateTime.Compare(DateTime.Now, examination.DateOf) < 0)
@@ -283,7 +306,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         }
 
 
-        private static void SetRoomsToAvailable(Dictionary<int, bool> availableRooms, List<Room> rooms)
+        private void SetRoomsToAvailable(Dictionary<int, bool> availableRooms, List<Room> rooms)
         {
             for (int i = 0; i < rooms.Count(); i++)
             {
@@ -322,7 +345,62 @@ namespace HealthCareSystem.Core.Rooms.Repository
             return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
+        public void PullFoundRows(string search, string amount, string roomType, string equipmentType)
+        {
+            Equipment = new DataTable();
+            string equipmentQuery = "select rhe.id_room as 'Room id', r.type as 'Room type', rhe.id_equipment as 'Equipment id', e.nameOf as 'Equipment name', e.type as 'Equipment type', rhe.amount as 'Amount' " +
+                                    "from Equipment e, Rooms r, RoomHasEquipment rhe " +
+                                    "where rhe.id_room = r.ID and rhe.id_equipment = e.ID and (e.nameOf like '%" + search + "%' or e.type like '%" + search + "%')";
 
+            if (amount != "Any")
+            {
+                if (amount == "10+")
+                {
+                    equipmentQuery += " and rhe.amount > 10";
+                }
+                else
+                {
+                    equipmentQuery += " and rhe.amount > 1 and rhe.amount <= 10";
+                }
+            }
+
+            if (roomType != "Any")
+            {
+                equipmentQuery += " and r.type like '" + roomType + "'";
+            }
+
+            if (equipmentType != "Any")
+            {
+                equipmentQuery += " and e.type like '" + equipmentType + "'";
+            }
+
+            GUIHelpers.FillTable(Equipment, equipmentQuery, Connection);
+        }
+        public List<RoomHasEquipment> GetEquipmentInRoom(string query)
+        {
+            List<RoomHasEquipment> equipmentInRoom = new List<RoomHasEquipment>();
+
+
+            try
+            {
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    equipmentInRoom.Add(new RoomHasEquipment(Convert.ToInt32(reader["id_equipment"]), Convert.ToInt32(reader["id_room"]), Convert.ToInt32(reader["amount"])));
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+            Connection.Close();
+
+            return equipmentInRoom;
+        }
 
     }
 }

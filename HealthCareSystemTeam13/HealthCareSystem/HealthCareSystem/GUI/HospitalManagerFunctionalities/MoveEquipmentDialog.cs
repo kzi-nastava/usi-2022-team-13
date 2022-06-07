@@ -30,6 +30,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         public DateTime TransferDate { get; set; }
 
         private RoomRepository RoomRepository;
+        private TransferHistoryRepository TransferHistoryRep;
 
         public MoveEquipmentDialog(int roomId, TypeOfRoom roomType, int amount, int equipmentId, string equipmentName)
         {
@@ -38,7 +39,8 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             this.OriginRoomId = roomId;
             this.EquipmentId = equipmentId;
             this.EquipmentName = equipmentName;
-            
+
+            TransferHistoryRep = new TransferHistoryRepository();
             RoomRepository = new RoomRepository();
 
             InitializeComponent();
@@ -54,7 +56,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
             //From full amount of equipment we subtract amount of those transfers from that room that haven't been realised yet
             string query = "select * from EquipmentTransferHistory where id_original_room = " + OriginRoomId + " and id_equipment = " + EquipmentId + " and isExecuted = false";
-            List<TransferHistoryOfEquipment> transferHistory = RoomRepository.GetTransferHistory(query);
+            List<TransferHistoryOfEquipment> transferHistory = TransferHistoryRep.GetTransferHistory(query);
    
             TrueAmount = GetTrueAmount(transferHistory);
 
@@ -121,7 +123,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             {
                 int amountForTransfer = (int)nudAmount.Value;
                 TransferHistoryOfEquipment newTransfer = new TransferHistoryOfEquipment(OriginRoomId, DestinationRoomId,TransferDate, false, amountForTransfer, EquipmentId);
-                RoomRepository.InsertTransferHistoryOfEquipment(newTransfer);
+                TransferHistoryRep.InsertTransferHistoryOfEquipment(newTransfer);
                 MessageBox.Show("Succesfully added new tranfer for date: " + TransferDate.ToString());
                 this.Hide();
             }

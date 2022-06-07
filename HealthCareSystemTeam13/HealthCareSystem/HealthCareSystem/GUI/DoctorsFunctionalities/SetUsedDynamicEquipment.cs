@@ -1,4 +1,6 @@
-﻿using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
+﻿using HealthCareSystem.Core.Examinations.Repository;
+using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
+using HealthCareSystem.Core.Rooms.Repository;
 using HealthCareSystem.Core.Users.Doctors.Model;
 using HealthCareSystem.Core.Users.Doctors.Repository;
 using System;
@@ -15,16 +17,19 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 {
     public partial class SetUsedDynamicEquipment : Form
     {
-        private readonly DoctorRepository DoctorRep;
-        private int ExaminationId;
-        private int RoomId;
+        private readonly DoctorRepository _doctorRep;
+        private readonly RoomRepository _roomRep;
+        private readonly ExaminationRepository _examinationRep;
+
+        private int _examinationId;
+        private int _roomId;
         public SetUsedDynamicEquipment(int examinationId, string doctorUsername)
         {
             InitializeComponent();
 
-            DoctorRep = new DoctorRepository(doctorUsername, true);
-            ExaminationId = examinationId;
-            RoomId = DoctorRep.GetRoomIdFromExaminationId(examinationId);
+            _doctorRep = new DoctorRepository(doctorUsername, true);
+            _examinationId = examinationId;
+            _roomId = _examinationRep.GetRoomIdFromExaminationId(examinationId);
             PullEquipment();
         }
 
@@ -32,7 +37,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         {
             
             lbDynamicEquipment.ValueMember = null;
-            List<Equipment> equipment = DoctorRep.GetEquipmentFromRoomId(RoomId);
+            List<Equipment> equipment = _roomRep.GetEquipmentFromRoomId(_roomId);
 
             lbDynamicEquipment.DisplayMember = "NameAndAmount";
             lbDynamicEquipment.DataSource = equipment;
@@ -63,7 +68,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 return;
             }
 
-            DoctorRep.UpdateAmountOfEquipmentInTheRoom(amount, RoomId, selectedEquipment.ID);
+            _roomRep.UpdateAmountOfEquipmentInTheRoom(amount, _roomId, selectedEquipment.ID);
             PullEquipment();
             MessageBox.Show("Successfully thrown out equipment that was used in the examination.");
         }

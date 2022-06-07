@@ -26,7 +26,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
     class InsertionRepository
     {
         private static OleDbConnection Connection;
-        RoomRepository RoomRep;
+        private RenovationRepository _renovationRepository;
+        private RoomRepository _roomRepository;
+        private TransferHistoryRepository _transferHistoryRepository;
 
         public InsertionRepository()
         {
@@ -44,7 +46,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            RoomRep = new RoomRepository();
+            _roomRepository = new RoomRepository(0);
+            _renovationRepository = new RenovationRepository();
+            
+            _transferHistoryRepository = new TransferHistoryRepository();
         }
 
         public void ExecuteQueries()
@@ -98,7 +103,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             string unrealizedRenovationsQuery = "select * from Renovations where dateOfFinish < #" + DateTime.Now.ToString() + "#";   
        
             List<Renovation> unrealizedRenovations;
-            unrealizedRenovations = RoomRep.GetRenovations(unrealizedRenovationsQuery);
+            unrealizedRenovations = _renovationRepository.GetRenovations(unrealizedRenovationsQuery);
 
             foreach(Renovation renovation in unrealizedRenovations)
             {
@@ -126,68 +131,68 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private void ExecuteRegularRenovations(Renovation renovation)
         {
             string deleteRegularRenovationQuery = "delete from Renovations where id_room = " + renovation.RoomId;
-            RoomRep.UpdateContent(deleteRegularRenovationQuery);
+            DatabaseCommander.ExecuteNonQueries(deleteRegularRenovationQuery, Connection);
         }
 
         private void ExecuteMergingRenovations(Renovation renovation)
         {
             string getEquipmentInRoomQuery = "select * from RoomHasEquipment where id_room = " + renovation.SecondRoomId;
-            List<RoomHasEquipment> equipmentToBeMoved = RoomRep.GetEquipmentInRoom(getEquipmentInRoomQuery);
+            List<RoomHasEquipment> equipmentToBeMoved = _roomRepository.GetEquipmentInRoom(getEquipmentInRoomQuery);
 
             foreach (RoomHasEquipment equipment in equipmentToBeMoved)
             {
                 //checking to see if there is an instance of RoomhasEquipment for room that we are putting equipment in
                 string checkQuery = "select * from RoomHasEquipment where id_room = " + renovation.RoomId + " and id_equipment = " + equipment.EquipmentId + "";
-                List<RoomHasEquipment> checkNumber = RoomRep.GetEquipmentInRoom(checkQuery);
+                List<RoomHasEquipment> checkNumber = _roomRepository.GetEquipmentInRoom(checkQuery);
 
 
                 if (checkNumber.Count == 0)
                 {
                     //if there is not that particular instance we create new one with amount of 0
                     string insertQueryDestination = "insert into RoomHasEquipment (id_room, id_equipment, amount) values (" + renovation.RoomId + ", " + equipment.EquipmentId + ", 0)";
-                    RoomRep.UpdateContent(insertQueryDestination);
+                    DatabaseCommander.ExecuteNonQueries(insertQueryDestination, Connection);
                 }
 
                 string updateFirstRoomEquipment = "update RoomHasEquipment set amount = amount + " + equipment.Quantity + " where id_room = " + renovation.RoomId + " and id_equipment = " + equipment.EquipmentId;
-                RoomRep.UpdateContent(updateFirstRoomEquipment);
+                DatabaseCommander.ExecuteNonQueries(updateFirstRoomEquipment, Connection);
 
             }
 
             string deleteMergingRenovationQuery = "delete from Renovations where id_room = " + renovation.RoomId + " and id_other_room = " + renovation.SecondRoomId;
-            RoomRep.UpdateContent(deleteMergingRenovationQuery);
+            DatabaseCommander.ExecuteNonQueries(deleteMergingRenovationQuery, Connection);
 
 
             string deleteOtherRoomQuery = "delete from Rooms where ID = " + renovation.SecondRoomId;
-            RoomRep.UpdateContent(deleteOtherRoomQuery);
+            DatabaseCommander.ExecuteNonQueries(deleteOtherRoomQuery, Connection);
         }
 
         private void ExecuteSplitingRenovations(Renovation renovation)
         {
             string getEquipmentInFirstRoomQuery = "select * from RoomHasEquipment where id_room = " + renovation.RoomId;
-            List<RoomHasEquipment> equipmentToBeMovedToWarehouse = RoomRep.GetEquipmentInRoom(getEquipmentInFirstRoomQuery);
+            List<RoomHasEquipment> equipmentToBeMovedToWarehouse = _roomRepository.GetEquipmentInRoom(getEquipmentInFirstRoomQuery);
 
-            Room warehouse = RoomRep.GetRooms("select * from Rooms where Type = 'Warehouse'")[0];
-            Room firstRoom = RoomRep.GetRooms("select * from Rooms where ID = " + renovation.RoomId)[0];
+            Room warehouse = _roomRepository.GetRooms("select * from Rooms where Type = 'Warehouse'")[0];
+            Room firstRoom = _roomRepository.GetRooms("select * from Rooms where ID = " + renovation.RoomId)[0];
 
             foreach (RoomHasEquipment equipment in equipmentToBeMovedToWarehouse)
             {
                 string checkQuery = "select * from RoomHasEquipment where id_equipment = " + equipment.EquipmentId + " and id_room in (select ID from Rooms where Type = 'Warehouse'";
-                List<RoomHasEquipment> checkNumber = RoomRep.GetEquipmentInRoom(checkQuery);
+                List<RoomHasEquipment> checkNumber = _roomRepository.GetEquipmentInRoom(checkQuery);
 
 
                 if (checkNumber.Count == 0)
                 {
                     string insertQueryDestination = "insert into RoomHasEquipment (id_room, id_equipment, amount) values (" + warehouse.ID + ", " + equipment.EquipmentId + ", 0)";
-                    RoomRep.UpdateContent(insertQueryDestination);
+                    DatabaseCommander.ExecuteNonQueries(insertQueryDestination, Connection);
                 }
 
                 string updateWarehouseEquipment = "update RoomHasEquipment set amount = amount + " + equipment.Quantity + " where id_room = " + warehouse.ID + " and id_equipment = " + equipment.EquipmentId;
-                RoomRep.UpdateContent(updateWarehouseEquipment);
+                DatabaseCommander.ExecuteNonQueries(updateWarehouseEquipment, Connection);
 
             }
 
             string deleteSplittingRenovationQuery = "delete from Renovations where id_room = " + renovation.RoomId;
-            RoomRep.UpdateContent(deleteSplittingRenovationQuery);
+            DatabaseCommander.ExecuteNonQueries(deleteSplittingRenovationQuery, Connection);
 
             var query = "INSERT INTO rooms(type) VALUES('"+firstRoom.Type.ToString()+"')";
             InsertSingle(query);
@@ -198,7 +203,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             string unrealizedTransfersQuery = "select * from EquipmentTransferHistory where isExecuted = false";
 
             List<TransferHistoryOfEquipment> unrealizedTransfers;
-            unrealizedTransfers = RoomRep.GetTransferHistory(unrealizedTransfersQuery);
+            unrealizedTransfers = _transferHistoryRepository.GetTransferHistory(unrealizedTransfersQuery);
 
             Connection.Close();
         }

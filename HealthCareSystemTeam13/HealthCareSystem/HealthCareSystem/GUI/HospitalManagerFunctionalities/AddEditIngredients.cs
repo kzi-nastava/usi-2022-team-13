@@ -1,4 +1,5 @@
 ﻿using HealthCareSystem.Core.Ingredients.Model;
+using HealthCareSystem.Core.Medications.Repository;
 using HealthCareSystem.Core.Rooms.Repository;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
     {
         public int IngredientId { get; set; }
         public bool IsAddChosen { get; set; }
-        private RoomRepository RoomRep;
+        private IngredientsRepository IngredientRep;
         private string IngredientName;
 
         public AddEditIngredients(int ingredientId, bool isAddChoosen)
@@ -24,7 +25,6 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
             IngredientId = ingredientId;
             IsAddChosen = isAddChoosen;
-            RoomRep = new RoomRepository();
             InitializeComponent();
 
             if (!IsAddChosen)
@@ -36,7 +36,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void LoadEditData()
         {
             string query = "select * from ingredients where id=" + IngredientId;
-            Ingredient ingredient = RoomRep.GetSelectedIngredient(query);
+            Ingredient ingredient = IngredientRep.GetSelectedIngredient(query);
             tbIngredient.Text = ingredient.Name;
         }
 
@@ -45,7 +45,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             if (IsAddChosen)
             {
                 IngredientName = tbIngredient.Text;
-                if (!RoomRep.DoesIngredientExists(IngredientName))
+                if (!IngredientRep.DoesIngredientExists(IngredientName))
                 {
                     MessageBox.Show("There already exists ingredient with this name!");
                     this.Close();
@@ -54,14 +54,14 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                 }
 
 
-                RoomRep.InsertIngredient(IngredientName);
+                IngredientRep.InsertIngredient(IngredientName);
                 MessageBox.Show("Successfully added an ingredient!");
 
             }
             else
             {
                 IngredientName = tbIngredient.Text;
-                if (!RoomRep.DoesIngredientExists(IngredientName))
+                if (!IngredientRep.DoesIngredientExists(IngredientName))
                 {
                     MessageBox.Show("There already exists ingredient with this name!");
                     this.Close();
@@ -69,7 +69,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                 }
 
                 string updateQuery = "Update Ingredients set nameOfIngredient = '" + IngredientName + "' where id = " + IngredientId;
-                RoomRep.UpdateContent(updateQuery);
+                DatabaseCommander.ExecuteNonQueries(updateQuery, IngredientRep.Connection);
                 MessageBox.Show("Successfully edited an ingredient!");
             }
             this.Close();

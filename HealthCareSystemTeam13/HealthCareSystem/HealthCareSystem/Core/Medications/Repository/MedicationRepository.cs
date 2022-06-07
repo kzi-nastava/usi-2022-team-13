@@ -166,7 +166,79 @@ namespace HealthCareSystem.Core.Medications.Repository
 
             GUIHelpers.FillTable(Medicine, medicineQuery, Connection);
         }
+        public Medication GetSelectedMedication(string query)
+        {
 
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
+            OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
+
+            Medication medication = new Medication();
+
+            OleDbDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+
+                MedicationStatus medicationState;
+                Enum.TryParse<MedicationStatus>(reader["status"].ToString(), out medicationState);
+                medication = new Medication(Convert.ToInt32(reader["id"]), reader["nameOfMedication"].ToString(), medicationState);
+            }
+
+            return medication;
+        }
+        public void InsertMedicationContainsIngredient(int medicationId, int ingredientId)
+        {
+            var insertQuery = "INSERT INTO medicationContainsIngredient(id_medication, id_ingredient) VALUES(@id_medication, @id_ingredient)";
+            using (var cmd = new OleDbCommand(insertQuery, Connection))
+            {
+                cmd.Parameters.AddWithValue("@id_medication", medicationId);
+                cmd.Parameters.AddWithValue("@id_ingredient", ingredientId);
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+        public bool DoesMedicationExists(string name)
+        {
+            string query = "select * from Medications where nameOfMedication='" + name + "'";
+            Medication medication = GetSelectedMedication(query);
+
+            if (medication.Name == name) return false;
+            return true;
+        }
+        public void InsertMedication(string ingredientName)
+        {
+            var insertQuery = "INSERT INTO medications(nameOfMedication, status) VALUES(@nameOfMedication, @status)";
+            using (var cmd = new OleDbCommand(insertQuery, Connection))
+            {
+                cmd.Parameters.AddWithValue("@nameOfMedication", ingredientName);
+                cmd.Parameters.AddWithValue("@status", MedicationStatus.InProgress.ToString());
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+        public List<int> GetAlergicMedicationsIds(int patientId)
+        {
+
+            List<int> alergicMedicationIds = new List<int>();
+
+            string query = "" +
+                           "select MedicationContainsIngredient.id_medication" +
+                           " from MedicationContainsIngredient inner join PatientAlergicTo " +
+                           "on MedicationContainsIngredient.id_ingredient = PatientAlergicTo.id_ingredient " +
+                           " where PatientAlergicTo.id_patient = " + patientId;
+
+            OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                alergicMedicationIds.Add(Convert.ToInt32
+                    (reader["id_medication"]));
+            }
+
+
+
+            return alergicMedicationIds;
+        }
 
     }
 }

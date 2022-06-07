@@ -16,11 +16,11 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
     public partial class ExaminationRequests : Form
     {
         ExaminationRepository _examinationRepository;
-        PatientRepository _patientRepository;
+        PatientRequestRepository _patientRequestRepository;
         public ExaminationRequests()
         {
             _examinationRepository = new ExaminationRepository();
-            _patientRepository = new PatientRepository();
+            _patientRequestRepository = new PatientRequestRepository();
             _examinationRepository.PullExaminationRequests();
             InitializeComponent();
             FillDataGridView();
@@ -41,10 +41,10 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         private void acceptButton_Click(object sender, EventArgs e)
         {
             string requestID = requestIdBox.Text;
-            if (_patientRepository.IsRequestChanged(requestID))
+            if (_patientRequestRepository.IsRequestChanged(requestID))
             {
                 _examinationRepository.UpdateExamination(requestID);
-                _patientRepository.DeleteSinglePatientRequest(requestID);
+                _patientRequestRepository.DeleteSinglePatientRequest(requestID);
             } 
             else
             {
@@ -57,7 +57,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         private void denyButton_Click(object sender, EventArgs e)
         {
             string requestID = requestIdBox.Text;
-            _patientRepository.DeleteSinglePatientRequest(requestID);
+            _patientRequestRepository.DeleteSinglePatientRequest(requestID);
             MessageBox.Show("Succesfully denied request!");
         }
     }

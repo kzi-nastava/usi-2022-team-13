@@ -14,11 +14,11 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 {
     public partial class Renovations : Form
     {
-        private RoomRepository RoomRepository;
+        private RenovationRepository RenovationRepository;
         public Renovations()
         {
-            RoomRepository = new RoomRepository();
-            RoomRepository.PullRenovations();
+            RenovationRepository = new RenovationRepository();
+            RenovationRepository.PullRenovations();
             InitializeComponent();
             FillDataGridView();
         }
@@ -26,7 +26,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void FillDataGridView()
         {
 
-            dgwRenovations.DataSource = RoomRepository.Renovations;
+            dgwRenovations.DataSource = RenovationRepository.Renovations;
             DataGridViewSettings();
         }
 
@@ -43,8 +43,8 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         public void RefreshDataGridView()
         {
-            RoomRepository.PullRenovations();
-            dgwRenovations.DataSource = RoomRepository.Renovations;
+            RenovationRepository.PullRenovations();
+            dgwRenovations.DataSource = RenovationRepository.Renovations;
             dgwRenovations.Refresh();
         }
 

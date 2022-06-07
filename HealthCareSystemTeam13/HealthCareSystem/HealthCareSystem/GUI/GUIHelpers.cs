@@ -80,11 +80,13 @@ namespace HealthCareSystem.Core
         }
         public static void FillTable(DataTable table, string query, OleDbConnection connection)
         {
+            if(connection.State == ConnectionState.Closed) connection.Open();
             using (var cmd = new OleDbCommand(query, connection))
             {
                 OleDbDataReader reader = cmd.ExecuteReader();
                 table.Load(reader);
             }
+            if (connection.State == ConnectionState.Open) connection.Close();
         }
     }
 }

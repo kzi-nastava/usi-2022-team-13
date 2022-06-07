@@ -26,9 +26,10 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         {
             Username = username;
             _patientRepository = new PatientRepository(Username);
-            _examinationRepository.PullExaminationForPatient(_patientRepository.GetPatientId());
+            _examinationRepository = new ExaminationRepository();
             _doctorRepository = new DoctorRepository();
             InitializeComponent();
+            _examinationRepository.PullExaminationForPatient(_patientRepository.GetPatientId());
             FillDataGridView();
 
         }
@@ -36,7 +37,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void FillDataGridView()
         {
 
-            dgwExaminations.DataSource = _patientRepository.Examinations;
+            dgwExaminations.DataSource = _examinationRepository.Examinations;
             GUIHelpers.DataGridViewSettings(dgwExaminations);
         }
         
@@ -184,7 +185,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         public void RefreshDataGridView()
         {
             _examinationRepository.PullExaminationForPatient(_patientRepository.GetPatientId());
-            dgwExaminations.DataSource = _patientRepository.Examinations;
+            dgwExaminations.DataSource = _examinationRepository.Examinations;
             dgwExaminations.Refresh();
         }
 

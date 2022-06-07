@@ -16,10 +16,11 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
     public partial class EquipmentMover : Form
     {
         private RoomRepository RoomRepository;
+        private EquipmentRepository EquipmentRepository;
         public EquipmentMover()
         {
-            RoomRepository = new RoomRepository();
-            RoomRepository.PullEquipment();
+            EquipmentRepository = new EquipmentRepository();
+            EquipmentRepository.PullEquipment();
             InitializeComponent();
             FillDataGridView();
             FillRoomTypeComboBox();
@@ -71,7 +72,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         private void FillDataGridView()
         {
-            dgwEquipment.DataSource = RoomRepository.Equipment;
+            dgwEquipment.DataSource = EquipmentRepository.Equipment;
             DataGridViewSettings();
         }
 
@@ -93,7 +94,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            RoomRepository.PullEquipment();
+            EquipmentRepository.PullEquipment();
             RefreshDataGridView();
         }
 

@@ -23,8 +23,9 @@ namespace HealthCareSystem.Core.Examinations.Repository
         public DataTable Examinations { get; private set; }
         public DataTable RequestsPatients { get; private set; }
         public DataTable ClosestExaminations { get; private set; }
+        public DataTable FinishedExaminations { get; private set; }
 
-        private PatientRepository _patientRepository;
+        private PatientRequestRepository _patientRequestRepository;
         public ExaminationRepository()
         {
             try
@@ -34,17 +35,18 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
                 Persist Security Info=False;";
 
-                
-
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.ToString());
             }
+
             RoomRep = new RoomRepository();
             DoctorRep = new DoctorRepository();
-            _patientRepository = new PatientRepository();
+            _patientRequestRepository = new PatientRequestRepository();
         }
+
+
         public void PullExaminationForPatient(int patientId)
         {
 
@@ -53,17 +55,17 @@ namespace HealthCareSystem.Core.Examinations.Repository
             string examinationsQuery = "select Examination.id, Doctors.FirstName + ' ' +Doctors.LastName as Doctor, dateOf as [Date and Time], id_room as RoomID, duration, typeOfExamination as Type from Examination left outer join Doctors  on Examination.id_doctor = Doctors.id " +
                 "where id_patient = " + patientId + "";
 
-            GUIHelpers.FillTable(Examinations, examinationsQuery);
+            GUIHelpers.FillTable(Examinations, examinationsQuery, Connection);
 
         }
         public void PullFinishedExaminations(int patientId)
         {
-            Examinations = new DataTable();
+            FinishedExaminations = new DataTable();
 
             string examinationsQuery = "select Examination.id, Doctors.FirstName + ' ' +Doctors.LastName as Doctor, Examination.dateOf as [Date and Time], Examination.id_room as RoomID, Examination.duration, typeOfExamination as Type from Examination left outer join Doctors on Examination.id_doctor = Doctors.id " +
                 "where id_patient = " + patientId + " and Examination.dateOf < #" + DateTime.Now.ToString() + "#";
 
-            GUIHelpers.FillTable(Examinations, examinationsQuery);
+            GUIHelpers.FillTable(FinishedExaminations, examinationsQuery, Connection);
         }
 
         public void SendExaminationEditRequest(int examinationId, DateTime currentTime, bool isEdit, int doctorId, DateTime newDateTime, int roomId)
@@ -149,7 +151,6 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 cmd.ExecuteNonQuery();
             }
 
-            Username = patientUsername;
             InsertExaminationChanges(TypeOfChange.Add, patientId);
             if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
@@ -203,20 +204,6 @@ namespace HealthCareSystem.Core.Examinations.Repository
             }
             return changes;
         }
-        private static void MoveExaminationDateTimeBoundaries(ref DateTime startDate, ref DateTime endDate)
-        {
-            startDate = startDate.AddHours(-4);
-            endDate = endDate.AddDays(2).AddHours(4);
-        }
-
-        private bool IsValidTime(DateTime startDate, Examination takenExamination)
-        {
-            TimeSpan difference = startDate.Subtract(takenExamination.DateOf);
-            if (Math.Abs(difference.TotalMinutes) < 15) return false;
-            return true;
-        }
-
-
 
         public int GetRoomIdFromExaminationId(int examinationId)
         {
@@ -240,10 +227,10 @@ namespace HealthCareSystem.Core.Examinations.Repository
             return roomNumber;
         }
 
-        public List<DateTime> GetDateOfExaminationsForDoctor()
+        public List<DateTime> GetDateOfExaminationsForDoctor(int doctorId)
         {
             List<DateTime> dates = new List<DateTime>();
-            string query = "select dateOf from Examination where id_doctor = " + GetDoctorId();
+            string query = "select dateOf from Examination where id_doctor = " + doctorId;
 
 
             int checkState = 0;
@@ -327,7 +314,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
             }
             public void UpdateExamination(string requestID)
             {
-                Dictionary<string, string> information = GetPatientRequest(requestID);
+                Dictionary<string, string> information = _patientRequestRepository.GetPatientRequest(requestID);
                 var query = "UPDATE Examination SET id_doctor = @id_doctor, dateOf = @dateOf, id_room = @id_room WHERE ID = @examination_id";
                 using (var cmd = new OleDbCommand(query, Connection))
                 {
@@ -409,7 +396,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
             public Tuple<string, DateTime> AvailableExamination(DoctorSpeciality speciality, int duration)
             {
-                List<string> doctorsID = GetSpecialistsIds(speciality);
+                List<string> doctorsID = DoctorRep.GetSpecialistsIds(speciality);
                 Tuple<string, DateTime> closestTimeAndDoctor = new Tuple<string, DateTime>("none", DateTime.Now.AddHours(2));
 
                 foreach (string doctorID in doctorsID)
@@ -484,16 +471,16 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 }
             }
 
-            public void PullExaminations()
+            public void PullExaminations(int doctorId)
             {
                 Examinations = new DataTable();
 
                 string examinationsQuery = "select Examination.id, Patients.FirstName + ' ' + Patients.LastName as Patient," +
                     " dateOf as [Date and Time], id_room as RoomID, duration as Duration, typeOfExamination as Type from Examination" +
                     " left outer join Patients  on Examination.id_patient = Patients.id " +
-                    "where id_doctor = " + GetDoctorId() + "";
+                    "where id_doctor = " + doctorId + "";
 
-                GUIHelpers.FillTable(Examinations, examinationsQuery);
+                GUIHelpers.FillTable(Examinations, examinationsQuery, Connection);
             }
 
             public List<Examination> GetExaminationsInRoom(Room room)
@@ -605,7 +592,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                     roomId = RoomRep.GetAvailableRoomId(startDate, takenExaminations);
                     if (roomId != 0)
                     {
-                        if (DoctorRep.IsDoctorAvailableAtTime(doctorId, startDate, takenExaminations, this))
+                        if (DoctorRep.IsDoctorAvailableAtTime(doctorId, startDate, takenExaminations))
                         {
                             examinations.Add(new Examination(doctorId, startDate, TypeOfExamination.BasicExamination, roomId));
                             totalFoundExaminations++;
@@ -663,7 +650,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                     roomId = RoomRep.GetAvailableRoomId(startDate, takenExaminations);
                     if (roomId != 0)
                     {
-                        if (DoctorRep.IsDoctorAvailableAtTime(doctorId, startDate, takenExaminations, this))
+                        if (DoctorRep.IsDoctorAvailableAtTime(doctorId, startDate, takenExaminations))
                         {
                             examinations.Add(new Examination(doctorId, startDate, TypeOfExamination.BasicExamination, roomId));
                             totalFoundExaminations++;
@@ -818,6 +805,33 @@ namespace HealthCareSystem.Core.Examinations.Repository
                     Convert.ToInt32(reader["duration"])
                     ));
             }
+            public void PullExaminationsByDate(DateTime date)
+            {
+                Examinations = new DataTable();
 
-        }
+
+                string examinationsQuery = "select Examination.id, Patients.FirstName + ' ' + Patients.LastName as Patient," +
+                                           " dateOf, id_room as RoomID, duration as Duration, typeOfExamination as Type from Examination" +
+                                           " left outer join Patients  on Examination.id_patient = Patients.id " +
+                                           "where id_doctor = " + DoctorRep.GetDoctorId() + " and Day(dateOf) = Day('" + date + "')";
+                GUIHelpers.FillTable(Examinations, examinationsQuery, Connection);
+            }
+
+            public void PullExaminationsThreeDays()
+            {
+                Examinations = new DataTable();
+                DateTime firstDay = DateTime.Today.AddDays(1);
+                DateTime secondDay = DateTime.Today.AddDays(2);
+                DateTime thirdDay = DateTime.Today.AddDays(3);
+
+
+                string examinationsQuery = "select Examination.id, Patients.FirstName + ' ' + Patients.LastName as Patient," +
+                                           " dateOf, id_room as RoomID, duration as Duration, typeOfExamination as Type from Examination" +
+                                           " left outer join Patients  on Examination.id_patient = Patients.id " +
+                                           "where id_doctor = " + DoctorRep.GetDoctorId() + " and (" +
+                                           "Day(dateOf) = Day('" + firstDay + "') or Day(dateOf) = Day('" + secondDay + "') or Day(dateOf) = Day('" + thirdDay + "'))";
+                GUIHelpers.FillTable(Examinations, examinationsQuery, Connection);
+            }
+
+    }
 }

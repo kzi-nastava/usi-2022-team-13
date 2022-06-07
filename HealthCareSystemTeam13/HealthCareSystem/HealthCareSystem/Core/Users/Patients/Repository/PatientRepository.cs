@@ -20,7 +20,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
     class PatientRepository
     {
         public string Username { get; set; }
-        public DataTable Examinations { get; set; }
         public OleDbConnection Connection { get; set; }
         public DataTable BlockedPatients { get; private set; }
         public DataTable Patients { get; private set; }
@@ -87,7 +86,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             return patientId;
         }
 
-        public void UpdateContent(string query, int patiendId = 0)
+        public void UpdatePatientContent(string query, int patiendId = 0)
         {
             int checkState = 0;
             if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
@@ -270,14 +269,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             }
         }
 
-        public void DeleteSinglePatientRequest(string requestID)
-        {
-            var query = "DELETE from PatientEditRequest WHERE ID = " + Convert.ToInt32(requestID) + "";
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.ExecuteNonQuery();
-            }
-        }
+   
         public Dictionary<string, string> GetPatientInformation(string patientID)
         {
             var query = "select Patients.firstName, Patients.lastName, Users.usrnm, Users.pass from Patients INNER JOIN Users ON users.id = patients.user_id WHERE patients.id = " + patientID + "";
@@ -335,31 +327,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             InsertSingleBlockedPatient(blockedPatient);
         }
 
-        public bool IsRequestChanged(string requestID)
-        {
-            var query = "SELECT isChanged FROM PatientEditRequest WHERE id = " + requestID + "";
-            return Convert.ToBoolean(DatabaseCommander.ExecuteReaderQueries(query, Connection)[0]);
-        }
-
-        public Dictionary<string, string> GetPatientRequest(string requestID)
-        {
-            var query = "SELECT id_examination, id_doctor, dateTimeOfExamination, id_room FROM PatientEditRequest WHERE id = " + requestID + "";
-            Dictionary<string, string> row = new Dictionary<string, string>();
-            OleDbCommand cmd = new OleDbCommand();
-            cmd.Connection = Connection;
-            cmd.CommandType = System.Data.CommandType.Text;
-            cmd.CommandText = query;
-
-            OleDbDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                row["examination_id"] = reader["id_examination"].ToString();
-                row["doctor_id"] = reader["id_doctor"].ToString();
-                row["dateTimeOfExamination"] = reader["dateTimeOfExamination"].ToString();
-                row["room_id"] = reader["id_room"].ToString();
-            }
-            return row;
-        }
+       
 
         public Patient GetSelectedPatient(string query)
         {

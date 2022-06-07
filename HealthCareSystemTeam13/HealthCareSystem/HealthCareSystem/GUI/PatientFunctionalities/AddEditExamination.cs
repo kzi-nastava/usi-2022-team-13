@@ -162,7 +162,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void UpdateContent(DateTime mergedTime)
         {
             string updateQuery = "Update Examination set id_doctor = " + _selectedDoctor.ID + ", isEdited=" + true + ", dateOf = '" + mergedTime + "', id_room = " + roomId + " where id = " + ExaminationId + "";
-            _patientRepository.UpdateContent(updateQuery, _patientRepository.GetPatientId());
+            _patientRepository.UpdatePatientContent(updateQuery, _patientRepository.GetPatientId());
             MessageBox.Show("Successfully edited examination!");
 
         }

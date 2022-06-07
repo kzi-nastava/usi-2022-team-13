@@ -75,7 +75,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                 
                 string updateQuery = "Update Rooms set type = '" + SelectedRoomType.ToString() + "' where id = " + RoomId;
 
-                RoomRep.UpdateContent(updateQuery);
+                DatabaseCommander.ExecuteNonQueries(updateQuery, RoomRep.Connection);
                 MessageBox.Show("Successfully edited room!");
             }
             this.Close();

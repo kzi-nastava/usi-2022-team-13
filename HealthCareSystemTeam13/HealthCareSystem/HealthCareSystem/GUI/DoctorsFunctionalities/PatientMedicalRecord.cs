@@ -15,6 +15,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
     public partial class PatientMedicalRecord : Form
     {
         private readonly PatientRepository PatientRep;
+        private readonly MedicalRecordRepository _medicalRecordRep;
         private readonly int PatientId;
         public PatientMedicalRecord(string patientFullName)
         {
@@ -31,7 +32,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private void PatientMedicalRecord_Load(object sender, EventArgs e)
         {
             string query = "select * from MedicalRecord where id_patient = " + PatientId;
-            string[] data = PatientRep.GetMedicalRecord(query);
+            string[] data = _medicalRecordRep.GetMedicalRecord(query);
             lbHeight.Text = "Height: " + data[0];
             lbWeight.Text = "Weight: " + data[1];
         }

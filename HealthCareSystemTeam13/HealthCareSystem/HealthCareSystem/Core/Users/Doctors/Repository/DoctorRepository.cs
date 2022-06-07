@@ -22,7 +22,6 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
         public string Username { get; set; }
         public DataTable Examinations { get; set; }
-        public DataTable Medicine { get; set; }
 
         public DataTable RequestsForDaysOff { get; set; }
 
@@ -50,6 +49,8 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         }
         public Doctor GetSelectedDoctor(string query)
         {
+            if(Connection.State == ConnectionState.Closed) Connection.Open();
+
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             Doctor doctor = new Doctor();
@@ -65,7 +66,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             return doctor;
         }
 
-        private bool IsDoctorAvailableAtTime(int doctorId, DateTime startDate, List<Examination> takenExaminations)
+        public bool IsDoctorAvailableAtTime(int doctorId, DateTime startDate, List<Examination> takenExaminations)
         {
             bool isAvailable = true;
             foreach (Examination takenExam in takenExaminations)
@@ -196,6 +197,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
         public int GetDoctorId()
         {
+            if(Connection.State == ConnectionState.Closed) Connection.Open();;
             string userId = DatabaseCommander.ExecuteReaderQueries("select id from users where usrnm = '" + Username + "'", Connection)[0];
 
             int doctorId = Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries("select id from doctors where user_id = " + Convert.ToInt32(userId) + "", Connection)[0]);
