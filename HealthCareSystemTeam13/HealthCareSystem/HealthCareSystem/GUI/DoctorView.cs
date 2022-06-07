@@ -217,5 +217,10 @@ namespace HealthCareSystem
             MedicationManagement medicationManagement = new MedicationManagement(Username);
             medicationManagement.ShowDialog();
         }
+
+        private void btnRequestDaysOff_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
