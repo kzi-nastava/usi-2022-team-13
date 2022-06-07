@@ -164,6 +164,11 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             var query = "SELECT id FROM Secretaries WHERE user_id = " + userID + "";
             return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
         }
+        public int GetSecretaryIdFromUsername(string username)
+        {
+            var query = "SELECT sc.id FROM Secretaries as sc inner join Users as us on sc.user_id = us.id where us.usrnm =  '" + username + "'";
+            return Convert.ToInt32(DatabaseHelpers.ExecuteReaderQueries(query, Connection)[0]);
+        }
         public int GetWarehouseId()
         {
             var query = "SELECT id FROM Rooms WHERE type = 'Warehouse'";
@@ -673,12 +678,12 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
 
         public void ManageDaysOffRequest(string username, int requestId, bool approved, string comment = "")
         {
-            var query = "INSERT INTO ManagementOfDaysOfRequests(id_request, id_secretary, isapproved, comment) VALUES(@id_request, @id_secretary, @isapproved, @comment)";
+            var query = "INSERT INTO ManagementOfDaysOfRequests(id_request, id_secretary, isApproved, comment) VALUES(@id_request, @id_secretary, @isapproved, @comment)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_request", requestId);
-                cmd.Parameters.AddWithValue("@id_secretary", GetSecretaryId(username)[0]);
-                cmd.Parameters.AddWithValue("@isapproved", approved.ToString());
+                cmd.Parameters.AddWithValue("@id_secretary",GetSecretaryIdFromUsername(username));
+                cmd.Parameters.AddWithValue("@isapproved", approved);
                 cmd.Parameters.AddWithValue("@comment", comment);
                 cmd.ExecuteNonQuery();
             }
