@@ -8,6 +8,7 @@ namespace HealthCareSystem.Core.Surveys
 {
     class DoctorSurvey
     {
+        public int DoctorId { get; set; }
         public int Grade { get; set; }
         public int Quality { get; set; }
         public bool WouldRecommend { get; set; }
@@ -15,6 +16,15 @@ namespace HealthCareSystem.Core.Surveys
 
         public DoctorSurvey(int grade, int quality, bool wouldRecommend, string comment)
         {
+            this.Grade = grade;
+            this.Quality = quality;
+            this.WouldRecommend = wouldRecommend;
+            this.Comment = comment;
+        }
+
+        public DoctorSurvey(int doctorId, int grade, int quality, bool wouldRecommend, string comment)
+        {
+            this.DoctorId = doctorId;
             this.Grade = grade;
             this.Quality = quality;
             this.WouldRecommend = wouldRecommend;
