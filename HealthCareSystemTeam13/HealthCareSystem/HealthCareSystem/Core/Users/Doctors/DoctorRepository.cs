@@ -23,6 +23,8 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public DataTable Examinations { get; set; }
         public DataTable Medicine { get; set; }
 
+        public DataTable RequestsForDaysOff { get; set; }
+
         public DoctorRepository(string username = "", bool calledFromDoctor = false)
         {
             if (username.Length > 0) Username = username;
@@ -67,6 +69,16 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 " from Medications where status = 'Approved'";
 
             FillTable(Medicine, medicineQuery);
+        }
+
+        public void PullRequestsForDaysOff()
+        {
+            RequestsForDaysOff = new DataTable();
+
+            string requestsForDaysOffQuery = "select DateFrom, DateTo, reasonOf, stateOfRequest, isUrgent from DoctorRequestDaysOf " +
+                "where id_doctor = " + GetDoctorId() + "";
+
+            FillTable(RequestsForDaysOff, requestsForDaysOffQuery);
         }
 
         private void FillTable(DataTable table, string query)
@@ -535,6 +547,66 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 " where id_room = " + roomId + " and id_equipment = " + equipmentId;
 
             DatabaseHelpers.ExecuteNonQueries(updateQuery, Connection);
+        }
+
+        public List<DateTime> GetDateOfExaminationsForDoctor()
+        {
+            List<DateTime> dates = new List<DateTime>();
+            string query = "select dateOf from Examination where id_doctor = " + GetDoctorId();
+
+
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+            try
+            {
+
+                OleDbCommand cmd = DatabaseHelpers.GetCommand(query, Connection);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                    dates.Add((DateTime)reader["DateOf"]);
+            }
+
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+
+
+
+            return dates;
+        }
+
+        public void InsertDaysOff(DateTime startDate, DateTime endDate, string reasonForDaysOff, bool isUrgent, int doctorId)
+        {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
+            string query = "insert into DoctorRequestDaysOf (dateFrom, dateTo, reasonOf, isUrgent, id_doctor, stateOfRequest) " +
+                "values (@dateFrom, @dateTo, @reasonOf, @isUrgent, @doctor_id, @stateOfRequest)";
+
+            
+            Console.WriteLine(isUrgent);
+
+            using (var cmd = new OleDbCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@dateFrom", startDate);
+                cmd.Parameters.AddWithValue("@dateTo", endDate);
+                cmd.Parameters.AddWithValue("@reasonOf", reasonForDaysOff);
+                cmd.Parameters.AddWithValue("@isUrgent", isUrgent);
+                cmd.Parameters.AddWithValue("@id_doctor", doctorId);
+                if(!isUrgent)
+                    cmd.Parameters.AddWithValue("@stateOfRequest", StateOfRequest.Waiting.ToString());
+                else
+                    cmd.Parameters.AddWithValue("@stateOfRequest", StateOfRequest.Accepted.ToString());
+
+                cmd.ExecuteNonQuery();
+            }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
         }
 
 

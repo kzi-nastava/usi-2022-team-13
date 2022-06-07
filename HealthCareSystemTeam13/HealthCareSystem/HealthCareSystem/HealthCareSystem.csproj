@@ -83,6 +83,7 @@
     <Compile Include="Core\Surveys\HospitalSurvey.cs" />
     <Compile Include="Core\Users\Doctors\DoctorRepository.cs" />
     <Compile Include="Core\Users\Doctors\DoctorService.cs" />
+    <Compile Include="Core\Users\Doctors\Model\DaysOffRequest.cs" />
     <Compile Include="Core\Users\HospitalManagers\HospitalManager.cs" />
     <Compile Include="Core\Users\Patients\PatientRepository.cs" />
     <Compile Include="Core\Users\Patients\PatientService.cs" />
@@ -93,6 +94,12 @@
     </Compile>
     <Compile Include="GUI\DoctorsFunctionalities\MedicationManagement.Designer.cs">
       <DependentUpon>MedicationManagement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DoctorsFunctionalities\RequestDaysOff.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DoctorsFunctionalities\RequestDaysOff.Designer.cs">
+      <DependentUpon>RequestDaysOff.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\DoctorsFunctionalities\SetUsedDynamicEquipment.cs">
       <SubType>Form</SubType>
@@ -395,6 +402,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\DoctorsFunctionalities\PatientMedicalRecord.resx">
       <DependentUpon>PatientMedicalRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DoctorsFunctionalities\RequestDaysOff.resx">
+      <DependentUpon>RequestDaysOff.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\DoctorsFunctionalities\SetUsedDynamicEquipment.resx">
       <DependentUpon>SetUsedDynamicEquipment.cs</DependentUpon>
