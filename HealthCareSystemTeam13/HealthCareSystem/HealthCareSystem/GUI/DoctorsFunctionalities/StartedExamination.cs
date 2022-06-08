@@ -33,6 +33,13 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             InitializeComponent();
             _patientRep = new PatientRepository();
             _doctorRep = new DoctorRepository(doctorUsername, true);
+            _medicationRep = new MedicationRepository();
+            _medicalRecordRep = new MedicalRecordRepository();
+            _referralLetterRep = new ReferralLetterRepository();
+            _receiptRep = new ReceiptRepository();
+            _instructionRep = new InstructionRepository();
+
+
             _patientId = _patientRep.GetPatientIdByFirstName(patientFullName.Split(' ')[0]);
             _patientFullName = patientFullName;
             _examinationId = examinationId;

@@ -331,6 +331,8 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         public Patient GetSelectedPatient(string query)
         {
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             Patient patient = new Patient();
@@ -340,6 +342,10 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             {
                 patient = SetPatientValues(reader);
             }
+
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
+
             return patient;
         }
 

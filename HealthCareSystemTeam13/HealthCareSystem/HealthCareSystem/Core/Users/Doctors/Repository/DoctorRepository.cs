@@ -21,9 +21,8 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public OleDbConnection Connection { get; set; }
 
         public string Username { get; set; }
-        public DataTable Examinations { get; set; }
+  
 
-        public DataTable RequestsForDaysOff { get; set; }
 
         public DoctorRepository(string username = "", bool calledFromDoctor = false)
         {
@@ -196,12 +195,15 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
         public int GetDoctorId()
         {
-            if(Connection.State == ConnectionState.Closed) Connection.Open();;
+            int checkState = 0;
+            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
             string userId = DatabaseCommander.ExecuteReaderQueries("select id from users where usrnm = '" + Username + "'", Connection)[0];
 
             int doctorId = Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries("select id from doctors where user_id = " + Convert.ToInt32(userId) + "", Connection)[0]);
             Console.WriteLine(doctorId);
             return doctorId;
+            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
         }
 
 

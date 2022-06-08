@@ -28,6 +28,8 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             InitializeComponent();
 
             _doctorRep = new DoctorRepository(doctorUsername, true);
+            _examinationRep = new ExaminationRepository();
+            _roomRep = new RoomRepository();
             _examinationId = examinationId;
             _roomId = _examinationRep.GetRoomIdFromExaminationId(examinationId);
             PullEquipment();

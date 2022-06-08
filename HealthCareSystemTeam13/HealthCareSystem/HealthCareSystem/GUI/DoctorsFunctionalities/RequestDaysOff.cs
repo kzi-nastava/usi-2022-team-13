@@ -20,11 +20,14 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
 
         public RequestDaysOff(string doctorUsername)
         {
-            InitializeComponent();
+            
             _doctorRep = new DoctorRepository(doctorUsername, true);
+            _examinationRep = new ExaminationRepository();
             _doctorRep.Username = doctorUsername;
             _daysOffRep = new DaysOffRepository();
             _daysOffRep.PullRequestsForDaysOff(_doctorRep.GetDoctorId());
+
+            InitializeComponent();
 
             FillDataGridView();
 
@@ -34,7 +37,7 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
         private void FillDataGridView()
         {
 
-            dgwRequests.DataSource = _doctorRep.RequestsForDaysOff;
+            dgwRequests.DataSource = _daysOffRep.RequestsForDaysOff;
             DataGridViewSettings();
         }
 
