@@ -104,6 +104,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
         {
 
             string insertQuery = "insert into PatientExaminationChanges(id_patient, typeOfChange, dateOf) values(@id_patient, @typeOfChange, @dateOf)";
+            if(Connection.State == ConnectionState.Closed) Connection.Open();
 
             using (var cmd = new OleDbCommand(insertQuery, Connection))
             {
@@ -192,6 +193,8 @@ namespace HealthCareSystem.Core.Examinations.Repository
         {
             List<ExaminationChange> changes = new List<ExaminationChange>();
             string query = "select * from PatientExaminationChanges where id_patient = " + patientId + "";
+            if(Connection.State == ConnectionState.Closed) Connection.Open();
+
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             OleDbDataReader reader = cmd.ExecuteReader();

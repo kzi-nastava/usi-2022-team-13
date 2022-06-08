@@ -15,7 +15,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     public partial class AnamnesisView : Form
     {
         public int ExaminationId { get; set; }
-        private AnamnesisRepository _anamnesisRepository;
+        private readonly AnamnesisRepository _anamnesisRepository;
         public AnamnesisView(int examinationId)
         {
             ExaminationId = examinationId;

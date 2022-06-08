@@ -19,9 +19,9 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     public partial class PatientExaminations : Form
     {
         public string Username { get; set; }
-        private PatientRepository _patientRepository;
-        private DoctorRepository _doctorRepository;
-        private ExaminationRepository _examinationRepository;
+        private readonly PatientRepository _patientRepository;
+        private readonly DoctorRepository _doctorRepository;
+        private readonly ExaminationRepository _examinationRepository;
         public PatientExaminations(string username)
         {
             Username = username;
@@ -40,18 +40,13 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             dgwExaminations.DataSource = _examinationRepository.Examinations;
             GUIHelpers.DataGridViewSettings(dgwExaminations);
         }
-        
-        private void dgwExaminations_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
 
             if (!_patientRepository.IsPatientBlocked(Username))
             {
-                if (CanChangeExamination())
+                if (GUIHelpers.IsDgwRowSelected(dgwExaminations))
                 {
                     int validDate = IsValidDate();
                     if (validDate != 0)
@@ -59,9 +54,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 }
             }
             else
-            {
                 MessageBox.Show("You are blocked");
-            }
 
         }
 
@@ -79,7 +72,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
             if (!_patientRepository.IsPatientBlocked(Username))
             {
-                if (CanChangeExamination())
+                if (GUIHelpers.IsDgwRowSelected(dgwExaminations))
                 {
                     DialogResult wantToCancel = MessageBox.Show("Are you sure?", "Cancel Examination", MessageBoxButtons.YesNo);
 
@@ -155,33 +148,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             return false;
         }
 
-
-        private bool CanChangeExamination()
-        {
-            if (dgwExaminations.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Please select a row first.");
-
-            }
-            else if (dgwExaminations.SelectedRows.Count == 1)
-            {
-                DataGridViewRow row = dgwExaminations.SelectedRows[0];
-                if (row.Cells[0].Value == null)
-                {
-                    MessageBox.Show("You selected an empty row.");
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please select only 1 row.");
-            }
-            return false;
-        }
-
         public void RefreshDataGridView()
         {
             _examinationRepository.PullExaminationForPatient(_patientRepository.GetPatientId());
@@ -193,35 +159,18 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         {
             if (!_patientRepository.IsPatientBlocked(Username))
             {
-                
                 AddEditExamination addEditView = new AddEditExamination(0, true, Username, 1);
 
                 addEditView.ShowDialog();
             }
             else
-            {
                 MessageBox.Show("You are blocked!");
-            }
-
-
-        }
-
-        private void PatientExaminations_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            if (!_patientRepository.IsPatientBlocked(Username))
-            {
-                RefreshDataGridView();
-
-            }
-            else
-            {
+            if (_patientRepository.IsPatientBlocked(Username))
                 MessageBox.Show("You are blocked!");
-            }
 
             RefreshDataGridView();
         }

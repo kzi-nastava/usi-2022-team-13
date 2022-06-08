@@ -47,7 +47,6 @@
             this.dgwExaminations.RowHeadersWidth = 51;
             this.dgwExaminations.Size = new System.Drawing.Size(737, 419);
             this.dgwExaminations.TabIndex = 0;
-            this.dgwExaminations.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwExaminations_CellContentClick);
             // 
             // btnAdd
             // 
@@ -151,7 +150,6 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "PatientExaminations";
             this.Text = "PatientExaminations";
-            this.Load += new System.EventHandler(this.PatientExaminations_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgwExaminations)).EndInit();
             this.ResumeLayout(false);
 

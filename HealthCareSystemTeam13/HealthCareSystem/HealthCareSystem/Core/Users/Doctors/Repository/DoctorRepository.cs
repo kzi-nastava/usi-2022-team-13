@@ -97,8 +97,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public BindingList<Doctor> GetDoctors()
         {
             BindingList<Doctor> doctors = new BindingList<Doctor>();
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+            if (Connection.State == ConnectionState.Closed) { Connection.Open();}
             try
             {
 
@@ -114,7 +113,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+            
 
             return doctors;
         }
@@ -131,7 +130,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 SetDoctorValuesWithRating(doctors, reader);
             }
 
-            if (Connection.State == ConnectionState.Open) Connection.Close();
+            
             return doctors;
         }
 

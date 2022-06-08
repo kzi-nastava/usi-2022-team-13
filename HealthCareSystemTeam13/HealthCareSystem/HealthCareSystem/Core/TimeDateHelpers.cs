@@ -38,5 +38,9 @@ namespace HealthCareSystem.Core
             if (Math.Abs(difference.TotalMinutes) < 15) return false;
             return true;
         }
+        public static bool IsValidExaminationDate(DateTime examinationDate)
+        {
+            return examinationDate > DateTime.Now;
+        }
     }
 }

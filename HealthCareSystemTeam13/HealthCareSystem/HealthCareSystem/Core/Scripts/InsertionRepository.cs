@@ -877,7 +877,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[0]), "Runny nose and coughs alot.", "Patient should drink antibiotics.", new DateTime(2022, 4, 26)));
             anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[4]), "Patient showed signs of Corona Virus: Headeches, High Temperature, Cough and Sleep Depravation", "Patient should go and take his blood and come back with results.", new DateTime(2022, 4, 28)));
-            anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[5]), "Patient is Fatigueing very quickly when training", "Rest for a few days and come back for a check up", new DateTime(2022, 4, 24)));
+            anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[5]), "Patient is Fatigueing very quickly when training", "Rest for a few days and come back for a check up", new DateTime(2022, 4, 28)));
+            anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[6]), "Patient is very weak and fragile", "Steady state for 5 days", new DateTime(2022, 4, 24)));
+
 
             return anamnesises;
         }

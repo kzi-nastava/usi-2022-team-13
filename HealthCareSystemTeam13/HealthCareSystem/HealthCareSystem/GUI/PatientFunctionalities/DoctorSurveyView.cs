@@ -16,7 +16,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     {
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
-        private SurveyRepository _surveyRepository;
+        private readonly SurveyRepository _surveyRepository;
         public DoctorSurveyView(int patientId, int doctorId)
         {
             this.PatientId = patientId;

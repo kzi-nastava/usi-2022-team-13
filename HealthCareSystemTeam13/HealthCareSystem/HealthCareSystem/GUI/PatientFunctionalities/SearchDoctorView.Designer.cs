@@ -165,7 +165,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "SearchDoctorView";
             this.Text = "SearchDoctorView";
-            this.Load += new System.EventHandler(this.SearchDoctorView_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgwDoctors)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

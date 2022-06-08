@@ -154,7 +154,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
             List<string> blockedPatients = DatabaseCommander.ExecuteReaderQueries("select isBlocked from Patients where user_id = " + Convert.ToInt32(userIds[0]) + "", Connection);
 
-            if (Connection.State == ConnectionState.Open) Connection.Close();
+          
 
             return blockedPatients[0] == "True";
         }

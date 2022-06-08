@@ -78,7 +78,6 @@
             this.lbUsername.Size = new System.Drawing.Size(117, 30);
             this.lbUsername.TabIndex = 3;
             this.lbUsername.Text = "Username";
-            this.lbUsername.Click += new System.EventHandler(this.lbUsername_Click);
             // 
             // lbPassword
             // 
@@ -160,7 +159,6 @@
             this.label1.TabIndex = 10;
             this.label1.Text = "No account? Contact\r\nour secretaries!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.label1.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // tbPasssword
             // 

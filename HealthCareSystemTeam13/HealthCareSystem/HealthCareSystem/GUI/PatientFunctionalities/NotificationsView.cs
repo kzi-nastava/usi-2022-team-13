@@ -15,8 +15,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     public partial class NotificationsView : Form
     {
         public string Username { get; set; }
-        private PatientRepository _patientRepository;
-        private MedicationRepository _medicationRepository;
+        private readonly PatientRepository _patientRepository;
+        private readonly MedicationRepository _medicationRepository;
         public NotificationsView(string username)
         {
             InitializeComponent();
@@ -47,9 +47,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                     MessageBox.Show("Please enter a positive number.");
             }
             else
-            {
                 MessageBox.Show("Please enter a number.");
-            }
         }
     }
 }

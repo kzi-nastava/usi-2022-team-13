@@ -19,7 +19,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     {
         public string Username { get; set; }
         private List<Doctor> _doctors;
-        private DoctorRepository _doctorRepository;
+        private readonly DoctorRepository _doctorRepository;
 
         public SearchDoctorView(string username)
         {
@@ -27,11 +27,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             InitializeComponent();
             _doctorRepository = new DoctorRepository();
             SetDgwDoctors();
-        }
-
-        private void SearchDoctorView_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void SetDgwDoctors()
@@ -45,13 +40,9 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void tbSearchDoctor_TextChanged(object sender, EventArgs e)
         {
-            Console.WriteLine("da");
             string keyword = tbSearchDoctor.Text.Trim();
             if (keyword != "")
-            {
                 dgwDoctors.DataSource = DoctorService.GetDoctorsByKeyword(_doctors, keyword.ToLower());
-                
-            }
             else
                 dgwDoctors.DataSource = _doctors;
         }

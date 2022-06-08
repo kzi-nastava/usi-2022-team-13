@@ -242,7 +242,6 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "PatientRecommendation";
             this.Text = "PatientRecommendation";
-            this.Load += new System.EventHandler(this.PatientRecommendation_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwRecommendations)).EndInit();

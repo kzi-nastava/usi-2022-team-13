@@ -16,9 +16,9 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     public partial class HospitalSurveysView : Form
     {
         public string Username { get; set; }
-        private SurveyRepository _surveyRepository;
+        private readonly SurveyRepository _surveyRepository;
         private HospitalSurvey _hospitalSurvey;
-        private PatientRepository _patientRepository;
+        private readonly PatientRepository _patientRepository;
         public HospitalSurveysView(string username)
         {
             this.Username = username;
@@ -56,9 +56,9 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             int quality = Convert.ToInt32(cbQuality.SelectedItem);
             int hygiene = Convert.ToInt32(cbHygiene.SelectedItem);
             int satisfied = rbSatisfiedNo.Checked == true ? 0 : 1;
-            int reccomend = rbReccomendNo.Checked == true ? 0 : 1;
+            int recommend = rbReccomendNo.Checked == true ? 0 : 1;
             string comment = rtbComment.Text;
-             _hospitalSurvey = new HospitalSurvey(quality, hygiene, satisfied, reccomend, comment);
+             _hospitalSurvey = new HospitalSurvey(quality, hygiene, satisfied, recommend, comment);
         }
         private void SendSurvey()
         {
