@@ -85,12 +85,13 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public void PullTransferDynamicEquipment(int equipmentId)
         {
             TransferDynamicEquipment = new DataTable();
-            var query = "select * from RoomHasEquipment where id_equipment = " + equipmentId.ToString() + "";
+            var query = "select * from RoomHasEquipment where id_equipment = " + equipmentId + "";
             GUIHelpers.FillTable(TransferDynamicEquipment, query, Connection);
         }
         public void InsertSingleDynamicEquipmentRequest(DynamicEquipmentRequest request)
         {
             var query = "INSERT INTO RequestForDinamicEquipment(id_equipment, amount, dateOf, id_secretary) VALUES(@id_equipment, @amount, @dateOf, @id_secretary)";
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_equipment", request.EquipmentId);
@@ -123,6 +124,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public void UpdateSigleDynamicEquipment(int amount, int roomHasEquipmentID)
         {
             var query = "Update RoomHasEquipment SET amount = amount - " + amount + " WHERE id = " + roomHasEquipmentID.ToString();
+            if (Connection.State == ConnectionState.Closed) Connection.Open();
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.ExecuteNonQuery();
@@ -132,6 +134,10 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public void UpdateSigleDynamicEquipment(int amount, RoomHasEquipment roomHasEquipment)
         {
             var query = "Update RoomHasEquipment SET amount = amount + " + amount + " WHERE id = " + roomHasEquipment.Id.ToString();
+            if(Connection.State == ConnectionState.Closed)
+            {
+                Connection.Open();
+            }
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.ExecuteNonQuery();
@@ -156,6 +162,10 @@ namespace HealthCareSystem.Core.Rooms.Repository
             var query = "SELECT id, id_equipment, amount, dateOf, id_secretary FROM RequestForDinamicEquipment where dateOf < #" + (DateTime.Now.AddDays(-1)).ToString() + "#";
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
+            if(Connection.State == ConnectionState.Closed)
+            {
+                Connection.Open();
+            }
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {

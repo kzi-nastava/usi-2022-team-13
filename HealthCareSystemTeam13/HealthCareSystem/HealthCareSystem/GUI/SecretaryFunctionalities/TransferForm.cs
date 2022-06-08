@@ -21,7 +21,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         {
             _equipmentRepository = new EquipmentRepository();
             _equipmentRepository.CheckDynamicEquipmentRequests();
-            _equipmentRepository.PullTransferDynamicEquipment(roomHasEquipment.Id);
+            _equipmentRepository.PullTransferDynamicEquipment(roomHasEquipment.EquipmentId);
             InitializeComponent();
             amountBox.Increment = 1;
             amountBox.DecimalPlaces = 0;
@@ -31,7 +31,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         }
         private void FillDataGridView()
         {
-            equipmentDataGrid.DataSource = _equipmentRepository.EquipmentInWarehouse;
+            equipmentDataGrid.DataSource = _equipmentRepository.TransferDynamicEquipment;
             DataGridViewSettings();
         }
         private void DataGridViewSettings()

@@ -18,6 +18,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         EquipmentRepository _equipmentRepository;
         public OutOfStockInRoomsForm()
         {
+            _equipmentRepository = new EquipmentRepository();
             _equipmentRepository.CheckDynamicEquipmentRequests();
             _equipmentRepository.PullDynamicEquipment();
             InitializeComponent();
