@@ -9,19 +9,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Surveys.Repository;
 
 namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 {
     public partial class HospitalSurveysView : Form
     {
         public string Username { get; set; }
-        private PatientRepository _patientRepository;
+        private readonly SurveyRepository _surveyRepository;
         private HospitalSurvey _hospitalSurvey;
+        private readonly PatientRepository _patientRepository;
         public HospitalSurveysView(string username)
         {
             this.Username = username;
-            _patientRepository = new PatientRepository(this.Username);
-
+            _surveyRepository = new SurveyRepository();
+            _patientRepository = new PatientRepository(username);
             InitializeComponent();
         }
 
@@ -54,13 +56,13 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             int quality = Convert.ToInt32(cbQuality.SelectedItem);
             int hygiene = Convert.ToInt32(cbHygiene.SelectedItem);
             int satisfied = rbSatisfiedNo.Checked == true ? 0 : 1;
-            int reccomend = rbReccomendNo.Checked == true ? 0 : 1;
+            int recommend = rbReccomendNo.Checked == true ? 0 : 1;
             string comment = rtbComment.Text;
-             _hospitalSurvey = new HospitalSurvey(quality, hygiene, satisfied, reccomend, comment);
+             _hospitalSurvey = new HospitalSurvey(quality, hygiene, satisfied, recommend, comment);
         }
         private void SendSurvey()
         {
-            _patientRepository.AddHospitalSurvey(this._hospitalSurvey);
+            _surveyRepository.AddHospitalSurvey(this._hospitalSurvey, _patientRepository.GetPatientId());
         }
 
         private void btnSend_MouseEnter(object sender, EventArgs e)

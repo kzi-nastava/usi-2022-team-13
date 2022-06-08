@@ -36,27 +36,16 @@ namespace HealthCareSystem.Core.Surveys.Repository
         {
             HospitalSurveys = new DataTable();
             string hospitalSurveysQuery = "select * from hospitalSurveys";
-            FillTable(HospitalSurveys, hospitalSurveysQuery);
+            GUIHelpers.FillTable(HospitalSurveys, hospitalSurveysQuery, Connection);
         }
 
         public void PullDoctorSurveys()
         {
             DoctorSurveys = new DataTable();
             string doctorSurveysQuery = "select * from doctorSurveys";
-            FillTable(DoctorSurveys, doctorSurveysQuery);
+            GUIHelpers.FillTable(DoctorSurveys, doctorSurveysQuery, Connection);
         }
 
-        private void FillTable(DataTable table, string query)
-        {
-
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                if (Connection.State == ConnectionState.Closed) Connection.Open();
-                OleDbDataReader reader = cmd.ExecuteReader();
-                table.Load(reader);
-            }
-            Connection.Close();
-        }
         public List<HospitalSurvey> GetHospitalSurveys()
         {
             List<HospitalSurvey> hospitalSurveys = new List<HospitalSurvey>();
@@ -65,7 +54,7 @@ namespace HealthCareSystem.Core.Surveys.Repository
             {
                 if (Connection.State == ConnectionState.Closed) Connection.Open();
 
-                OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from hospitalSurveys", Connection);
+                OleDbCommand cmd = DatabaseCommander.GetCommand("select * from hospitalSurveys", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -92,7 +81,7 @@ namespace HealthCareSystem.Core.Surveys.Repository
             {
                 if (Connection.State == ConnectionState.Closed) Connection.Open();
 
-                OleDbCommand cmd = DatabaseHelpers.GetCommand("select * from doctorSurveys", Connection);
+                OleDbCommand cmd = DatabaseCommander.GetCommand("select * from doctorSurveys", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -109,6 +98,20 @@ namespace HealthCareSystem.Core.Surveys.Repository
             return doctorSurveys;
         }
 
+        internal void AddDoctorSurvey(int doctorId, int patientId, int rating, int quality, bool wouldReccomend, string comment)
+        {
+            string query = "insert into DoctorSurveys(id_doctor, id_patient, doctorGrade, quality, wouldRecommend, comment) values(" + doctorId + ", " + patientId + ", " + rating + ", " + quality + ", " + wouldReccomend + ", '" + comment + "')";
+
+            DatabaseCommander.ExecuteNonQueries(query, Connection);
+        }
+
+        public void AddHospitalSurvey(HospitalSurvey survey, int patientId)
+        {
+            bool isSatisfied = survey.Happiness == 1 ? true : false;
+            bool wouldReccomend = survey.WouldRecommend == 1 ? true : false;
+            string query = "insert into HospitalSurveys(quality, higyene, isSatisfied, wouldRecomend, comment, id_patient) values(" + survey.QualityOfService + ", " + survey.Cleanliness + ", " + isSatisfied + ", " + wouldReccomend + ", '" + survey.Comment + "', " + patientId + ")";
+            DatabaseCommander.ExecuteNonQueries(query, Connection);
+        }
 
     }
 

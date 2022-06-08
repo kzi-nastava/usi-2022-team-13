@@ -1,5 +1,6 @@
 ﻿using HealthCareSystem.Core.Ingredients.Model;
 using HealthCareSystem.Core.Medications.Model;
+using HealthCareSystem.Core.Medications.Repository;
 using HealthCareSystem.Core.Rooms.Repository;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,8 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
     public partial class AddEditMedication : Form
     {
         public int MedicationId { get; set; }
-        private RoomRepository RoomRep;
+        private IngredientsRepository IngredientRep;
+        private MedicationRepository MedicationRep;
         private string MedicationName;
 
         private bool IsAddChosen { get; set; }
@@ -25,7 +27,8 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         {
             MedicationId = medicationId;
             IsAddChosen = isAddChosen;
-            RoomRep = new RoomRepository();
+            MedicationRep = new MedicationRepository();
+            IngredientRep = new IngredientsRepository();
             InitializeComponent();
             FillCheckBoxList();
 
@@ -37,7 +40,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         private void FillCheckBoxList()
         {
-            List<Ingredient> ingredients = RoomRep.GetIngredients("select * from ingredients");
+            List<Ingredient> ingredients = IngredientRep.GetIngredients("select * from ingredients");
           
             foreach(Ingredient ingredient in ingredients)
             {
@@ -48,11 +51,11 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void LoadEditData()
         {
             string query = "select * from medications where id=" + MedicationId;
-            Medication medication = RoomRep.GetSelectedMedication(query);
+            Medication medication = MedicationRep.GetSelectedMedication(query);
 
 
-            List<Ingredient> allIngredients = RoomRep.GetIngredients("select * from ingredients");
-            List<Ingredient> ingredientsInMedication = RoomRep.GetIngredients("select * from ingredients" +
+            List<Ingredient> allIngredients = IngredientRep.GetIngredients("select * from ingredients");
+            List<Ingredient> ingredientsInMedication = IngredientRep.GetIngredients("select * from ingredients" +
                 " where id in (select id_ingredient from MedicationContainsIngredient where id_medication=" + MedicationId + ")");
             
 
@@ -94,24 +97,24 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         {
             string updateNameAndStatusQuery = "Update medications set nameOfMedication = '" + MedicationName + "'" +
                                 " ,status = '" + MedicationStatus.InProgress.ToString() + "' where id = " + MedicationId;
-            RoomRep.UpdateContent(updateNameAndStatusQuery);
+            DatabaseCommander.ExecuteNonQueries(updateNameAndStatusQuery, MedicationRep.Connection);
 
             string deleteRejectedQuery = "Delete from rejectedmedications where id_medication=" + MedicationId;
-            RoomRep.UpdateContent(deleteRejectedQuery);
+            DatabaseCommander.ExecuteNonQueries(deleteRejectedQuery, MedicationRep.Connection);
 
             string deleteMedicationIngredientsQuery = "Delete from MedicationContainsIngredient where id_medication=" + MedicationId;
-            RoomRep.UpdateContent(deleteMedicationIngredientsQuery);
+            DatabaseCommander.ExecuteNonQueries(deleteMedicationIngredientsQuery, MedicationRep.Connection);
 
             foreach (Ingredient ingredient in clbIngredients.CheckedItems)
             {
-                RoomRep.InsertMedicationContainsIngredient(MedicationId, ingredient.Id);
+                MedicationRep.InsertMedicationContainsIngredient(MedicationId, ingredient.Id);
             }
             MessageBox.Show("Successfully edited a medication!");
         }
 
         private bool InsertMedication()
         {
-            if (!RoomRep.DoesMedicationExists(MedicationName))
+            if (!MedicationRep.DoesMedicationExists(MedicationName))
             {
                 MessageBox.Show("There already exists medication with this name!");
                 this.Close();
@@ -119,14 +122,14 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             }
 
 
-            RoomRep.InsertMedication(MedicationName);
+            MedicationRep.InsertMedication(MedicationName);
 
             string medicationQuery = "select * from medications where nameOfMedication ='" + MedicationName + "'";
-            Medication newMedication = RoomRep.GetSelectedMedication(medicationQuery);
+            Medication newMedication = MedicationRep.GetSelectedMedication(medicationQuery);
 
             foreach (Ingredient ingredient in clbIngredients.CheckedItems)
             {
-                RoomRep.InsertMedicationContainsIngredient(newMedication.Id, ingredient.Id);
+                MedicationRep.InsertMedicationContainsIngredient(newMedication.Id, ingredient.Id);
             }
             MessageBox.Show("Successfully added a medication!");
             return true;

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Users.Doctors.Repository;
 
 namespace HealthCareSystem.GUI.SecretaryFunctionalities
 {
@@ -15,18 +16,18 @@ namespace HealthCareSystem.GUI.SecretaryFunctionalities
     {
         string Username;
         int RequestId;
-        SecretaryRepository _secretaryRepository;
+        DaysOffRepository _daysOffRepository;
         public AddComment(string username, int requestId)
         {
             this.Username = username;
             this.RequestId = requestId;
-            _secretaryRepository = new SecretaryRepository();
+            _daysOffRepository = new DaysOffRepository();
             InitializeComponent();
         }
 
         private void denyButton_Click(object sender, EventArgs e)
         {
-            _secretaryRepository.ManageDaysOffRequest(Username, RequestId, false, commentTextBox.Text);
+            _daysOffRepository.ManageDaysOffRequest(Username, RequestId, false, commentTextBox.Text);
         }
     }
 }

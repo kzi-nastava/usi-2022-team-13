@@ -26,7 +26,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
     class InsertionRepository
     {
         private static OleDbConnection Connection;
-        RoomRepository RoomRep;
+        private RenovationRepository _renovationRepository;
+        private RoomRepository _roomRepository;
+        private TransferHistoryRepository _transferHistoryRepository;
 
         public InsertionRepository()
         {
@@ -44,7 +46,10 @@ namespace HealthCareSystem.Core.Scripts.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            RoomRep = new RoomRepository();
+            _roomRepository = new RoomRepository(0);
+            _renovationRepository = new RenovationRepository();
+            
+            _transferHistoryRepository = new TransferHistoryRepository();
         }
 
         public void ExecuteQueries()
@@ -98,7 +103,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             string unrealizedRenovationsQuery = "select * from Renovations where dateOfFinish < #" + DateTime.Now.ToString() + "#";   
        
             List<Renovation> unrealizedRenovations;
-            unrealizedRenovations = RoomRep.GetRenovations(unrealizedRenovationsQuery);
+            unrealizedRenovations = _renovationRepository.GetRenovations(unrealizedRenovationsQuery);
 
             foreach(Renovation renovation in unrealizedRenovations)
             {
@@ -126,68 +131,68 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private void ExecuteRegularRenovations(Renovation renovation)
         {
             string deleteRegularRenovationQuery = "delete from Renovations where id_room = " + renovation.RoomId;
-            RoomRep.UpdateContent(deleteRegularRenovationQuery);
+            DatabaseCommander.ExecuteNonQueries(deleteRegularRenovationQuery, Connection);
         }
 
         private void ExecuteMergingRenovations(Renovation renovation)
         {
             string getEquipmentInRoomQuery = "select * from RoomHasEquipment where id_room = " + renovation.SecondRoomId;
-            List<RoomHasEquipment> equipmentToBeMoved = RoomRep.GetEquipmentInRoom(getEquipmentInRoomQuery);
+            List<RoomHasEquipment> equipmentToBeMoved = _roomRepository.GetEquipmentInRoom(getEquipmentInRoomQuery);
 
             foreach (RoomHasEquipment equipment in equipmentToBeMoved)
             {
                 //checking to see if there is an instance of RoomhasEquipment for room that we are putting equipment in
                 string checkQuery = "select * from RoomHasEquipment where id_room = " + renovation.RoomId + " and id_equipment = " + equipment.EquipmentId + "";
-                List<RoomHasEquipment> checkNumber = RoomRep.GetEquipmentInRoom(checkQuery);
+                List<RoomHasEquipment> checkNumber = _roomRepository.GetEquipmentInRoom(checkQuery);
 
 
                 if (checkNumber.Count == 0)
                 {
                     //if there is not that particular instance we create new one with amount of 0
                     string insertQueryDestination = "insert into RoomHasEquipment (id_room, id_equipment, amount) values (" + renovation.RoomId + ", " + equipment.EquipmentId + ", 0)";
-                    RoomRep.UpdateContent(insertQueryDestination);
+                    DatabaseCommander.ExecuteNonQueries(insertQueryDestination, Connection);
                 }
 
                 string updateFirstRoomEquipment = "update RoomHasEquipment set amount = amount + " + equipment.Quantity + " where id_room = " + renovation.RoomId + " and id_equipment = " + equipment.EquipmentId;
-                RoomRep.UpdateContent(updateFirstRoomEquipment);
+                DatabaseCommander.ExecuteNonQueries(updateFirstRoomEquipment, Connection);
 
             }
 
             string deleteMergingRenovationQuery = "delete from Renovations where id_room = " + renovation.RoomId + " and id_other_room = " + renovation.SecondRoomId;
-            RoomRep.UpdateContent(deleteMergingRenovationQuery);
+            DatabaseCommander.ExecuteNonQueries(deleteMergingRenovationQuery, Connection);
 
 
             string deleteOtherRoomQuery = "delete from Rooms where ID = " + renovation.SecondRoomId;
-            RoomRep.UpdateContent(deleteOtherRoomQuery);
+            DatabaseCommander.ExecuteNonQueries(deleteOtherRoomQuery, Connection);
         }
 
         private void ExecuteSplitingRenovations(Renovation renovation)
         {
             string getEquipmentInFirstRoomQuery = "select * from RoomHasEquipment where id_room = " + renovation.RoomId;
-            List<RoomHasEquipment> equipmentToBeMovedToWarehouse = RoomRep.GetEquipmentInRoom(getEquipmentInFirstRoomQuery);
+            List<RoomHasEquipment> equipmentToBeMovedToWarehouse = _roomRepository.GetEquipmentInRoom(getEquipmentInFirstRoomQuery);
 
-            Room warehouse = RoomRep.GetRooms("select * from Rooms where Type = 'Warehouse'")[0];
-            Room firstRoom = RoomRep.GetRooms("select * from Rooms where ID = " + renovation.RoomId)[0];
+            Room warehouse = _roomRepository.GetRooms("select * from Rooms where Type = 'Warehouse'")[0];
+            Room firstRoom = _roomRepository.GetRooms("select * from Rooms where ID = " + renovation.RoomId)[0];
 
             foreach (RoomHasEquipment equipment in equipmentToBeMovedToWarehouse)
             {
                 string checkQuery = "select * from RoomHasEquipment where id_equipment = " + equipment.EquipmentId + " and id_room in (select ID from Rooms where Type = 'Warehouse'";
-                List<RoomHasEquipment> checkNumber = RoomRep.GetEquipmentInRoom(checkQuery);
+                List<RoomHasEquipment> checkNumber = _roomRepository.GetEquipmentInRoom(checkQuery);
 
 
                 if (checkNumber.Count == 0)
                 {
                     string insertQueryDestination = "insert into RoomHasEquipment (id_room, id_equipment, amount) values (" + warehouse.ID + ", " + equipment.EquipmentId + ", 0)";
-                    RoomRep.UpdateContent(insertQueryDestination);
+                    DatabaseCommander.ExecuteNonQueries(insertQueryDestination, Connection);
                 }
 
                 string updateWarehouseEquipment = "update RoomHasEquipment set amount = amount + " + equipment.Quantity + " where id_room = " + warehouse.ID + " and id_equipment = " + equipment.EquipmentId;
-                RoomRep.UpdateContent(updateWarehouseEquipment);
+                DatabaseCommander.ExecuteNonQueries(updateWarehouseEquipment, Connection);
 
             }
 
             string deleteSplittingRenovationQuery = "delete from Renovations where id_room = " + renovation.RoomId;
-            RoomRep.UpdateContent(deleteSplittingRenovationQuery);
+            DatabaseCommander.ExecuteNonQueries(deleteSplittingRenovationQuery, Connection);
 
             var query = "INSERT INTO rooms(type) VALUES('"+firstRoom.Type.ToString()+"')";
             InsertSingle(query);
@@ -198,7 +203,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             string unrealizedTransfersQuery = "select * from EquipmentTransferHistory where isExecuted = false";
 
             List<TransferHistoryOfEquipment> unrealizedTransfers;
-            unrealizedTransfers = RoomRep.GetTransferHistory(unrealizedTransfersQuery);
+            unrealizedTransfers = _transferHistoryRepository.GetTransferHistory(unrealizedTransfersQuery);
 
             Connection.Close();
         }
@@ -258,49 +263,49 @@ namespace HealthCareSystem.Core.Scripts.Repository
         }
         private void DeleteTableData(string tableName)
         {
-            DatabaseHelpers.ExecuteNonQueries("Delete from " + tableName, Connection);
+            DatabaseCommander.ExecuteNonQueries("Delete from " + tableName, Connection);
         }
 
         private static List<String> GetUserIDs(UserRole role)
         {
             var query = "select ID from Users where role='" + role.ToString() + "'";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
         private static List<String> GetPatientIds()
         {
             var query = "select ID from Patients";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
         private static List<String> GetSecretaryIDs()
         {
             var query = "select ID from Secretaries";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
         private static List<String> GetDoctorIds()
         {
             var query = "select ID from Doctors";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
         private static List<String> GetEquipmentIDs()
         {
             var query = "select ID from Equipment where type='" + Equipment.EquipmentType.Dynamic.ToString() + "'";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
         private static List<String> GetRoomIDs()
         {
             var query = "select ID from Rooms";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
         private static List<String> GetIngredientIDs()
         {
             var query = "select ID from Ingredients";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
         private static List<Equipment> GetEquipment()
@@ -390,7 +395,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
         }
         private static void InsertSingle(string query)
         {
-            DatabaseHelpers.ExecuteNonQueries(query, Connection);
+            DatabaseCommander.ExecuteNonQueries(query, Connection);
         }
 
 
@@ -697,7 +702,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static List<String> GetMedicationIds()
         {
             var query = "select ID from Medications";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
         private static void InsertRejectedMedications()
@@ -749,14 +754,14 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static List<String> GetMedicalRecordIds()
         {
             var query = "select ID from MedicalRecord";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
 
         }
 
         private static void InsertPatientAlergies()
         {
             List<string> patientIDs = GetPatientIds();
-            List<string> ingredientIDs = DatabaseHelpers.ExecuteReaderQueries("select id from ingredients", Connection);
+            List<string> ingredientIDs = DatabaseCommander.ExecuteReaderQueries("select id from ingredients", Connection);
 
             for(int i =0;i < patientIDs.Count();i++)
             {
@@ -782,7 +787,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
         {
             List<MedicationsIngredient> medicationsIngredients = new List<MedicationsIngredient>();
             List<String> medicationsIDs = GetMedicationIds();
-            List<String> ingredientsIDs = DatabaseHelpers.ExecuteReaderQueries("select id from Ingredients", Connection);
+            List<String> ingredientsIDs = DatabaseCommander.ExecuteReaderQueries("select id from Ingredients", Connection);
 
             medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[0]), Convert.ToInt32(ingredientsIDs[0])));
             medicationsIngredients.Add(new MedicationsIngredient(Convert.ToInt32(medicationsIDs[1]), Convert.ToInt32(ingredientsIDs[1])));
@@ -851,7 +856,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
         private static List<String> GetExaminationIDs()
         {
             var query = "select ID from Examination";
-            return DatabaseHelpers.ExecuteReaderQueries(query, Connection);
+            return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
         private static void InsertAnamnesises()
@@ -872,7 +877,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
             anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[0]), "Runny nose and coughs alot.", "Patient should drink antibiotics.", new DateTime(2022, 4, 26)));
             anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[4]), "Patient showed signs of Corona Virus: Headeches, High Temperature, Cough and Sleep Depravation", "Patient should go and take his blood and come back with results.", new DateTime(2022, 4, 28)));
-            anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[5]), "Patient is Fatigueing very quickly when training", "Rest for a few days and come back for a check up", new DateTime(2022, 4, 24)));
+            anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[5]), "Patient is Fatigueing very quickly when training", "Rest for a few days and come back for a check up", new DateTime(2022, 4, 28)));
+            anamnesises.Add(new Anamnesis(Convert.ToInt32(examinationIDs[6]), "Patient is very weak and fragile", "Steady state for 5 days", new DateTime(2022, 4, 24)));
+
 
             return anamnesises;
         }
@@ -908,9 +915,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         private static void InsertPatientEditRequests()
         {
-            List<string> examinationIds = DatabaseHelpers.ExecuteReaderQueries("select id from examination", Connection);
+            List<string> examinationIds = DatabaseCommander.ExecuteReaderQueries("select id from examination", Connection);
             List<string> doctors = GetDoctorIds();
-            List<string> rooms = DatabaseHelpers.ExecuteReaderQueries("select id from rooms where type = '" + TypeOfRoom.ExaminationRoom.ToString() + "'", Connection);
+            List<string> rooms = DatabaseCommander.ExecuteReaderQueries("select id from rooms where type = '" + TypeOfRoom.ExaminationRoom.ToString() + "'", Connection);
 
             InsertSinglePatientEditRequest(Convert.ToInt32(examinationIds[0]), DateTime.Now, true, false, Convert.ToInt32(doctors[0]), DateTime.Now.AddDays(2), Convert.ToInt32(rooms[0]));
             InsertSinglePatientEditRequest(Convert.ToInt32(examinationIds[1]), DateTime.Now, false, true, Convert.ToInt32(doctors[0]), DateTime.Now, Convert.ToInt32(rooms[0]));
@@ -950,7 +957,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
             List<Receipt> receipts = new List<Receipt>();
             List<string> patientIds = GetPatientIds();
             List<string> doctorIds = GetDoctorIds();
-            List<string> instructionIds = DatabaseHelpers.ExecuteReaderQueries("select id from Instructions", Connection);
+            List<string> instructionIds = DatabaseCommander.ExecuteReaderQueries("select id from Instructions", Connection);
             receipts.Add(new Receipt(Convert.ToInt32(doctorIds[0]), Convert.ToInt32(instructionIds[0]), Convert.ToInt32(patientIds[0]), DateTime.Now));
             receipts.Add(new Receipt(Convert.ToInt32(doctorIds[0]), Convert.ToInt32(instructionIds[1]), Convert.ToInt32(patientIds[1]), DateTime.Now));
             receipts.Add(new Receipt(Convert.ToInt32(doctorIds[1]), Convert.ToInt32(instructionIds[2]), Convert.ToInt32(patientIds[2]), DateTime.Now));
@@ -961,7 +968,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         private static void InsertReceiptMedication()
         {
-            List<string> receiptIds = DatabaseHelpers.ExecuteReaderQueries("select id from Receipt", Connection);
+            List<string> receiptIds = DatabaseCommander.ExecuteReaderQueries("select id from Receipt", Connection);
             List<string> medicationIds = GetMedicationIds();
             InsertSingleReceiptMedication(Convert.ToInt32(receiptIds[0]), Convert.ToInt32(medicationIds[0]));
             InsertSingleReceiptMedication(Convert.ToInt32(receiptIds[1]), Convert.ToInt32(medicationIds[0]));

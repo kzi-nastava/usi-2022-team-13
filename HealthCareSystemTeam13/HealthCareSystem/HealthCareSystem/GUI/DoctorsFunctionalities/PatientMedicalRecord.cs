@@ -14,13 +14,15 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 {
     public partial class PatientMedicalRecord : Form
     {
-        private readonly PatientRepository PatientRep;
+        private readonly PatientRepository _patientRep;
+        private readonly MedicalRecordRepository _medicalRecordRep;
         private readonly int PatientId;
         public PatientMedicalRecord(string patientFullName)
         {
             InitializeComponent();
-            PatientRep = new PatientRepository();
-            PatientId = PatientRep.GetPatientIdByFirstName(patientFullName.Split(' ')[0]);
+            _patientRep = new PatientRepository();
+            _medicalRecordRep = new MedicalRecordRepository();
+            PatientId = _patientRep.GetPatientIdByFirstName(patientFullName.Split(' ')[0]);
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -31,7 +33,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private void PatientMedicalRecord_Load(object sender, EventArgs e)
         {
             string query = "select * from MedicalRecord where id_patient = " + PatientId;
-            string[] data = PatientRep.GetMedicalRecord(query);
+            string[] data = _medicalRecordRep.GetMedicalRecord(query);
             lbHeight.Text = "Height: " + data[0];
             lbWeight.Text = "Weight: " + data[1];
         }

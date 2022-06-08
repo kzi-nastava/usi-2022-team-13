@@ -14,18 +14,18 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     public partial class HomeView : Form
     {
         public string Username { get; set; }
-        private PatientRepository PatientRep;
+        private PatientRepository _patientRepository;
         public HomeView(string username)
         {
             this.Username = username;
-            PatientRep = new PatientRepository(this.Username);
+            _patientRepository = new PatientRepository(this.Username);
             InitializeComponent();
         }
 
         private void HomeView_Load(object sender, EventArgs e)
         {
-            int patientId = PatientRep.GetPatientId();
-            string name = DatabaseHelpers.ExecuteReaderQueries("select firstName + ' ' + lastName from Patients where id = " + patientId + "", PatientRep.Connection)[0];
+            int patientId = _patientRepository.GetPatientId();
+            string name = DatabaseCommander.ExecuteReaderQueries("select firstName + ' ' + lastName from Patients where id = " + patientId + "", _patientRepository.Connection)[0];
             lbName.Text = name;
         }
     }

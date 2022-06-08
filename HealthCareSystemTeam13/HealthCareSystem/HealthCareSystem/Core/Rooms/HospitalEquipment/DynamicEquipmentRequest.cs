@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HealthCareSystem.Core.Rooms.DynamicEqipmentRequests.Model
 {
-    class DynamicEquipmentRequest
+    public class DynamicEquipmentRequest
     {
         public int ID { get; set; }
         public int EquipmentId { get; set; }

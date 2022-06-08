@@ -19,9 +19,10 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
     public partial class AddRenovations : Form
     {
         private RoomRepository RoomRepository;
+        private RenovationRepository RenovationRepository;
         public AddRenovations()
         {
-
+            RenovationRepository = new RenovationRepository();
             RoomRepository = new RoomRepository();
             InitializeComponent();
 
@@ -186,7 +187,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
                 Renovation newRenovation = new Renovation(roomId, startingDate, endingDate, secondRoomId, type);
               
-                RoomRepository.InsertRenovation(newRenovation);
+                RenovationRepository.InsertRenovation(newRenovation);
                 MessageBox.Show("Succesfully added new renovation");
                 this.Hide();
             }

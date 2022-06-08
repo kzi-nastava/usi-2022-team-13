@@ -21,47 +21,32 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     {
 
         public string Username { get; set; }
-        PatientRepository PatientRep;
-        DoctorRepository DoctorRep;
-        RoomRepository RoomRep;
-        ExaminationRepository ExaminationRep;
-        private DateTime ExaminationFinalDate;
-        private Doctor SelectedDoctor;
-        private string StartTime, EndTime;
-        private bool IsDoctorPriority;
+        private readonly PatientRepository _patientRepository;
+        private readonly DoctorRepository _doctorRepository;
+        private readonly ExaminationRepository _examinationRepository;
+        private DateTime _examinationFinalDate;
+        private Doctor _selectedDoctor;
+        private string _startTime, _endTime;
+        private bool _isDoctorPriority;
 
         public PatientRecommendation(string username)
         {
             Username = username;
-            PatientRep = new PatientRepository(Username);
-            DoctorRep = new DoctorRepository();
-            RoomRep = new RoomRepository();
-            ExaminationRep = new ExaminationRepository();
-            IsDoctorPriority = true;
+            _patientRepository = new PatientRepository(Username);
+            _doctorRepository = new DoctorRepository();
+            _examinationRepository = new ExaminationRepository();
+            _isDoctorPriority = true;
 
             
             InitializeComponent();
-            //DataGridViewSettings();
+            
             FillDoctorsComboBox();
         }
-        private void DataGridViewSettings()
-        {
-
-            dgwRecommendations.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgwRecommendations.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            dgwRecommendations.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            dgwRecommendations.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            dgwRecommendations.Columns[0].Width = 90;
-            dgwRecommendations.Columns[3].Width = 90;
-            dgwRecommendations.Columns[4].Width = 90;
-            dgwRecommendations.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwRecommendations.MultiSelect = false;
-
-        }
+        
         private void FillDoctorsComboBox()
         {
 
-            BindingList<Doctor> doctors = DoctorRep.GetDoctors();
+            BindingList<Doctor> doctors = _doctorRepository.GetDoctors();
 
             cbDoctors.ValueMember = null;
             cbDoctors.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -73,31 +58,26 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private bool CheckSelectedValues()
         {
             var regex = @"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$";
-            DateTime startDateTime = Helpers.GetMergedDateTime(DateTime.Now, StartTime);
-            DateTime endDateTime = Helpers.GetMergedDateTime(ExaminationFinalDate, EndTime);
+            DateTime startDateTime = TimeDateHelpers.GetMergedDateTime(DateTime.Now, _startTime);
+            DateTime endDateTime = TimeDateHelpers.GetMergedDateTime(_examinationFinalDate, _endTime);
 
             if (!IsTimeValid(regex)) return false;
-            else if (!IsDateValid()) return false;
+            else if (!TimeDateHelpers.IsValidExaminationDate(_examinationFinalDate))
+            {
+                MessageBox.Show("Examination date must be after current time.");
+                return false;
+            }
             
             return true;
         }
 
-        private bool IsDateValid()
-        {
-            if (ExaminationFinalDate <= DateTime.Now)
-            {
-                MessageBox.Show("Examination date must be after current time.");
-                return false;
-
-            }
-            return true;
-        }
+        
 
         private bool IsTimeValid(string regex)
         {
  
-            var startMatch = System.Text.RegularExpressions.Regex.Match(StartTime, regex);
-            var endMatch = System.Text.RegularExpressions.Regex.Match(EndTime, regex);
+            var startMatch = System.Text.RegularExpressions.Regex.Match(_startTime, regex);
+            var endMatch = System.Text.RegularExpressions.Regex.Match(_endTime, regex);
             DateTime start = DateTime.Now;
             DateTime end = DateTime.Now;
             if (!startMatch.Success || !endMatch.Success)
@@ -107,8 +87,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             }
             try
             {
-                start = DateTime.ParseExact(StartTime, "HH:mm", CultureInfo.InvariantCulture);
-                end = DateTime.ParseExact(EndTime, "HH:mm", CultureInfo.InvariantCulture);
+                start = DateTime.ParseExact(_startTime, "HH:mm", CultureInfo.InvariantCulture);
+                end = DateTime.ParseExact(_endTime, "HH:mm", CultureInfo.InvariantCulture);
             }catch(Exception)
             {
                 MessageBox.Show("Time Format Must be HH:mm !");
@@ -124,39 +104,34 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void SetSelectedValues()
         {
-            SelectedDoctor = (Doctor)cbDoctors.SelectedValue;
-            ExaminationFinalDate = dtLatestDate.Value;
-            StartTime = tbStartTime.Text;
-            EndTime = tbEndTime.Text;
-            if (rbDoctor.Checked == true) IsDoctorPriority = true;
-            else IsDoctorPriority = false;
-        }
-        private void PatientRecommendation_Load(object sender, EventArgs e)
-        {
-
+            _selectedDoctor = (Doctor)cbDoctors.SelectedValue;
+            _examinationFinalDate = dtLatestDate.Value;
+            _startTime = tbStartTime.Text;
+            _endTime = tbEndTime.Text;
+            if (rbDoctor.Checked == true) _isDoctorPriority = true;
+            else _isDoctorPriority = false;
         }
 
         private void rbDoctor_CheckedChanged(object sender, EventArgs e)
         {
-            if (rbDoctor.Checked == true) IsDoctorPriority = true;
-            else IsDoctorPriority = false;
+            if (rbDoctor.Checked == true) _isDoctorPriority = true;
+            else _isDoctorPriority = false;
  
         }
 
         private void rbTime_CheckedChanged(object sender, EventArgs e)
         {
-            if (rbTime.Checked == true) IsDoctorPriority = false;
-            else IsDoctorPriority = true;
+            if (rbTime.Checked == true) _isDoctorPriority = false;
+            else _isDoctorPriority = true;
         }
 
         private void btnAppoint_Click(object sender, EventArgs e)
         {
             if (CanAddExamination())
             {
-
                 var selectedRow = dgwRecommendations.SelectedRows[0];
 
-                PatientRep.InsertExamination(Username, (int)selectedRow.Cells[0].Value, (DateTime)selectedRow.Cells[2].Value, 15, (int)selectedRow.Cells[4].Value);
+                _examinationRepository.InsertExamination(_patientRepository.GetPatientId(), (int)selectedRow.Cells[0].Value, (DateTime)selectedRow.Cells[2].Value, 15, (int)selectedRow.Cells[4].Value);
                 MessageBox.Show("Successfully added examination!");
             }
         }
@@ -165,38 +140,16 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         {
             SetSelectedValues();
 
-            bool valid = CheckSelectedValues();
-
-            if (valid)
+            if (CheckSelectedValues())
             {
-                List<Examination> examinations = ExaminationRep.GetRecommendedExaminations(SelectedDoctor, StartTime, EndTime, ExaminationFinalDate, IsDoctorPriority);
+                List<Examination> examinations = _examinationRepository.GetRecommendedExaminations(_selectedDoctor, _startTime, _endTime, _examinationFinalDate, _isDoctorPriority);
                 dgwRecommendations.DataSource = examinations;
             }
         }
         private bool CanAddExamination()
         {
-            if (dgwRecommendations.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Please select a row first.");
-
-            }
-            else if (dgwRecommendations.SelectedRows.Count == 1)
-            {
-                DataGridViewRow row = dgwRecommendations.SelectedRows[0];
-                if (row.Cells[0].Value == null)
-                {
-                    MessageBox.Show("You selected an empty row.");
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please select only 1 row.");
-            }
-            return false;
+            return GUIHelpers.IsDgwRowSelected(dgwRecommendations);
+            
         }
     }
 }

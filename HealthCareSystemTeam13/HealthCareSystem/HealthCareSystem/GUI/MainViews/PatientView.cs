@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HealthCareSystem.Core.GUI.PatientFunctionalities;
+using HealthCareSystem.Core.Medications.Repository;
 using HealthCareSystem.Core.Users.Patients.Repository;
 using HealthCareSystem.Core.Users.Patients.Service;
 
@@ -19,7 +20,9 @@ namespace HealthCareSystem.Core.GUI
         public string Username { get; set; }
         public LoginForm SuperForm;
         private PatientRepository _patientRepository;
+        private MedicationRepository _medicationRepository;
         private List<System.Threading.Timer> _timers;
+
         private int _notificationAlertTime;
 
         public PatientView(string username, LoginForm superForm)
@@ -27,7 +30,8 @@ namespace HealthCareSystem.Core.GUI
             Username = username;
             SuperForm = superForm;
             _patientRepository = new PatientRepository(username);
-            _notificationAlertTime = _patientRepository.GetMedicationNotificationTime();
+            _medicationRepository = new MedicationRepository();
+            _notificationAlertTime = _medicationRepository.GetMedicationNotificationTime(_patientRepository.GetPatientId());
 
             InitializeComponent();
 
@@ -83,7 +87,7 @@ namespace HealthCareSystem.Core.GUI
         }
         private void LoadNotifications()
         { 
-            Dictionary<int, DateTime> instructions = _patientRepository.GetMedicationInstructions();
+            Dictionary<int, DateTime> instructions = _medicationRepository.GetMedicationInstructions(_patientRepository.GetPatientId());
             if (instructions.Count() == 0)
                 return;
 
@@ -155,53 +159,53 @@ namespace HealthCareSystem.Core.GUI
 
         private void btnHome_MouseEnter(object sender, EventArgs e)
         {
-            Helpers.ButtonEnter(btnHome);
+            GUIHelpers.ButtonEnter(btnHome);
         }
 
         private void btnHome_MouseLeave(object sender, EventArgs e)
         {
-            Helpers.ButtonLeave(btnHome);
+            GUIHelpers.ButtonLeave(btnHome);
         }
 
         private void btnExaminations_MouseEnter(object sender, EventArgs e)
         {
-            Helpers.ButtonEnter(btnExaminations);
+            GUIHelpers.ButtonEnter(btnExaminations);
 
         }
 
         private void btnExaminations_MouseLeave(object sender, EventArgs e)
         {
-            Helpers.ButtonLeave(btnExaminations);
+            GUIHelpers.ButtonLeave(btnExaminations);
         }
 
         private void btnAptRecc_MouseEnter(object sender, EventArgs e)
         {
-            Helpers.ButtonEnter(btnAptRecc);
+            GUIHelpers.ButtonEnter(btnAptRecc);
         }
 
         private void btnAptRecc_MouseLeave(object sender, EventArgs e)
         {
-            Helpers.ButtonLeave(btnAptRecc);
+            GUIHelpers.ButtonLeave(btnAptRecc);
         }
 
         private void btnMedicalRecord_MouseEnter(object sender, EventArgs e)
         {
-            Helpers.ButtonEnter(btnMedicalRecord);
+            GUIHelpers.ButtonEnter(btnMedicalRecord);
         }
 
         private void btnMedicalRecord_MouseLeave(object sender, EventArgs e)
         {
-            Helpers.ButtonLeave(btnMedicalRecord);
+            GUIHelpers.ButtonLeave(btnMedicalRecord);
         }
 
         private void btnExit_MouseEnter(object sender, EventArgs e)
         {
-            Helpers.ButtonEnter(btnExit);
+            GUIHelpers.ButtonEnter(btnExit);
         }
 
         private void btnExit_MouseLeave(object sender, EventArgs e)
         {
-            Helpers.ButtonLeave(btnExit);
+            GUIHelpers.ButtonLeave(btnExit);
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -221,12 +225,12 @@ namespace HealthCareSystem.Core.GUI
 
         private void btnSearchDoctor_MouseEnter(object sender, EventArgs e)
         {
-            Helpers.ButtonEnter(btnSearchDoctor);
+            GUIHelpers.ButtonEnter(btnSearchDoctor);
         }
 
         private void btnSearchDoctor_MouseLeave(object sender, EventArgs e)
         {
-            Helpers.ButtonLeave(btnSearchDoctor);
+            GUIHelpers.ButtonLeave(btnSearchDoctor);
         }
 
         private void btnNotifications_Click(object sender, EventArgs e)

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -8,14 +10,8 @@ using System.Windows.Forms;
 
 namespace HealthCareSystem.Core
 {
-    class Helpers
+    class GUIHelpers
     {
-        public static DateTime GetMergedDateTime(DateTime examinationDate, string examinationTime)
-        {
-            string[] examinationHourMinute = examinationTime.Split(':');
-            DateTime examinationDateTime = new DateTime(examinationDate.Year, examinationDate.Month, examinationDate.Day, Convert.ToInt32(examinationHourMinute[0]), Convert.ToInt32(examinationHourMinute[1]), 0);
-            return examinationDateTime;
-        }
         public static void DataGridViewSettings(DataGridView dgw)
         {
             dgw.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -81,6 +77,16 @@ namespace HealthCareSystem.Core
         {
             button.BackColor = Color.Transparent;
             button.ForeColor = Color.White;
+        }
+        public static void FillTable(DataTable table, string query, OleDbConnection connection)
+        {
+            if(connection.State == ConnectionState.Closed) connection.Open();
+            using (var cmd = new OleDbCommand(query, connection))
+            {
+                OleDbDataReader reader = cmd.ExecuteReader();
+                table.Load(reader);
+            }
+            if (connection.State == ConnectionState.Open) connection.Close();
         }
     }
 }

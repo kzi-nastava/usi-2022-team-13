@@ -1,4 +1,5 @@
-﻿using HealthCareSystem.Core.Users.Doctors.Repository;
+﻿using HealthCareSystem.Core.Examinations.Repository;
+using HealthCareSystem.Core.Users.Doctors.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,15 +14,20 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
 {
     public partial class RequestDaysOff : Form
     {
-        private DoctorRepository DoctorRep;
+        private DoctorRepository _doctorRep;
+        private ExaminationRepository _examinationRep;
+        private DaysOffRepository _daysOffRep;
 
         public RequestDaysOff(string doctorUsername)
         {
-            InitializeComponent();
-            DoctorRep = new DoctorRepository(doctorUsername, true);
-            DoctorRep.Username = doctorUsername;
+            
+            _doctorRep = new DoctorRepository(doctorUsername, true);
+            _examinationRep = new ExaminationRepository();
+            _doctorRep.Username = doctorUsername;
+            _daysOffRep = new DaysOffRepository();
+            _daysOffRep.PullRequestsForDaysOff(_doctorRep.GetDoctorId());
 
-            DoctorRep.PullRequestsForDaysOff();
+            InitializeComponent();
 
             FillDataGridView();
 
@@ -31,7 +37,7 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
         private void FillDataGridView()
         {
 
-            dgwRequests.DataSource = DoctorRep.RequestsForDaysOff;
+            dgwRequests.DataSource = _daysOffRep.RequestsForDaysOff;
             DataGridViewSettings();
         }
 
@@ -76,7 +82,7 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
                 return;
             }
 
-            List<DateTime> examinationDates = DoctorRep.GetDateOfExaminationsForDoctor();
+            List<DateTime> examinationDates = _examinationRep.GetDateOfExaminationsForDoctor(_doctorRep.GetDoctorId());
 
             bool isUrgent = cbUrgent.Checked;
 
@@ -98,11 +104,11 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
 
             String reasonForDaysOff = rtbReasonForRequest.Text;
 
-            DoctorRep.InsertDaysOff(startDate, endDate, reasonForDaysOff, isUrgent, DoctorRep.GetDoctorId());
+            _daysOffRep.InsertDaysOff(startDate, endDate, reasonForDaysOff, isUrgent, _doctorRep.GetDoctorId());
 
             MessageBox.Show("Successfully created a request for taking days off!");
 
-            DoctorRep.PullRequestsForDaysOff();
+            _daysOffRep.PullRequestsForDaysOff(_doctorRep.GetDoctorId());
             FillDataGridView();
 
 

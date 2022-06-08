@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HealthCareSystem.Core.Rooms.HospitalEquipment.Model
 {
-    class Equipment
+    public class Equipment
     {
         public enum EquipmentType
         {

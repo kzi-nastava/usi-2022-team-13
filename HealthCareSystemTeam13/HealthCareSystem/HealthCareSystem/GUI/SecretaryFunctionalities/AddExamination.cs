@@ -22,7 +22,6 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         private RoomRepository _roomRepository;
         private ExaminationRepository _examinationRepository;
         private DoctorRepository _doctorRepository;
-        private SecretaryRepository _secretaryRepository;
         private ReferralLetter ChosenReferralLetter;
         public AddExamination(ReferralLetter referralLetter)
         {
@@ -31,15 +30,14 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             _roomRepository = new RoomRepository();
             _examinationRepository = new ExaminationRepository();
             _doctorRepository = new DoctorRepository();
-            _secretaryRepository = new SecretaryRepository();
         }
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
             if (CheckSelectedValues())
             {
-                Examination examination = new Examination(ChosenReferralLetter.ForwardedDoctorID, ChosenReferralLetter.CurrentPatientID, false, false, false, Helpers.GetMergedDateTime(dateTimeBox.Value, timeBox.Text), ChosenReferralLetter.ExaminationType, false, Convert.ToInt32(roomIdBox.Text), Convert.ToInt32(durationBox.Text));
-                _secretaryRepository.InsertSingleExamination(examination);
+                Examination examination = new Examination(ChosenReferralLetter.ForwardedDoctorID, ChosenReferralLetter.CurrentPatientID, false, false, false, TimeDateHelpers.GetMergedDateTime(dateTimeBox.Value, timeBox.Text), ChosenReferralLetter.ExaminationType, false, Convert.ToInt32(roomIdBox.Text), Convert.ToInt32(durationBox.Text));
+                _examinationRepository.InsertSingleExamination(examination);
             }
         }
 
@@ -49,7 +47,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             string time = timeBox.Text;
 
             List<Examination> otherExaminations = _examinationRepository.GetAllExaminations();
-            DateTime mergedExaminationTime = Helpers.GetMergedDateTime(dateTimeBox.Value, time);
+            DateTime mergedExaminationTime = TimeDateHelpers.GetMergedDateTime(dateTimeBox.Value, time);
             var match = System.Text.RegularExpressions.Regex.Match(timeBox.Text, regex);
 
             if (dateTimeBox.Value <= DateTime.Now)

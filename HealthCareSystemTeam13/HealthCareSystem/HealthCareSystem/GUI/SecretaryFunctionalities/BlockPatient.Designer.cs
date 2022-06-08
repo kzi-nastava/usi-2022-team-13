@@ -36,27 +36,26 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             // 
             // patientIdBox
             // 
-            this.patientIdBox.Location = new System.Drawing.Point(148, 60);
+            this.patientIdBox.Location = new System.Drawing.Point(111, 49);
+            this.patientIdBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.patientIdBox.Name = "patientIdBox";
-            this.patientIdBox.Size = new System.Drawing.Size(132, 22);
+            this.patientIdBox.Size = new System.Drawing.Size(100, 20);
             this.patientIdBox.TabIndex = 37;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(57, 65);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Location = new System.Drawing.Point(43, 53);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(69, 17);
+            this.label5.Size = new System.Drawing.Size(54, 13);
             this.label5.TabIndex = 36;
             this.label5.Text = "Patient ID";
             // 
             // acceptButton
             // 
-            this.acceptButton.Location = new System.Drawing.Point(117, 129);
-            this.acceptButton.Margin = new System.Windows.Forms.Padding(4);
+            this.acceptButton.Location = new System.Drawing.Point(88, 105);
             this.acceptButton.Name = "acceptButton";
-            this.acceptButton.Size = new System.Drawing.Size(100, 28);
+            this.acceptButton.Size = new System.Drawing.Size(75, 23);
             this.acceptButton.TabIndex = 35;
             this.acceptButton.Text = "Accept";
             this.acceptButton.UseVisualStyleBackColor = true;
@@ -64,14 +63,16 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             // 
             // BlockPatient
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(337, 216);
+            this.ClientSize = new System.Drawing.Size(253, 176);
             this.Controls.Add(this.patientIdBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.acceptButton);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "BlockPatient";
             this.Text = "BlockPatient";
+            this.Load += new System.EventHandler(this.BlockPatient_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

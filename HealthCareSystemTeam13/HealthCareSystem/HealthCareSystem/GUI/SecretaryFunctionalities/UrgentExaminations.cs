@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Examinations.Repository;
 
 namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
@@ -17,22 +18,22 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         int PatiendId;
         DoctorSpeciality Speciality;
         int Duration;
-        SecretaryRepository _secretaryRepository;
+        ExaminationRepository _examinationRepository;
 
         public UrgentExaminations(int patientID, DoctorSpeciality doctorSpeciality, int duration)
         {
             PatiendId = patientID;
             Speciality = doctorSpeciality;
             Duration = duration;
-            _secretaryRepository = new SecretaryRepository();
-            _secretaryRepository.PullClosestExaminations(doctorSpeciality);
+            _examinationRepository = new ExaminationRepository();
+            _examinationRepository.PullClosestExaminations(doctorSpeciality);
             InitializeComponent();
             FillDataGridView();
         }
 
         private void FillDataGridView()
         {
-            examinationsDataGrid.DataSource = _secretaryRepository.ClosestExaminations;
+            examinationsDataGrid.DataSource = _examinationRepository.ClosestExaminations;
             DataGridViewSettings();
         }
 
@@ -49,7 +50,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
             DateTime to = from.AddMinutes(Duration);
             int doctorId = (int)examinationsDataGrid.SelectedRows[0].Cells[1].Value;
             int roomId = (int)examinationsDataGrid.SelectedRows[0].Cells[9].Value;
-            _secretaryRepository.MoveDoctorsExaminations(from, to, doctorId);
+            _examinationRepository.MoveDoctorsExaminations(from, to, doctorId);
         }
     }
 }

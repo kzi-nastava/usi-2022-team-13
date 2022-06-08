@@ -1,4 +1,5 @@
 ﻿using HealthCareSystem.Core.Medications.Model;
+using HealthCareSystem.Core.Medications.Repository;
 using HealthCareSystem.Core.Users.Doctors.Repository;
 using System;
 using System.Collections.Generic;
@@ -14,13 +15,15 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 {
     public partial class MedicationManagement : Form
     {
-        private DoctorRepository DoctorRep;
-        private string DoctorUsername;
+        private DoctorRepository _doctorRep;
+        private MedicationRepository _medicationRep;
+        public string DoctorUsername;
         public MedicationManagement(string doctorUsername)
         {
-            DoctorRep = new DoctorRepository(doctorUsername, true);
+            _doctorRep = new DoctorRepository(doctorUsername, true);
             DoctorUsername = doctorUsername;
-            DoctorRep.Username = DoctorUsername;
+            _doctorRep.Username = DoctorUsername;
+            _medicationRep = new MedicationRepository();
             InitializeComponent();
 
             FillMedicationComboBox();
@@ -28,7 +31,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
         private void FillMedicationComboBox()
         {
-            BindingList<Medication> medications = DoctorRep.GetMedications();
+            BindingList<Medication> medications = _medicationRep.GetMedications();
 
 
             cbDrug.ValueMember = null;
@@ -68,7 +71,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             if(rbAllowDrug.Checked)
             {
                 string updateQuery = "update medications set status = 'Approved' where id = " + selectedMedication.Id ;
-                DoctorRep.UpdateMedication(updateQuery);
+                _medicationRep.UpdateMedication(updateQuery);
 
                 MessageBox.Show("Successfully allowed the medication!");
 
@@ -76,14 +79,14 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             {
                 string reasonForDenying = rtbDrug.Text;
                 string updateQuery = "update medications set status = 'Denied' where id = " + selectedMedication.Id;
-                DoctorRep.UpdateMedication(updateQuery);
+                _medicationRep.UpdateMedication(updateQuery);
 
 
-                int doctorId = DoctorRep.GetDoctorId();
+                int doctorId = _doctorRep.GetDoctorId();
                 string insertQuery = "insert into RejectedMedications (id_medication, id_doctor, description)" +
                     " values (" + selectedMedication.Id + ", " + doctorId + ", '" + reasonForDenying + "')";
 
-                DoctorRep.InsertRejectedMedication(reasonForDenying, selectedMedication.Id, doctorId);
+                _medicationRep.InsertRejectedMedication(reasonForDenying, selectedMedication.Id, doctorId);
                 
                 MessageBox.Show("Successfully rejected the medication!");
             }

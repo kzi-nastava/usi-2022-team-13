@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Users.Doctors;
 
 namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 {
@@ -18,7 +19,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     {
         public string Username { get; set; }
         private List<Doctor> _doctors;
-        private DoctorRepository _doctorRepository;
+        private readonly DoctorRepository _doctorRepository;
 
         public SearchDoctorView(string username)
         {
@@ -28,57 +29,48 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             SetDgwDoctors();
         }
 
-        private void SearchDoctorView_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void SetDgwDoctors()
         {
             _doctors = _doctorRepository.GetDoctorsWithAverageRating();
 
             dgwDoctors.DataSource = _doctors;
-            Helpers.DataGridViewSettings(dgwDoctors);
+            GUIHelpers.DataGridViewSettings(dgwDoctors);
             dgwDoctors.Font = new Font("Lucida Bright", 10);
         }
 
         private void tbSearchDoctor_TextChanged(object sender, EventArgs e)
         {
-            Console.WriteLine("da");
             string keyword = tbSearchDoctor.Text.Trim();
             if (keyword != "")
-            {
                 dgwDoctors.DataSource = DoctorService.GetDoctorsByKeyword(_doctors, keyword.ToLower());
-                
-            }
             else
                 dgwDoctors.DataSource = _doctors;
         }
 
         private void btnSortByAverageRating_Click(object sender, EventArgs e)
         {
-            _doctors = DoctorService.SortDoctors(_doctors, 1);
+            _doctors = DoctorSorter.SortDoctors(_doctors, 1);
             dgwDoctors.DataSource = _doctors;
             dgwDoctors.Refresh();
         }
 
         private void btnSortByName_Click(object sender, EventArgs e)
         {
-            _doctors = DoctorService.SortDoctors(_doctors, 2);
+            _doctors = DoctorSorter.SortDoctors(_doctors, 2);
             dgwDoctors.DataSource = _doctors;
             dgwDoctors.Refresh();
         }
 
         private void btnSortByLastName_Click(object sender, EventArgs e)
         {
-            _doctors = DoctorService.SortDoctors(_doctors, 3);
+            _doctors = DoctorSorter.SortDoctors(_doctors, 3);
             dgwDoctors.DataSource = _doctors;
             dgwDoctors.Refresh();
         }
 
         private void btnSortBySpeciality_Click(object sender, EventArgs e)
         {
-            _doctors = DoctorService.SortDoctors(_doctors, 4);
+            _doctors = DoctorSorter.SortDoctors(_doctors, 4);
             dgwDoctors.DataSource = _doctors;
             dgwDoctors.Refresh();
         }
@@ -86,7 +78,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void btnAppoint_Click(object sender, EventArgs e)
         {
 
-            if (Helpers.IsDgwRowSelected(dgwDoctors)) {
+            if (GUIHelpers.IsDgwRowSelected(dgwDoctors)) {
                 int selectedId = (int)dgwDoctors.SelectedRows[0].Cells[0].Value;
                 foreach(Doctor dr in _doctors)
                 {

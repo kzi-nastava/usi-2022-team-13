@@ -1,4 +1,5 @@
 ﻿using HealthCareSystem.Core.Ingredients.Model;
+using HealthCareSystem.Core.Medications.Repository;
 using HealthCareSystem.Core.Rooms.Repository;
 using System;
 using System.Collections.Generic;
@@ -14,18 +15,19 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 {
     public partial class IngredientsView : Form
     {
-        private RoomRepository RoomRepository;
+
+        private IngredientsRepository IngredientRep;
         public IngredientsView()
         {
-            RoomRepository = new RoomRepository();
-            RoomRepository.PullIngredients();
+            IngredientRep = new IngredientsRepository();
+            IngredientRep.PullIngredients();
             InitializeComponent();
             FillDataGridView();
         }
 
         private void FillDataGridView()
         {
-            dgwIngredients.DataSource = RoomRepository.Ingredients;
+            dgwIngredients.DataSource = IngredientRep.Ingredients;
             DataGridViewSettings();
         }
 
@@ -39,8 +41,8 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         public void RefreshDataGridView()
         {
-            RoomRepository.PullIngredients();
-            dgwIngredients.DataSource = RoomRepository.Ingredients;
+            IngredientRep.PullIngredients();
+            dgwIngredients.DataSource = IngredientRep.Ingredients;
             dgwIngredients.Refresh();
         }
 
@@ -60,7 +62,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void btnEdit_Click(object sender, EventArgs e)
         {
             int ingredientId = (int)dgwIngredients.SelectedRows[0].Cells[0].Value;
-            Ingredient ingredient = RoomRepository.GetIngredient(ingredientId);
+            Ingredient ingredient = IngredientRep.GetIngredient(ingredientId);
 
 
             AddEditIngredients addEditView = new AddEditIngredients(ingredientId, false);
@@ -72,14 +74,14 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         {
 
             int ingredientId = (int)dgwIngredients.SelectedRows[0].Cells[0].Value;
-            Ingredient ingredient = RoomRepository.GetIngredient(ingredientId);
+            Ingredient ingredient = IngredientRep.GetIngredient(ingredientId);
 
 
             DialogResult wantToCancel = MessageBox.Show("Are you sure?", "Cancel removing a ingredient", MessageBoxButtons.YesNo);
 
             if (wantToCancel == DialogResult.Yes)
             {
-                RoomRepository.RemoveIngredient((int)dgwIngredients.SelectedRows[0].Cells[0].Value);
+                IngredientRep.RemoveIngredient((int)dgwIngredients.SelectedRows[0].Cells[0].Value);
                 MessageBox.Show("Succesfully removed a ingredient!");
                 RefreshDataGridView();
             }

@@ -129,7 +129,6 @@
             this.dtDate.Name = "dtDate";
             this.dtDate.Size = new System.Drawing.Size(200, 23);
             this.dtDate.TabIndex = 7;
-            this.dtDate.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
             // label4
             // 
@@ -149,7 +148,6 @@
             this.tbRoomId.Name = "tbRoomId";
             this.tbRoomId.Size = new System.Drawing.Size(100, 23);
             this.tbRoomId.TabIndex = 9;
-            this.tbRoomId.TextChanged += new System.EventHandler(this.tbRoomId_TextChanged);
             // 
             // tbDuration
             // 
@@ -210,8 +208,6 @@
             this.Controls.Add(this.btnAccept);
             this.Name = "AddEditExamination";
             this.Text = "AddEditExamination";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddEditExamination_FormClosing);
-            this.Load += new System.EventHandler(this.AddEditExamination_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

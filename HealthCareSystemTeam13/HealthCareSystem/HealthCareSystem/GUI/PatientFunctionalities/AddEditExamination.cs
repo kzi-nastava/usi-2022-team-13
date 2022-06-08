@@ -26,15 +26,15 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         public DateTime ExaminationDate { get; set; }
         private Doctor _selectedDoctor { get; set; }
         private BindingList<Doctor> _doctors;
-        private int roomId { get; set; }
-        private int duration { get; set; }
+        private int _RoomId { get; set; }
+        private int _Duration { get; set; }
         public bool IsAddChoosen { get; set; }
-        private PatientRepository _patientRepository;
-        private DoctorRepository _doctorRepository;
-        private RoomRepository _roomRepository;
-        private ExaminationRepository _examinationRepository;
-        private string _patientUsername;
-        private int _validDate;
+        private readonly PatientRepository _patientRepository;
+        private readonly DoctorRepository _doctorRepository;
+        private readonly RoomRepository _roomRepository;
+        private readonly ExaminationRepository _examinationRepository;
+        private readonly string _patientUsername;
+        private readonly int _validDate;
 
         public AddEditExamination(int examinationId, bool isAddChoosen, string patientUsername, int validDate, int doctorId = 0)
         {
@@ -80,7 +80,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void LoadEditData()
         {
-            Dictionary<string, string> data = _patientRepository.GetExamination(ExaminationId);
+            Dictionary<string, string> data = _examinationRepository.GetExamination(ExaminationId);
             tbExaminationId.Text = data["id"];
 
             tbDuration.Text = "15";
@@ -110,7 +110,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         {
             Doctor doctor;
             string doctorQuery = "select * from Doctors inner join Examination on Doctors.id = Examination.id_doctor where Examination.id = " + ExaminationId + "";
-            doctor = _patientRepository.GetSelectedDoctor(doctorQuery);
+            doctor = _doctorRepository.GetSelectedDoctor(doctorQuery);
 
             return doctor;
         }
@@ -128,41 +128,45 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             
             if (isValid)
             {
-                // check for block
                 string time = tbTime.Text;
-                DateTime mergedTime = Helpers.GetMergedDateTime(ExaminationDate, time);
+                DateTime mergedTime = TimeDateHelpers.GetMergedDateTime(ExaminationDate, time);
+
                 if (IsAddChoosen)
-                {
-                    
-                    _patientRepository.InsertExamination(_patientUsername, _selectedDoctor.ID, mergedTime, duration, roomId);
-                    MessageBox.Show("Successfully added examination!");
-                    
-                }
+                    InsertExamination(mergedTime);
                 else
                 {
-
                     if (_validDate == 1)
-                    {
                         UpdateContent(mergedTime);
-                    }
                     else
-                    {
-                        _patientRepository.SendExaminationEditRequest(ExaminationId, DateTime.Now, true, _selectedDoctor.ID, mergedTime, roomId);
-
-                        _patientRepository.InsertExaminationChanges(TypeOfChange.Edit);
-
-                        MessageBox.Show("Wait for a secretary to aproove this request.");
-                    }
+                        SendExaminationEditRequest(mergedTime);
                 }
+
                 _patientRepository.BlockSpamPatients(_patientUsername);
                 this.Close();
             } 
         }
 
+        private void InsertExamination(DateTime mergedTime)
+        {
+            _examinationRepository.InsertExamination(_patientRepository.GetPatientId(), _selectedDoctor.ID, mergedTime,
+                _Duration, _RoomId);
+            MessageBox.Show("Successfully added examination!");
+        }
+
+        private void SendExaminationEditRequest(DateTime mergedTime)
+        {
+            _examinationRepository.SendExaminationEditRequest(ExaminationId, DateTime.Now, true, _selectedDoctor.ID, mergedTime,
+                _RoomId);
+
+            _examinationRepository.InsertExaminationChanges(TypeOfChange.Edit, _patientRepository.GetPatientId());
+
+            MessageBox.Show("Wait for a secretary to aproove this request.");
+        }
+
         private void UpdateContent(DateTime mergedTime)
         {
-            string updateQuery = "Update Examination set id_doctor = " + _selectedDoctor.ID + ", isEdited=" + true + ", dateOf = '" + mergedTime + "', id_room = " + roomId + " where id = " + ExaminationId + "";
-            _patientRepository.UpdateContent(updateQuery);
+            string updateQuery = "Update Examination set id_doctor = " + _selectedDoctor.ID + ", isEdited=" + true + ", dateOf = '" + mergedTime + "', id_room = " + _RoomId + " where id = " + ExaminationId + "";
+            _patientRepository.UpdatePatientContent(updateQuery, _patientRepository.GetPatientId());
             MessageBox.Show("Successfully edited examination!");
 
         }
@@ -173,7 +177,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             string time = tbTime.Text;
 
             List<Examination> otherExaminations = _examinationRepository.GetAllOtherExaminations(ExaminationId);
-            DateTime mergedExaminationTime = Helpers.GetMergedDateTime(ExaminationDate, time);
+            DateTime mergedExaminationTime = TimeDateHelpers.GetMergedDateTime(ExaminationDate, time);
             var match = System.Text.RegularExpressions.Regex.Match(tbTime.Text, regex);
 
             if (ExaminationDate <= DateTime.Now)
@@ -198,50 +202,32 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
             }
             else if (!_roomRepository.IsRoomAvailable(Convert.ToInt32(tbRoomId.Text), mergedExaminationTime, otherExaminations))
+                if (!SetAvailableRoomId(mergedExaminationTime, otherExaminations)) return false;
+
+            return true;
+        }
+
+        private bool SetAvailableRoomId(DateTime mergedExaminationTime, List<Examination> otherExaminations)
+        {
+            int availableRoomId = _roomRepository.GetAvailableRoomId(mergedExaminationTime, otherExaminations);
+            if (availableRoomId == 0)
             {
-
-                int availableRoomId = _roomRepository.GetAvailableRoomId(mergedExaminationTime, otherExaminations);
-                if (availableRoomId == 0)
-                {
-                    MessageBox.Show("No available rooms at this date/time.");
-                    return false;
-                }
-                roomId = availableRoomId;
-
+                MessageBox.Show("No available rooms at this date/time.");
+                return false;
             }
 
-
+            _RoomId = availableRoomId;
             return true;
         }
 
         private void SetSelectedValues()
         {
             _selectedDoctor = (Doctor)cbDoctors.SelectedValue;
-            if (tbRoomId.Text != "") { roomId = Convert.ToInt32(tbRoomId.Text); }
-            else { roomId = 0; }
-            duration = Convert.ToInt32(tbDuration.Text);
+            if (tbRoomId.Text != "") { _RoomId = Convert.ToInt32(tbRoomId.Text); }
+            else { _RoomId = 0; }
+            _Duration = Convert.ToInt32(tbDuration.Text);
             ExaminationDate = dtDate.Value;
         }
-
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tbRoomId_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void AddEditExamination_Load(object sender, EventArgs e)
-        {
-
-        }
        
-
-        private void AddEditExamination_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            
-        }
     }
 }

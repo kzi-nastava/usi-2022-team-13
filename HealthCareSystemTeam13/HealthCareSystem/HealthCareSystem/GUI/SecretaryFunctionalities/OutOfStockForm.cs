@@ -9,20 +9,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Rooms.Repository;
+using HealthCareSystem.Core.Users;
 
 namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class OutOfStockForm : Form
     {
-        SecretaryRepository _secretaryRepository;
+        private EquipmentRepository _equipmentRepository;
+        private UserRepository _userRepository;
+        private SecretaryRepository _secretaryRepository;
         string Username;
         public OutOfStockForm(string username)
         {
-            _secretaryRepository = new SecretaryRepository();
+            _equipmentRepository = new EquipmentRepository();
  
-            _secretaryRepository.CheckDynamicEquipmentRequests();
-            _secretaryRepository.PullEquipmentInWarehouse();
-
+            _equipmentRepository.CheckDynamicEquipmentRequests();
+            _equipmentRepository.PullEquipmentInWarehouse();
+            _userRepository = new UserRepository();
+            _secretaryRepository = new SecretaryRepository();
             InitializeComponent();
             amountBox.Increment = 1;
             amountBox.DecimalPlaces = 0;
@@ -32,7 +37,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         }
         private void FillDataGridView()
         {
-            requestsDataGrid.DataSource = _secretaryRepository.EquipmentInWarehouse;
+            requestsDataGrid.DataSource = _equipmentRepository.EquipmentInWarehouse;
             DataGridViewSettings();
         }
         private void DataGridViewSettings()
@@ -46,10 +51,10 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         {
             int equipmentID = (int)requestsDataGrid.SelectedRows[0].Cells[0].Value;
             int amount = (int)amountBox.Value;
-            string userId = _secretaryRepository.GetUserId(Username)[0];
+            string userId = _userRepository.GetUserId(Username)[0];
             int secretaryId = Convert.ToInt32(_secretaryRepository.GetSecretaryId(userId)[0]);
             DynamicEquipmentRequest request = new DynamicEquipmentRequest(equipmentID, amount, DateTime.Now, secretaryId);
-            _secretaryRepository.InsertSingleDynamicEquipmentRequest(request);
+            _equipmentRepository.InsertSingleDynamicEquipmentRequest(request);
         }
 
         private void OutOfStockForm_Load(object sender, EventArgs e)

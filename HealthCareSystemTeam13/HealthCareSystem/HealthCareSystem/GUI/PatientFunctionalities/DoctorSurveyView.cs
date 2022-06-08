@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Surveys.Repository;
 
 namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 {
@@ -15,12 +16,12 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     {
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
-        private PatientRepository _patientRepository;
+        private readonly SurveyRepository _surveyRepository;
         public DoctorSurveyView(int patientId, int doctorId)
         {
             this.PatientId = patientId;
             this.DoctorId = doctorId;
-            _patientRepository = new PatientRepository();
+            _surveyRepository = new SurveyRepository();
             InitializeComponent();
         }
 
@@ -54,7 +55,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             bool reccomend = rbReccomendNo.Checked == true ? false : true;
             string comment = rtbComment.Text;
 
-            _patientRepository.AddDoctorSurvey(DoctorId, PatientId, rating, quality, reccomend, comment);
+            _surveyRepository.AddDoctorSurvey(DoctorId, PatientId, rating, quality, reccomend, comment);
         }
     }
 }

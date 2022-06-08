@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HealthCareSystem.Core.Examinations.Controller
 {
-    class ExaminationController
+    class ExaminationSorter
     {
         public static List<DoctorAnamnesis> SortAnamnesises(List<DoctorAnamnesis> anamnesises, int indicator = 0)
         {

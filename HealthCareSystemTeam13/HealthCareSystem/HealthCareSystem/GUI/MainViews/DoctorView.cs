@@ -1,4 +1,5 @@
 ﻿using HealthCareSystem.Core.Examinations.Model;
+using HealthCareSystem.Core.Examinations.Repository;
 using HealthCareSystem.Core.GUI.DoctorsFunctionalities;
 using HealthCareSystem.Core.Users.Doctors.Repository;
 using HealthCareSystem.Core.Users.Patients.Model;
@@ -19,15 +20,18 @@ namespace HealthCareSystem
     {
         public string Username { get; set; }
         public LoginForm AuthForm;
-        private readonly DoctorRepository DoctorRep;
+        private readonly DoctorRepository _doctorRep;
+        private readonly ExaminationRepository _examinationRep;
         public DoctorView(string username, LoginForm authForm)
         {
             Username = username;
             AuthForm = authForm;
-            DoctorRep = new DoctorRepository(username, true);
-            DoctorRep.PullExaminations();
+            
             InitializeComponent();
 
+            _doctorRep = new DoctorRepository(username, true);
+            _examinationRep = new ExaminationRepository();
+            _examinationRep.PullExaminations(_doctorRep.GetDoctorId());
             FillDataGridView();
 
         }
@@ -35,7 +39,7 @@ namespace HealthCareSystem
         private void FillDataGridView()
         {
 
-            dgwExaminations.DataSource = DoctorRep.Examinations;
+            dgwExaminations.DataSource = _examinationRep.Examinations;
             DataGridViewSettings();
         }
 
@@ -80,7 +84,7 @@ namespace HealthCareSystem
 
                 if (wantToCancel == DialogResult.Yes)
                 {
-                        DoctorRep.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
+                    _examinationRep.CancelExamination((int)dgwExaminations.SelectedRows[0].Cells[0].Value);
                         // DoctorRep.InsertExaminationChanges(TypeOfChange.Delete);
                         MessageBox.Show("Succesfully canceled examination!");
                         RefreshDataGridView();
@@ -95,8 +99,8 @@ namespace HealthCareSystem
 
         public void RefreshDataGridView()
         {
-            DoctorRep.PullExaminations();
-            dgwExaminations.DataSource = DoctorRep.Examinations;
+            _examinationRep.PullExaminations(_doctorRep.GetDoctorId());
+            dgwExaminations.DataSource = _examinationRep.Examinations;
             dgwExaminations.Refresh();
         }
 
@@ -172,15 +176,15 @@ namespace HealthCareSystem
         private void btnShowDay_Click(object sender, EventArgs e)
         {
             DateTime date = dtDate.Value;
-            DoctorRep.PullExaminationsByDate(date);
-            dgwExaminations.DataSource = DoctorRep.Examinations;
+            _examinationRep.PullExaminationsByDate(date);
+            dgwExaminations.DataSource = _examinationRep.Examinations;
             dgwExaminations.Refresh();
         }
 
         private void btnShowNextThreeDays_Click(object sender, EventArgs e)
         {
-            DoctorRep.PullExaminationsThreeDays();
-            dgwExaminations.DataSource = DoctorRep.Examinations;
+            _examinationRep.PullExaminationsThreeDays();
+            dgwExaminations.DataSource = _examinationRep.Examinations;
             dgwExaminations.Refresh();
         }
 

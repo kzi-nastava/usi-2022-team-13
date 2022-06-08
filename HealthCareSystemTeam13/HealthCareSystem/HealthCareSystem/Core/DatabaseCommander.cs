@@ -9,7 +9,7 @@ using HealthCareSystem.Core.Users.Patients.Model;
 
 namespace HealthCareSystem.Core
 {
-    class DatabaseHelpers
+    class DatabaseCommander
     {
        
         public static void ExecuteNonQueries(string query, OleDbConnection connection)

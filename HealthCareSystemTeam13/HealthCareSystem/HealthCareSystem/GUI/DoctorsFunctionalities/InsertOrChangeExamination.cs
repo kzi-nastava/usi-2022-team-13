@@ -26,14 +26,14 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private int RoomId { get; set; }
         private int Duration { get; set; }
         public bool IsAddChoosen { get; set; }
-        private PatientRepository PatientRep;
-        private DoctorRepository DoctorRep;
-        private RoomRepository RoomRep;
-        private ExaminationRepository ExaminationRep;
-        private Doctor DoctorEntity;
-        private string DoctorUsername;
-        private readonly int ValidDate;
-        private string PatientUsername;
+        private PatientRepository _patientRep;
+        private DoctorRepository _doctorRep;
+        private RoomRepository _roomRep;
+        private ExaminationRepository _examinationRep;
+        private Doctor _doctorEntity;
+        public string DoctorUsername;
+        public readonly int ValidDate;
+        public string PatientUsername;
 
         public InsertOrChangeExamination(int examinationId, bool isAddChoosen, string doctorUsername, int validDate)
         {
@@ -41,13 +41,13 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             IsAddChoosen = isAddChoosen;
             DoctorUsername = doctorUsername;
             ValidDate = validDate;
-            PatientRep = new PatientRepository();
-            DoctorRep = new DoctorRepository(doctorUsername, true);
-            DoctorRep.Username = DoctorUsername;
-            DoctorEntity = DoctorRep.GetDoctorByUsername();
+            _patientRep = new PatientRepository();
+            _doctorRep = new DoctorRepository(doctorUsername, true);
+            _doctorRep.Username = DoctorUsername;
+            _doctorEntity = _doctorRep.GetDoctorByUsername();
 
-            RoomRep = new RoomRepository();
-            ExaminationRep = new ExaminationRepository();
+            _roomRep = new RoomRepository();
+            _examinationRep = new ExaminationRepository();
 
             InitializeComponent();
 
@@ -69,7 +69,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private void FillPatientsComboBox()
         {
             // Using BindingList so that i can display the name of the doctor, and have his id in the back
-            BindingList<Patient> patients = PatientRep.GetPatients();
+            BindingList<Patient> patients = _patientRep.GetPatients();
 
             cbPatients.ValueMember = null;
             cbPatients.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -108,8 +108,8 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 string selectedType = cbType.SelectedItem.ToString();
                 if (IsAddChoosen)
                 {
-                    
-                    PatientRep.InsertExamination(PatientUsername, DoctorEntity.ID, mergedTime, Duration, RoomId, selectedType);
+                    _patientRep.Username = PatientUsername;
+                    _examinationRep.InsertExamination(_patientRep.GetPatientId(), _doctorEntity.ID, mergedTime, Duration, RoomId, selectedType);
                     MessageBox.Show("Successfully added examination!");
 
                 }
@@ -123,13 +123,13 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
         private void UpdateContent(DateTime mergedTime)
         {
-            int patiendId = PatientRep.GetPatientIdByFirstName(
+            int patiendId = _patientRep.GetPatientIdByFirstName(
                 cbPatients.Text.Split(' ')[0]);
 
             string updateQuery = "Update Examination set id_patient = " + patiendId + "," +
                 " isEdited=" + true + ", dateOf = '" + mergedTime + "', typeOfExamination = '" + cbType.SelectedItem.ToString() + "', " +
                 "id_room = " + RoomId + " where id = " + ExaminationId + "";
-            PatientRep.UpdateContent(updateQuery, patiendId);
+            _patientRep.UpdatePatientContent(updateQuery, patiendId);
             MessageBox.Show("Successfully edited examination!");
 
         }
@@ -138,7 +138,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         {
             // napraviti metodu u patient repositorijumu da se preko patient entiteta nadje username iz user tabele i onda malo edit doradis i tjt
             SelectedPatient = (Patient)cbPatients.SelectedValue;
-            PatientUsername = PatientRep.GetUsernameFromPatient(SelectedPatient);
+            PatientUsername = _patientRep.GetUsernameFromPatient(SelectedPatient);
             if (tbRoomId.Text != "") { RoomId = Convert.ToInt32(tbRoomId.Text); }
             else { RoomId = 0; }
             Duration = Convert.ToInt32(tbDuration.Text);
@@ -158,7 +158,8 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 return false;
 
             }
-            else if (!DoctorService.IsDoctorAvailable(DoctorEntity.ID, GetMergedDateTime(ExaminationDate, time), ExaminationRep.GetAllOtherExaminations(ExaminationId)))
+            else if (!DoctorService.IsDoctorAvailable(_doctorEntity.ID, GetMergedDateTime(ExaminationDate, time),
+                _examinationRep.GetAllOtherExaminations(ExaminationId)))
             {
 
                 MessageBox.Show("Doctor is not available at that time.");
@@ -172,10 +173,11 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 return false;
 
             }
-            else if (!RoomRep.IsRoomAvailable(Convert.ToInt32(tbRoomId.Text), GetMergedDateTime(ExaminationDate, time), ExaminationRep.GetAllOtherExaminations(ExaminationId)))
+            else if (!_roomRep.IsRoomAvailable(Convert.ToInt32(tbRoomId.Text), GetMergedDateTime(ExaminationDate, time),
+                _examinationRep.GetAllOtherExaminations(ExaminationId)))
             {
 
-                int availableRoomId = RoomRep.GetAvailableRoomId(GetMergedDateTime(ExaminationDate, time), ExaminationRep.GetAllOtherExaminations(ExaminationId));
+                int availableRoomId = _roomRep.GetAvailableRoomId(GetMergedDateTime(ExaminationDate, time), _examinationRep.GetAllOtherExaminations(ExaminationId));
                 if (availableRoomId == 0)
                 {
                     MessageBox.Show("No available rooms at this date/time.");
@@ -199,7 +201,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
         private void LoadEditData()
         {
-            Dictionary<string, string> data = PatientRep.GetExamination(ExaminationId);
+            Dictionary<string, string> data = _examinationRep.GetExamination(ExaminationId);
             tbExaminationId.Text = data["id"];
 
             tbDuration.Text = "15";
@@ -219,7 +221,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
             string doctorQuery = "select * from Patients inner join Examination on Patients.ID = Examination.id_patient where Examination.ID = " + ExaminationId;
             
-            patient = DoctorRep.GetSelectedPatient(doctorQuery);
+            patient = _patientRep.GetSelectedPatient(doctorQuery);
             return patient;
         }
 

@@ -63,5 +63,10 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
             
 
         }
+
+        private void DoctorGradesView_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
