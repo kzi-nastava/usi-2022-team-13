@@ -5,6 +5,7 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HealthCareSystem.Core.GUI.DoctorsFunctionalities;
 using HealthCareSystem.Core.Users.Patients.Model;
 
 namespace HealthCareSystem.Core.Users.Patients.Repository
@@ -63,5 +64,9 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             }
         }
 
+        public static implicit operator MedicalRecordRepository(PatientMedicalRecord v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
