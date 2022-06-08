@@ -20,7 +20,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         public MedicationsView()
         {
             MedicationRep = new MedicationRepository();
-            MedicationRep.PullMedicine();
+            MedicationRep.PullMedications();
             InitializeComponent();
             FillDataGridView();
             btnEdit.Enabled = false;
@@ -28,7 +28,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         private void FillDataGridView()
         {
-            dgwMedications.DataSource = MedicationRep.Medicine;
+            dgwMedications.DataSource = MedicationRep.Medications;
             DataGridViewSettings();
         }
 
@@ -42,8 +42,8 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         public void RefreshDataGridView()
         {
-            MedicationRep.PullMedicine();
-            dgwMedications.DataSource = MedicationRep.Medicine;
+            MedicationRep.PullMedications();
+            dgwMedications.DataSource = MedicationRep.Medications;
             dgwMedications.Refresh();
         }
 
@@ -62,7 +62,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             }
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private void btnAdd_Click(object sender, EventArgs e)  
         {
             AddEditMedication addEditView = new AddEditMedication((int)dgwMedications.SelectedRows[0].Cells[0].Value, true);
 

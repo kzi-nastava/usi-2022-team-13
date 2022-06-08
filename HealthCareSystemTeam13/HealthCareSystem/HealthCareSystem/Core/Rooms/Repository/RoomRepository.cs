@@ -270,7 +270,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         public bool DoesRoomHaveFutureExaminations(Room room)
         {
-
+            _examinationRepository = new ExaminationRepository();
             List<Examination> examinations = _examinationRepository.GetExaminationsInRoom(room);
             foreach (Examination examination in examinations)
             {

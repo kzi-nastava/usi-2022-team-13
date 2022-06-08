@@ -14,6 +14,7 @@ namespace HealthCareSystem.Core.Medications.Repository
     {
         public OleDbConnection Connection { get; set; }
         public DataTable Medicine { get; private set; }
+        public DataTable Medications { get; private set; }
 
         public MedicationRepository()
         {
@@ -165,6 +166,14 @@ namespace HealthCareSystem.Core.Medications.Repository
                 " from Medications where status = 'Approved'";
 
             GUIHelpers.FillTable(Medicine, medicineQuery, Connection);
+        }
+
+        public void PullMedications()
+        {
+            Medications = new DataTable();
+            string medicationsQuery = "select m.ID, m.nameOfMedication, m.status, r.id_doctor, r.description" +
+                " from medications m left join RejectedMedications r on m.Id = r.id_medication";
+            GUIHelpers.FillTable(Medications, medicationsQuery, Connection);
         }
         public Medication GetSelectedMedication(string query)
         {

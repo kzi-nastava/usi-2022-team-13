@@ -19,6 +19,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private EquipmentRepository EquipmentRepository;
         public EquipmentMover()
         {
+            RoomRepository = new RoomRepository();
             EquipmentRepository = new EquipmentRepository();
             EquipmentRepository.PullEquipment();
             InitializeComponent();

@@ -22,7 +22,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         public AddEditIngredients(int ingredientId, bool isAddChoosen)
         {
-
+            IngredientRep = new IngredientsRepository();
             IngredientId = ingredientId;
             IsAddChosen = isAddChoosen;
             InitializeComponent();
