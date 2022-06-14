@@ -20,12 +20,7 @@ namespace HealthCareSystem.Core.Medications.Repository
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                    Persist Security Info=False;";
-
-
+                Connection = DatabaseConnection.GetConnection();
 
             }
             catch (Exception exception)
@@ -65,11 +60,9 @@ namespace HealthCareSystem.Core.Medications.Repository
 
         public void InsertConnectionOfReceiptAndMedication(int receiptId, int medicationId)
         {
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 
             string query = "insert into ReceiptMedications (id_receipt, id_medication)" +
-                " values (@id_receipt, @id_medication)";
+                           " values (@id_receipt, @id_medication)";
 
             using (var cmd = new OleDbCommand(query, Connection))
             {
@@ -77,10 +70,8 @@ namespace HealthCareSystem.Core.Medications.Repository
                 cmd.Parameters.AddWithValue("@id_medication", medicationId);
 
                 cmd.ExecuteNonQuery();
-
             }
 
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
         }
 
         public String GetMedicationNameById(int medicationId)
@@ -101,8 +92,7 @@ namespace HealthCareSystem.Core.Medications.Repository
         public BindingList<Medication> GetMedications()
         {
             BindingList<Medication> medications = new BindingList<Medication>();
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
             try
             {
 
@@ -126,7 +116,6 @@ namespace HealthCareSystem.Core.Medications.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
             return medications;
 
@@ -140,11 +129,9 @@ namespace HealthCareSystem.Core.Medications.Repository
 
         public void InsertRejectedMedication(string reasonForDenying, int medicationId, int doctorId)
         {
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 
             string insertQuery = "insert into RejectedMedications (id_medication, id_doctor, description)" +
-            " values (@id_medication, @id_doctor, @description)";
+                                 " values (@id_medication, @id_doctor, @description)";
 
             using (var cmd = new OleDbCommand(insertQuery, Connection))
             {
@@ -153,8 +140,6 @@ namespace HealthCareSystem.Core.Medications.Repository
                 cmd.Parameters.AddWithValue("@description", reasonForDenying.ToString());
                 cmd.ExecuteNonQuery();
             }
-
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
         }
 
@@ -178,7 +163,6 @@ namespace HealthCareSystem.Core.Medications.Repository
         public Medication GetSelectedMedication(string query)
         {
 
-            if (Connection.State == ConnectionState.Closed) Connection.Open();
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             Medication medication = new Medication();
@@ -186,9 +170,7 @@ namespace HealthCareSystem.Core.Medications.Repository
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-
-                MedicationStatus medicationState;
-                Enum.TryParse<MedicationStatus>(reader["status"].ToString(), out medicationState);
+                Enum.TryParse<MedicationStatus>(reader["status"].ToString(), out var medicationState);
                 medication = new Medication(Convert.ToInt32(reader["id"]), reader["nameOfMedication"].ToString(), medicationState);
             }
 
@@ -243,9 +225,6 @@ namespace HealthCareSystem.Core.Medications.Repository
                 alergicMedicationIds.Add(Convert.ToInt32
                     (reader["id_medication"]));
             }
-
-
-
             return alergicMedicationIds;
         }
 

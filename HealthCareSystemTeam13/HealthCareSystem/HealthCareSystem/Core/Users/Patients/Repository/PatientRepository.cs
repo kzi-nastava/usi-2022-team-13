@@ -24,20 +24,15 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         public DataTable BlockedPatients { get; private set; }
         public DataTable Patients { get; private set; }
 
-        private ExaminationRepository _examinationRepository;
-        private UserRepository _userRepository;
+        private readonly ExaminationRepository _examinationRepository;
+        private readonly UserRepository _userRepository;
 
 
         public PatientRepository(string username = "") { 
             if(username.Length > 0) Username = username;
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                Persist Security Info=False;";
-
-                Connection.Open();
+                Connection = DatabaseConnection.GetConnection();
 
             }
             catch (Exception exception)
@@ -75,27 +70,20 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         }
         public int GetPatientIdByFirstName(string firstName)
         {
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 
             int patientId = Convert.ToInt32(
                 DatabaseCommander.ExecuteReaderQueries("select id from Patients where firstName = '" + firstName + "'", Connection)[0]);
-
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
             return patientId;
         }
 
         public void UpdatePatientContent(string query, int patiendId = 0)
         {
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 
             DatabaseCommander.ExecuteNonQueries(query, Connection);
             if (patiendId > 0) _examinationRepository.InsertExaminationChanges(TypeOfChange.Edit, patiendId);
             else _examinationRepository.InsertExaminationChanges(TypeOfChange.Edit);
 
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
         }
 
@@ -108,7 +96,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         public BindingList<Patient> GetPatients()
         {
-            if (Connection.State == ConnectionState.Closed) Connection.Open();
 
             BindingList<Patient> patients = new BindingList<Patient>();
             try
@@ -129,32 +116,26 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            if (Connection.State == ConnectionState.Open) Connection.Close();
 
             return patients;
         }
 
         public string GetUsernameFromPatient(Patient patient)
         {
-            if (Connection.State == ConnectionState.Closed) Connection.Open();
 
             string query = "select Users.usrnm from Users inner join " +
-                "Patients on Patients.user_id = Users.id where Patients.id = " + patient.ID;
+                           "Patients on Patients.user_id = Users.id where Patients.id = " + patient.ID;
 
             string patientUsername = DatabaseCommander.ExecuteReaderQueries(query, Connection)[0];
-            if (Connection.State == ConnectionState.Open) Connection.Close();
             return patientUsername;
         }
 
         public bool IsPatientBlocked(string patientUsername)
         {
-            if (Connection.State == System.Data.ConnectionState.Closed) Connection.Open();
 
             List<string> userIds = DatabaseCommander.ExecuteReaderQueries("select id from users where usrnm= '" + patientUsername + "'", Connection);
 
             List<string> blockedPatients = DatabaseCommander.ExecuteReaderQueries("select isBlocked from Patients where user_id = " + Convert.ToInt32(userIds[0]) + "", Connection);
-
-          
 
             return blockedPatients[0] == "True";
         }
@@ -331,8 +312,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         public Patient GetSelectedPatient(string query)
         {
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             Patient patient = new Patient();
@@ -342,9 +322,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             {
                 patient = SetPatientValues(reader);
             }
-
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
-
 
             return patient;
         }

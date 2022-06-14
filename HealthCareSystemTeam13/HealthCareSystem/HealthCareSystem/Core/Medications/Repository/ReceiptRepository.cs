@@ -11,16 +11,13 @@ namespace HealthCareSystem.Core.Medications.Repository
     class ReceiptRepository
     {
         public OleDbConnection Connection { get; set; }
-        private InstructionRepository _instructionRepository;
+        private readonly InstructionRepository _instructionRepository;
 
         public ReceiptRepository()
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                    Persist Security Info=False;";
+                Connection = DatabaseConnection.GetConnection();
             }
             catch (Exception exception)
             {
@@ -32,9 +29,6 @@ namespace HealthCareSystem.Core.Medications.Repository
         public void InsertReceipt(int doctorId, int patientId, DateTime dateOf)
         {
             int instructionId = _instructionRepository.GetLastCreatedInstructionId();
-
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 
             string query = "insert into Receipt (id_instructions, id_doctor, id_patient, dateOf)" +
                            " values (@id_instructions, @id_doctor, @id_patient, @dateOf )";
@@ -48,8 +42,6 @@ namespace HealthCareSystem.Core.Medications.Repository
 
                 cmd.ExecuteNonQuery();
             }
-
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
         }
 

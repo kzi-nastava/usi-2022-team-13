@@ -33,13 +33,7 @@ namespace HealthCareSystem.Core.Authentication
             PatientRep = new PatientRepository();
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                Persist Security Info=False;";
-
-                Connection.Open();
-
+                Connection = DatabaseConnection.GetConnection();
 
             }
             catch (Exception exception)
@@ -53,8 +47,6 @@ namespace HealthCareSystem.Core.Authentication
         {
             User user = GetUser(Username, Password);
 
-            if (Connection.State == ConnectionState.Closed) Connection.Open();
-            
             if (user == null)
             {
                 MessageBox.Show("Invalid Input. Try Again!");

@@ -18,12 +18,7 @@ namespace HealthCareSystem.Core.Medications.Repository
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                    Persist Security Info=False;";
-
-
+                Connection = DatabaseConnection.GetConnection();
 
             }
             catch (Exception exception)
@@ -41,7 +36,6 @@ namespace HealthCareSystem.Core.Medications.Repository
 
         public void RemoveIngredient(int ingredientId)
         {
-            if (Connection.State == ConnectionState.Closed) Connection.Open();
             string query = "delete from ingredients where id = " + ingredientId + "";
             DatabaseCommander.ExecuteNonQueries(query, Connection);
         }
@@ -62,10 +56,8 @@ namespace HealthCareSystem.Core.Medications.Repository
         {
             List<Ingredient> ingredients = new List<Ingredient>();
 
-
             try
             {
-                if (Connection.State == ConnectionState.Closed) Connection.Open();
 
                 OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -80,7 +72,6 @@ namespace HealthCareSystem.Core.Medications.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
 
             return ingredients;
         }
@@ -107,7 +98,6 @@ namespace HealthCareSystem.Core.Medications.Repository
         public Ingredient GetSelectedIngredient(string query)
         {
 
-            if (Connection.State == ConnectionState.Closed) Connection.Open();
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             Ingredient ingredient = new Ingredient();

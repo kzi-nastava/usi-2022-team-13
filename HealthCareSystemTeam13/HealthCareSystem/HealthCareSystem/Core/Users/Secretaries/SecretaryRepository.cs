@@ -27,12 +27,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                Persist Security Info=False;";
-
-                Connection.Open();
+                Connection = DatabaseConnection.GetConnection();
 
             }
             catch (Exception exception)

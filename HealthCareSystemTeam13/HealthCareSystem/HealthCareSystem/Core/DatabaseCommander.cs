@@ -24,7 +24,6 @@ namespace HealthCareSystem.Core
         public static List<string> ExecuteReaderQueries(string query, OleDbConnection connection)
         {
             if (connection.State == System.Data.ConnectionState.Closed) connection.Open();
-            Console.WriteLine(query);
 
             List<string> data = new List<string>();
             OleDbCommand cmd = GetCommand(query, connection);

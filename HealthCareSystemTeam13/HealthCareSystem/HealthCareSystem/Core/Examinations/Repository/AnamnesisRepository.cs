@@ -15,13 +15,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                    Persist Security Info=False;";
-
-
-
+                Connection = DatabaseConnection.GetConnection();
             }
             catch (Exception exception)
             {
@@ -62,7 +56,6 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
         public DoctorAnamnesis GetDoctorAnamnesis(int examinationId)
         {
-            if (Connection.State == System.Data.ConnectionState.Closed) Connection.Open();
 
             string query = "select a.id_examination as ExaminationId, a.notice as Notice, a.conclusions as Conclusions, e.dateOf as DateOfExamination, d.firstName + ' ' + d.lastName as Doctor, d.speciality as Speciality from (Anamnesises a inner join Examination e on a.id_examination = e.id) inner join doctors d on e.id_doctor = d.id where e.id = " + examinationId + "";
 
@@ -93,7 +86,6 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
         public Anamnesis GetAnamnesis(int examinationId)
         {
-            if (Connection.State == System.Data.ConnectionState.Closed) Connection.Open();
 
             OleDbCommand cmd = DatabaseCommander.GetCommand("select * from Anamnesises where id_examination = " + examinationId + "", Connection);
             Anamnesis anamnesis = null;

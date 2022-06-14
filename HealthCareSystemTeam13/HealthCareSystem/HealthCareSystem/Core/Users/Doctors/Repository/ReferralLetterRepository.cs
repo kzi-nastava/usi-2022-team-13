@@ -18,13 +18,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                    Persist Security Info=False;";
-
-
-
+                Connection = DatabaseConnection.GetConnection();
             }
             catch (Exception exception)
             {
@@ -33,13 +27,11 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         }
         public void InsertReferral(ReferralLetter referralLetter, int option)
         {
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 
             string query = "INSERT INTO ReferralLetter" +
-                "(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) " +
-                "VALUES (@id_doctor, @id_patient," +
-                " @id_forwarded_doctor, @typeOfExamination, @speciality)";
+                           "(id_doctor, id_patient, id_forwarded_doctor, typeOfExamination, speciality) " +
+                           "VALUES (@id_doctor, @id_patient," +
+                           " @id_forwarded_doctor, @typeOfExamination, @speciality)";
 
             using (var cmd = new OleDbCommand(query, Connection))
             {
@@ -60,7 +52,6 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 cmd.ExecuteNonQuery();
             }
 
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
         }
 
         public void PullReferralLetters()

@@ -16,13 +16,7 @@ namespace HealthCareSystem.Core.Medications.Repository
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                    Persist Security Info=False;";
-
-
-
+                Connection = DatabaseConnection.GetConnection();
             }
             catch (Exception exception)
             {
@@ -31,8 +25,6 @@ namespace HealthCareSystem.Core.Medications.Repository
         }
         public void InsertInstruction(string description)
         {
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 
             DateTime startTime = DateTime.Now;
             int timesPerDay = 2;
@@ -48,7 +40,6 @@ namespace HealthCareSystem.Core.Medications.Repository
                 cmd.ExecuteNonQuery();
             }
 
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
         }
 
         public int GetLastCreatedInstructionId()

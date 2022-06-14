@@ -15,18 +15,13 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public DataTable DynamicEquipment { get; private set; }
         public DataTable TransferDynamicEquipment { get; private set; }
         public DataTable Equipment { get; private set; }
-        private RoomRepository _roomRepository;
+        private readonly RoomRepository _roomRepository;
 
         public EquipmentRepository()
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                    Persist Security Info=False;";
-
-
+                Connection = DatabaseConnection.GetConnection();
 
             }
             catch (Exception exception)
@@ -41,8 +36,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
             List<Equipment> equipment = new List<Equipment>();
 
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
             try
             {
                 string query = "select id_equipment, amount, Equipment.nameOf from RoomHasEquipment, Equipment" +
@@ -62,7 +55,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
             return equipment;
         }
@@ -162,10 +154,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
             var query = "SELECT id, id_equipment, amount, dateOf, id_secretary FROM RequestForDinamicEquipment where dateOf < #" + (DateTime.Now.AddDays(-1)).ToString() + "#";
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
-            if(Connection.State == ConnectionState.Closed)
-            {
-                Connection.Open();
-            }
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -208,8 +196,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
                 while (reader.Read())
                 {
-                    Equipment.EquipmentType typeOfEquipment;
-                    Enum.TryParse<Equipment.EquipmentType>(reader["type"].ToString(), out typeOfEquipment);
+                    Enum.TryParse<Equipment.EquipmentType>(reader["type"].ToString(), out var typeOfEquipment);
 
                     equipment.Add(new Equipment(Convert.ToInt32(reader["id"]), reader["nameOf"].ToString(), typeOfEquipment));
                 }
@@ -218,8 +205,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
-
             return equipment;
         }
     }
