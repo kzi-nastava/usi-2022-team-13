@@ -10,17 +10,12 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 {
     class PatientRequestRepository
     {
-        public OleDbConnection Connection { get; }
+        public OleDbConnection Connection { get; set; }
         public PatientRequestRepository()
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                Persist Security Info=False;";
-
-                Connection.Open();
+                Connection = DatabaseConnection.GetConnection();
 
             }
             catch (Exception exception)

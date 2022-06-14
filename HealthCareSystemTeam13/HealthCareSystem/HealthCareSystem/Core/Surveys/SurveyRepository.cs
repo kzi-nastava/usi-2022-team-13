@@ -18,12 +18,7 @@ namespace HealthCareSystem.Core.Surveys.Repository
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                Persist Security Info=False;";
-
-
+                Connection = DatabaseConnection.GetConnection();
             }
             catch (Exception exception)
             {
@@ -52,7 +47,6 @@ namespace HealthCareSystem.Core.Surveys.Repository
 
             try
             {
-                if (Connection.State == ConnectionState.Closed) Connection.Open();
 
                 OleDbCommand cmd = DatabaseCommander.GetCommand("select * from hospitalSurveys", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -68,7 +62,6 @@ namespace HealthCareSystem.Core.Surveys.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
 
             return hospitalSurveys;
         }
@@ -93,7 +86,6 @@ namespace HealthCareSystem.Core.Surveys.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
 
             return doctorSurveys;
         }

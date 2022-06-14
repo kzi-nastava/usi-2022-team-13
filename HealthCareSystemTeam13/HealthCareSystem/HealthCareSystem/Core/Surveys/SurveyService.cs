@@ -135,64 +135,69 @@ namespace HealthCareSystem.Core.Surveys
         {
             int[] numberOfGrades = new int[5];
 
-
             if (isDoctorGrade)
-            {
-
-                foreach (DoctorSurvey doctorSurvey in doctorSurveys)
-                {
-                    if(doctorSurvey.DoctorId == doctorId)
-                    {
-                        switch (doctorSurvey.Grade)
-                        {
-                            case 1:
-                                numberOfGrades[0]++;
-                                break;
-                            case 2:
-                                numberOfGrades[1]++;
-                                break;
-                            case 3:
-                                numberOfGrades[2]++;
-                                break;
-                            case 4:
-                                numberOfGrades[3]++;
-                                break;
-                            case 5:
-                                numberOfGrades[4]++;
-                                break;
-                        }
-                    }
-                }
-            }
+                SetNumberOfGradesForGrade(doctorSurveys, doctorId, numberOfGrades);
             else
-            {
-                foreach (DoctorSurvey doctorSurvey in doctorSurveys)
-                {
-                    if(doctorSurvey.DoctorId == doctorId)
-                    {
-                        switch (doctorSurvey.Quality)
-                        {
-                            case 1:
-                                numberOfGrades[0]++;
-                                break;
-                            case 2:
-                                numberOfGrades[1]++;
-                                break;
-                            case 3:
-                                numberOfGrades[2]++;
-                                break;
-                            case 4:
-                                numberOfGrades[3]++;
-                                break;
-                            case 5:
-                                numberOfGrades[4]++;
-                                break;
-                        }
-                    }
-                }
-            }
+                SetNumberOfGradesForQuality(doctorSurveys, doctorId, numberOfGrades);
+
 
             return numberOfGrades;
+        }
+
+        private static void SetNumberOfGradesForGrade(List<DoctorSurvey> doctorSurveys, int doctorId, int[] numberOfGrades)
+        {
+            foreach (DoctorSurvey doctorSurvey in doctorSurveys)
+            {
+                if (doctorSurvey.DoctorId == doctorId)
+                {
+                    switch (doctorSurvey.Grade)
+                    {
+                        case 1:
+                            numberOfGrades[0]++;
+                            break;
+                        case 2:
+                            numberOfGrades[1]++;
+                            break;
+                        case 3:
+                            numberOfGrades[2]++;
+                            break;
+                        case 4:
+                            numberOfGrades[3]++;
+                            break;
+                        case 5:
+                            numberOfGrades[4]++;
+                            break;
+                    }
+                }
+            }
+        }
+
+        private static void SetNumberOfGradesForQuality(List<DoctorSurvey> doctorSurveys, int doctorId, int[] numberOfGrades)
+        {
+            foreach (DoctorSurvey doctorSurvey in doctorSurveys)
+            {
+                if (doctorSurvey.DoctorId == doctorId)
+                {
+                    switch (doctorSurvey.Quality)
+                    {
+                        case 1:
+                            numberOfGrades[0]++;
+                            break;
+                        case 2:
+                            numberOfGrades[1]++;
+                            break;
+                        case 3:
+                            numberOfGrades[2]++;
+                            break;
+                        case 4:
+                            numberOfGrades[3]++;
+                            break;
+                        case 5:
+                            numberOfGrades[4]++;
+                            break;
+                    }
+                }
+            }
         }
     }
 }

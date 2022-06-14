@@ -11,17 +11,14 @@ namespace HealthCareSystem.Core.Rooms.Repository
 {
     class RenovationRepository
     {
-        public OleDbConnection Connection { get; }
+        public OleDbConnection Connection { get; set; }
         public DataTable Renovations { get; private set; }
 
         public RenovationRepository()
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                    Persist Security Info=False;";
+                Connection = DatabaseConnection.GetConnection();
 
             }
             catch (Exception exception)
@@ -39,7 +36,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         public void InsertRenovation(Renovation renovation)
         {
-            if (Connection.State == ConnectionState.Closed) Connection.Open();
             var query = "INSERT INTO Renovations(id_room, dateOfStart, dateOfFinish, id_other_room, renovationType) VALUES(@id_room, @startingDate, @ending_date, @id_other_room, @renovationType)";
 
             using (var cmd = new OleDbCommand(query, Connection))
@@ -60,7 +56,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
                 cmd.ExecuteNonQuery();
             }
 
-            Connection.Close();
         }
 
 
@@ -68,19 +63,15 @@ namespace HealthCareSystem.Core.Rooms.Repository
         {
             List<Renovation> renovations = new List<Renovation>();
 
-
             try
             {
-                if (Connection.State == ConnectionState.Closed) Connection.Open();
 
                 OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-
-                    Renovation.TypeOfRenovation typeOfRenovation;
-                    Enum.TryParse<Renovation.TypeOfRenovation>(reader["renovationType"].ToString(), out typeOfRenovation);
+                    Enum.TryParse<Renovation.TypeOfRenovation>(reader["renovationType"].ToString(), out var typeOfRenovation);
 
                     try
                     {
@@ -98,7 +89,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
 
             return renovations;
         }

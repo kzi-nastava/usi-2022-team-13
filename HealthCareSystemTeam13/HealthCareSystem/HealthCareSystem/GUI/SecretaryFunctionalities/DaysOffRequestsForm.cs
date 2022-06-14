@@ -15,8 +15,8 @@ namespace HealthCareSystem.GUI.SecretaryFunctionalities
 {
     public partial class DaysOffRequestsForm : Form
     {
-        DaysOffRepository _daysOffRepository;
-        string Username;
+        private readonly DaysOffRepository _daysOffRepository;
+        public string Username { get; set; }
         public DaysOffRequestsForm(string username)
         {
             _daysOffRepository = new DaysOffRepository();

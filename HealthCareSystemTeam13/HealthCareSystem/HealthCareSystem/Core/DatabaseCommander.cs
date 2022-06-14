@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,8 @@ namespace HealthCareSystem.Core
        
         public static void ExecuteNonQueries(string query, OleDbConnection connection)
         {
-            if (connection.State == System.Data.ConnectionState.Closed) connection.Open();
+            if (connection.State == ConnectionState.Closed) connection.Open();
+
             using (var cmd = new OleDbCommand(query, connection))
             {
                 cmd.ExecuteNonQuery();
@@ -23,8 +25,7 @@ namespace HealthCareSystem.Core
         }
         public static List<string> ExecuteReaderQueries(string query, OleDbConnection connection)
         {
-            if (connection.State == System.Data.ConnectionState.Closed) connection.Open();
-            Console.WriteLine(query);
+            if (connection.State == ConnectionState.Closed) connection.Open();
 
             List<string> data = new List<string>();
             OleDbCommand cmd = GetCommand(query, connection);
@@ -41,6 +42,7 @@ namespace HealthCareSystem.Core
 
         public static OleDbCommand GetCommand(string query, OleDbConnection connection)
         {
+            if(connection.State == ConnectionState.Closed)connection.Open();
             OleDbCommand cmd = new OleDbCommand();
 
             cmd.Connection = connection;

@@ -35,12 +35,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                Persist Security Info=False;";
-
-                Connection.Open();
+                Connection = DatabaseConnection.GetConnection();
 
             }
             catch (Exception exception)
@@ -55,8 +50,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
             List<Equipment> equipment = new List<Equipment>();
 
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
             try
             {
                 string query = "select id_equipment, amount, Equipment.nameOf from RoomHasEquipment, Equipment" +
@@ -76,17 +69,15 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
             return equipment;
         }
 
         public void UpdateAmountOfEquipmentInTheRoom(int amount, int roomId, int equipmentId)
         {
-            if (Connection.State == ConnectionState.Closed) Connection.Open();
 
             string updateQuery = "update RoomHasEquipment set amount = " + amount +
-                " where id_room = " + roomId + " and id_equipment = " + equipmentId;
+                                 " where id_room = " + roomId + " and id_equipment = " + equipmentId;
 
             DatabaseCommander.ExecuteNonQueries(updateQuery, Connection);
         }
@@ -169,7 +160,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         public Room GetSelectedRoom(string query)
         {
-            if (Connection.State == ConnectionState.Closed) Connection.Open();
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
             Room room = new Room();
@@ -210,7 +200,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
             try
             {
-                if (Connection.State == ConnectionState.Closed) Connection.Open();
 
                 OleDbCommand cmd = DatabaseCommander.GetCommand("select * from rooms", Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -227,7 +216,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
 
             return rooms;
         }
@@ -235,18 +223,15 @@ namespace HealthCareSystem.Core.Rooms.Repository
         {
             List<Room> rooms = new List<Room>();
 
-
             try
             {
-                if (Connection.State == ConnectionState.Closed) Connection.Open();
 
                 OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    TypeOfRoom typeOfRoom;
-                    Enum.TryParse<TypeOfRoom>(reader["type"].ToString(), out typeOfRoom);
+                    Enum.TryParse<TypeOfRoom>(reader["type"].ToString(), out var typeOfRoom);
 
                     rooms.Add(new Room(typeOfRoom, Convert.ToInt32(reader["id"])));
                 }
@@ -255,7 +240,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
 
             return rooms;
         }

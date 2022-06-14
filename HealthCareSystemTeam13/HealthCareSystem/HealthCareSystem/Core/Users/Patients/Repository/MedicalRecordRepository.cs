@@ -18,12 +18,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                    Persist Security Info=False;";
-
-
+                Connection = DatabaseConnection.GetConnection();
 
             }
             catch (Exception exception)
@@ -33,8 +28,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         }
         public string[] GetMedicalRecord(string query)
         {
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
 
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
             OleDbDataReader reader = cmd.ExecuteReader();
@@ -46,8 +39,6 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
                 data[0] = reader["weight"].ToString();
                 data[1] = reader["height"].ToString();
             }
-
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
 
             return data;
         }
@@ -64,9 +55,5 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             }
         }
 
-        public static implicit operator MedicalRecordRepository(PatientMedicalRecord v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

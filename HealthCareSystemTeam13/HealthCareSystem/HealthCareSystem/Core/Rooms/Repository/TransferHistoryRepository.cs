@@ -17,12 +17,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                    Persist Security Info=False;";
-
-
+                Connection = DatabaseConnection.GetConnection();
 
             }
             catch (Exception exception)
@@ -32,9 +27,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
         }
         public void InsertTransferHistoryOfEquipment(TransferHistoryOfEquipment transferHistoryOfEquipment)
         {
-            if (Connection.State == ConnectionState.Closed) Connection.Open();
             var query = "INSERT INTO EquipmentTransferHistory(id_original_room, id_new_room, dateOfChange, isExecuted, amount, id_equipment) " +
-                "VALUES(@first_room_id, @second_room_id, @transferDate, @isExecuted, @amount, @id_equipment)";
+                        "VALUES(@first_room_id, @second_room_id, @transferDate, @isExecuted, @amount, @id_equipment)";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@first_room_id", transferHistoryOfEquipment.FirstRoomId);
@@ -46,7 +40,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
                 cmd.ExecuteNonQuery();
             }
 
-            Connection.Close();
         }
 
 
@@ -54,10 +47,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
         {
             List<TransferHistoryOfEquipment> transferHistory = new List<TransferHistoryOfEquipment>();
 
-
             try
             {
-                if (Connection.State == ConnectionState.Closed) Connection.Open();
 
                 OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -72,7 +63,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
 
             return transferHistory;
         }

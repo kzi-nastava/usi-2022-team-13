@@ -15,18 +15,13 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public OleDbConnection Connection { get; set; }
         public DataTable DaysOffRequests { get; private set; }
         public DataTable RequestsForDaysOff { get; private set; }
-        private SecretaryRepository _secretaryRepository;
+        private readonly SecretaryRepository _secretaryRepository;
 
         public DaysOffRepository()
         {
             try
             {
-                Connection = new OleDbConnection();
-
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                    Persist Security Info=False;";
-
-
+                Connection = DatabaseConnection.GetConnection();
 
             }
             catch (Exception exception)
@@ -39,14 +34,11 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
         public void InsertDaysOff(DateTime startDate, DateTime endDate, string reasonForDaysOff, bool isUrgent, int doctorId)
         {
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
+
 
             string query = "insert into DoctorRequestDaysOf (dateFrom, dateTo, reasonOf, isUrgent, id_doctor, stateOfRequest) " +
                 "values (@dateFrom, @dateTo, @reasonOf, @isUrgent, @doctor_id, @stateOfRequest)";
 
-
-            Console.WriteLine(isUrgent);
 
             using (var cmd = new OleDbCommand(query, Connection))
             {
@@ -63,7 +55,6 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
                 cmd.ExecuteNonQuery();
             }
 
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
         }
 
         public void PullDaysOffRequests()

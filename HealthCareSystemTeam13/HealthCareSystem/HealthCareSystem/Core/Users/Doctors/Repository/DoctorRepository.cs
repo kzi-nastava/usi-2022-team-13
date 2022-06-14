@@ -29,15 +29,8 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             if (username.Length > 0) Username = username;
             try
             {
-                Connection = new OleDbConnection();
+                Connection = DatabaseConnection.GetConnection();
 
-                Connection.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../../Data/HCDb.mdb;
-                Persist Security Info=False;";
-
-                if (calledFromDoctor)
-                {
-                    Connection.Open();
-                }
 
             }
             catch (Exception exception)
@@ -48,7 +41,6 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         }
         public Doctor GetSelectedDoctor(string query)
         {
-            if(Connection.State == ConnectionState.Closed) Connection.Open();
 
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
 
@@ -96,7 +88,6 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public BindingList<Doctor> GetDoctors()
         {
             BindingList<Doctor> doctors = new BindingList<Doctor>();
-            if (Connection.State == ConnectionState.Closed) { Connection.Open();}
             try
             {
 
@@ -118,7 +109,6 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         }
         public List<Doctor> GetDoctorsWithAverageRating()
         {
-            if (Connection.State == ConnectionState.Closed) Connection.Open();
             string query = "select dr.id as DoctorID, dr.firstName as FirstName, dr.lastName as LastName, dr.user_id as UserId, dr.speciality as Speciality, avg(ds.doctorGrade) as Rating  from Doctors as dr left outer join DoctorSurveys ds on dr.id = ds.id_doctor group by dr.id, dr.firstName, dr.lastName, dr.user_id, dr.speciality";
 
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
@@ -174,11 +164,9 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
         private static Doctor GetDoctorFromReader(OleDbDataReader reader)
         {
-            Doctor doctor;
-            DoctorSpeciality speciality;
-            Enum.TryParse<DoctorSpeciality>(reader["speciality"].ToString(), out speciality);
+            Enum.TryParse<DoctorSpeciality>(reader["speciality"].ToString(), out var speciality);
 
-            doctor = new Doctor(Convert.ToInt32(reader["id"]), reader["firstName"].ToString(), reader["lastName"].ToString(),
+            var doctor = new Doctor(Convert.ToInt32(reader["id"]), reader["firstName"].ToString(), reader["lastName"].ToString(),
                 Convert.ToInt32(reader["user_id"]), speciality);
             return doctor;
         }
@@ -195,14 +183,11 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
 
         public int GetDoctorId()
         {
-            int checkState = 0;
-            if (Connection.State == ConnectionState.Closed) { Connection.Open(); checkState = 1; }
             string userId = DatabaseCommander.ExecuteReaderQueries("select id from users where usrnm = '" + Username + "'", Connection)[0];
 
             int doctorId = Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries("select id from doctors where user_id = " + Convert.ToInt32(userId) + "", Connection)[0]);
-            Console.WriteLine(doctorId);
             return doctorId;
-            if (Connection.State == ConnectionState.Open && checkState == 1) Connection.Close();
+
 
         }
 
