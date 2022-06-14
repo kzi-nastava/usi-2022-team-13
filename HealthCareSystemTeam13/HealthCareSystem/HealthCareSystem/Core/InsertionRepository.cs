@@ -27,7 +27,7 @@ namespace HealthCareSystem.Core.Scripts.Repository
     {
         private static OleDbConnection _connection;
         private readonly RenovationRepository _renovationRepository;
-        private RoomRepository _roomRepository;
+        private readonly RoomRepository _roomRepository;
         private readonly TransferHistoryRepository _transferHistoryRepository;
 
         public InsertionRepository()
@@ -227,31 +227,17 @@ namespace HealthCareSystem.Core.Scripts.Repository
 
         public void DeleteRecords()
         {
-            try
-            {
-                if (_connection.State == System.Data.ConnectionState.Closed)
-                {
-                    _connection.Open();
-                }
 
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.ToString());
-            }
-            finally
-            {
-                List<String> tableNames = new List<string>() {
+            List<String> tableNames = new List<string>() {
                     "DoctorSurveys", "BlockedPatients", "PatientExaminationChanges", "ReceiptMedications", "Receipt", "HospitalSurveys", "PatientAlergicTo", "MedicalRecord", "Examination", "Instructions", "DiseaseHistory", "RequestForDinamicEquipment", "users", "rooms", "medications", "Ingredients", "ReferralLetter", "MedicationContainsIngredient", "RejectedMedications", "Equipment", "Anamnesises", "RoomHasEquipment", "EquipmentTransferHistory"
                 };
 
 
-                // Deleting all records from database
-                foreach (string tableName in tableNames)
-                    DeleteTableData(tableName);
+            // Deleting all records from database
+            foreach (string tableName in tableNames)
+                DeleteTableData(tableName);
 
-                _connection.Close();
-            }
+
         }
         private void DeleteTableData(string tableName)
         {

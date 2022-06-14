@@ -46,26 +46,18 @@ namespace HealthCareSystem.Core
         public static bool IsDgwRowSelected(DataGridView dgw)
         {
             if (dgw.SelectedRows.Count == 0)
-            {
                 MessageBox.Show("Please select a row first.");
 
-            }
             else if (dgw.SelectedRows.Count == 1)
             {
                 DataGridViewRow row = dgw.SelectedRows[0];
                 if (row.Cells[0].Value == null)
-                {
                     MessageBox.Show("You selected an empty row.");
-                }
                 else
-                {
                     return true;
-                }
             }
             else
-            {
                 MessageBox.Show("Please select only 1 row.");
-            }
             return false;
         }
         public static void ButtonEnter(Button button)
@@ -80,13 +72,12 @@ namespace HealthCareSystem.Core
         }
         public static void FillTable(DataTable table, string query, OleDbConnection connection)
         {
-            if(connection.State == ConnectionState.Closed) connection.Open();
+            if(connection.State == ConnectionState.Closed) connection.Open();;
             using (var cmd = new OleDbCommand(query, connection))
             {
                 OleDbDataReader reader = cmd.ExecuteReader();
                 table.Load(reader);
             }
-            if (connection.State == ConnectionState.Open) connection.Close();
         }
     }
 }

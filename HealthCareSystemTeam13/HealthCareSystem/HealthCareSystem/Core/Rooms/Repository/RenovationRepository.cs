@@ -11,7 +11,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
 {
     class RenovationRepository
     {
-        public OleDbConnection Connection { get; }
+        public OleDbConnection Connection { get; set; }
         public DataTable Renovations { get; private set; }
 
         public RenovationRepository()
@@ -71,9 +71,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
                 while (reader.Read())
                 {
-
-                    Renovation.TypeOfRenovation typeOfRenovation;
-                    Enum.TryParse<Renovation.TypeOfRenovation>(reader["renovationType"].ToString(), out typeOfRenovation);
+                    Enum.TryParse<Renovation.TypeOfRenovation>(reader["renovationType"].ToString(), out var typeOfRenovation);
 
                     try
                     {
