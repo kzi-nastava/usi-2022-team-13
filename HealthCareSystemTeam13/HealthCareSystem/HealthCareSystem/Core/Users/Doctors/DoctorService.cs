@@ -16,14 +16,10 @@ namespace HealthCareSystem.Core.Users.Doctors.Service
             for (int i = 0; i < examinations.Count(); i++)
             {
                 TimeSpan difference = ExaminationDateTime.Subtract(examinations[i].DateOf);
-                Console.WriteLine(ExaminationDateTime.ToString());
 
                 if (Math.Abs(difference.TotalMinutes) < 15 && doctorID == examinations[i].IdDoctor)
-                {
                     return false;
-                }
             }
-
             return true;
         }
         public static List<Doctor> GetDoctorsByKeyword(List<Doctor> doctors, string keyword)
@@ -32,9 +28,8 @@ namespace HealthCareSystem.Core.Users.Doctors.Service
             foreach (Doctor doctor in doctors)
             {
                 if (IsKeywordInDoctor(keyword, doctor))
-                {
                     selectedDoctors.Add(doctor);
-                }
+
             }
 
             return selectedDoctors;

@@ -47,17 +47,17 @@ namespace HealthCareSystem.Core.Medications.Repository
 
         public int GetLastReceiptId()
         {
-            int lastCreatedReceiptnId = 0;
+            int lastCreatedReceiptId = 0;
             string query = "select top 1 ID from Receipt order by id desc";
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
             OleDbDataReader reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
-                lastCreatedReceiptnId = Convert.ToInt32(reader["ID"]);
+                lastCreatedReceiptId = Convert.ToInt32(reader["ID"]);
             }
 
-            return lastCreatedReceiptnId;
+            return lastCreatedReceiptId;
         }
     }
 }

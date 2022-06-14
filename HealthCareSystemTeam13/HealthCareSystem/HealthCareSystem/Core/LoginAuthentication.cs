@@ -22,18 +22,18 @@ namespace HealthCareSystem.Core.Authentication
         public string Username { get; set; }
         public string Password { get; set; }
         public LoginForm Login { get; set; }
-        private PatientRepository PatientRep;
-        private static OleDbConnection Connection;
+        private readonly PatientRepository _patientRep;
+        private static OleDbConnection _connection;
 
         public LoginAuthentication(string username, string password, LoginForm loginForm)
         {
             this.Username = username;
             this.Password = password;
             this.Login = loginForm;
-            PatientRep = new PatientRepository();
+            _patientRep = new PatientRepository();
             try
             {
-                Connection = DatabaseConnection.GetConnection();
+                _connection = DatabaseConnection.GetConnection();
 
             }
             catch (Exception exception)
@@ -68,7 +68,7 @@ namespace HealthCareSystem.Core.Authentication
                         managerView.ShowDialog();
                         break;
                     case UserRole.Patients:
-                        bool isBlocked = PatientRep.IsPatientBlocked(Username);
+                        bool isBlocked = _patientRep.IsPatientBlocked(Username);
                         if (!isBlocked)
                         {
                             PatientView patientView = new PatientView(Username, Login);
@@ -86,7 +86,7 @@ namespace HealthCareSystem.Core.Authentication
                         secretacyView.ShowDialog();
                         break;
                 }
-                Connection.Close();
+                _connection.Close();
             }
         }
 
@@ -97,13 +97,12 @@ namespace HealthCareSystem.Core.Authentication
             if (isInvalid) return null;
 
             string query = "select role from users where usrnm = '" + username + "' and pass = '" + password + "'";
-            List<string> roles = DatabaseCommander.ExecuteReaderQueries(query, Connection);
+            List<string> roles = DatabaseCommander.ExecuteReaderQueries(query, _connection);
 
-            if (roles.Count() == 0) return null;
+            if (!roles.Any()) return null;
             else
             {
-                UserRole role;
-                Enum.TryParse<UserRole>(roles[0], out role);
+                Enum.TryParse<UserRole>(roles[0], out var role);
                 return new User(username, password, role);
             }
 
