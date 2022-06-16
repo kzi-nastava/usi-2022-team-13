@@ -25,7 +25,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         public DataTable Patients { get; private set; }
 
         private readonly ExaminationRepository _examinationRepository;
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
         private readonly ExaminationChangesRepository _examinationChangesRepository;
 
 

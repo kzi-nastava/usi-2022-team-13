@@ -16,9 +16,9 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class OutOfStockForm : Form
     {
-        private EquipmentRepository _equipmentRepository;
-        private UserRepository _userRepository;
-        private SecretaryRepository _secretaryRepository;
+        private readonly EquipmentRepository _equipmentRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly SecretaryRepository _secretaryRepository;
         string Username;
         public OutOfStockForm(string username)
         {
