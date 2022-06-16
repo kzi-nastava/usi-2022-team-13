@@ -21,13 +21,14 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private List<Doctor> _doctors;
         private readonly IDoctorRepository _doctorRepository;
         private DoctorSorter _doctorSorter;
-
+        private IDoctorService _doctorService;
         public SearchDoctorView(string username)
         {
             this.Username = username;
             InitializeComponent();
             _doctorRepository = new DoctorRepository();
             _doctorSorter = new DoctorSorter();
+            _doctorService = new DoctorService();
             SetDgwDoctors();
         }
 
@@ -44,7 +45,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         {
             string keyword = tbSearchDoctor.Text.Trim();
             if (keyword != "")
-                dgwDoctors.DataSource = DoctorService.GetDoctorsByKeyword(_doctors, keyword.ToLower());
+                dgwDoctors.DataSource = _doctorService.GetDoctorsByKeyword(_doctors, keyword.ToLower());
             else
                 dgwDoctors.DataSource = _doctors;
         }

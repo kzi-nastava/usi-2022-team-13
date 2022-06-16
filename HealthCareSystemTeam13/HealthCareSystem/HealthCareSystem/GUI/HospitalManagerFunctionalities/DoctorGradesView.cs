@@ -19,10 +19,12 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
         private int DoctorId { get; set; }
         private readonly ISurveyRepository _surveyRepository;
         private readonly IDoctorRepository _doctorRepository;
+        private readonly ISurveyService _surveyService;
         public DoctorGradesView(int doctorId)
         {
             _surveyRepository = new SurveyRepository();
             _doctorRepository = new DoctorRepository();
+            _surveyService = new SurveyService();
             DoctorId = doctorId;
             InitializeComponent();
             FillLabels();
@@ -44,10 +46,10 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
 
             lblDoctor.Text += DoctorId + "  " + doctorFullName;
             List<DoctorSurvey> doctorSurveys = _surveyRepository.GetDoctorSurveys();
-            double[] avgGrades = SurveyService.GetAverageDoctorGrades(doctorSurveys, DoctorId);
+            double[] avgGrades = _surveyService.GetAverageDoctorGrades(doctorSurveys, DoctorId);
             
-            int[] numberDoctorGrades = SurveyService.GetNumberOfDoctorGrades(doctorSurveys, true, DoctorId);
-            int[] numberQualityGrades = SurveyService.GetNumberOfDoctorGrades(doctorSurveys, false, DoctorId);
+            int[] numberDoctorGrades = _surveyService.GetNumberOfDoctorGrades(doctorSurveys, true, DoctorId);
+            int[] numberQualityGrades = _surveyService.GetNumberOfDoctorGrades(doctorSurveys, false, DoctorId);
 
             Label[] gradeLabels = { lblDoctor1, lblDoctor2, lblDoctor3, lblDoctor4, lblDoctor5 };
             Label[] qualityLabels = { lblQuality1, lblQuality2, lblQuality3, lblQuality4, lblQuality5};

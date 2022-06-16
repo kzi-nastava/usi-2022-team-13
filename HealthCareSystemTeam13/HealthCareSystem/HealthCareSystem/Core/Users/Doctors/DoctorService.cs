@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace HealthCareSystem.Core.Users.Doctors.Service
 {
-    class DoctorService
+    class DoctorService:IDoctorService
     {
-        public static bool IsDoctorAvailable(int doctorID, DateTime ExaminationDateTime, List<Examination> examinations)
+        public bool IsDoctorAvailable(int doctorID, DateTime ExaminationDateTime, List<Examination> examinations)
         {
             for (int i = 0; i < examinations.Count(); i++)
             {
@@ -22,7 +22,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Service
             }
             return true;
         }
-        public static List<Doctor> GetDoctorsByKeyword(List<Doctor> doctors, string keyword)
+        public List<Doctor> GetDoctorsByKeyword(List<Doctor> doctors, string keyword)
         {
             List<Doctor> selectedDoctors = new List<Doctor>();
             foreach (Doctor doctor in doctors)
@@ -35,7 +35,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Service
             return selectedDoctors;
         }
 
-        private static bool IsKeywordInDoctor(string keyword, Doctor doctor)
+        public bool IsKeywordInDoctor(string keyword, Doctor doctor)
         {
             return doctor.FirstName.ToLower().Contains(keyword) || doctor.LastName.ToLower().Contains(keyword) || doctor.Speciality.ToString().ToLower().Contains(keyword);
         }

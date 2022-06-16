@@ -21,7 +21,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public OleDbConnection Connection { get; set; }
 
         public string Username { get; set; }
-  
+        private IDoctorService _doctorService;
 
 
         public DoctorRepository(string username = "", bool calledFromDoctor = false)
@@ -35,6 +35,8 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
+
+            _doctorService = new DoctorService();
 
         }
         public Doctor GetSelectedDoctor(string query)
@@ -179,7 +181,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             BindingList<Doctor> doctors = GetDoctors();
             foreach (Doctor doctor in doctors)
             {
-                if (DoctorService.IsDoctorAvailable(doctor.ID, examinationDateTime, examinations)) return doctor;
+                if (_doctorService.IsDoctorAvailable(doctor.ID, examinationDateTime, examinations)) return doctor;
             }
             return null;
 

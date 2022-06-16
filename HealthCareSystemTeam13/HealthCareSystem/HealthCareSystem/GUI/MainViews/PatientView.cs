@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using HealthCareSystem.Core.GUI.PatientFunctionalities;
 using HealthCareSystem.Core.Medications.Repository;
+using HealthCareSystem.Core.Users.Patients;
 using HealthCareSystem.Core.Users.Patients.Repository;
 using HealthCareSystem.Core.Users.Patients.Service;
 
@@ -23,6 +24,7 @@ namespace HealthCareSystem.Core.GUI
         private readonly IMedicationRepository _medicationRepository;
         private readonly IInstructionRepository _instructionRepository;
         private List<System.Threading.Timer> _timers;
+        private IPatientService _patientService;
 
         private int _notificationAlertTime;
 
@@ -34,6 +36,7 @@ namespace HealthCareSystem.Core.GUI
             _medicationRepository = new MedicationRepository();
             _notificationAlertTime = _medicationRepository.GetMedicationNotificationTime(_patientRepository.GetPatientId());
             _instructionRepository = new InstructionRepository();
+            _patientService = new PatientService();
 
             InitializeComponent();
 
@@ -93,7 +96,7 @@ namespace HealthCareSystem.Core.GUI
             if (instructions.Count() == 0)
                 return;
 
-            List<int> atHours = PatientService.GetHoursForNotifications(instructions, _notificationAlertTime);
+            List<int> atHours = _patientService.GetHoursForNotifications(instructions, _notificationAlertTime);
 
             DateTime startDate = instructions.Values.First();
 

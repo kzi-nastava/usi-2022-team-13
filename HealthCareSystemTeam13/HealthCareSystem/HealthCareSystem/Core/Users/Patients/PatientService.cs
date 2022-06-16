@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace HealthCareSystem.Core.Users.Patients.Service
 {
-    class PatientService
+    class PatientService: IPatientService
     {
-        public static List<int> GetHoursForNotifications(Dictionary<int, DateTime> instructions, int notificationAlertTime)
+        public List<int> GetHoursForNotifications(Dictionary<int, DateTime> instructions, int notificationAlertTime)
         {
             List<int> atHours = new List<int>();
             int timesPerDay = instructions.Keys.First();

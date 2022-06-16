@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Users.Doctors;
 
 namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 {
@@ -29,8 +30,8 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private readonly IPatientRepository _patientRepository;
         private IDoctorRepository _doctorRepository;
         private IRoomRepository _roomRepository;
-
-        private IExaminationRepository _examinationRep;
+        private IDoctorService _doctorService;
+        private IExaminationRepository _examinationRepository;
         private Doctor _doctorEntity;
         public string DoctorUsername;
         public readonly int ValidDate;
@@ -48,7 +49,8 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             _doctorEntity = _doctorRepository.GetDoctorByUsername();
 
             _roomRepository = new RoomRepository();
-            _examinationRep = new ExaminationRepository();
+            _examinationRepository = new ExaminationRepository();
+            _doctorService = new DoctorService();
 
             InitializeComponent();
 
@@ -110,7 +112,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 if (IsAddChoosen)
                 {
                     _patientRepository.SetUsername(PatientUsername);
-                    _examinationRep.InsertExamination(_patientRepository.GetPatientId(), _doctorEntity.ID, mergedTime, Duration, RoomId, selectedType);
+                    _examinationRepository.InsertExamination(_patientRepository.GetPatientId(), _doctorEntity.ID, mergedTime, Duration, RoomId, selectedType);
                     MessageBox.Show("Successfully added examination!");
 
                 }
@@ -159,8 +161,8 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 return false;
 
             }
-            else if (!DoctorService.IsDoctorAvailable(_doctorEntity.ID, GetMergedDateTime(ExaminationDate, time),
-                _examinationRep.GetAllOtherExaminations(ExaminationId)))
+            else if (!_doctorService.IsDoctorAvailable(_doctorEntity.ID, GetMergedDateTime(ExaminationDate, time),
+                _examinationRepository.GetAllOtherExaminations(ExaminationId)))
             {
 
                 MessageBox.Show("Doctor is not available at that time.");
@@ -175,10 +177,10 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
             }
             else if (!_roomRepository.IsRoomAvailable(Convert.ToInt32(tbRoomId.Text), GetMergedDateTime(ExaminationDate, time),
-                _examinationRep.GetAllOtherExaminations(ExaminationId)))
+                _examinationRepository.GetAllOtherExaminations(ExaminationId)))
             {
 
-                int availableRoomId = _roomRepository.GetAvailableRoomId(GetMergedDateTime(ExaminationDate, time), _examinationRep.GetAllOtherExaminations(ExaminationId));
+                int availableRoomId = _roomRepository.GetAvailableRoomId(GetMergedDateTime(ExaminationDate, time), _examinationRepository.GetAllOtherExaminations(ExaminationId));
                 if (availableRoomId == 0)
                 {
                     MessageBox.Show("No available rooms at this date/time.");
@@ -200,7 +202,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
         private void LoadEditData()
         {
-            Dictionary<string, string> data = _examinationRep.GetExamination(ExaminationId);
+            Dictionary<string, string> data = _examinationRepository.GetExamination(ExaminationId);
             tbExaminationId.Text = data["id"];
 
             tbDuration.Text = "15";

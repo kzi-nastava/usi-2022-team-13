@@ -105,12 +105,14 @@
     <Compile Include="Core\Rooms\Room.cs" />
     <Compile Include="Core\InsertionRepository.cs" />
     <Compile Include="Core\Surveys\ISurveyRepository.cs" />
+    <Compile Include="Core\Surveys\ISurveyService.cs" />
     <Compile Include="Core\Surveys\Model\DoctorSurvey.cs" />
     <Compile Include="Core\Surveys\Model\HospitalSurvey.cs" />
     <Compile Include="Core\Surveys\SurveyRepository.cs" />
     <Compile Include="Core\Surveys\SurveyService.cs" />
     <Compile Include="Core\TimeDateHelpers.cs" />
     <Compile Include="Core\Users\Doctors\DoctorSorter.cs" />
+    <Compile Include="Core\Users\Doctors\IDoctorService.cs" />
     <Compile Include="Core\Users\Doctors\IDoctorSorter.cs" />
     <Compile Include="Core\Users\Doctors\Repository\DaysOffRepository.cs" />
     <Compile Include="Core\Users\Doctors\Repository\DoctorRepository.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="Core\Users\Doctors\Repository\IReferralLetterRepository.cs" />
     <Compile Include="Core\Users\Doctors\Repository\ReferralLetterRepository.cs" />
     <Compile Include="Core\Users\HospitalManagers\HospitalManager.cs" />
+    <Compile Include="Core\Users\Patients\IPatientService.cs" />
     <Compile Include="Core\Users\Patients\Repository\IMedicalRecordRepository.cs" />
     <Compile Include="Core\Users\Patients\Repository\IPatientRepository.cs" />
     <Compile Include="Core\Users\Patients\Repository\IPatientRequestRepository.cs" />

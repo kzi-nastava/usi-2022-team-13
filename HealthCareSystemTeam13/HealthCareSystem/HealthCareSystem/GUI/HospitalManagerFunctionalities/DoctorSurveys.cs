@@ -18,10 +18,12 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
     {
         private readonly ISurveyRepository _surveyRepository;
         private readonly IDoctorRepository _doctorRepository;
+        private readonly ISurveyService _surveyService;
         public DoctorSurveys()
         {
             _surveyRepository = new SurveyRepository();
             _doctorRepository = new DoctorRepository();
+            _surveyService = new SurveyService();
             _surveyRepository.PullDoctorSurveys();
             InitializeComponent();
             FillDataGridView();
@@ -31,7 +33,7 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
         {
             List<DoctorSurvey> doctorSurveys = _surveyRepository.GetDoctorSurveys();
             BindingList<Doctor> doctors = _doctorRepository.GetDoctors();
-            Dictionary<Doctor, double> rankings = SurveyService.GetDoctorsAndAverages(doctorSurveys, doctors);
+            Dictionary<Doctor, double> rankings = _surveyService.GetDoctorsAndAverages(doctorSurveys, doctors);
             Label[] labelsBest = { lblBest1, lblBest2, lblBest3};
             Label[] labelsWorst = { lblWorst1, lblWorst2, lblWorst3};
 
