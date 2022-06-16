@@ -17,12 +17,12 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
     public partial class DoctorGradesView : Form
     {
         private int DoctorId { get; set; }
-        private SurveyRepository SurveyRepository;
-        private DoctorRepository DoctorRepository;
+        private readonly ISurveyRepository _surveyRepository;
+        private readonly IDoctorRepository _doctorRepository;
         public DoctorGradesView(int doctorId)
         {
-            SurveyRepository = new SurveyRepository();
-            DoctorRepository = new DoctorRepository();
+            _surveyRepository = new SurveyRepository();
+            _doctorRepository = new DoctorRepository();
             DoctorId = doctorId;
             InitializeComponent();
             FillLabels();
@@ -30,7 +30,7 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
 
         private void FillLabels()
         {
-            BindingList<Doctor> doctors = DoctorRepository.GetDoctors();
+            BindingList<Doctor> doctors = _doctorRepository.GetDoctors();
 
             string doctorFullName = "";
             foreach (Doctor doctor in doctors)
@@ -43,7 +43,7 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
 
 
             lblDoctor.Text += DoctorId + "  " + doctorFullName;
-            List<DoctorSurvey> doctorSurveys = SurveyRepository.GetDoctorSurveys();
+            List<DoctorSurvey> doctorSurveys = _surveyRepository.GetDoctorSurveys();
             double[] avgGrades = SurveyService.GetAverageDoctorGrades(doctorSurveys, DoctorId);
             
             int[] numberDoctorGrades = SurveyService.GetNumberOfDoctorGrades(doctorSurveys, true, DoctorId);

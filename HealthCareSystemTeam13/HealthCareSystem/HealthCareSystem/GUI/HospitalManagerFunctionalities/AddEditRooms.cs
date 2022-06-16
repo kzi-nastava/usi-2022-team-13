@@ -16,14 +16,14 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
     {
         public int RoomId { get; set; }
         public bool IsAddChosen { get; set; }
-        private RoomRepository RoomRep;
+        private IRoomRepository _roomRepository;
         private TypeOfRoom SelectedRoomType;
         public AddEditRooms(int roomId, bool isAddChoosen)
         {
 
             RoomId = roomId;
             IsAddChosen = isAddChoosen;
-            RoomRep = new RoomRepository();
+            _roomRepository = new RoomRepository();
             InitializeComponent();
 
             FillRoomTypeComboBox();
@@ -54,7 +54,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         {
 
             string query = "select * from Rooms where id=" + RoomId;
-            Room room = RoomRep.GetSelectedRoom(query);
+            Room room = _roomRepository.GetSelectedRoom(query);
             cbRoomTypes.SelectedIndex = cbRoomTypes.FindStringExact(room.Type.ToString());
         }
 
@@ -64,7 +64,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             if (IsAddChosen)
             {
                 SelectedRoomType = (TypeOfRoom)cbRoomTypes.SelectedValue;
-                RoomRep.InsertRoom(SelectedRoomType);
+                _roomRepository.InsertRoom(SelectedRoomType);
                 MessageBox.Show("Successfully added a room!");
 
             }
@@ -75,7 +75,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                 
                 string updateQuery = "Update Rooms set type = '" + SelectedRoomType.ToString() + "' where id = " + RoomId;
 
-                DatabaseCommander.ExecuteNonQueries(updateQuery, RoomRep.Connection);
+                DatabaseCommander.ExecuteNonQueries(updateQuery, DatabaseConnection.GetConnection());
                 MessageBox.Show("Successfully edited room!");
             }
             this.Close();

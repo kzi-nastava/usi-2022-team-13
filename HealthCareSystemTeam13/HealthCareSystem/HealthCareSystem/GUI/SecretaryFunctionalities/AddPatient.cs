@@ -17,9 +17,9 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class AddPatient : Form
     {
-        MedicalRecordRepository _medicalRecordRepository;
-        UserRepository _userRepository;
-        PatientRepository _patientRepository;
+        readonly MedicalRecordRepository _medicalRecordRepository;
+        readonly IUserRepository _userRepository;
+        private readonly IPatientRepository _patientRepository;
         public AddPatient()
         {
             InitializeComponent();

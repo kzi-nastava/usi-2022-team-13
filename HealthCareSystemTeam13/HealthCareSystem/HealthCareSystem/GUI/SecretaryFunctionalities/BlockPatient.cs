@@ -16,7 +16,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
     public partial class BlockPatient : Form
     {
         string Username;
-        PatientRepository _patientRepository;
+        private readonly IPatientRepository _patientRepository;
         public BlockPatient(string username)
         {
             InitializeComponent();

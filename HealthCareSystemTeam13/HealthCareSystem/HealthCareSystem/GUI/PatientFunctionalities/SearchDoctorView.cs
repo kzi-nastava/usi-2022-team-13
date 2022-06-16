@@ -19,13 +19,15 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     {
         public string Username { get; set; }
         private List<Doctor> _doctors;
-        private readonly DoctorRepository _doctorRepository;
+        private readonly IDoctorRepository _doctorRepository;
+        private DoctorSorter _doctorSorter;
 
         public SearchDoctorView(string username)
         {
             this.Username = username;
             InitializeComponent();
             _doctorRepository = new DoctorRepository();
+            _doctorSorter = new DoctorSorter();
             SetDgwDoctors();
         }
 
@@ -49,28 +51,28 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnSortByAverageRating_Click(object sender, EventArgs e)
         {
-            _doctors = DoctorSorter.SortDoctors(_doctors, 1);
+            _doctors = _doctorSorter.SortDoctors(_doctors, 1);
             dgwDoctors.DataSource = _doctors;
             dgwDoctors.Refresh();
         }
 
         private void btnSortByName_Click(object sender, EventArgs e)
         {
-            _doctors = DoctorSorter.SortDoctors(_doctors, 2);
+            _doctors = _doctorSorter.SortDoctors(_doctors, 2);
             dgwDoctors.DataSource = _doctors;
             dgwDoctors.Refresh();
         }
 
         private void btnSortByLastName_Click(object sender, EventArgs e)
         {
-            _doctors = DoctorSorter.SortDoctors(_doctors, 3);
+            _doctors = _doctorSorter.SortDoctors(_doctors, 3);
             dgwDoctors.DataSource = _doctors;
             dgwDoctors.Refresh();
         }
 
         private void btnSortBySpeciality_Click(object sender, EventArgs e)
         {
-            _doctors = DoctorSorter.SortDoctors(_doctors, 4);
+            _doctors = _doctorSorter.SortDoctors(_doctors, 4);
             dgwDoctors.DataSource = _doctors;
             dgwDoctors.Refresh();
         }

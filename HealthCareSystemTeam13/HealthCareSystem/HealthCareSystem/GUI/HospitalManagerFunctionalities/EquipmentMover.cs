@@ -15,13 +15,13 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 {
     public partial class EquipmentMover : Form
     {
-        private RoomRepository RoomRepository;
-        private EquipmentRepository EquipmentRepository;
+        private IRoomRepository _roomRepository;
+        private IEquipmentRepository _equipmentRepository;
         public EquipmentMover()
         {
-            RoomRepository = new RoomRepository();
-            EquipmentRepository = new EquipmentRepository();
-            EquipmentRepository.PullEquipment();
+            _roomRepository = new RoomRepository();
+            _equipmentRepository = new EquipmentRepository();
+            _equipmentRepository.PullEquipment();
             InitializeComponent();
             FillDataGridView();
             FillRoomTypeComboBox();
@@ -73,9 +73,10 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         private void FillDataGridView()
         {
-            dgwEquipment.DataSource = EquipmentRepository.Equipment;
+            dgwEquipment.DataSource = _equipmentRepository.GetEquipmentDataTable();
             DataGridViewSettings();
         }
+
 
         private void DataGridViewSettings()
         {
@@ -89,13 +90,13 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         public void RefreshDataGridView()
         {
             
-            dgwEquipment.DataSource = RoomRepository.Equipment;
+            dgwEquipment.DataSource = _roomRepository.GetEquipmentDataTable();
             dgwEquipment.Refresh();
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            EquipmentRepository.PullEquipment();
+            _equipmentRepository.PullEquipment();
             RefreshDataGridView();
         }
 
@@ -146,7 +147,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             string roomType = (string)cmbRoomType.SelectedItem;
             string equipmentType = (string)cmbEquipmentType.SelectedItem;
             
-            RoomRepository.PullFoundRows(tbxSearch.Text, amount, roomType, equipmentType);
+            _roomRepository.PullFoundRows(tbxSearch.Text, amount, roomType, equipmentType);
             RefreshDataGridView();
         }
 

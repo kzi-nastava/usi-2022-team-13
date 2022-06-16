@@ -10,7 +10,7 @@ using HealthCareSystem.Core.Medications.Model;
 
 namespace HealthCareSystem.Core.Medications.Repository
 {
-    class MedicationRepository
+    class MedicationRepository:IMedicationRepository
     {
         public OleDbConnection Connection { get; set; }
         public DataTable Medicine { get; private set; }
@@ -28,22 +28,7 @@ namespace HealthCareSystem.Core.Medications.Repository
                 Console.WriteLine(exception.ToString());
             }
         }
-        public Dictionary<int, DateTime> GetMedicationInstructions(int patientId)
-        {
-            Dictionary<int, DateTime> instructions = new Dictionary<int, DateTime>();
-
-            string query = "select ins.startTime as startTime, ins.timesPerDay as perDay from Receipt as r inner join Instructions as ins on r.id_instructions = ins.id where r.id_patient = " + patientId + "";
-
-            OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
-            OleDbDataReader reader = cmd.ExecuteReader();
-
-            while (reader.Read())
-            {
-                instructions.Add(Convert.ToInt32(reader["perDay"]), (DateTime)reader["startTime"]);
-            }
-
-            return instructions;
-        }
+        
         public int GetMedicationNotificationTime(int patientId)
         {
             string query = "select notificationTime from Patients where id = " + patientId + "";
@@ -101,8 +86,7 @@ namespace HealthCareSystem.Core.Medications.Repository
 
                 while (reader.Read())
                 {
-                    MedicationStatus status;
-                    Enum.TryParse<MedicationStatus>(reader["status"].ToString(), out status);
+                    Enum.TryParse<MedicationStatus>(reader["status"].ToString(), out var status);
 
                     Medication medication = new Medication(Convert.ToInt32(reader["id"]), reader["nameOfMedication"].ToString(), status);
                     if (reader["status"].ToString() == "InProgress")
@@ -159,6 +143,15 @@ namespace HealthCareSystem.Core.Medications.Repository
             string medicationsQuery = "select m.ID, m.nameOfMedication, m.status, r.id_doctor, r.description" +
                 " from medications m left join RejectedMedications r on m.Id = r.id_medication";
             GUIHelpers.FillTable(Medications, medicationsQuery, Connection);
+        }
+
+        public DataTable GetMedicineDatatable()
+        {
+            return Medicine;
+        }
+        public DataTable GetMedicationsDatatable()
+        {
+            return Medications;
         }
         public Medication GetSelectedMedication(string query)
         {

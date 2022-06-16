@@ -17,13 +17,13 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 {
     public partial class StartedExamination : Form
     {
-        private readonly PatientRepository _patientRep;
-        private readonly MedicationRepository _medicationRep;
-        private readonly DoctorRepository _doctorRep;
-        private readonly MedicalRecordRepository _medicalRecordRep;
-        private readonly ReferralLetterRepository _referralLetterRep;
-        private readonly ReceiptRepository _receiptRep;
-        private readonly InstructionRepository _instructionRep;
+        private readonly IPatientRepository _patientRepository;
+        private readonly IMedicationRepository _medicationRepository;
+        private readonly IDoctorRepository _doctorRepository;
+        private readonly IMedicalRecordRepository _medicalRecordRepository;
+        private readonly IReferralLetterRepository _referralLetterRepository;
+        private readonly IReceiptRepository _receiptRepository;
+        private readonly IInstructionRepository _instructionRepository;
         private readonly int _patientId;
         private int _examinationId;
         private string _patientFullName;
@@ -31,27 +31,27 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         public StartedExamination(int examinationId, string patientFullName, string doctorUsername)
         {
             InitializeComponent();
-            _patientRep = new PatientRepository();
-            _doctorRep = new DoctorRepository(doctorUsername, true);
-            _medicationRep = new MedicationRepository();
-            _medicalRecordRep = new MedicalRecordRepository();
-            _referralLetterRep = new ReferralLetterRepository();
-            _receiptRep = new ReceiptRepository();
-            _instructionRep = new InstructionRepository();
+            _patientRepository = new PatientRepository();
+            _doctorRepository = new DoctorRepository(doctorUsername, true);
+            _medicationRepository = new MedicationRepository();
+            _medicalRecordRepository = new MedicalRecordRepository();
+            _referralLetterRepository = new ReferralLetterRepository();
+            _receiptRepository = new ReceiptRepository();
+            _instructionRepository = new InstructionRepository();
 
 
-            _patientId = _patientRep.GetPatientIdByFirstName(patientFullName.Split(' ')[0]);
+            _patientId = _patientRepository.GetPatientIdByFirstName(patientFullName.Split(' ')[0]);
             _patientFullName = patientFullName;
             _examinationId = examinationId;
-            _examiningDoctor = _doctorRep.GetDoctorByUsername();
-            _medicationRep.PullMedicine();
+            _examiningDoctor = _doctorRepository.GetDoctorByUsername();
+            _medicationRepository.PullMedicine();
             FillDataGridView();
         }
 
         private void FillDataGridView()
         {
 
-            dgwMedications.DataSource = _medicationRep.Medicine;
+            dgwMedications.DataSource = _medicationRepository.GetMedicineDatatable();
             DataGridViewSettings();
         }
 
@@ -69,7 +69,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         {
             string firstQuery = "select * from MedicalRecord where id_patient = " + _patientId;
 
-            string[] firstData = _medicalRecordRep.GetMedicalRecord(firstQuery);
+            string[] firstData = _medicalRecordRepository.GetMedicalRecord(firstQuery);
             lbPatientName.Text = "Examining: " + _patientFullName;
             lbHeight.Text = "Height: " + firstData[0];
             lbWeight.Text = "Weight: " + firstData[1];
@@ -82,7 +82,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             cbSpeciality.DropDownStyle = ComboBoxStyle.DropDownList;
 
 
-            BindingList<Doctor> doctors = _doctorRep.GetDoctors();
+            BindingList<Doctor> doctors = _doctorRepository.GetDoctors();
             var filteredBindingList = new BindingList<Doctor>
                 (doctors.Where(doc => doc.FullName != _examiningDoctor.FullName).ToList());
 
@@ -142,7 +142,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 option = 2;
             }
 
-            _referralLetterRep.InsertReferral(referralLetter, option);
+            _referralLetterRepository.InsertReferral(referralLetter, option);
             MessageBox.Show("Successfully created a referral for the patient");
 
         }
@@ -224,22 +224,22 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 MessageBox.Show("Instructions for the receipt can't be empty!");
                 return false;
             }
-            _instructionRep.InsertInstruction(rtbInstructions.Text);
+            _instructionRepository.InsertInstruction(rtbInstructions.Text);
             DateTime currentTime = DateTime.Now;
 
-            _receiptRep.InsertReceipt(_examiningDoctor.ID, _patientId, currentTime);
-            int lastReceiptId = _receiptRep.GetLastReceiptId();
+            _receiptRepository.InsertReceipt(_examiningDoctor.ID, _patientId, currentTime);
+            int lastReceiptId = _receiptRepository.GetLastReceiptId();
 
             foreach (int medicationId in medicationIds)
             {
-                _medicationRep.InsertConnectionOfReceiptAndMedication(lastReceiptId, medicationId);
+                _medicationRepository.InsertConnectionOfReceiptAndMedication(lastReceiptId, medicationId);
             }
             return true;
         }
 
         private bool RejectIfPatientIsAlergic(List<int> medicationIds)
         {
-            List<int> alergicMedicationIds = _medicationRep.GetAlergicMedicationsIds(_patientId);
+            List<int> alergicMedicationIds = _medicationRepository.GetAlergicMedicationsIds(_patientId);
 
             foreach (int medicationId in medicationIds)
             {
@@ -248,7 +248,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                     if (medicationId == alergicMedicationId)
                     {
                         MessageBox.Show(_patientFullName + " is alergic to " +
-                            _medicationRep.GetMedicationNameById(alergicMedicationId) +
+                            _medicationRepository.GetMedicationNameById(alergicMedicationId) +
                             "! Try again.");
                         return false;
                     }
@@ -259,7 +259,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
         private void btnFinish_Click(object sender, EventArgs e)
         {
-            SetUsedDynamicEquipment setUsedDynamicEquipmentForm = new SetUsedDynamicEquipment(_examinationId, _doctorRep.Username);
+            SetUsedDynamicEquipment setUsedDynamicEquipmentForm = new SetUsedDynamicEquipment(_examinationId, _doctorRepository.GetUsername());
             setUsedDynamicEquipmentForm.ShowDialog();
             this.Close();
         }

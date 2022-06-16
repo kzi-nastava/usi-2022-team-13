@@ -9,7 +9,7 @@ using HealthCareSystem.Core.Rooms.HospitalEquipment.TransferHistoryOfEquipment.M
 
 namespace HealthCareSystem.Core.Rooms.Repository
 {
-    class TransferHistoryRepository
+    class TransferHistoryRepository: ITransferHistoryRepository
     {
         public OleDbConnection Connection { get; set; }
 

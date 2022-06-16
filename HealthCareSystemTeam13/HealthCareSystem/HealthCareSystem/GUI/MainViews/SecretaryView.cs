@@ -49,7 +49,7 @@ namespace HealthCareSystem.Core.GUI
 
         private void blockedPatientsButton_Click(object sender, EventArgs e)
         {
-            LoadForm(new BlockedPatientsForm(Username));
+            LoadForm(new BlockedPatientsForm());
         }
 
         private void requestsButton_Click(object sender, EventArgs e)

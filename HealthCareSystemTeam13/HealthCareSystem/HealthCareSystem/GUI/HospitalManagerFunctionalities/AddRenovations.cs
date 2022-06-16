@@ -18,12 +18,12 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
     
     public partial class AddRenovations : Form
     {
-        private RoomRepository RoomRepository;
-        private RenovationRepository RenovationRepository;
+        private IRoomRepository _roomRepository;
+        private IRenovationRepository _renovationRepository;
         public AddRenovations()
         {
-            RenovationRepository = new RenovationRepository();
-            RoomRepository = new RoomRepository();
+            _renovationRepository = new RenovationRepository();
+            _roomRepository = new RoomRepository();
             InitializeComponent();
 
 
@@ -53,7 +53,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             string firstQuery = "select * from Rooms where type <> 'Warehouse' and ID not in (select id_room from Examination where isFinished = false) and " +
                 "ID not in (select id_room from Renovations where dateOfFinish > #" + DateTime.Now.ToString() + "#) and " +
                 "ID not in (select isnull(id_other_room) from Renovations where dateOfFinish > #" + DateTime.Now.ToString() + "#)";
-            List<Room> firstRooms = RoomRepository.GetRooms(firstQuery);
+            List<Room> firstRooms = _roomRepository.GetRooms(firstQuery);
             
             cmbFirstRoom.ValueMember = null;
             cmbFirstRoom.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -70,7 +70,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                 " and ID not in (select id_room from Examination where isFinished = false) and " +
                 "ID not in (select id_room from Renovations where dateOfFinish > #" + DateTime.Now.ToString() + "#) and " +
                 "ID not in (select isnull(id_other_room) from Renovations where dateOfFinish > #" + DateTime.Now.ToString() + "#)";
-                List<Room> secondRooms = RoomRepository.GetRooms(secondQuery);
+                List<Room> secondRooms = _roomRepository.GetRooms(secondQuery);
 
                 cmbSecondRoom.ValueMember = null;
                 cmbSecondRoom.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -186,8 +186,8 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                 TypeOfRenovation type = (TypeOfRenovation)cmbType.SelectedValue;
 
                 Renovation newRenovation = new Renovation(roomId, startingDate, endingDate, secondRoomId, type);
-              
-                RenovationRepository.InsertRenovation(newRenovation);
+
+                _renovationRepository.InsertRenovation(newRenovation);
                 MessageBox.Show("Succesfully added new renovation");
                 this.Hide();
             }

@@ -20,8 +20,8 @@ namespace HealthCareSystem
     {
         public string Username { get; set; }
         public LoginForm AuthForm;
-        private readonly DoctorRepository _doctorRep;
-        private readonly ExaminationRepository _examinationRep;
+        private readonly IDoctorRepository _doctorRepository;
+        private readonly IExaminationRepository _examinationRep;
         public DoctorView(string username, LoginForm authForm)
         {
             Username = username;
@@ -29,9 +29,9 @@ namespace HealthCareSystem
             
             InitializeComponent();
 
-            _doctorRep = new DoctorRepository(username, true);
+            _doctorRepository = new DoctorRepository(username, true);
             _examinationRep = new ExaminationRepository();
-            _examinationRep.PullExaminations(_doctorRep.GetDoctorId());
+            _examinationRep.PullExaminations(_doctorRepository.GetDoctorId());
             FillDataGridView();
 
         }
@@ -39,7 +39,7 @@ namespace HealthCareSystem
         private void FillDataGridView()
         {
 
-            dgwExaminations.DataSource = _examinationRep.Examinations;
+            dgwExaminations.DataSource = _examinationRep.GetExaminations();
             DataGridViewSettings();
         }
 
@@ -99,8 +99,8 @@ namespace HealthCareSystem
 
         public void RefreshDataGridView()
         {
-            _examinationRep.PullExaminations(_doctorRep.GetDoctorId());
-            dgwExaminations.DataSource = _examinationRep.Examinations;
+            _examinationRep.PullExaminations(_doctorRepository.GetDoctorId());
+            dgwExaminations.DataSource = _examinationRep.GetExaminations();
             dgwExaminations.Refresh();
         }
 
@@ -177,14 +177,14 @@ namespace HealthCareSystem
         {
             DateTime date = dtDate.Value;
             _examinationRep.PullExaminationsByDate(date);
-            dgwExaminations.DataSource = _examinationRep.Examinations;
+            dgwExaminations.DataSource = _examinationRep.GetExaminations();
             dgwExaminations.Refresh();
         }
 
         private void btnShowNextThreeDays_Click(object sender, EventArgs e)
         {
             _examinationRep.PullExaminationsThreeDays();
-            dgwExaminations.DataSource = _examinationRep.Examinations;
+            dgwExaminations.DataSource = _examinationRep.GetExaminations();
             dgwExaminations.Refresh();
         }
 

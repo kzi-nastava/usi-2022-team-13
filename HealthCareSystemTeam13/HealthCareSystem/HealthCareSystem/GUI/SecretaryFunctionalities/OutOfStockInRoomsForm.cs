@@ -15,7 +15,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class OutOfStockInRoomsForm : Form
     {
-        EquipmentRepository _equipmentRepository;
+        IEquipmentRepository _equipmentRepository;
         public OutOfStockInRoomsForm()
         {
             _equipmentRepository = new EquipmentRepository();
@@ -26,7 +26,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         }
         private void FillDataGridView()
         {
-            dynamicEquipmentGrid.DataSource = _equipmentRepository.DynamicEquipment;
+            dynamicEquipmentGrid.DataSource = _equipmentRepository.GetDynamicEquipmentDataTable();
             DataGridViewSettings();
         }
         private void DataGridViewSettings()

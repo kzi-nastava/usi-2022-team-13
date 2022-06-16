@@ -16,7 +16,7 @@ using HealthCareSystem.Core.Rooms.HospitalEquipment.Model;
 
 namespace HealthCareSystem.Core.Users.Doctors.Repository
 {
-    class DoctorRepository
+    class DoctorRepository:IDoctorRepository
     {
         public OleDbConnection Connection { get; set; }
 
@@ -30,8 +30,6 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             try
             {
                 Connection = DatabaseConnection.GetConnection();
-
-
             }
             catch (Exception exception)
             {
@@ -49,8 +47,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                DoctorSpeciality speciality;
-                Enum.TryParse<DoctorSpeciality>(reader["speciality"].ToString(), out speciality);
+                Enum.TryParse<DoctorSpeciality>(reader["speciality"].ToString(), out var speciality);
                 doctor = new Doctor(reader["firstName"].ToString(), reader["lastName"].ToString(), Convert.ToInt32(reader["user_id"]), speciality);
 
             }
@@ -85,6 +82,10 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 
+        public string GetUsername()
+        {
+            return Username;
+        }
         public BindingList<Doctor> GetDoctors()
         {
             BindingList<Doctor> doctors = new BindingList<Doctor>();
@@ -123,7 +124,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             return doctors;
         }
 
-        private static void SetDoctorValuesWithRating(List<Doctor> doctors, OleDbDataReader reader)
+        public void SetDoctorValuesWithRating(List<Doctor> doctors, OleDbDataReader reader)
         {
             DoctorSpeciality speciality;
             Enum.TryParse<DoctorSpeciality>(reader["Speciality"].ToString(), out speciality);
@@ -145,6 +146,10 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             return doctorId;
         }
 
+        public void SetUsername(string username)
+        {
+            Username = username;
+        }
         public Doctor GetDoctorByUsername()
         {
             string userId = DatabaseCommander.ExecuteReaderQueries("select id from users where usrnm = '" + Username + "'", Connection)[0];
@@ -161,8 +166,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             return doctor;
 
         }
-
-        private static Doctor GetDoctorFromReader(OleDbDataReader reader)
+        public Doctor GetDoctorFromReader(OleDbDataReader reader)
         {
             Enum.TryParse<DoctorSpeciality>(reader["speciality"].ToString(), out var speciality);
 
@@ -188,12 +192,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             int doctorId = Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries("select id from doctors where user_id = " + Convert.ToInt32(userId) + "", Connection)[0]);
             return doctorId;
 
-
         }
-
-
-
-
 
 
     }

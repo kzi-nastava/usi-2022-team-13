@@ -1,4 +1,5 @@
-﻿using HealthCareSystem.Core.Examinations.Controller;
+﻿using HealthCareSystem.Core.Examinations;
+using HealthCareSystem.Core.Examinations.Controller;
 using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Examinations.Repository;
 using HealthCareSystem.Core.Users.Patients.Repository;
@@ -17,11 +18,12 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     public partial class MedicalRecordView : Form
     {
         public string Username { get; set; }
-        private readonly PatientRepository _patientRepository;
-        private readonly ExaminationRepository _examinationRepository;
+        private readonly IExaminationRepository _examinationRepository;
+        private readonly IPatientRepository _patientRepository;
         private int _patientId;
         private List<DoctorAnamnesis> _anamnesises;
-        private readonly AnamnesisRepository _anamnsesisRepository;
+        private readonly IAnamnesisRepository _anamnsesisRepository;
+        private IExaminationSorter _examinationSorter;
         
         public MedicalRecordView(string username)
         {
@@ -29,6 +31,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             _patientRepository = new PatientRepository(Username);
             _examinationRepository = new ExaminationRepository();
             _anamnsesisRepository = new AnamnesisRepository();
+            _examinationSorter = new ExaminationSorter();
             InitializeComponent();
         }
 
@@ -55,7 +58,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void SetDgwExaminations()
         {
             _examinationRepository.PullFinishedExaminations(_patientRepository.GetPatientId());
-            dgwExaminations.DataSource = _examinationRepository.FinishedExaminations;
+            dgwExaminations.DataSource = _examinationRepository.GetFinishedExaminations();
             GUIHelpers.DataGridViewSettings(dgwExaminations);
             dgwExaminations.Font = new Font("Lucida Bright", 10);
 
@@ -75,8 +78,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void SetListBoxDiseases()
         {
             
-            int medicalRecordId = Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries("select id from MedicalRecord where id_patient = " + _patientId + "", _patientRepository.Connection)[0]);
-            List<string> diseases = DatabaseCommander.ExecuteReaderQueries("select nameOfDisease from DiseaseHistory where id_medicalRecord = " + medicalRecordId + "", _patientRepository.Connection);
+            int medicalRecordId = Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries("select id from MedicalRecord where id_patient = " + _patientId + "", DatabaseConnection.GetConnection())[0]);
+            List<string> diseases = DatabaseCommander.ExecuteReaderQueries("select nameOfDisease from DiseaseHistory where id_medicalRecord = " + medicalRecordId + "", DatabaseConnection.GetConnection());
             lbDiseases.DataSource = diseases;
 
         }
@@ -103,7 +106,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnSortByDoctor_Click(object sender, EventArgs e)
         {
-            _anamnesises = ExaminationSorter.SortAnamnesises(_anamnesises, 1);
+            _anamnesises = _examinationSorter.SortAnamnesises(_anamnesises, 1);
             dgwAnamnesis.DataSource = _anamnesises;
             dgwAnamnesis.Refresh();
 
@@ -111,14 +114,14 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void btnSortBySpeciality_Click(object sender, EventArgs e)
         {
-            _anamnesises = ExaminationSorter.SortAnamnesises(_anamnesises, 2);
+            _anamnesises = _examinationSorter.SortAnamnesises(_anamnesises, 2);
             dgwAnamnesis.DataSource = _anamnesises;
             dgwAnamnesis.Refresh();
         }
 
         private void btnSortByDate_Click(object sender, EventArgs e)
         {
-            _anamnesises = ExaminationSorter.SortAnamnesises(_anamnesises);
+            _anamnesises = _examinationSorter.SortAnamnesises(_anamnesises);
             dgwAnamnesis.DataSource = _anamnesises;
             dgwAnamnesis.Refresh();
 

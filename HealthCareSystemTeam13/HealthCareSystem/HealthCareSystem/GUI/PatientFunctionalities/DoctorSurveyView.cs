@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Surveys;
 using HealthCareSystem.Core.Surveys.Repository;
 
 namespace HealthCareSystem.Core.GUI.PatientFunctionalities
@@ -16,7 +17,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     {
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
-        private readonly SurveyRepository _surveyRepository;
+        private readonly ISurveyRepository _surveyRepository;
         public DoctorSurveyView(int patientId, int doctorId)
         {
             this.PatientId = patientId;

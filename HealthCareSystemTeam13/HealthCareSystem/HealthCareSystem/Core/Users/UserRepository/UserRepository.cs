@@ -8,7 +8,7 @@ using HealthCareSystem.Core.Users.Model;
 
 namespace HealthCareSystem.Core.Users
 {
-    class UserRepository
+    class UserRepository:IUserRepository
     {
         public OleDbConnection Connection { get; set; }
 

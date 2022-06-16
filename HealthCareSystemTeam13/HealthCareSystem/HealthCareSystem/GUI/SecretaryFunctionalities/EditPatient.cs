@@ -14,7 +14,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class EditPatient : Form
     {
-        PatientRepository _patientRepository;
+        private readonly IPatientRepository _patientRepository;
         public EditPatient()
         {
             InitializeComponent();

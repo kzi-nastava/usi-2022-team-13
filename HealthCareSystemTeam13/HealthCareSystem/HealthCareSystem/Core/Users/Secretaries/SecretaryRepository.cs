@@ -18,7 +18,7 @@ using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
 
 namespace HealthCareSystem.Core.Users.Secretaries.Repository
 {
-    class SecretaryRepository
+    class SecretaryRepository:ISecretaryRepository
     {
         public DataTable Patients { get; set; }
         public OleDbConnection Connection { get; set; }
@@ -36,9 +36,9 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
             }
         }
 
-        public List<string> GetSecretaryId(string userID)
+        public List<string> GetSecretaryId(string userId)
         {
-            var query = "SELECT id FROM Secretaries WHERE user_id = " + userID + "";
+            var query = "SELECT id FROM Secretaries WHERE user_id = " + userId + "";
             return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 

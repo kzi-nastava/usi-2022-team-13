@@ -15,11 +15,11 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
 {
     public partial class HospitalSurveys : Form
     {
-        private SurveyRepository SurveyRepository;
+        private readonly ISurveyRepository _surveyRepository;
         public HospitalSurveys()
         {    
-            SurveyRepository = new SurveyRepository();
-            SurveyRepository.PullHospitalSurveys();
+            _surveyRepository = new SurveyRepository();
+            _surveyRepository.PullHospitalSurveys();
             InitializeComponent();
             FillDataGridView();
             FillGradeLabels();
@@ -32,7 +32,7 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
 
         private void FillGradeLabels()
         {
-            List<HospitalSurvey> hospitalSurveys = SurveyRepository.GetHospitalSurveys();
+            List<HospitalSurvey> hospitalSurveys = _surveyRepository.GetHospitalSurveys();
             int[] numberOfHygeneGrades = SurveyService.GetNumberOfHospitalGrades(hospitalSurveys, true);
             int[] numberOfQualityGrades = SurveyService.GetNumberOfHospitalGrades(hospitalSurveys, false);
             Label[] hygene = { lblHygene1, lblHygene2, lblHygene3, lblHygene4, lblHygene5 };
@@ -66,14 +66,14 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
 
         public void RefreshDataGridView()
         {
-            SurveyRepository.PullHospitalSurveys();
-            dgwHospitalSurveys.DataSource = SurveyRepository.HospitalSurveys;
+            _surveyRepository.PullHospitalSurveys();
+            dgwHospitalSurveys.DataSource = _surveyRepository.GetHospitalsSurveys();
             dgwHospitalSurveys.Refresh();
         }
 
         private void FillDataGridView()
         {
-            dgwHospitalSurveys.DataSource = SurveyRepository.HospitalSurveys;
+            dgwHospitalSurveys.DataSource = _surveyRepository.GetHospitalsSurveys();
             DataGridViewSettings();
         }
 

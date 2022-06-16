@@ -18,7 +18,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         int PatiendId;
         DoctorSpeciality Speciality;
         int Duration;
-        ExaminationRepository _examinationRepository;
+        IExaminationRepository _examinationRepository;
 
         public UrgentExaminations(int patientID, DoctorSpeciality doctorSpeciality, int duration)
         {
@@ -33,7 +33,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 
         private void FillDataGridView()
         {
-            examinationsDataGrid.DataSource = _examinationRepository.ClosestExaminations;
+            examinationsDataGrid.DataSource = _examinationRepository.GetClosestExaminations();
             DataGridViewSettings();
         }
 

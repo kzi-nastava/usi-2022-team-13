@@ -18,8 +18,8 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
     public partial class SetUsedDynamicEquipment : Form
     {
         private readonly DoctorRepository _doctorRep;
-        private readonly RoomRepository _roomRep;
-        private readonly ExaminationRepository _examinationRep;
+        private readonly IRoomRepository _roomRepository;
+        private readonly IExaminationRepository _examinationRep;
 
         private int _examinationId;
         private int _roomId;
@@ -29,7 +29,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
             _doctorRep = new DoctorRepository(doctorUsername, true);
             _examinationRep = new ExaminationRepository();
-            _roomRep = new RoomRepository();
+            _roomRepository = new RoomRepository();
             _examinationId = examinationId;
             _roomId = _examinationRep.GetRoomIdFromExaminationId(examinationId);
             PullEquipment();
@@ -39,7 +39,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         {
             
             lbDynamicEquipment.ValueMember = null;
-            List<Equipment> equipment = _roomRep.GetEquipmentFromRoomId(_roomId);
+            List<Equipment> equipment = _roomRepository.GetEquipmentFromRoomId(_roomId);
 
             lbDynamicEquipment.DisplayMember = "NameAndAmount";
             lbDynamicEquipment.DataSource = equipment;
@@ -70,7 +70,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 return;
             }
 
-            _roomRep.UpdateAmountOfEquipmentInTheRoom(amount, _roomId, selectedEquipment.ID);
+            _roomRepository.UpdateAmountOfEquipmentInTheRoom(amount, _roomId, selectedEquipment.ID);
             PullEquipment();
             MessageBox.Show("Successfully thrown out equipment that was used in the examination.");
         }

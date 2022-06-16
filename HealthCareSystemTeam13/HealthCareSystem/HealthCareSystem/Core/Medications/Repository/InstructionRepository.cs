@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HealthCareSystem.Core.Medications.Repository
 {
-    class InstructionRepository
+    class InstructionRepository: IInstructionRepository
     {
         public OleDbConnection Connection { get; set; }
 
@@ -40,6 +40,22 @@ namespace HealthCareSystem.Core.Medications.Repository
                 cmd.ExecuteNonQuery();
             }
 
+        }
+        public Dictionary<int, DateTime> GetMedicationInstructions(int patientId)
+        {
+            Dictionary<int, DateTime> instructions = new Dictionary<int, DateTime>();
+
+            string query = "select ins.startTime as startTime, ins.timesPerDay as perDay from Receipt as r inner join Instructions as ins on r.id_instructions = ins.id where r.id_patient = " + patientId + "";
+
+            OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
+            OleDbDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                instructions.Add(Convert.ToInt32(reader["perDay"]), (DateTime)reader["startTime"]);
+            }
+
+            return instructions;
         }
 
         public int GetLastCreatedInstructionId()

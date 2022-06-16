@@ -23,12 +23,12 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace HealthCareSystem.Core.Rooms.Repository
 {
-    class RoomRepository
+    class RoomRepository : IRoomRepository
     {
         public OleDbConnection Connection { get; set; }
         public DataTable Rooms { get; set; }
         public DataTable Equipment { get; set; }
-        private ExaminationRepository _examinationRepository;
+        private IExaminationRepository _examinationRepository;
 
 
         public RoomRepository(int indicator = 1)
@@ -71,6 +71,16 @@ namespace HealthCareSystem.Core.Rooms.Repository
             }
 
             return equipment;
+        }
+
+        public DataTable GetRoomsDataTable()
+        {
+            return Rooms;
+        }
+
+        public DataTable GetEquipmentDataTable()
+        {
+            return Equipment;
         }
 
         public void UpdateAmountOfEquipmentInTheRoom(int amount, int roomId, int equipmentId)
@@ -206,8 +216,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
                 while (reader.Read())
                 {
-                    TypeOfRoom typeOfRoom;
-                    Enum.TryParse<TypeOfRoom>(reader["type"].ToString(), out typeOfRoom);
+                    Enum.TryParse<TypeOfRoom>(reader["type"].ToString(), out var typeOfRoom);
 
                     rooms.Add(new Room(typeOfRoom, Convert.ToInt32(reader["id"])));
                 }
@@ -290,7 +299,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         }
 
 
-        private void SetRoomsToAvailable(Dictionary<int, bool> availableRooms, List<Room> rooms)
+        public void SetRoomsToAvailable(Dictionary<int, bool> availableRooms, List<Room> rooms)
         {
             for (int i = 0; i < rooms.Count(); i++)
             {
@@ -300,7 +309,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         }
 
 
-        private static void EliminateUnavailableRooms(DateTime examinationDateTime, List<Examination> examinations, Dictionary<int, bool> availableRooms, List<Room> rooms)
+        public void EliminateUnavailableRooms(DateTime examinationDateTime, List<Examination> examinations, Dictionary<int, bool> availableRooms, List<Room> rooms)
         {
             for (int i = 0; i < examinations.Count(); i++)
             {
@@ -314,8 +323,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
                 }
             }
         }
-
-
 
         public List<string> GetOperationRooms()
         {
@@ -363,11 +370,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public List<RoomHasEquipment> GetEquipmentInRoom(string query)
         {
             List<RoomHasEquipment> equipmentInRoom = new List<RoomHasEquipment>();
-
-
             try
             {
-                if (Connection.State == ConnectionState.Closed) Connection.Open();
 
                 OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -381,7 +385,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
 
             return equipmentInRoom;
         }

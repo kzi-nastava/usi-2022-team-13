@@ -19,8 +19,8 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     partial class AddExamination : Form
     {
-        private RoomRepository _roomRepository;
-        private ExaminationRepository _examinationRepository;
+        private IRoomRepository _roomRepository;
+        private IExaminationRepository _examinationRepository;
         private DoctorRepository _doctorRepository;
         private ReferralLetter ChosenReferralLetter;
         public AddExamination(ReferralLetter referralLetter)

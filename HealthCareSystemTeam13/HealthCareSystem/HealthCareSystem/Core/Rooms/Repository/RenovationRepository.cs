@@ -9,7 +9,7 @@ using HealthCareSystem.Core.Rooms.Renovations.Model;
 
 namespace HealthCareSystem.Core.Rooms.Repository
 {
-    class RenovationRepository
+    class RenovationRepository: IRenovationRepository
     {
         public OleDbConnection Connection { get; set; }
         public DataTable Renovations { get; private set; }
@@ -31,6 +31,11 @@ namespace HealthCareSystem.Core.Rooms.Repository
             Renovations = new DataTable();
             string renovationsQuery = "select * from renovations";
             GUIHelpers.FillTable(Renovations, renovationsQuery, Connection);
+        }
+
+        public DataTable GetRenovationsDataTable()
+        {
+            return Renovations;
         }
 
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HealthCareSystem.Core.Surveys.Repository
 {
-    class SurveyRepository
+    class SurveyRepository:ISurveyRepository
     {
         public DataTable HospitalSurveys { get; set; }
         public DataTable DoctorSurveys { get; set; }
@@ -25,6 +25,16 @@ namespace HealthCareSystem.Core.Surveys.Repository
                 Console.WriteLine(exception.ToString());
             }
 
+        }
+
+
+        public DataTable GetHospitalsSurveys()
+        {
+            return DoctorSurveys;
+        }
+        public DataTable GetDoctorsSurveys()
+        {
+            return DoctorSurveys;
         }
 
         public void PullHospitalSurveys()
@@ -90,7 +100,7 @@ namespace HealthCareSystem.Core.Surveys.Repository
             return doctorSurveys;
         }
 
-        internal void AddDoctorSurvey(int doctorId, int patientId, int rating, int quality, bool wouldReccomend, string comment)
+        public void AddDoctorSurvey(int doctorId, int patientId, int rating, int quality, bool wouldReccomend, string comment)
         {
             string query = "insert into DoctorSurveys(id_doctor, id_patient, doctorGrade, quality, wouldRecommend, comment) values(" + doctorId + ", " + patientId + ", " + rating + ", " + quality + ", " + wouldReccomend + ", '" + comment + "')";
 

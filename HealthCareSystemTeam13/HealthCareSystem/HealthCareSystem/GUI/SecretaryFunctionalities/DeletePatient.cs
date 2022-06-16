@@ -15,7 +15,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class DeletePatient : Form
     {
-        PatientRepository _patientRepository;
+        private readonly IPatientRepository _patientRepository;
         public DeletePatient()
         {
             InitializeComponent();
