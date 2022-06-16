@@ -18,7 +18,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
     class ExaminationRepository
     {
         public OleDbConnection Connection { get; set; }
-        public RoomRepository RoomRep { get; set; }
+        public IRoomRepository _roomRepository { get; set; }
         public DoctorRepository DoctorRep { get; set; }
         public DataTable Examinations { get; private set; }
         public DataTable RequestsPatients { get; private set; }
@@ -38,7 +38,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 Console.WriteLine(exception.ToString());
             }
 
-            RoomRep = new RoomRepository();
+            _roomRepository = new RoomRepository();
             DoctorRep = new DoctorRepository();
             _patientRequestRepository = new PatientRequestRepository();
         }
@@ -502,7 +502,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 while (startDate.CompareTo(endDate) <= 0)
                 {
 
-                    int roomId = RoomRep.GetAvailableRoomId(startDate, takenExaminations);
+                    int roomId = _roomRepository.GetAvailableRoomId(startDate, takenExaminations);
                     if (roomId != 0)
                     {
                         if (DoctorRep.IsDoctorAvailableAtTime(doctorId, startDate, takenExaminations))
@@ -528,7 +528,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 int totalFoundExaminations = 0;
                 while (startDate.CompareTo(endDate) <= 0)
                 {
-                    var roomId = RoomRep.GetAvailableRoomId(startDate, takenExaminations);
+                    var roomId = _roomRepository.GetAvailableRoomId(startDate, takenExaminations);
                     if (roomId != 0)
                     {
                         Doctor availableDoctor = DoctorRep.GetAvailableDoctor(startDate, takenExaminations);
@@ -558,7 +558,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
                 while (startDate.CompareTo(endDate) <= 0)
                 {
-                    var roomId = RoomRep.GetAvailableRoomId(startDate, takenExaminations);
+                    var roomId = _roomRepository.GetAvailableRoomId(startDate, takenExaminations);
                     if (roomId != 0)
                     {
                         if (DoctorRep.IsDoctorAvailableAtTime(doctorId, startDate, takenExaminations))
@@ -587,7 +587,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
                 while (startDate.CompareTo(endDate) <= 0)
                 {
-                    var roomId = RoomRep.GetAvailableRoomId(startDate, takenExaminations);
+                    var roomId = _roomRepository.GetAvailableRoomId(startDate, takenExaminations);
                     if (roomId != 0)
                     {
                         Doctor availableDoctor = DoctorRep.GetAvailableDoctor(startDate, takenExaminations);

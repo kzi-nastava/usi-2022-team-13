@@ -19,7 +19,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
     {
         private int PatientID;
         ExaminationRepository _examinationRepository;
-        RoomRepository _roomRepository;
+        IRoomRepository _roomRepository;
         public ChooseSpeciality(int patientID)
         {
             InitializeComponent();

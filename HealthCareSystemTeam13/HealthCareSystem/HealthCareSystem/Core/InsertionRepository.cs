@@ -26,9 +26,9 @@ namespace HealthCareSystem.Core.Scripts.Repository
     class InsertionRepository
     {
         private static OleDbConnection _connection;
-        private readonly RenovationRepository _renovationRepository;
-        private readonly RoomRepository _roomRepository;
-        private readonly TransferHistoryRepository _transferHistoryRepository;
+        private readonly IRenovationRepository _renovationRepository;
+        private readonly IRoomRepository _roomRepository;
+        private readonly ITransferHistoryRepository _transferHistoryRepository;
 
         public InsertionRepository()
         {

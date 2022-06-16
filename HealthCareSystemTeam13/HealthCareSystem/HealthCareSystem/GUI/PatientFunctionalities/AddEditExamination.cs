@@ -31,7 +31,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         public bool IsAddChoosen { get; set; }
         private readonly PatientRepository _patientRepository;
         private readonly DoctorRepository _doctorRepository;
-        private readonly RoomRepository _roomRepository;
+        private readonly IRoomRepository _roomRepository;
         private readonly ExaminationRepository _examinationRepository;
         private readonly string _patientUsername;
         private readonly int _validDate;

@@ -16,7 +16,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class OutOfStockForm : Form
     {
-        private readonly EquipmentRepository _equipmentRepository;
+        private readonly IEquipmentRepository _equipmentRepository;
         private readonly IUserRepository _userRepository;
         private readonly SecretaryRepository _secretaryRepository;
         string Username;
@@ -37,7 +37,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         }
         private void FillDataGridView()
         {
-            requestsDataGrid.DataSource = _equipmentRepository.EquipmentInWarehouse;
+            requestsDataGrid.DataSource = _equipmentRepository.GetEquipmentInWarehouseDataTable();
             DataGridViewSettings();
         }
         private void DataGridViewSettings()

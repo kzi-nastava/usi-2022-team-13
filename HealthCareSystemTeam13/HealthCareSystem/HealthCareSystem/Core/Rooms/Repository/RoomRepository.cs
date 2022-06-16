@@ -23,7 +23,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace HealthCareSystem.Core.Rooms.Repository
 {
-    class RoomRepository
+    class RoomRepository : IRoomRepository
     {
         public OleDbConnection Connection { get; set; }
         public DataTable Rooms { get; set; }
@@ -71,6 +71,16 @@ namespace HealthCareSystem.Core.Rooms.Repository
             }
 
             return equipment;
+        }
+
+        public DataTable GetRoomsDataTable()
+        {
+            return Rooms;
+        }
+
+        public DataTable GetEquipmentDataTable()
+        {
+            return Equipment;
         }
 
         public void UpdateAmountOfEquipmentInTheRoom(int amount, int roomId, int equipmentId)
@@ -289,7 +299,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         }
 
 
-        private void SetRoomsToAvailable(Dictionary<int, bool> availableRooms, List<Room> rooms)
+        public void SetRoomsToAvailable(Dictionary<int, bool> availableRooms, List<Room> rooms)
         {
             for (int i = 0; i < rooms.Count(); i++)
             {
@@ -299,7 +309,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         }
 
 
-        private static void EliminateUnavailableRooms(DateTime examinationDateTime, List<Examination> examinations, Dictionary<int, bool> availableRooms, List<Room> rooms)
+        public void EliminateUnavailableRooms(DateTime examinationDateTime, List<Examination> examinations, Dictionary<int, bool> availableRooms, List<Room> rooms)
         {
             for (int i = 0; i < examinations.Count(); i++)
             {

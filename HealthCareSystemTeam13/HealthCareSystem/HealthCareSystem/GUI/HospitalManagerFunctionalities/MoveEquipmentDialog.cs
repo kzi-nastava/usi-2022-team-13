@@ -29,8 +29,8 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         public DateTime TransferDate { get; set; }
 
-        private RoomRepository RoomRepository;
-        private TransferHistoryRepository TransferHistoryRep;
+        private IRoomRepository _roomRepository;
+        private ITransferHistoryRepository _transferHistoryRepository;
 
         public MoveEquipmentDialog(int roomId, TypeOfRoom roomType, int amount, int equipmentId, string equipmentName)
         {
@@ -40,8 +40,8 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             this.EquipmentId = equipmentId;
             this.EquipmentName = equipmentName;
 
-            TransferHistoryRep = new TransferHistoryRepository();
-            RoomRepository = new RoomRepository();
+            _transferHistoryRepository = new TransferHistoryRepository();
+            _roomRepository = new RoomRepository();
 
             InitializeComponent();
             FillDestinationComboBox();
@@ -56,7 +56,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
             //From full amount of equipment we subtract amount of those transfers from that room that haven't been realised yet
             string query = "select * from EquipmentTransferHistory where id_original_room = " + OriginRoomId + " and id_equipment = " + EquipmentId + " and isExecuted = false";
-            List<TransferHistoryOfEquipment> transferHistory = TransferHistoryRep.GetTransferHistory(query);
+            List<TransferHistoryOfEquipment> transferHistory = _transferHistoryRepository.GetTransferHistory(query);
    
             TrueAmount = GetTrueAmount(transferHistory);
 
@@ -78,7 +78,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         {
             //query selects every room that is not the origin of equipment
             string query = "select * from Rooms where ID <> " + OriginRoomId;
-            List<Room> rooms = RoomRepository.GetRooms(query);
+            List<Room> rooms = _roomRepository.GetRooms(query);
 
             cmbDestination.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbDestination.DataSource = rooms;
@@ -123,7 +123,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             {
                 int amountForTransfer = (int)nudAmount.Value;
                 TransferHistoryOfEquipment newTransfer = new TransferHistoryOfEquipment(OriginRoomId, DestinationRoomId,TransferDate, false, amountForTransfer, EquipmentId);
-                TransferHistoryRep.InsertTransferHistoryOfEquipment(newTransfer);
+                _transferHistoryRepository.InsertTransferHistoryOfEquipment(newTransfer);
                 MessageBox.Show("Succesfully added new tranfer for date: " + TransferDate.ToString());
                 this.Hide();
             }

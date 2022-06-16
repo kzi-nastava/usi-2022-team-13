@@ -8,14 +8,14 @@ using HealthCareSystem.Core.Rooms.HospitalEquipment.RoomHasEquipment.Model;
 
 namespace HealthCareSystem.Core.Rooms.Repository
 {
-    public class EquipmentRepository
+    public class EquipmentRepository : IEquipmentRepository
     {
         public OleDbConnection Connection { get; set; }
         public DataTable EquipmentInWarehouse { get; private set; }
         public DataTable DynamicEquipment { get; private set; }
         public DataTable TransferDynamicEquipment { get; private set; }
         public DataTable Equipment { get; private set; }
-        private readonly RoomRepository _roomRepository;
+        private readonly IRoomRepository _roomRepository;
 
         public EquipmentRepository()
         {
@@ -31,6 +31,26 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
             _roomRepository = new RoomRepository();
         }
+
+        public DataTable GetEquipmentDataTable() {
+            return Equipment;
+        }
+
+        public DataTable GetEquipmentInWarehouseDataTable()
+        {
+            return EquipmentInWarehouse;
+        }
+
+        public DataTable GetDynamicEquipmentDataTable()
+        {
+            return DynamicEquipment;
+        }
+
+        public DataTable GetTransferDynamicEquipmentDataTable()
+        {
+            return TransferDynamicEquipment;
+        }
+
 
         public void PullEquipmentInWarehouse()
         {

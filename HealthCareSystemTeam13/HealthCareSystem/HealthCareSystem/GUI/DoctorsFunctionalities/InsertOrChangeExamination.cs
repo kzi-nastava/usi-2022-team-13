@@ -28,7 +28,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         public bool IsAddChoosen { get; set; }
         private PatientRepository _patientRep;
         private DoctorRepository _doctorRep;
-        private RoomRepository _roomRep;
+        private IRoomRepository _roomRepository;
         private ExaminationRepository _examinationRep;
         private Doctor _doctorEntity;
         public string DoctorUsername;
@@ -46,7 +46,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             _doctorRep.Username = DoctorUsername;
             _doctorEntity = _doctorRep.GetDoctorByUsername();
 
-            _roomRep = new RoomRepository();
+            _roomRepository = new RoomRepository();
             _examinationRep = new ExaminationRepository();
 
             InitializeComponent();
@@ -173,7 +173,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 return false;
 
             }
-            else if (!_roomRep.IsRoomAvailable(Convert.ToInt32(tbRoomId.Text), GetMergedDateTime(ExaminationDate, time),
+            else if (!_roomRepository.IsRoomAvailable(Convert.ToInt32(tbRoomId.Text), GetMergedDateTime(ExaminationDate, time),
                 _examinationRep.GetAllOtherExaminations(ExaminationId)))
             {
 

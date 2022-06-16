@@ -88,6 +88,7 @@
     <Compile Include="Core\Rooms\HospitalEquipment\TransferHistoryOfEquipment.cs" />
     <Compile Include="Core\Rooms\Renovation.cs" />
     <Compile Include="Core\Rooms\Repository\EquipmentRepository.cs" />
+    <Compile Include="Core\Rooms\Repository\IEquipmentRepository.cs" />
     <Compile Include="Core\Rooms\Repository\RenovationRepository.cs" />
     <Compile Include="Core\Rooms\Repository\TransferHistoryRepository.cs" />
     <Compile Include="Core\Rooms\Room.cs" />

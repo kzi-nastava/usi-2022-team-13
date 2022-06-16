@@ -15,7 +15,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     partial class TransferForm : Form
     {
-        EquipmentRepository _equipmentRepository;
+        IEquipmentRepository _equipmentRepository;
         RoomHasEquipment OutOfStock;
         public TransferForm(RoomHasEquipment roomHasEquipment)
         {
@@ -31,7 +31,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         }
         private void FillDataGridView()
         {
-            equipmentDataGrid.DataSource = _equipmentRepository.TransferDynamicEquipment;
+            equipmentDataGrid.DataSource = _equipmentRepository.GetTransferDynamicEquipmentDataTable();
             DataGridViewSettings();
         }
         private void DataGridViewSettings()
