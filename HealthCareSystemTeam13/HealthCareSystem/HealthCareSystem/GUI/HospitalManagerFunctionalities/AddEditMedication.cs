@@ -17,7 +17,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
     public partial class AddEditMedication : Form
     {
         public int MedicationId { get; set; }
-        private IngredientsRepository IngredientRep;
+        private readonly IIngredientRepository _ingredientRepository;
         private MedicationRepository MedicationRep;
         private string MedicationName;
 
@@ -28,7 +28,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             MedicationId = medicationId;
             IsAddChosen = isAddChosen;
             MedicationRep = new MedicationRepository();
-            IngredientRep = new IngredientsRepository();
+            _ingredientRepository = new IngredientsRepository();
             InitializeComponent();
             FillCheckBoxList();
 
@@ -40,7 +40,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
 
         private void FillCheckBoxList()
         {
-            List<Ingredient> ingredients = IngredientRep.GetIngredients("select * from ingredients");
+            List<Ingredient> ingredients = _ingredientRepository.GetIngredients("select * from ingredients");
           
             foreach(Ingredient ingredient in ingredients)
             {
@@ -54,8 +54,8 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             Medication medication = MedicationRep.GetSelectedMedication(query);
 
 
-            List<Ingredient> allIngredients = IngredientRep.GetIngredients("select * from ingredients");
-            List<Ingredient> ingredientsInMedication = IngredientRep.GetIngredients("select * from ingredients" +
+            List<Ingredient> allIngredients = _ingredientRepository.GetIngredients("select * from ingredients");
+            List<Ingredient> ingredientsInMedication = _ingredientRepository.GetIngredients("select * from ingredients" +
                 " where id in (select id_ingredient from MedicationContainsIngredient where id_medication=" + MedicationId + ")");
             
 

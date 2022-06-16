@@ -28,7 +28,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public OleDbConnection Connection { get; set; }
         public DataTable Rooms { get; set; }
         public DataTable Equipment { get; set; }
-        private ExaminationRepository _examinationRepository;
+        private IExaminationRepository _examinationRepository;
 
 
         public RoomRepository(int indicator = 1)

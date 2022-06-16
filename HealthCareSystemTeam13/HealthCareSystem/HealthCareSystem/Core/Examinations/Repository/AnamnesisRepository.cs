@@ -8,7 +8,7 @@ using HealthCareSystem.Core.Examinations.Model;
 
 namespace HealthCareSystem.Core.Examinations.Repository
 {
-    class AnamnesisRepository
+    class AnamnesisRepository: IAnamnesisRepository
     {
         public OleDbConnection Connection { get; set; }
         public AnamnesisRepository()
@@ -24,7 +24,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
         }
 
-        internal List<DoctorAnamnesis> GetAnamnesises(List<Examination> examinations)
+        public List<DoctorAnamnesis> GetAnamnesises(List<Examination> examinations)
         {
             List<DoctorAnamnesis> anamnesises = new List<DoctorAnamnesis>();
 
@@ -49,7 +49,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
             return filteredAnamnesises;
         }
 
-        private static bool IsKeywordInAnamnesis(string keyword, DoctorAnamnesis anamnesis)
+        public bool IsKeywordInAnamnesis(string keyword, DoctorAnamnesis anamnesis)
         {
             return anamnesis.Notice.ToLower().Contains(keyword.ToLower()) || anamnesis.Conclusions.ToLower().Contains(keyword.ToLower());
         }
@@ -72,7 +72,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
             return anamnesis;
         }
 
-        private static DoctorAnamnesis SetDoctorAnamnesisValues(OleDbDataReader reader)
+        public DoctorAnamnesis SetDoctorAnamnesisValues(OleDbDataReader reader)
         {
             return new DoctorAnamnesis(Convert.ToInt32(
                                         reader["ExaminationId"]),
@@ -100,7 +100,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
             return anamnesis;
         }
 
-        private static Anamnesis SetAnamnesisValues(OleDbDataReader reader)
+        public Anamnesis SetAnamnesisValues(OleDbDataReader reader)
         {
             return new Anamnesis(Convert.ToInt32(reader["id_examination"]),
                                             reader["notice"].ToString(),

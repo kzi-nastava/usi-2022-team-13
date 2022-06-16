@@ -15,8 +15,8 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class ExaminationRequests : Form
     {
-        ExaminationRepository _examinationRepository;
-        PatientRequestRepository _patientRequestRepository;
+        IExaminationRepository _examinationRepository;
+        private readonly IPatientRequestRepository _patientRequestRepository;
         public ExaminationRequests()
         {
             _examinationRepository = new ExaminationRepository();
@@ -28,7 +28,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 
         private void FillDataGridView()
         {
-            requestsDataGrid.DataSource = _examinationRepository.RequestsPatients;
+            requestsDataGrid.DataSource = _examinationRepository.GetRequestsPatients();
             DataGridViewSettings();
         }
         private void DataGridViewSettings()

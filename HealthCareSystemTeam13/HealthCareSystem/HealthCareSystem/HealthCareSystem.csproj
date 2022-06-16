@@ -69,6 +69,10 @@
     <Compile Include="Core\Examinations\IExaminationSorter.cs" />
     <Compile Include="Core\Examinations\Repository\ExaminationChangesRepository.cs" />
     <Compile Include="Core\Examinations\Repository\ExaminationEditRequestRepository.cs" />
+    <Compile Include="Core\Examinations\Repository\IAnamnesisRepository.cs" />
+    <Compile Include="Core\Examinations\Repository\IExaminationChangesRepository.cs" />
+    <Compile Include="Core\Examinations\Repository\IExaminationEditRequestRepository.cs" />
+    <Compile Include="Core\Examinations\Repository\IExaminationRepository.cs" />
     <Compile Include="Core\LoginAuthentication.cs" />
     <Compile Include="Core\DatabaseCommander.cs" />
     <Compile Include="Core\Examinations\ExaminationSorter.cs" />
@@ -79,6 +83,8 @@
     <Compile Include="Core\Examinations\Repository\ExaminationRepository.cs" />
     <Compile Include="Core\Medications\Model\Ingredient.cs" />
     <Compile Include="Core\Medications\Model\Instruction.cs" />
+    <Compile Include="Core\Medications\Repository\IIngredientRepository.cs" />
+    <Compile Include="Core\Medications\Repository\IInstructionRepository.cs" />
     <Compile Include="Core\Medications\Repository\IngredientsRepository.cs" />
     <Compile Include="Core\Medications\Repository\InstructionRepository.cs" />
     <Compile Include="Core\Medications\Repository\MedicationRepository.cs" />
@@ -106,6 +112,10 @@
     <Compile Include="Core\Users\Doctors\Model\DaysOffRequest.cs" />
     <Compile Include="Core\Users\Doctors\Repository\ReferralLetterRepository.cs" />
     <Compile Include="Core\Users\HospitalManagers\HospitalManager.cs" />
+    <Compile Include="Core\Users\Patients\Repository\IMedicalRecordRepository.cs" />
+    <Compile Include="Core\Users\Patients\Repository\IPatientRepository.cs" />
+    <Compile Include="Core\Users\Patients\Repository\IPatientRequestRepository.cs" />
+    <Compile Include="Core\Users\Secretaries\ISecretaryRepository.cs" />
     <Compile Include="Core\Users\UserRepository\IUserRepository.cs" />
     <Compile Include="Core\Users\Patients\Repository\MedicalRecordRepository.cs" />
     <Compile Include="Core\Users\Patients\Repository\PatientRepository.cs" />

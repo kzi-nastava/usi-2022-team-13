@@ -19,7 +19,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
     {
         readonly MedicalRecordRepository _medicalRecordRepository;
         readonly IUserRepository _userRepository;
-        readonly PatientRepository _patientRepository;
+        private readonly IPatientRepository _patientRepository;
         public AddPatient()
         {
             InitializeComponent();

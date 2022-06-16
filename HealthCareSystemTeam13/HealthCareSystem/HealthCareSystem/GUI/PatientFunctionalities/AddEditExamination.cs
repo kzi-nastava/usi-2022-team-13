@@ -29,13 +29,13 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private int _RoomId { get; set; }
         private int _Duration { get; set; }
         public bool IsAddChoosen { get; set; }
-        private readonly PatientRepository _patientRepository;
+        private readonly IPatientRepository _patientRepository;
         private readonly DoctorRepository _doctorRepository;
         private readonly IRoomRepository _roomRepository;
-        private readonly ExaminationRepository _examinationRepository;
+        private readonly IExaminationRepository _examinationRepository;
         private readonly string _patientUsername;
         private readonly int _validDate;
-        private readonly ExaminationEditRequestRepository _examinationEditRequestRepository;
+        private readonly IExaminationEditRequestRepository _examinationEditRequestRepository;
 
         public AddEditExamination(int examinationId, bool isAddChoosen, string patientUsername, int validDate, int doctorId = 0)
         {

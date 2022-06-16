@@ -17,13 +17,13 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 {
     public partial class StartedExamination : Form
     {
-        private readonly PatientRepository _patientRep;
+        private readonly IPatientRepository _patientRepository;
         private readonly MedicationRepository _medicationRep;
         private readonly DoctorRepository _doctorRep;
-        private readonly MedicalRecordRepository _medicalRecordRep;
+        private readonly IMedicalRecordRepository _medicalRecordRepository;
         private readonly ReferralLetterRepository _referralLetterRep;
         private readonly ReceiptRepository _receiptRep;
-        private readonly InstructionRepository _instructionRep;
+        private readonly IInstructionRepository _instructionRepository;
         private readonly int _patientId;
         private int _examinationId;
         private string _patientFullName;
@@ -31,16 +31,16 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         public StartedExamination(int examinationId, string patientFullName, string doctorUsername)
         {
             InitializeComponent();
-            _patientRep = new PatientRepository();
+            _patientRepository = new PatientRepository();
             _doctorRep = new DoctorRepository(doctorUsername, true);
             _medicationRep = new MedicationRepository();
-            _medicalRecordRep = new MedicalRecordRepository();
+            _medicalRecordRepository = new MedicalRecordRepository();
             _referralLetterRep = new ReferralLetterRepository();
             _receiptRep = new ReceiptRepository();
-            _instructionRep = new InstructionRepository();
+            _instructionRepository = new InstructionRepository();
 
 
-            _patientId = _patientRep.GetPatientIdByFirstName(patientFullName.Split(' ')[0]);
+            _patientId = _patientRepository.GetPatientIdByFirstName(patientFullName.Split(' ')[0]);
             _patientFullName = patientFullName;
             _examinationId = examinationId;
             _examiningDoctor = _doctorRep.GetDoctorByUsername();
@@ -69,7 +69,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         {
             string firstQuery = "select * from MedicalRecord where id_patient = " + _patientId;
 
-            string[] firstData = _medicalRecordRep.GetMedicalRecord(firstQuery);
+            string[] firstData = _medicalRecordRepository.GetMedicalRecord(firstQuery);
             lbPatientName.Text = "Examining: " + _patientFullName;
             lbHeight.Text = "Height: " + firstData[0];
             lbWeight.Text = "Weight: " + firstData[1];
@@ -224,7 +224,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 MessageBox.Show("Instructions for the receipt can't be empty!");
                 return false;
             }
-            _instructionRep.InsertInstruction(rtbInstructions.Text);
+            _instructionRepository.InsertInstruction(rtbInstructions.Text);
             DateTime currentTime = DateTime.Now;
 
             _receiptRep.InsertReceipt(_examiningDoctor.ID, _patientId, currentTime);

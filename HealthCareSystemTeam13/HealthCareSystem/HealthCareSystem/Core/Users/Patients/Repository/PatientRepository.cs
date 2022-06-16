@@ -17,16 +17,16 @@ using HealthCareSystem.Core.Surveys.HospitalSurveys.Model;
 
 namespace HealthCareSystem.Core.Users.Patients.Repository
 {
-    class PatientRepository
+    class PatientRepository: IPatientRepository
     {
         public string Username { get; set; }
         public OleDbConnection Connection { get; set; }
         public DataTable BlockedPatients { get; private set; }
         public DataTable Patients { get; private set; }
 
-        private readonly ExaminationRepository _examinationRepository;
+        private readonly IExaminationRepository _examinationRepository;
         private readonly IUserRepository _userRepository;
-        private readonly ExaminationChangesRepository _examinationChangesRepository;
+        private readonly IExaminationChangesRepository _examinationChangesRepository;
 
 
         public PatientRepository(string username = "") { 
@@ -45,6 +45,15 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             _examinationChangesRepository = new ExaminationChangesRepository();
 
 
+        }
+
+        public string GetUsername()
+        {
+            return Username;
+        }
+        public void SetUsername(string username)
+        {
+            Username = username;
         }
         public int GetPatientId()
         {
@@ -89,7 +98,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         }
 
-        private int GetPatientId(string patientUsername)
+        public int GetPatientId(string patientUsername)
         {
             string patientIdQuery = "select Patients.id from Patients inner join Users on Patients.user_id = Users.id where Users.usrnm = '" + patientUsername + "'";
             int patientId = Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries(patientIdQuery, Connection)[0]);
@@ -164,7 +173,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             }
 
         }
-        private void BlockPatient(int patientId)
+        public void BlockPatient(int patientId)
         {
             string query = "Update Patients set isBlocked = " + true + " where id = " + patientId + "";
             DatabaseCommander.ExecuteNonQueries(query, Connection);
@@ -181,6 +190,14 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         }
 
+        public DataTable GetPatientsTable()
+        {
+            return Patients;
+        }
+        public DataTable GetBlockedPatientsTable()
+        {
+            return BlockedPatients;
+        }
         public void PullPatients()
         {
             Patients = new DataTable();
@@ -329,7 +346,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             return patient;
         }
 
-        private static Patient SetPatientValues(OleDbDataReader reader)
+        public Patient SetPatientValues(OleDbDataReader reader)
         {
             return new Patient(
             Convert.ToInt32(reader["Patients.ID"]),

@@ -22,7 +22,7 @@ namespace HealthCareSystem.Core.Authentication
         public string Username { get; set; }
         public string Password { get; set; }
         public LoginForm Login { get; set; }
-        private readonly PatientRepository _patientRep;
+        private readonly IPatientRepository _patientRepository;
         private static OleDbConnection _connection;
 
         public LoginAuthentication(string username, string password, LoginForm loginForm)
@@ -30,7 +30,7 @@ namespace HealthCareSystem.Core.Authentication
             this.Username = username;
             this.Password = password;
             this.Login = loginForm;
-            _patientRep = new PatientRepository();
+            _patientRepository = new PatientRepository();
             try
             {
                 _connection = DatabaseConnection.GetConnection();
@@ -68,7 +68,7 @@ namespace HealthCareSystem.Core.Authentication
                         managerView.ShowDialog();
                         break;
                     case UserRole.Patients:
-                        bool isBlocked = _patientRep.IsPatientBlocked(Username);
+                        bool isBlocked = _patientRepository.IsPatientBlocked(Username);
                         if (!isBlocked)
                         {
                             PatientView patientView = new PatientView(Username, Login);

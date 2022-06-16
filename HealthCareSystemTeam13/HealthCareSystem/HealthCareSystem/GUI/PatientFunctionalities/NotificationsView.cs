@@ -15,7 +15,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     public partial class NotificationsView : Form
     {
         public string Username { get; set; }
-        private readonly PatientRepository _patientRepository;
+        private readonly IPatientRepository _patientRepository;
         private readonly MedicationRepository _medicationRepository;
         public NotificationsView(string username)
         {
