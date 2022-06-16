@@ -16,21 +16,21 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
 {
     public partial class DoctorSurveys : Form
     {
-        private SurveyRepository SurveyRepository;
-        private DoctorRepository DoctorRepository;
+        private readonly ISurveyRepository _surveyRepository;
+        private readonly IDoctorRepository _doctorRepository;
         public DoctorSurveys()
         {
-            SurveyRepository = new SurveyRepository();
-            DoctorRepository = new DoctorRepository();
-            SurveyRepository.PullDoctorSurveys();
+            _surveyRepository = new SurveyRepository();
+            _doctorRepository = new DoctorRepository();
+            _surveyRepository.PullDoctorSurveys();
             InitializeComponent();
             FillDataGridView();
             FillLabels();
         }
         private void FillLabels()
         {
-            List<DoctorSurvey> doctorSurveys = SurveyRepository.GetDoctorSurveys();
-            BindingList<Doctor> doctors = DoctorRepository.GetDoctors();
+            List<DoctorSurvey> doctorSurveys = _surveyRepository.GetDoctorSurveys();
+            BindingList<Doctor> doctors = _doctorRepository.GetDoctors();
             Dictionary<Doctor, double> rankings = SurveyService.GetDoctorsAndAverages(doctorSurveys, doctors);
             Label[] labelsBest = { lblBest1, lblBest2, lblBest3};
             Label[] labelsWorst = { lblWorst1, lblWorst2, lblWorst3};
@@ -58,14 +58,14 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
 
         public void RefreshDataGridView()
         {
-            SurveyRepository.PullDoctorSurveys();
-            dgwDoctorSurveys.DataSource = SurveyRepository.DoctorSurveys;
+            _surveyRepository.PullDoctorSurveys();
+            dgwDoctorSurveys.DataSource = _surveyRepository.GetDoctorsSurveys();
             dgwDoctorSurveys.Refresh();
         }
 
         private void FillDataGridView()
         {
-            dgwDoctorSurveys.DataSource = SurveyRepository.DoctorSurveys;
+            dgwDoctorSurveys.DataSource = _surveyRepository.GetDoctorsSurveys();
             DataGridViewSettings();
         }
 

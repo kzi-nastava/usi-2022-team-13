@@ -20,7 +20,7 @@ namespace HealthCareSystem
     {
         public string Username { get; set; }
         public LoginForm AuthForm;
-        private readonly DoctorRepository _doctorRep;
+        private readonly IDoctorRepository _doctorRepository;
         private readonly IExaminationRepository _examinationRep;
         public DoctorView(string username, LoginForm authForm)
         {
@@ -29,9 +29,9 @@ namespace HealthCareSystem
             
             InitializeComponent();
 
-            _doctorRep = new DoctorRepository(username, true);
+            _doctorRepository = new DoctorRepository(username, true);
             _examinationRep = new ExaminationRepository();
-            _examinationRep.PullExaminations(_doctorRep.GetDoctorId());
+            _examinationRep.PullExaminations(_doctorRepository.GetDoctorId());
             FillDataGridView();
 
         }
@@ -99,7 +99,7 @@ namespace HealthCareSystem
 
         public void RefreshDataGridView()
         {
-            _examinationRep.PullExaminations(_doctorRep.GetDoctorId());
+            _examinationRep.PullExaminations(_doctorRepository.GetDoctorId());
             dgwExaminations.DataSource = _examinationRep.GetExaminations();
             dgwExaminations.Refresh();
         }

@@ -22,7 +22,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         public string Username { get; set; }
         private readonly IPatientRepository _patientRepository;
-        private readonly DoctorRepository _doctorRepository;
+        private readonly IDoctorRepository _doctorRepository;
         private readonly IExaminationRepository _examinationRepository;
         private DateTime _examinationFinalDate;
         private Doctor _selectedDoctor;

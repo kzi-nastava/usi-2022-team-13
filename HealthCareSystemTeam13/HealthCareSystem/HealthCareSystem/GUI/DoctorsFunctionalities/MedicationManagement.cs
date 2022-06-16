@@ -15,14 +15,14 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 {
     public partial class MedicationManagement : Form
     {
-        private DoctorRepository _doctorRep;
+        private IDoctorRepository _doctorRepository;
         private MedicationRepository _medicationRep;
         public string DoctorUsername;
         public MedicationManagement(string doctorUsername)
         {
-            _doctorRep = new DoctorRepository(doctorUsername, true);
+            _doctorRepository = new DoctorRepository(doctorUsername, true);
             DoctorUsername = doctorUsername;
-            _doctorRep.Username = DoctorUsername;
+            _doctorRepository.SetUsername(DoctorUsername);
             _medicationRep = new MedicationRepository();
             InitializeComponent();
 
@@ -82,7 +82,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 _medicationRep.UpdateMedication(updateQuery);
 
 
-                int doctorId = _doctorRep.GetDoctorId();
+                int doctorId = _doctorRepository.GetDoctorId();
                 string insertQuery = "insert into RejectedMedications (id_medication, id_doctor, description)" +
                     " values (" + selectedMedication.Id + ", " + doctorId + ", '" + reasonForDenying + "')";
 

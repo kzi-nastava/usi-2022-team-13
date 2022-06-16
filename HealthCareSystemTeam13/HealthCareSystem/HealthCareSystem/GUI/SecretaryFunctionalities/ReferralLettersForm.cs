@@ -16,7 +16,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class ReferralLettersForm : Form
     {
-        ReferralLetterRepository _referralLetterRepository;
+        private readonly IReferralLetterRepository _referralLetterRepository;
         public ReferralLettersForm()
         {
             _referralLetterRepository = new ReferralLetterRepository();
@@ -26,7 +26,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
         }
         private void FillDataGridView()
         {
-            lettersDataGrid.DataSource = _referralLetterRepository.ReferralLetters;
+            lettersDataGrid.DataSource = _referralLetterRepository.GetReferalLetters();
             DataGridViewSettings();
         }
 

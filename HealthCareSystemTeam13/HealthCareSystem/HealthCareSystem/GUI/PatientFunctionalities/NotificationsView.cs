@@ -16,7 +16,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     {
         public string Username { get; set; }
         private readonly IPatientRepository _patientRepository;
-        private readonly MedicationRepository _medicationRepository;
+        private readonly IMedicationRepository _medicationRepository;
         public NotificationsView(string username)
         {
             InitializeComponent();

@@ -9,7 +9,7 @@ using HealthCareSystem.Core.Users.Doctors.Model;
 
 namespace HealthCareSystem.Core.Users.Doctors.Repository
 {
-    class ReferralLetterRepository
+    class ReferralLetterRepository:IReferralLetterRepository
     {
         public OleDbConnection Connection { get; set; }
         public DataTable ReferralLetters { get; private set; }
@@ -59,6 +59,11 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             ReferralLetters = new DataTable();
             var query = "select * from ReferralLetter";
             GUIHelpers.FillTable(ReferralLetters, query, Connection);
+        }
+
+        public DataTable GetReferalLetters()
+        {
+            return ReferralLetters;
         }
 
         public void DeleteSingleReferralLetter(string letterID)

@@ -27,7 +27,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private int Duration { get; set; }
         public bool IsAddChoosen { get; set; }
         private readonly IPatientRepository _patientRepository;
-        private DoctorRepository _doctorRep;
+        private IDoctorRepository _doctorRepository;
         private IRoomRepository _roomRepository;
 
         private IExaminationRepository _examinationRep;
@@ -43,9 +43,9 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             DoctorUsername = doctorUsername;
             ValidDate = validDate;
             _patientRepository = new PatientRepository();
-            _doctorRep = new DoctorRepository(doctorUsername, true);
-            _doctorRep.Username = DoctorUsername;
-            _doctorEntity = _doctorRep.GetDoctorByUsername();
+            _doctorRepository = new DoctorRepository(doctorUsername, true);
+            _doctorRepository.SetUsername(DoctorUsername);
+            _doctorEntity = _doctorRepository.GetDoctorByUsername();
 
             _roomRepository = new RoomRepository();
             _examinationRep = new ExaminationRepository();
@@ -178,7 +178,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 _examinationRep.GetAllOtherExaminations(ExaminationId)))
             {
 
-                int availableRoomId = _roomRep.GetAvailableRoomId(GetMergedDateTime(ExaminationDate, time), _examinationRep.GetAllOtherExaminations(ExaminationId));
+                int availableRoomId = _roomRepository.GetAvailableRoomId(GetMergedDateTime(ExaminationDate, time), _examinationRep.GetAllOtherExaminations(ExaminationId));
                 if (availableRoomId == 0)
                 {
                     MessageBox.Show("No available rooms at this date/time.");
@@ -187,8 +187,6 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 RoomId = availableRoomId;
 
             }
-
-
 
             return true;
         }

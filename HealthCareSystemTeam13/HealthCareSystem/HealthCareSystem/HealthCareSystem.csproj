@@ -85,8 +85,10 @@
     <Compile Include="Core\Medications\Model\Instruction.cs" />
     <Compile Include="Core\Medications\Repository\IIngredientRepository.cs" />
     <Compile Include="Core\Medications\Repository\IInstructionRepository.cs" />
+    <Compile Include="Core\Medications\Repository\IMedicationRepository.cs" />
     <Compile Include="Core\Medications\Repository\IngredientsRepository.cs" />
     <Compile Include="Core\Medications\Repository\InstructionRepository.cs" />
+    <Compile Include="Core\Medications\Repository\IReceiptRepository.cs" />
     <Compile Include="Core\Medications\Repository\MedicationRepository.cs" />
     <Compile Include="Core\Medications\Repository\ReceiptRepository.cs" />
     <Compile Include="Core\Rooms\HospitalEquipment\DynamicEquipmentRequest.cs" />
@@ -95,10 +97,14 @@
     <Compile Include="Core\Rooms\Renovation.cs" />
     <Compile Include="Core\Rooms\Repository\EquipmentRepository.cs" />
     <Compile Include="Core\Rooms\Repository\IEquipmentRepository.cs" />
+    <Compile Include="Core\Rooms\Repository\IRenovationRepository.cs" />
+    <Compile Include="Core\Rooms\Repository\IRoomRepository.cs" />
+    <Compile Include="Core\Rooms\Repository\ITransferHistoryRepository.cs" />
     <Compile Include="Core\Rooms\Repository\RenovationRepository.cs" />
     <Compile Include="Core\Rooms\Repository\TransferHistoryRepository.cs" />
     <Compile Include="Core\Rooms\Room.cs" />
     <Compile Include="Core\InsertionRepository.cs" />
+    <Compile Include="Core\Surveys\ISurveyRepository.cs" />
     <Compile Include="Core\Surveys\Model\DoctorSurvey.cs" />
     <Compile Include="Core\Surveys\Model\HospitalSurvey.cs" />
     <Compile Include="Core\Surveys\SurveyRepository.cs" />
@@ -110,6 +116,9 @@
     <Compile Include="Core\Users\Doctors\Repository\DoctorRepository.cs" />
     <Compile Include="Core\Users\Doctors\DoctorService.cs" />
     <Compile Include="Core\Users\Doctors\Model\DaysOffRequest.cs" />
+    <Compile Include="Core\Users\Doctors\Repository\IDaysOffRepository.cs" />
+    <Compile Include="Core\Users\Doctors\Repository\IDoctorRepository.cs" />
+    <Compile Include="Core\Users\Doctors\Repository\IReferralLetterRepository.cs" />
     <Compile Include="Core\Users\Doctors\Repository\ReferralLetterRepository.cs" />
     <Compile Include="Core\Users\HospitalManagers\HospitalManager.cs" />
     <Compile Include="Core\Users\Patients\Repository\IMedicalRecordRepository.cs" />

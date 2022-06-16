@@ -18,7 +18,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
     {
         public int MedicationId { get; set; }
         private readonly IIngredientRepository _ingredientRepository;
-        private MedicationRepository MedicationRep;
+        private IMedicationRepository _medicationRepository;
         private string MedicationName;
 
         private bool IsAddChosen { get; set; }
@@ -27,7 +27,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         {
             MedicationId = medicationId;
             IsAddChosen = isAddChosen;
-            MedicationRep = new MedicationRepository();
+            _medicationRepository = new MedicationRepository();
             _ingredientRepository = new IngredientsRepository();
             InitializeComponent();
             FillCheckBoxList();
@@ -51,7 +51,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void LoadEditData()
         {
             string query = "select * from medications where id=" + MedicationId;
-            Medication medication = MedicationRep.GetSelectedMedication(query);
+            Medication medication = _medicationRepository.GetSelectedMedication(query);
 
 
             List<Ingredient> allIngredients = _ingredientRepository.GetIngredients("select * from ingredients");
@@ -97,24 +97,24 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         {
             string updateNameAndStatusQuery = "Update medications set nameOfMedication = '" + MedicationName + "'" +
                                 " ,status = '" + MedicationStatus.InProgress.ToString() + "' where id = " + MedicationId;
-            DatabaseCommander.ExecuteNonQueries(updateNameAndStatusQuery, MedicationRep.Connection);
+            DatabaseCommander.ExecuteNonQueries(updateNameAndStatusQuery, DatabaseConnection.GetConnection());
 
             string deleteRejectedQuery = "Delete from rejectedmedications where id_medication=" + MedicationId;
-            DatabaseCommander.ExecuteNonQueries(deleteRejectedQuery, MedicationRep.Connection);
+            DatabaseCommander.ExecuteNonQueries(deleteRejectedQuery, DatabaseConnection.GetConnection());
 
             string deleteMedicationIngredientsQuery = "Delete from MedicationContainsIngredient where id_medication=" + MedicationId;
-            DatabaseCommander.ExecuteNonQueries(deleteMedicationIngredientsQuery, MedicationRep.Connection);
+            DatabaseCommander.ExecuteNonQueries(deleteMedicationIngredientsQuery, DatabaseConnection.GetConnection());
 
             foreach (Ingredient ingredient in clbIngredients.CheckedItems)
             {
-                MedicationRep.InsertMedicationContainsIngredient(MedicationId, ingredient.Id);
+                _medicationRepository.InsertMedicationContainsIngredient(MedicationId, ingredient.Id);
             }
             MessageBox.Show("Successfully edited a medication!");
         }
 
         private bool InsertMedication()
         {
-            if (!MedicationRep.DoesMedicationExists(MedicationName))
+            if (!_medicationRepository.DoesMedicationExists(MedicationName))
             {
                 MessageBox.Show("There already exists medication with this name!");
                 this.Close();
@@ -122,14 +122,14 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             }
 
 
-            MedicationRep.InsertMedication(MedicationName);
+            _medicationRepository.InsertMedication(MedicationName);
 
             string medicationQuery = "select * from medications where nameOfMedication ='" + MedicationName + "'";
-            Medication newMedication = MedicationRep.GetSelectedMedication(medicationQuery);
+            Medication newMedication = _medicationRepository.GetSelectedMedication(medicationQuery);
 
             foreach (Ingredient ingredient in clbIngredients.CheckedItems)
             {
-                MedicationRep.InsertMedicationContainsIngredient(newMedication.Id, ingredient.Id);
+                _medicationRepository.InsertMedicationContainsIngredient(newMedication.Id, ingredient.Id);
             }
             MessageBox.Show("Successfully added a medication!");
             return true;

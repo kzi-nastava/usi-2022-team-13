@@ -20,7 +20,7 @@ namespace HealthCareSystem.Core.GUI
         public string Username { get; set; }
         public LoginForm SuperForm;
         private readonly IPatientRepository _patientRepository;
-        private readonly MedicationRepository _medicationRepository;
+        private readonly IMedicationRepository _medicationRepository;
         private readonly IInstructionRepository _instructionRepository;
         private List<System.Threading.Timer> _timers;
 

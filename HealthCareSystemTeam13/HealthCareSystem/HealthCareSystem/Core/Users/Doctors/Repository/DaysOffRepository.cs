@@ -10,7 +10,7 @@ using HealthCareSystem.Core.Users.Secretaries.Repository;
 
 namespace HealthCareSystem.Core.Users.Doctors.Repository
 {
-    class DaysOffRepository
+    class DaysOffRepository:IDaysOffRepository
     {
         public OleDbConnection Connection { get; set; }
         public DataTable DaysOffRequests { get; private set; }
@@ -62,6 +62,11 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             DaysOffRequests = new DataTable();
             var query = "select * from DoctorRequestDaysOf df where df.id not in (select mdf.id_request from ManagementOfDaysOfRequests mdf)";
             GUIHelpers.FillTable(DaysOffRequests, query, Connection);
+        }
+
+        public DataTable GetDaysOfRequests()
+        {
+            return DaysOffRequests;
         }
 
         public void ManageDaysOffRequest(string username, int requestId, bool approved, string comment = "")

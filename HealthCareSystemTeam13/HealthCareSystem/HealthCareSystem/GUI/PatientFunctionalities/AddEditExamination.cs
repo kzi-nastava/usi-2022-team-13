@@ -30,7 +30,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private int _Duration { get; set; }
         public bool IsAddChoosen { get; set; }
         private readonly IPatientRepository _patientRepository;
-        private readonly DoctorRepository _doctorRepository;
+        private readonly IDoctorRepository _doctorRepository;
         private readonly IRoomRepository _roomRepository;
         private readonly IExaminationRepository _examinationRepository;
         private readonly string _patientUsername;

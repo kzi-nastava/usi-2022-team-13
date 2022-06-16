@@ -15,7 +15,7 @@ namespace HealthCareSystem.GUI.SecretaryFunctionalities
 {
     public partial class DaysOffRequestsForm : Form
     {
-        private readonly DaysOffRepository _daysOffRepository;
+        private readonly IDaysOffRepository _daysOffRepository;
         public string Username { get; set; }
         public DaysOffRequestsForm(string username)
         {
@@ -27,7 +27,7 @@ namespace HealthCareSystem.GUI.SecretaryFunctionalities
         }
         private void FillDataGridView()
         {
-            requestsDataGrid.DataSource = _daysOffRepository.DaysOffRequests;
+            requestsDataGrid.DataSource = _daysOffRepository.GetDaysOfRequests();
             DataGridViewSettings();
         }
         private void DataGridViewSettings()

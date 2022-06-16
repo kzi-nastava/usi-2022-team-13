@@ -16,7 +16,7 @@ namespace HealthCareSystem.GUI.SecretaryFunctionalities
     {
         string Username;
         int RequestId;
-        DaysOffRepository _daysOffRepository;
+        private readonly IDaysOffRepository _daysOffRepository;
         public AddComment(string username, int requestId)
         {
             this.Username = username;

@@ -19,7 +19,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     {
         public string Username { get; set; }
         private List<Doctor> _doctors;
-        private readonly DoctorRepository _doctorRepository;
+        private readonly IDoctorRepository _doctorRepository;
         private DoctorSorter _doctorSorter;
 
         public SearchDoctorView(string username)

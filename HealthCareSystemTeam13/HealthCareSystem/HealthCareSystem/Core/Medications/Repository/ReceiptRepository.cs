@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HealthCareSystem.Core.Medications.Repository
 {
-    class ReceiptRepository
+    class ReceiptRepository:IReceiptRepository
     {
         public OleDbConnection Connection { get; set; }
         private readonly IInstructionRepository _instructionRepository;

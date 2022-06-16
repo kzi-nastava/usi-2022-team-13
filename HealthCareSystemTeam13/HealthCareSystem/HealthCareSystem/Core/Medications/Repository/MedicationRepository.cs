@@ -10,7 +10,7 @@ using HealthCareSystem.Core.Medications.Model;
 
 namespace HealthCareSystem.Core.Medications.Repository
 {
-    class MedicationRepository
+    class MedicationRepository:IMedicationRepository
     {
         public OleDbConnection Connection { get; set; }
         public DataTable Medicine { get; private set; }
@@ -143,6 +143,15 @@ namespace HealthCareSystem.Core.Medications.Repository
             string medicationsQuery = "select m.ID, m.nameOfMedication, m.status, r.id_doctor, r.description" +
                 " from medications m left join RejectedMedications r on m.Id = r.id_medication";
             GUIHelpers.FillTable(Medications, medicationsQuery, Connection);
+        }
+
+        public DataTable GetMedicineDatatable()
+        {
+            return Medicine;
+        }
+        public DataTable GetMedicationsDatatable()
+        {
+            return Medications;
         }
         public Medication GetSelectedMedication(string query)
         {

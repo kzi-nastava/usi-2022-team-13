@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Surveys;
 using HealthCareSystem.Core.Surveys.Repository;
 
 namespace HealthCareSystem.Core.GUI.PatientFunctionalities
@@ -16,7 +17,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     public partial class HospitalSurveysView : Form
     {
         public string Username { get; set; }
-        private readonly SurveyRepository _surveyRepository;
+        private readonly ISurveyRepository _surveyRepository;
         private HospitalSurvey _hospitalSurvey;
         private readonly IPatientRepository _patientRepository;
         public HospitalSurveysView(string username)
