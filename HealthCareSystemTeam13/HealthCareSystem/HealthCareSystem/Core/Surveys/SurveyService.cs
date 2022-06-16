@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 namespace HealthCareSystem.Core.Surveys
 {
     
-    class SurveyService
+    class SurveyService: ISurveyService
     {
-        public static int[] GetNumberOfHospitalGrades(List<HospitalSurvey> hospitalSurveys, bool isHygene)
+        public int[] GetNumberOfHospitalGrades(List<HospitalSurvey> hospitalSurveys, bool isHygene)
         {
             int[] numberOfGrades = new int[5];
 
@@ -69,7 +69,7 @@ namespace HealthCareSystem.Core.Surveys
 
             return numberOfGrades;
         }
-        public static double SumAllHospitalGrades(List<HospitalSurvey> hospitalSurveys, bool isHygene)
+        public double SumAllHospitalGrades(List<HospitalSurvey> hospitalSurveys, bool isHygene)
         {
             double sum = 0;
             if (isHygene)
@@ -90,7 +90,7 @@ namespace HealthCareSystem.Core.Surveys
             return sum;
         }
 
-        public static Dictionary<Doctor, double> GetDoctorsAndAverages(List<DoctorSurvey> doctorSurveys, BindingList<Doctor> doctors)
+        public Dictionary<Doctor, double> GetDoctorsAndAverages(List<DoctorSurvey> doctorSurveys, BindingList<Doctor> doctors)
         {
             Dictionary<Doctor, double> rankings = new Dictionary<Doctor, double>();
             
@@ -105,7 +105,7 @@ namespace HealthCareSystem.Core.Surveys
 
         }
 
-        public static double[] GetAverageDoctorGrades(List<DoctorSurvey> doctorSurveys, int doctorId)
+        public double[] GetAverageDoctorGrades(List<DoctorSurvey> doctorSurveys, int doctorId)
         {
             double[] avgGrades = new double[2];
             double sumDoctorGrade = 0;
@@ -131,7 +131,7 @@ namespace HealthCareSystem.Core.Surveys
             return avgGrades;
         }
 
-        public static int[] GetNumberOfDoctorGrades(List<DoctorSurvey> doctorSurveys, bool isDoctorGrade, int doctorId)
+        public int[] GetNumberOfDoctorGrades(List<DoctorSurvey> doctorSurveys, bool isDoctorGrade, int doctorId)
         {
             int[] numberOfGrades = new int[5];
 
@@ -144,7 +144,7 @@ namespace HealthCareSystem.Core.Surveys
             return numberOfGrades;
         }
 
-        private static void SetNumberOfGradesForGrade(List<DoctorSurvey> doctorSurveys, int doctorId, int[] numberOfGrades)
+        public void SetNumberOfGradesForGrade(List<DoctorSurvey> doctorSurveys, int doctorId, int[] numberOfGrades)
         {
             foreach (DoctorSurvey doctorSurvey in doctorSurveys)
             {
@@ -172,7 +172,7 @@ namespace HealthCareSystem.Core.Surveys
             }
         }
 
-        private static void SetNumberOfGradesForQuality(List<DoctorSurvey> doctorSurveys, int doctorId, int[] numberOfGrades)
+        public void SetNumberOfGradesForQuality(List<DoctorSurvey> doctorSurveys, int doctorId, int[] numberOfGrades)
         {
             foreach (DoctorSurvey doctorSurvey in doctorSurveys)
             {

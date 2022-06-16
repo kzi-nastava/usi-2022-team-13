@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HealthCareSystem.Core.Users.Doctors;
 
 namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
@@ -21,15 +22,19 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
     {
         private IRoomRepository _roomRepository;
         private IExaminationRepository _examinationRepository;
-        private DoctorRepository _doctorRepository;
+ 
         private ReferralLetter ChosenReferralLetter;
+        private IDoctorService _doctorService;
+
         public AddExamination(ReferralLetter referralLetter)
         {
             InitializeComponent();
             ChosenReferralLetter = referralLetter;
             _roomRepository = new RoomRepository();
             _examinationRepository = new ExaminationRepository();
-            _doctorRepository = new DoctorRepository();
+            _doctorService = new DoctorService();
+
+
         }
 
         private void acceptButton_Click(object sender, EventArgs e)
@@ -57,7 +62,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
                 return false;
 
             }
-            else if (!DoctorService.IsDoctorAvailable(ChosenReferralLetter.ForwardedDoctorID, mergedExaminationTime, otherExaminations))
+            else if (!_doctorService.IsDoctorAvailable(ChosenReferralLetter.ForwardedDoctorID, mergedExaminationTime, otherExaminations))
             {
 
                 MessageBox.Show("Doctor is not available at that time.");

@@ -16,10 +16,12 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
     public partial class HospitalSurveys : Form
     {
         private readonly ISurveyRepository _surveyRepository;
+        private readonly ISurveyService _surveyService;
         public HospitalSurveys()
         {    
             _surveyRepository = new SurveyRepository();
             _surveyRepository.PullHospitalSurveys();
+            _surveyService = new SurveyService();
             InitializeComponent();
             FillDataGridView();
             FillGradeLabels();
@@ -33,14 +35,14 @@ namespace HealthCareSystem.GUI.HospitalManagerFunctionalities
         private void FillGradeLabels()
         {
             List<HospitalSurvey> hospitalSurveys = _surveyRepository.GetHospitalSurveys();
-            int[] numberOfHygeneGrades = SurveyService.GetNumberOfHospitalGrades(hospitalSurveys, true);
-            int[] numberOfQualityGrades = SurveyService.GetNumberOfHospitalGrades(hospitalSurveys, false);
+            int[] numberOfHygeneGrades = _surveyService.GetNumberOfHospitalGrades(hospitalSurveys, true);
+            int[] numberOfQualityGrades = _surveyService.GetNumberOfHospitalGrades(hospitalSurveys, false);
             Label[] hygene = { lblHygene1, lblHygene2, lblHygene3, lblHygene4, lblHygene5 };
             Label[] quality = { lblQuality1, lblQuality2, lblQuality3, lblQuality4, lblQuality5 };
 
-            double hygeneSum = SurveyService.SumAllHospitalGrades(hospitalSurveys, true);
+            double hygeneSum = _surveyService.SumAllHospitalGrades(hospitalSurveys, true);
             int countHygene = 0;
-            double qualitySum = SurveyService.SumAllHospitalGrades(hospitalSurveys, false);
+            double qualitySum = _surveyService.SumAllHospitalGrades(hospitalSurveys, false);
             int countQuality = 0;
 
             for (int i = 0; i < 5; i++)

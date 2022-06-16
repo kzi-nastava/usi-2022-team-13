@@ -12,6 +12,7 @@ using HealthCareSystem.Core;
 using HealthCareSystem.Core.Examinations.Model;
 using HealthCareSystem.Core.Examinations.Repository;
 using HealthCareSystem.Core.Rooms.Repository;
+using HealthCareSystem.Core.Users.Doctors;
 using HealthCareSystem.Core.Users.Doctors.Model;
 using HealthCareSystem.Core.Users.Doctors.Repository;
 using HealthCareSystem.Core.Users.Doctors.Service;
@@ -36,6 +37,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private readonly string _patientUsername;
         private readonly int _validDate;
         private readonly IExaminationEditRequestRepository _examinationEditRequestRepository;
+        private IDoctorService _doctorService;
 
         public AddEditExamination(int examinationId, bool isAddChoosen, string patientUsername, int validDate, int doctorId = 0)
         {
@@ -48,6 +50,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             _roomRepository = new RoomRepository();
             _examinationRepository = new ExaminationRepository();
             _examinationEditRequestRepository = new ExaminationEditRequestRepository();
+            _doctorService = new DoctorService();
 
             InitializeComponent();
 
@@ -189,7 +192,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
                 return false;
 
             }
-            else if (!DoctorService.IsDoctorAvailable(_selectedDoctor.ID, mergedExaminationTime, otherExaminations))
+            else if (!_doctorService.IsDoctorAvailable(_selectedDoctor.ID, mergedExaminationTime, otherExaminations))
             {
 
                 MessageBox.Show("Doctor is not available at that time.");
