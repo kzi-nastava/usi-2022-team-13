@@ -18,7 +18,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         public string Username { get; set; }
         private readonly SurveyRepository _surveyRepository;
         private HospitalSurvey _hospitalSurvey;
-        private readonly PatientRepository _patientRepository;
+        private readonly IPatientRepository _patientRepository;
         public HospitalSurveysView(string username)
         {
             this.Username = username;

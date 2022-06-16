@@ -14,7 +14,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     public partial class HomeView : Form
     {
         public string Username { get; set; }
-        private PatientRepository _patientRepository;
+        private readonly IPatientRepository _patientRepository;
         public HomeView(string username)
         {
             this.Username = username;
@@ -25,7 +25,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void HomeView_Load(object sender, EventArgs e)
         {
             int patientId = _patientRepository.GetPatientId();
-            string name = DatabaseCommander.ExecuteReaderQueries("select firstName + ' ' + lastName from Patients where id = " + patientId + "", _patientRepository.Connection)[0];
+            string name = DatabaseCommander.ExecuteReaderQueries("select firstName + ' ' + lastName from Patients where id = " + patientId + "", DatabaseConnection.GetConnection())[0];
             lbName.Text = name;
         }
     }

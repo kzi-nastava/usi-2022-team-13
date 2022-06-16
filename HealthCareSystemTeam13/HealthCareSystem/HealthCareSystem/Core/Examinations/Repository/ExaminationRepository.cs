@@ -25,7 +25,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
         public DataTable ClosestExaminations { get; private set; }
         public DataTable FinishedExaminations { get; private set; }
 
-        private readonly PatientRequestRepository _patientRequestRepository;
+        private readonly IPatientRequestRepository _patientRequestRepository;
         public ExaminationRepository()
         {
             try

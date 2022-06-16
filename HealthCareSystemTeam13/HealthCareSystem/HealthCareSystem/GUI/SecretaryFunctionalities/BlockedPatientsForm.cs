@@ -15,20 +15,18 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
 {
     public partial class BlockedPatientsForm : Form
     {
-        PatientRepository _patientRepository;
-        string Username;
-        public BlockedPatientsForm(string username)
+        private readonly IPatientRepository _patientRepository;
+        public BlockedPatientsForm()
         {
             _patientRepository = new PatientRepository();
             _patientRepository.PullBlockedPatients();
             InitializeComponent();
             FillDataGridView();
-            this.Username = username;
         }
 
         private void FillDataGridView()
         {
-            blockedPatientsDataGrid.DataSource = _patientRepository.BlockedPatients;
+            blockedPatientsDataGrid.DataSource = _patientRepository.GetBlockedPatientsTable();
             DataGridViewSettings();
         }
 

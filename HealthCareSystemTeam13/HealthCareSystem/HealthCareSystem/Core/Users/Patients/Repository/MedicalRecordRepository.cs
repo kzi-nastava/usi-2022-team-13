@@ -10,7 +10,7 @@ using HealthCareSystem.Core.Users.Patients.Model;
 
 namespace HealthCareSystem.Core.Users.Patients.Repository
 {
-    class MedicalRecordRepository
+    class MedicalRecordRepository: IMedicalRecordRepository
     {
         public OleDbConnection Connection { get; set; }
 

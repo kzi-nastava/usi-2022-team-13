@@ -9,7 +9,7 @@ using HealthCareSystem.Core.Ingredients.Model;
 
 namespace HealthCareSystem.Core.Medications.Repository
 {
-    class IngredientsRepository
+    class IngredientsRepository:IIngredientRepository
     {
         public OleDbConnection Connection { get; set; }
         public DataTable Ingredients { get; private set; }
@@ -25,6 +25,11 @@ namespace HealthCareSystem.Core.Medications.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
+        }
+
+        public DataTable GetIngredients()
+        {
+            return Ingredients;
         }
         public void PullIngredients()
         {

@@ -15,7 +15,7 @@ namespace HealthCareSystem.Core.GUI
 {
     public partial class PatientCRUDForm : Form
     {
-        PatientRepository _patientRepository;
+        private readonly IPatientRepository _patientRepository;
         string Username;
         public PatientCRUDForm(string username)
         {
@@ -28,7 +28,7 @@ namespace HealthCareSystem.Core.GUI
 
         private void FillDataGridView()
         {
-            patientsDataGrid.DataSource = _patientRepository.Patients;
+            patientsDataGrid.DataSource = _patientRepository.GetPatientsTable();
             DataGridViewSettings();
         }
 

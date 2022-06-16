@@ -79,6 +79,8 @@
     <Compile Include="Core\Examinations\Repository\ExaminationRepository.cs" />
     <Compile Include="Core\Medications\Model\Ingredient.cs" />
     <Compile Include="Core\Medications\Model\Instruction.cs" />
+    <Compile Include="Core\Medications\Repository\IIngredientRepository.cs" />
+    <Compile Include="Core\Medications\Repository\IInstructionRepository.cs" />
     <Compile Include="Core\Medications\Repository\IngredientsRepository.cs" />
     <Compile Include="Core\Medications\Repository\InstructionRepository.cs" />
     <Compile Include="Core\Medications\Repository\MedicationRepository.cs" />
@@ -105,6 +107,10 @@
     <Compile Include="Core\Users\Doctors\Model\DaysOffRequest.cs" />
     <Compile Include="Core\Users\Doctors\Repository\ReferralLetterRepository.cs" />
     <Compile Include="Core\Users\HospitalManagers\HospitalManager.cs" />
+    <Compile Include="Core\Users\Patients\Repository\IMedicalRecordRepository.cs" />
+    <Compile Include="Core\Users\Patients\Repository\IPatientRepository.cs" />
+    <Compile Include="Core\Users\Patients\Repository\IPatientRequestRepository.cs" />
+    <Compile Include="Core\Users\Secretaries\ISecretaryRepository.cs" />
     <Compile Include="Core\Users\UserRepository\IUserRepository.cs" />
     <Compile Include="Core\Users\Patients\Repository\MedicalRecordRepository.cs" />
     <Compile Include="Core\Users\Patients\Repository\PatientRepository.cs" />

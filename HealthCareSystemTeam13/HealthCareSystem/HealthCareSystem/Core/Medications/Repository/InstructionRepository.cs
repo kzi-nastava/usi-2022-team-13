@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HealthCareSystem.Core.Medications.Repository
 {
-    class InstructionRepository
+    class InstructionRepository: IInstructionRepository
     {
         public OleDbConnection Connection { get; set; }
 
