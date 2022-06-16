@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace HealthCareSystem.Core.Examinations.Controller
 {
-    class ExaminationSorter
+    class ExaminationSorter:IExaminationSorter
     {
-        public static List<DoctorAnamnesis> SortAnamnesises(List<DoctorAnamnesis> anamnesises, int indicator = 0)
+        public List<DoctorAnamnesis> SortAnamnesises(List<DoctorAnamnesis> anamnesises, int indicator = 0)
         {
             // indicator = 0 -> sort by date, = 1 -> sort by doctor, = 2 -> sort by speciality
             if (indicator == 0) return SortByDate(anamnesises);
-            else if (indicator == 1) return SortByDoctor(anamnesises);
-            else return SortBySpeciality(anamnesises);
+            if (indicator == 1) return SortByDoctor(anamnesises);
+            return SortBySpeciality(anamnesises);
 
         }
 
-        private static List<DoctorAnamnesis> SortBySpeciality(List<DoctorAnamnesis> anamnesises)
+        public List<DoctorAnamnesis> SortBySpeciality(List<DoctorAnamnesis> anamnesises)
         {
             for (int i = 0; i < anamnesises.Count() - 1; i++)
             {
@@ -34,7 +34,7 @@ namespace HealthCareSystem.Core.Examinations.Controller
             return anamnesises;
         }
 
-        private static List<DoctorAnamnesis> SortByDoctor(List<DoctorAnamnesis> anamnesises)
+        public List<DoctorAnamnesis> SortByDoctor(List<DoctorAnamnesis> anamnesises)
         {
             for (int i = 0; i < anamnesises.Count() - 1; i++)
             {
@@ -50,7 +50,7 @@ namespace HealthCareSystem.Core.Examinations.Controller
             return anamnesises;
         }
 
-        private static List<DoctorAnamnesis> SortByDate(List<DoctorAnamnesis> anamnesises)
+        public List<DoctorAnamnesis> SortByDate(List<DoctorAnamnesis> anamnesises)
         {
             for (int i = 0; i < anamnesises.Count() - 1; i++)
             {
@@ -67,7 +67,7 @@ namespace HealthCareSystem.Core.Examinations.Controller
 
         }
 
-        private static void Swap(List<DoctorAnamnesis> anamnesises, int j)
+        public void Swap(List<DoctorAnamnesis> anamnesises, int j)
         {
             DoctorAnamnesis temp = anamnesises[j];
             anamnesises[j] = anamnesises[j + 1];

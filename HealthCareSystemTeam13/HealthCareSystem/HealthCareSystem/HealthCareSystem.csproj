@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\DatabaseConnection.cs" />
+    <Compile Include="Core\Examinations\IExaminationSorter.cs" />
     <Compile Include="Core\LoginAuthentication.cs" />
     <Compile Include="Core\DatabaseCommander.cs" />
     <Compile Include="Core\Examinations\ExaminationSorter.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Core\Surveys\SurveyService.cs" />
     <Compile Include="Core\TimeDateHelpers.cs" />
     <Compile Include="Core\Users\Doctors\DoctorSorter.cs" />
+    <Compile Include="Core\Users\Doctors\IDoctorSorter.cs" />
     <Compile Include="Core\Users\Doctors\Repository\DaysOffRepository.cs" />
     <Compile Include="Core\Users\Doctors\Repository\DoctorRepository.cs" />
     <Compile Include="Core\Users\Doctors\DoctorService.cs" />
