@@ -30,8 +30,6 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             try
             {
                 Connection = DatabaseConnection.GetConnection();
-
-
             }
             catch (Exception exception)
             {
@@ -49,8 +47,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             OleDbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                DoctorSpeciality speciality;
-                Enum.TryParse<DoctorSpeciality>(reader["speciality"].ToString(), out speciality);
+                Enum.TryParse<DoctorSpeciality>(reader["speciality"].ToString(), out var speciality);
                 doctor = new Doctor(reader["firstName"].ToString(), reader["lastName"].ToString(), Convert.ToInt32(reader["user_id"]), speciality);
 
             }

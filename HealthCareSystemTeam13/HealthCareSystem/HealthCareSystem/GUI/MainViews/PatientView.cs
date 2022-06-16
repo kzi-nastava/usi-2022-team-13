@@ -19,8 +19,9 @@ namespace HealthCareSystem.Core.GUI
     {
         public string Username { get; set; }
         public LoginForm SuperForm;
-        private PatientRepository _patientRepository;
-        private MedicationRepository _medicationRepository;
+        private readonly PatientRepository _patientRepository;
+        private readonly MedicationRepository _medicationRepository;
+        private readonly InstructionRepository _instructionRepository;
         private List<System.Threading.Timer> _timers;
 
         private int _notificationAlertTime;
@@ -32,6 +33,7 @@ namespace HealthCareSystem.Core.GUI
             _patientRepository = new PatientRepository(username);
             _medicationRepository = new MedicationRepository();
             _notificationAlertTime = _medicationRepository.GetMedicationNotificationTime(_patientRepository.GetPatientId());
+            _instructionRepository = new InstructionRepository();
 
             InitializeComponent();
 
@@ -87,7 +89,7 @@ namespace HealthCareSystem.Core.GUI
         }
         private void LoadNotifications()
         { 
-            Dictionary<int, DateTime> instructions = _medicationRepository.GetMedicationInstructions(_patientRepository.GetPatientId());
+            Dictionary<int, DateTime> instructions = _instructionRepository.GetMedicationInstructions(_patientRepository.GetPatientId());
             if (instructions.Count() == 0)
                 return;
 

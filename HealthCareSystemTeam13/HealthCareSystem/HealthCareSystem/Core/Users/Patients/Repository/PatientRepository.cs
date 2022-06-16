@@ -26,6 +26,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
 
         private readonly ExaminationRepository _examinationRepository;
         private readonly UserRepository _userRepository;
+        private readonly ExaminationChangesRepository _examinationChangesRepository;
 
 
         public PatientRepository(string username = "") { 
@@ -41,6 +42,7 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             }
             _examinationRepository = new ExaminationRepository();
             _userRepository = new UserRepository();
+            _examinationChangesRepository = new ExaminationChangesRepository();
 
 
         }
@@ -142,7 +144,8 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         public void BlockSpamPatients(string patientUsername)
         {
             int patientId = GetPatientId(patientUsername);
-            List<ExaminationChange> changes = _examinationRepository.GetExaminationChanges(patientId);
+            
+            List<ExaminationChange> changes = _examinationChangesRepository.GetExaminationChanges(patientId);
             int adds = 0, edits = 0;
 
             for (int i = 0; i < changes.Count(); i++)

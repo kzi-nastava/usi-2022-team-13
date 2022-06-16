@@ -31,33 +31,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
             _roomRepository = new RoomRepository();
         }
-        public List<Equipment> GetEquipmentFromRoomId(int roomId)
-        {
-
-            List<Equipment> equipment = new List<Equipment>();
-
-            try
-            {
-                string query = "select id_equipment, amount, Equipment.nameOf from RoomHasEquipment, Equipment" +
-                    " where Equipment.id = id_equipment and RoomHasEquipment.id_room = " + roomId;
-
-                OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
-                OleDbDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    Equipment equipmentEntity = new Equipment(reader["nameOf"].ToString(),
-                        Convert.ToInt32(reader["id_equipment"]), Convert.ToInt32(reader["amount"]));
-                    equipment.Add(equipmentEntity);
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.ToString());
-            }
-
-            return equipment;
-        }
 
         public void PullEquipmentInWarehouse()
         {
@@ -182,30 +155,5 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
         }
 
-        public List<Equipment> GetEquipment(string query)
-        {
-            List<Equipment> equipment = new List<Equipment>();
-
-
-            try
-            {
-                if (Connection.State == ConnectionState.Closed) Connection.Open();
-
-                OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
-                OleDbDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    Enum.TryParse<Equipment.EquipmentType>(reader["type"].ToString(), out var typeOfEquipment);
-
-                    equipment.Add(new Equipment(Convert.ToInt32(reader["id"]), reader["nameOf"].ToString(), typeOfEquipment));
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.ToString());
-            }
-            return equipment;
-        }
     }
 }

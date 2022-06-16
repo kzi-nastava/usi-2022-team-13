@@ -206,8 +206,7 @@ namespace HealthCareSystem.Core.Rooms.Repository
 
                 while (reader.Read())
                 {
-                    TypeOfRoom typeOfRoom;
-                    Enum.TryParse<TypeOfRoom>(reader["type"].ToString(), out typeOfRoom);
+                    Enum.TryParse<TypeOfRoom>(reader["type"].ToString(), out var typeOfRoom);
 
                     rooms.Add(new Room(typeOfRoom, Convert.ToInt32(reader["id"])));
                 }
@@ -315,8 +314,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
             }
         }
 
-
-
         public List<string> GetOperationRooms()
         {
             var query = "SELECT ID FROM Rooms WHERE type = operation";
@@ -363,11 +360,8 @@ namespace HealthCareSystem.Core.Rooms.Repository
         public List<RoomHasEquipment> GetEquipmentInRoom(string query)
         {
             List<RoomHasEquipment> equipmentInRoom = new List<RoomHasEquipment>();
-
-
             try
             {
-                if (Connection.State == ConnectionState.Closed) Connection.Open();
 
                 OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -381,7 +375,6 @@ namespace HealthCareSystem.Core.Rooms.Repository
             {
                 Console.WriteLine(exception.ToString());
             }
-            Connection.Close();
 
             return equipmentInRoom;
         }

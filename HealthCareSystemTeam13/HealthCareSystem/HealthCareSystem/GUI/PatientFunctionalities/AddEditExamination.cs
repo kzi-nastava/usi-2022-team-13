@@ -35,6 +35,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private readonly ExaminationRepository _examinationRepository;
         private readonly string _patientUsername;
         private readonly int _validDate;
+        private readonly ExaminationEditRequestRepository _examinationEditRequestRepository;
 
         public AddEditExamination(int examinationId, bool isAddChoosen, string patientUsername, int validDate, int doctorId = 0)
         {
@@ -46,6 +47,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             _doctorRepository = new DoctorRepository();
             _roomRepository = new RoomRepository();
             _examinationRepository = new ExaminationRepository();
+            _examinationEditRequestRepository = new ExaminationEditRequestRepository();
 
             InitializeComponent();
 
@@ -155,7 +157,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void SendExaminationEditRequest(DateTime mergedTime)
         {
-            _examinationRepository.SendExaminationEditRequest(ExaminationId, DateTime.Now, true, _selectedDoctor.ID, mergedTime,
+            _examinationEditRequestRepository.SendExaminationEditRequest(ExaminationId, DateTime.Now, true, _selectedDoctor.ID, mergedTime,
                 _RoomId);
 
             _examinationRepository.InsertExaminationChanges(TypeOfChange.Edit, _patientRepository.GetPatientId());

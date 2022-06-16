@@ -22,6 +22,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private readonly PatientRepository _patientRepository;
         private readonly DoctorRepository _doctorRepository;
         private readonly ExaminationRepository _examinationRepository;
+        private readonly ExaminationEditRequestRepository _examinationEditRequestRepository;
         public PatientExaminations(string username)
         {
             Username = username;
@@ -30,6 +31,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
             _doctorRepository = new DoctorRepository();
             InitializeComponent();
             _examinationRepository.PullExaminationForPatient(_patientRepository.GetPatientId());
+            _examinationEditRequestRepository = new ExaminationEditRequestRepository();
             FillDataGridView();
 
         }
@@ -93,7 +95,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
 
         private void CancelExaminationWithRequest()
         {
-            _examinationRepository.SendExaminationEditRequest((int)dgwExaminations.SelectedRows[0].Cells[0].Value, DateTime.Now,
+            _examinationEditRequestRepository.SendExaminationEditRequest((int)dgwExaminations.SelectedRows[0].Cells[0].Value, DateTime.Now,
                 false, 0, DateTime.Now, 0);
             MessageBox.Show("Wait for a secretary to aproove this request.");
         }

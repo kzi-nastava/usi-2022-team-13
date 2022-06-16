@@ -65,54 +65,6 @@ namespace HealthCareSystem.Core.Examinations.Repository
             GUIHelpers.FillTable(FinishedExaminations, examinationsQuery, Connection);
         }
 
-        public void SendExaminationEditRequest(int examinationId, DateTime currentTime, bool isEdit, int doctorId, DateTime newDateTime, int roomId)
-        {
-            string query = "insert into PatientEditRequest (id_examination, dateOf, isChanged, isDeleted, id_doctor, dateTimeOfExamination, id_room) VALUES(@id_examination, @dateOf, @isChanged, @isDeleted, @id_doctor, @dateTimeOfExamination, @id_room)";
-
-            using (var cmd = new OleDbCommand(query, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_examination", examinationId);
-                cmd.Parameters.AddWithValue("@dateOf", currentTime.ToString());
-                if (isEdit)
-                {
-                    cmd.Parameters.AddWithValue("@isChanged", true);
-                    cmd.Parameters.AddWithValue("@isDeleted", false);
-                    cmd.Parameters.AddWithValue("@id_doctor", doctorId);
-                    cmd.Parameters.AddWithValue("@dateTimeOfExamination", newDateTime.ToString());
-                    cmd.Parameters.AddWithValue("@id_room", roomId);
-                }
-                else
-                {
-                    cmd.Parameters.AddWithValue("@isChanged", false);
-                    cmd.Parameters.AddWithValue("@isDeleted", true);
-                    cmd.Parameters.AddWithValue("@id_doctor", DBNull.Value);
-                    cmd.Parameters.AddWithValue("@dateTimeOfExamination", DBNull.Value);
-                    cmd.Parameters.AddWithValue("@id_room", DBNull.Value);
-                }
-
-                cmd.ExecuteNonQuery();
-
-            }
-
-        }
-
-        public void InsertExaminationChanges(TypeOfChange typeOfChange, int patientId = 0)
-        {
-
-            string insertQuery = "insert into PatientExaminationChanges(id_patient, typeOfChange, dateOf) values(@id_patient, @typeOfChange, @dateOf)";
-            if(Connection.State == ConnectionState.Closed) Connection.Open();
-
-            using (var cmd = new OleDbCommand(insertQuery, Connection))
-            {
-                cmd.Parameters.AddWithValue("@id_patient", patientId);
-                cmd.Parameters.AddWithValue("@typeOfChange", typeOfChange.ToString());
-                cmd.Parameters.AddWithValue("@dateOf", DateTime.Now.ToString());
-
-                cmd.ExecuteNonQuery();
-            }
-
-
-        }
 
         public void InsertExamination(int patientId, int doctorId, DateTime examinationDateTime,
             int duration, int roomId, string selectedType = "")
@@ -180,22 +132,6 @@ namespace HealthCareSystem.Core.Examinations.Repository
             DatabaseCommander.ExecuteNonQueries(query, Connection);
         }
 
-        public List<ExaminationChange> GetExaminationChanges(int patientId)
-        {
-            List<ExaminationChange> changes = new List<ExaminationChange>();
-            string query = "select * from PatientExaminationChanges where id_patient = " + patientId + "";
-
-            OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
-
-            OleDbDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                Enum.TryParse<TypeOfChange>(reader["typeOfChange"].ToString(), out var typeOfChange);
-                changes.Add(new ExaminationChange(patientId, typeOfChange, (DateTime)reader["dateOf"]));
-
-            }
-            return changes;
-        }
 
         public int GetRoomIdFromExaminationId(int examinationId)
         {
@@ -419,7 +355,24 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 }
             }
 
-            public void MoveDoctorsExaminations(DateTime from, DateTime to, int doctorId)
+            public void InsertExaminationChanges(TypeOfChange typeOfChange, int patientId = 0)
+            {
+
+                string insertQuery = "insert into PatientExaminationChanges(id_patient, typeOfChange, dateOf) values(@id_patient, @typeOfChange, @dateOf)";
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
+
+                using (var cmd = new OleDbCommand(insertQuery, Connection))
+                {
+                    cmd.Parameters.AddWithValue("@id_patient", patientId);
+                    cmd.Parameters.AddWithValue("@typeOfChange", typeOfChange.ToString());
+                    cmd.Parameters.AddWithValue("@dateOf", DateTime.Now.ToString());
+
+                    cmd.ExecuteNonQuery();
+                }
+
+
+            }
+        public void MoveDoctorsExaminations(DateTime from, DateTime to, int doctorId)
             {
                 List<Examination> movingExaminations = GetDoctorsExamiantions(from, to, doctorId.ToString());
                 foreach (Examination movingExamination in movingExaminations)

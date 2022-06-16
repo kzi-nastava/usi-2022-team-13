@@ -67,6 +67,8 @@
   <ItemGroup>
     <Compile Include="Core\DatabaseConnection.cs" />
     <Compile Include="Core\Examinations\IExaminationSorter.cs" />
+    <Compile Include="Core\Examinations\Repository\ExaminationChangesRepository.cs" />
+    <Compile Include="Core\Examinations\Repository\ExaminationEditRequestRepository.cs" />
     <Compile Include="Core\LoginAuthentication.cs" />
     <Compile Include="Core\DatabaseCommander.cs" />
     <Compile Include="Core\Examinations\ExaminationSorter.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="Core\Users\Doctors\Model\DaysOffRequest.cs" />
     <Compile Include="Core\Users\Doctors\Repository\ReferralLetterRepository.cs" />
     <Compile Include="Core\Users\HospitalManagers\HospitalManager.cs" />
+    <Compile Include="Core\Users\IUserRepository.cs" />
     <Compile Include="Core\Users\Patients\Repository\MedicalRecordRepository.cs" />
     <Compile Include="Core\Users\Patients\Repository\PatientRepository.cs" />
     <Compile Include="Core\Users\Patients\PatientService.cs" />
