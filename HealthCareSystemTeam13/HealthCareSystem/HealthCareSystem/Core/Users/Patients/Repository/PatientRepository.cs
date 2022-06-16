@@ -24,9 +24,9 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
         public DataTable BlockedPatients { get; private set; }
         public DataTable Patients { get; private set; }
 
-        private readonly ExaminationRepository _examinationRepository;
+        private readonly IExaminationRepository _examinationRepository;
         private readonly IUserRepository _userRepository;
-        private readonly ExaminationChangesRepository _examinationChangesRepository;
+        private readonly IExaminationChangesRepository _examinationChangesRepository;
 
 
         public PatientRepository(string username = "") { 

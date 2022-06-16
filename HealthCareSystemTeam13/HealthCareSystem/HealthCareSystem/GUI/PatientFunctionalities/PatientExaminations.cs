@@ -21,8 +21,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         public string Username { get; set; }
         private readonly PatientRepository _patientRepository;
         private readonly DoctorRepository _doctorRepository;
-        private readonly ExaminationRepository _examinationRepository;
-        private readonly ExaminationEditRequestRepository _examinationEditRequestRepository;
+        private readonly IExaminationRepository _examinationRepository;
+        private readonly IExaminationEditRequestRepository _examinationEditRequestRepository;
         public PatientExaminations(string username)
         {
             Username = username;
@@ -39,7 +39,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void FillDataGridView()
         {
 
-            dgwExaminations.DataSource = _examinationRepository.Examinations;
+            dgwExaminations.DataSource = _examinationRepository.GetExaminations();
             GUIHelpers.DataGridViewSettings(dgwExaminations);
         }
 
@@ -153,7 +153,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         public void RefreshDataGridView()
         {
             _examinationRepository.PullExaminationForPatient(_patientRepository.GetPatientId());
-            dgwExaminations.DataSource = _examinationRepository.Examinations;
+            dgwExaminations.DataSource = _examinationRepository.GetExaminations();
             dgwExaminations.Refresh();
         }
 

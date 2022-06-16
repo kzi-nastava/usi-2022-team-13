@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HealthCareSystem.Core.Examinations.Repository
 {
-    class ExaminationEditRequestRepository
+    class ExaminationEditRequestRepository: IExaminationEditRequestRepository
     {
         public OleDbConnection Connection { get; set; }
         public ExaminationEditRequestRepository()

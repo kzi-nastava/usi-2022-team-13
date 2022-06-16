@@ -15,7 +15,7 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
     public partial class RequestDaysOff : Form
     {
         private DoctorRepository _doctorRep;
-        private ExaminationRepository _examinationRep;
+        private IExaminationRepository _examinationRep;
         private DaysOffRepository _daysOffRep;
 
         public RequestDaysOff(string doctorUsername)

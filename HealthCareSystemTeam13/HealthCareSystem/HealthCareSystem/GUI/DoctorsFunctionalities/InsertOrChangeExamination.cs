@@ -29,7 +29,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private PatientRepository _patientRep;
         private DoctorRepository _doctorRep;
         private RoomRepository _roomRep;
-        private ExaminationRepository _examinationRep;
+        private IExaminationRepository _examinationRep;
         private Doctor _doctorEntity;
         public string DoctorUsername;
         public readonly int ValidDate;

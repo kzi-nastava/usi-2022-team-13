@@ -18,7 +18,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
     public partial class ChooseSpeciality : Form
     {
         private int PatientID;
-        ExaminationRepository _examinationRepository;
+        IExaminationRepository _examinationRepository;
         RoomRepository _roomRepository;
         public ChooseSpeciality(int patientID)
         {

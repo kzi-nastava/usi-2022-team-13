@@ -69,6 +69,10 @@
     <Compile Include="Core\Examinations\IExaminationSorter.cs" />
     <Compile Include="Core\Examinations\Repository\ExaminationChangesRepository.cs" />
     <Compile Include="Core\Examinations\Repository\ExaminationEditRequestRepository.cs" />
+    <Compile Include="Core\Examinations\Repository\IAnamnesisRepository.cs" />
+    <Compile Include="Core\Examinations\Repository\IExaminationChangesRepository.cs" />
+    <Compile Include="Core\Examinations\Repository\IExaminationEditRequestRepository.cs" />
+    <Compile Include="Core\Examinations\Repository\IExaminationRepository.cs" />
     <Compile Include="Core\LoginAuthentication.cs" />
     <Compile Include="Core\DatabaseCommander.cs" />
     <Compile Include="Core\Examinations\ExaminationSorter.cs" />

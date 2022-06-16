@@ -8,7 +8,7 @@ using HealthCareSystem.Core.Users.Patients.Model;
 
 namespace HealthCareSystem.Core.Examinations.Repository
 {
-    class ExaminationChangesRepository
+    class ExaminationChangesRepository: IExaminationChangesRepository
     {
         public OleDbConnection Connection { get; set; }
         public ExaminationChangesRepository()

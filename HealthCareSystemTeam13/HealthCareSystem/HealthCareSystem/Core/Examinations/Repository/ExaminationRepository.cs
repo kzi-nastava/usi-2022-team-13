@@ -15,7 +15,7 @@ using HealthCareSystem.Core.Users.Patients.Repository;
 
 namespace HealthCareSystem.Core.Examinations.Repository
 {
-    class ExaminationRepository
+    class ExaminationRepository : IExaminationRepository
     {
         public OleDbConnection Connection { get; set; }
         public RoomRepository RoomRep { get; set; }
@@ -24,6 +24,15 @@ namespace HealthCareSystem.Core.Examinations.Repository
         public DataTable RequestsPatients { get; private set; }
         public DataTable ClosestExaminations { get; private set; }
         public DataTable FinishedExaminations { get; private set; }
+
+        public DataTable GetExaminations() 
+        { return Examinations; }
+        public DataTable GetRequestsPatients()
+        { return RequestsPatients; }
+        public DataTable GetClosestExaminations()
+        { return ClosestExaminations; }
+        public DataTable GetFinishedExaminations()
+        { return FinishedExaminations; }
 
         private readonly PatientRequestRepository _patientRequestRepository;
         public ExaminationRepository()
@@ -279,7 +288,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 return examinations;
             }
 
-            private static Examination GetExaminationFromReader(OleDbDataReader reader)
+            public Examination GetExaminationFromReader(OleDbDataReader reader)
             {
                 return new Examination((int)reader["id"], (int)reader["id_doctor"], (int)reader["id_patient"], (bool)reader["isEdited"], (bool)reader["isCancelled"], (bool)reader["isFinished"], (DateTime)reader["dateOf"],
                                                                  (TypeOfExamination)reader["typeOfExamination"], (bool)reader["isUrgent"], (int)reader["id_room"], (int)reader["duration"]);
@@ -346,7 +355,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 }
                 return closestTimeAndDoctor;
             }
-            void MoveExamination(int id, DateTime dateTime)
+            public void MoveExamination(int id, DateTime dateTime)
             {
                 var query = "UPDATE Examination SET dateOf = " + dateTime + " WHERE ID = " + id + "";
                 using (var cmd = new OleDbCommand(query, Connection))
@@ -436,7 +445,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
             }
 
 
-            private static Examination SetExaminationValues(OleDbDataReader reader)
+            public Examination SetExaminationValues(OleDbDataReader reader)
             {
                 Enum.TryParse<TypeOfExamination>(reader["typeOfExamination"].ToString(), out var typeOfExamination);
                 int id = Convert.ToInt32(reader["id"]);
@@ -488,7 +497,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 return examinations;
             }
 
-            private List<Examination> GetFreeExaminationsWithDoctorPriority(int doctorId, DateTime startDate, DateTime endDate, List<Examination> takenExaminations)
+        public List<Examination> GetFreeExaminationsWithDoctorPriority(int doctorId, DateTime startDate, DateTime endDate, List<Examination> takenExaminations)
             {
                 List<Examination> examinations = new List<Examination>();
 
@@ -518,7 +527,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
 
                 return examinations;
             }
-            private List<Examination> GetFreeExaminationsWithTimespanPriority(DateTime startDate, DateTime endDate, List<Examination> takenExaminations)
+        public List<Examination> GetFreeExaminationsWithTimespanPriority(DateTime startDate, DateTime endDate, List<Examination> takenExaminations)
             {
                 List<Examination> examinations = new List<Examination>();
                 int startHour = startDate.Hour;
@@ -546,7 +555,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 return examinations;
             }
 
-            private List<Examination> GetFreeExaminations(int doctorId, DateTime startDate, DateTime endDate, List<Examination> takenExaminations)
+            public List<Examination> GetFreeExaminations(int doctorId, DateTime startDate, DateTime endDate, List<Examination> takenExaminations)
             {
                 List<Examination> examinations = new List<Examination>();
 
@@ -574,7 +583,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 return examinations;
 
             }
-            private List<Examination> GetTopThreeExaminations(DateTime startDate, DateTime endDate, List<Examination> takenExaminations)
+        public List<Examination> GetTopThreeExaminations(DateTime startDate, DateTime endDate, List<Examination> takenExaminations)
             {
                 List<Examination> examinations = new List<Examination>();
 
@@ -604,7 +613,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
             }
 
 
-            private List<Examination> GetTakenExaminations(int doctorId, string startTime, string endTime, DateTime examinationFinalDate)
+        public List<Examination> GetTakenExaminations(int doctorId, string startTime, string endTime, DateTime examinationFinalDate)
             {
                 List<Examination> examinations = new List<Examination>();
 
@@ -625,7 +634,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 return examinations;
             }
 
-            private static Examination GetExaminationValues(OleDbDataReader reader)
+        public Examination GetExaminationValues(OleDbDataReader reader)
             {
                 Enum.TryParse<TypeOfExamination>(reader["typeOfExamination"].ToString(), out var typeOfExamination);
 
@@ -689,7 +698,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
                 return examinations;
             }
 
-            private static void SetExaminationValues(List<Examination> examinations, OleDbDataReader reader)
+            public void SetExaminationValues(List<Examination> examinations, OleDbDataReader reader)
             {
                 Enum.TryParse<TypeOfExamination>(reader["typeOfExamination"].ToString(), out var typeOfExamination);
 

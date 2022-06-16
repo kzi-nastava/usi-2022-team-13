@@ -19,7 +19,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
     {
         private readonly DoctorRepository _doctorRep;
         private readonly RoomRepository _roomRep;
-        private readonly ExaminationRepository _examinationRep;
+        private readonly IExaminationRepository _examinationRep;
 
         private int _examinationId;
         private int _roomId;

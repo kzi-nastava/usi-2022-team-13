@@ -32,10 +32,10 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private readonly PatientRepository _patientRepository;
         private readonly DoctorRepository _doctorRepository;
         private readonly RoomRepository _roomRepository;
-        private readonly ExaminationRepository _examinationRepository;
+        private readonly IExaminationRepository _examinationRepository;
         private readonly string _patientUsername;
         private readonly int _validDate;
-        private readonly ExaminationEditRequestRepository _examinationEditRequestRepository;
+        private readonly IExaminationEditRequestRepository _examinationEditRequestRepository;
 
         public AddEditExamination(int examinationId, bool isAddChoosen, string patientUsername, int validDate, int doctorId = 0)
         {
