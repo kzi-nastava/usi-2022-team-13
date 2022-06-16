@@ -16,7 +16,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         public DataTable DaysOffRequests { get; private set; }
         public DataTable RequestsForDaysOff { get; private set; }
         private readonly SecretaryRepository _secretaryRepository;
-
+        private readonly IUserRepository _userRepository;
         public DaysOffRepository()
         {
             try
@@ -30,6 +30,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             }
 
             _secretaryRepository = new SecretaryRepository();
+            _userRepository = new UserRepository();
         }
 
         public void InsertDaysOff(DateTime startDate, DateTime endDate, string reasonForDaysOff, bool isUrgent, int doctorId)
@@ -75,13 +76,17 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.Parameters.AddWithValue("@id_request", requestId);
-                cmd.Parameters.AddWithValue("@id_secretary", _secretaryRepository.GetSecretaryId(username)[0]);
-                cmd.Parameters.AddWithValue("@isapproved", approved.ToString());
+                cmd.Parameters.AddWithValue("@id_secretary", Convert.ToInt32(_secretaryRepository.GetSecretaryId(_userRepository.GetUserId(username)[0])[0]));
+                cmd.Parameters.AddWithValue("@isapproved", approved);
                 cmd.Parameters.AddWithValue("@comment", comment);
                 cmd.ExecuteNonQuery();
             }
         }
 
+        public DataTable GetRequestsForDaysOff()
+        {
+            return RequestsForDaysOff;
+        }
         public void PullRequestsForDaysOff(int doctorId)
         {
             RequestsForDaysOff = new DataTable();

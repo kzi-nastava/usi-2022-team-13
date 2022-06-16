@@ -14,15 +14,15 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
 {
     public partial class RequestDaysOff : Form
     {
-        private IDoctorRepository _doctorRepository;
-        private IExaminationRepository _examinationRep;
+        private readonly IDoctorRepository _doctorRepository;
+        private readonly IExaminationRepository _examinationRepository;
         private readonly IDaysOffRepository _daysOffRepository;
 
         public RequestDaysOff(string doctorUsername)
         {
             
             _doctorRepository = new DoctorRepository(doctorUsername, true);
-            _examinationRep = new ExaminationRepository();
+            _examinationRepository = new ExaminationRepository();
             _doctorRepository.SetUsername(doctorUsername);
             _daysOffRepository = new DaysOffRepository();
             _daysOffRepository.PullRequestsForDaysOff(_doctorRepository.GetDoctorId());
@@ -37,7 +37,7 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
         private void FillDataGridView()
         {
 
-            dgwRequests.DataSource = _daysOffRepository.GetDaysOfRequests();
+            dgwRequests.DataSource = _daysOffRepository.GetRequestsForDaysOff();
             DataGridViewSettings();
         }
 
@@ -82,7 +82,7 @@ namespace HealthCareSystem.GUI.DoctorsFunctionalities
                 return;
             }
 
-            List<DateTime> examinationDates = _examinationRep.GetDateOfExaminationsForDoctor(_doctorRepository.GetDoctorId());
+            List<DateTime> examinationDates = _examinationRepository.GetDateOfExaminationsForDoctor(_doctorRepository.GetDoctorId());
 
             bool isUrgent = cbUrgent.Checked;
 
