@@ -14,6 +14,7 @@ namespace HealthCareSystem.Core.Users.Doctors.Repository
         DataTable GetDaysOfRequests();
         void ManageDaysOffRequest(string username, int requestId, bool approved, string comment = "");
         void PullRequestsForDaysOff(int doctorId);
+        DataTable GetRequestsForDaysOff();
 
     }
 }

@@ -38,7 +38,7 @@ namespace HealthCareSystem.Core.Users.Secretaries.Repository
 
         public List<string> GetSecretaryId(string userId)
         {
-            var query = "SELECT id FROM Secretaries WHERE user_id = " + userId + "";
+            var query = "SELECT id FROM Secretaries WHERE user_id = " + Convert.ToInt32(userId) + "";
             return DatabaseCommander.ExecuteReaderQueries(query, Connection);
         }
 

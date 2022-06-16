@@ -30,7 +30,7 @@ namespace HealthCareSystem.Core.Surveys.Repository
 
         public DataTable GetHospitalsSurveys()
         {
-            return DoctorSurveys;
+            return HospitalSurveys;
         }
         public DataTable GetDoctorsSurveys()
         {
