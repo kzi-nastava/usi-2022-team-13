@@ -26,7 +26,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private int RoomId { get; set; }
         private int Duration { get; set; }
         public bool IsAddChoosen { get; set; }
-        private PatientRepository _patientRep;
+        private readonly IPatientRepository _patientRepository;
         private DoctorRepository _doctorRep;
         private RoomRepository _roomRep;
         private IExaminationRepository _examinationRep;
@@ -41,7 +41,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
             IsAddChoosen = isAddChoosen;
             DoctorUsername = doctorUsername;
             ValidDate = validDate;
-            _patientRep = new PatientRepository();
+            _patientRepository = new PatientRepository();
             _doctorRep = new DoctorRepository(doctorUsername, true);
             _doctorRep.Username = DoctorUsername;
             _doctorEntity = _doctorRep.GetDoctorByUsername();
@@ -69,7 +69,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         private void FillPatientsComboBox()
         {
             // Using BindingList so that i can display the name of the doctor, and have his id in the back
-            BindingList<Patient> patients = _patientRep.GetPatients();
+            BindingList<Patient> patients = _patientRepository.GetPatients();
 
             cbPatients.ValueMember = null;
             cbPatients.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -108,8 +108,8 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
                 string selectedType = cbType.SelectedItem.ToString();
                 if (IsAddChoosen)
                 {
-                    _patientRep.Username = PatientUsername;
-                    _examinationRep.InsertExamination(_patientRep.GetPatientId(), _doctorEntity.ID, mergedTime, Duration, RoomId, selectedType);
+                    _patientRepository.SetUsername(PatientUsername);
+                    _examinationRep.InsertExamination(_patientRepository.GetPatientId(), _doctorEntity.ID, mergedTime, Duration, RoomId, selectedType);
                     MessageBox.Show("Successfully added examination!");
 
                 }
@@ -123,13 +123,13 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
         private void UpdateContent(DateTime mergedTime)
         {
-            int patiendId = _patientRep.GetPatientIdByFirstName(
+            int patiendId = _patientRepository.GetPatientIdByFirstName(
                 cbPatients.Text.Split(' ')[0]);
 
             string updateQuery = "Update Examination set id_patient = " + patiendId + "," +
                 " isEdited=" + true + ", dateOf = '" + mergedTime + "', typeOfExamination = '" + cbType.SelectedItem.ToString() + "', " +
                 "id_room = " + RoomId + " where id = " + ExaminationId + "";
-            _patientRep.UpdatePatientContent(updateQuery, patiendId);
+            _patientRepository.UpdatePatientContent(updateQuery, patiendId);
             MessageBox.Show("Successfully edited examination!");
 
         }
@@ -138,7 +138,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
         {
             // napraviti metodu u patient repositorijumu da se preko patient entiteta nadje username iz user tabele i onda malo edit doradis i tjt
             SelectedPatient = (Patient)cbPatients.SelectedValue;
-            PatientUsername = _patientRep.GetUsernameFromPatient(SelectedPatient);
+            PatientUsername = _patientRepository.GetUsernameFromPatient(SelectedPatient);
             if (tbRoomId.Text != "") { RoomId = Convert.ToInt32(tbRoomId.Text); }
             else { RoomId = 0; }
             Duration = Convert.ToInt32(tbDuration.Text);
@@ -221,7 +221,7 @@ namespace HealthCareSystem.Core.GUI.DoctorsFunctionalities
 
             string doctorQuery = "select * from Patients inner join Examination on Patients.ID = Examination.id_patient where Examination.ID = " + ExaminationId;
             
-            patient = _patientRep.GetSelectedPatient(doctorQuery);
+            patient = _patientRepository.GetSelectedPatient(doctorQuery);
             return patient;
         }
 

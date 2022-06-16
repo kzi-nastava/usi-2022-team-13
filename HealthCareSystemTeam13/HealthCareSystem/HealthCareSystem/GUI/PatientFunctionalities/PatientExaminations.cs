@@ -19,7 +19,7 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     public partial class PatientExaminations : Form
     {
         public string Username { get; set; }
-        private readonly PatientRepository _patientRepository;
+        private readonly IPatientRepository _patientRepository;
         private readonly DoctorRepository _doctorRepository;
         private readonly IExaminationRepository _examinationRepository;
         private readonly IExaminationEditRequestRepository _examinationEditRequestRepository;

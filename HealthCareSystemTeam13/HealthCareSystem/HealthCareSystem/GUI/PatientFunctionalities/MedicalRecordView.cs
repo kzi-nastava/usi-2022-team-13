@@ -18,8 +18,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
     public partial class MedicalRecordView : Form
     {
         public string Username { get; set; }
-        private readonly PatientRepository _patientRepository;
         private readonly IExaminationRepository _examinationRepository;
+        private readonly IPatientRepository _patientRepository;
         private int _patientId;
         private List<DoctorAnamnesis> _anamnesises;
         private readonly IAnamnesisRepository _anamnsesisRepository;
@@ -78,8 +78,8 @@ namespace HealthCareSystem.Core.GUI.PatientFunctionalities
         private void SetListBoxDiseases()
         {
             
-            int medicalRecordId = Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries("select id from MedicalRecord where id_patient = " + _patientId + "", _patientRepository.Connection)[0]);
-            List<string> diseases = DatabaseCommander.ExecuteReaderQueries("select nameOfDisease from DiseaseHistory where id_medicalRecord = " + medicalRecordId + "", _patientRepository.Connection);
+            int medicalRecordId = Convert.ToInt32(DatabaseCommander.ExecuteReaderQueries("select id from MedicalRecord where id_patient = " + _patientId + "", DatabaseConnection.GetConnection())[0]);
+            List<string> diseases = DatabaseCommander.ExecuteReaderQueries("select nameOfDisease from DiseaseHistory where id_medicalRecord = " + medicalRecordId + "", DatabaseConnection.GetConnection());
             lbDiseases.DataSource = diseases;
 
         }

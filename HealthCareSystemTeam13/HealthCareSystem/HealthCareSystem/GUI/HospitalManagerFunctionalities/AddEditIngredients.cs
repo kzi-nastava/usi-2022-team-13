@@ -17,12 +17,12 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
     {
         public int IngredientId { get; set; }
         public bool IsAddChosen { get; set; }
-        private IngredientsRepository IngredientRep;
+        private readonly IIngredientRepository _ingredientRepository;
         private string IngredientName;
 
         public AddEditIngredients(int ingredientId, bool isAddChoosen)
         {
-            IngredientRep = new IngredientsRepository();
+            _ingredientRepository = new IngredientsRepository();
             IngredientId = ingredientId;
             IsAddChosen = isAddChoosen;
             InitializeComponent();
@@ -36,7 +36,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
         private void LoadEditData()
         {
             string query = "select * from ingredients where id=" + IngredientId;
-            Ingredient ingredient = IngredientRep.GetSelectedIngredient(query);
+            Ingredient ingredient = _ingredientRepository.GetSelectedIngredient(query);
             tbIngredient.Text = ingredient.Name;
         }
 
@@ -45,7 +45,7 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
             if (IsAddChosen)
             {
                 IngredientName = tbIngredient.Text;
-                if (!IngredientRep.DoesIngredientExists(IngredientName))
+                if (!_ingredientRepository.DoesIngredientExists(IngredientName))
                 {
                     MessageBox.Show("There already exists ingredient with this name!");
                     this.Close();
@@ -53,15 +53,14 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                     
                 }
 
-
-                IngredientRep.InsertIngredient(IngredientName);
+                _ingredientRepository.InsertIngredient(IngredientName);
                 MessageBox.Show("Successfully added an ingredient!");
 
             }
             else
             {
                 IngredientName = tbIngredient.Text;
-                if (!IngredientRep.DoesIngredientExists(IngredientName))
+                if (!_ingredientRepository.DoesIngredientExists(IngredientName))
                 {
                     MessageBox.Show("There already exists ingredient with this name!");
                     this.Close();
@@ -69,15 +68,11 @@ namespace HealthCareSystem.Core.GUI.HospitalManagerFunctionalities
                 }
 
                 string updateQuery = "Update Ingredients set nameOfIngredient = '" + IngredientName + "' where id = " + IngredientId;
-                DatabaseCommander.ExecuteNonQueries(updateQuery, IngredientRep.Connection);
+                DatabaseCommander.ExecuteNonQueries(updateQuery, DatabaseConnection.GetConnection());
                 MessageBox.Show("Successfully edited an ingredient!");
             }
             this.Close();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
     }
 }

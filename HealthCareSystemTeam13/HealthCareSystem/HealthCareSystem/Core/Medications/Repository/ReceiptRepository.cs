@@ -11,7 +11,7 @@ namespace HealthCareSystem.Core.Medications.Repository
     class ReceiptRepository
     {
         public OleDbConnection Connection { get; set; }
-        private readonly InstructionRepository _instructionRepository;
+        private readonly IInstructionRepository _instructionRepository;
 
         public ReceiptRepository()
         {

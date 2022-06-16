@@ -8,7 +8,7 @@ using HealthCareSystem.Core.Examinations.Repository;
 
 namespace HealthCareSystem.Core.Users.Patients.Repository
 {
-    class PatientRequestRepository
+    class PatientRequestRepository:IPatientRequestRepository
     {
         public OleDbConnection Connection { get; set; }
         public PatientRequestRepository()
@@ -24,15 +24,15 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             }
 
         }
-        public bool IsRequestChanged(string requestID)
+        public bool IsRequestChanged(string requestId)
         {
-            var query = "SELECT isChanged FROM PatientEditRequest WHERE id = " + requestID + "";
+            var query = "SELECT isChanged FROM PatientEditRequest WHERE id = " + requestId + "";
             return Convert.ToBoolean(DatabaseCommander.ExecuteReaderQueries(query, Connection)[0]);
         }
 
-        public Dictionary<string, string> GetPatientRequest(string requestID)
+        public Dictionary<string, string> GetPatientRequest(string requestId)
         {
-            var query = "SELECT id_examination, id_doctor, dateTimeOfExamination, id_room FROM PatientEditRequest WHERE id = " + requestID + "";
+            var query = "SELECT id_examination, id_doctor, dateTimeOfExamination, id_room FROM PatientEditRequest WHERE id = " + requestId + "";
             Dictionary<string, string> row = new Dictionary<string, string>();
             OleDbCommand cmd = DatabaseCommander.GetCommand(query, Connection);
             OleDbDataReader reader = cmd.ExecuteReader();
@@ -45,9 +45,9 @@ namespace HealthCareSystem.Core.Users.Patients.Repository
             }
             return row;
         }
-        public void DeleteSinglePatientRequest(string requestID)
+        public void DeleteSinglePatientRequest(string requestId)
         {
-            var query = "DELETE from PatientEditRequest WHERE ID = " + Convert.ToInt32(requestID) + "";
+            var query = "DELETE from PatientEditRequest WHERE ID = " + Convert.ToInt32(requestId) + "";
             using (var cmd = new OleDbCommand(query, Connection))
             {
                 cmd.ExecuteNonQuery();

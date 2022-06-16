@@ -16,7 +16,7 @@ namespace HealthCareSystem.Core.GUI.SecretaryFunctionalities
     public partial class ExaminationRequests : Form
     {
         IExaminationRepository _examinationRepository;
-        PatientRequestRepository _patientRequestRepository;
+        private readonly IPatientRequestRepository _patientRequestRepository;
         public ExaminationRequests()
         {
             _examinationRepository = new ExaminationRepository();

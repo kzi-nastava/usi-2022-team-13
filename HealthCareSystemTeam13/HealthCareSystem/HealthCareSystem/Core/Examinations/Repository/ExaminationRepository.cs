@@ -34,7 +34,7 @@ namespace HealthCareSystem.Core.Examinations.Repository
         public DataTable GetFinishedExaminations()
         { return FinishedExaminations; }
 
-        private readonly PatientRequestRepository _patientRequestRepository;
+        private readonly IPatientRequestRepository _patientRequestRepository;
         public ExaminationRepository()
         {
             try
